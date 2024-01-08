@@ -29,10 +29,9 @@ if linkage != nil
 end
 
 target 'ihereapp' do
-  config = use_native_modules!
-
   use_frameworks! :linkage => :static # => added
 
+  config = use_native_modules!
 
   use_react_native!(
     :path => config[:reactNativePath],
