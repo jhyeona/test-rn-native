@@ -1,25 +1,47 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import React, {useRef} from 'react';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignIn from '../../container/SignIn';
-import DrawerNavigation from '../DrawerNavigation';
+import TabNavigation from '../TabNavigation';
+import {logFBScreenView} from '../../common/firebaseLogHelper.ts';
 
-const Drawer = createDrawerNavigator();
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
+  const navigationRef = useNavigationContainerRef();
+  const routeNameRef = useRef<string>();
+
+  const onStateChangeHandler = async () => {
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName: string =
+      navigationRef?.current?.getCurrentRoute()?.name ?? '';
+
+    if (previousRouteName !== currentRouteName) {
+      await logFBScreenView(currentRouteName, currentRouteName);
+    }
+    routeNameRef.current = currentRouteName;
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current =
+          navigationRef?.current?.getCurrentRoute()?.name ?? '';
+      }}
+      onStateChange={onStateChangeHandler}>
       <RootStack.Navigator initialRouteName="SignIn">
-        <Drawer.Screen
+        <RootStack.Screen
           name="SignIn"
           component={SignIn}
-          options={{drawerLabel: () => null, headerShown: false}}
+          options={{headerShown: false}}
         />
         <RootStack.Screen
           name="Root"
-          component={DrawerNavigation}
+          component={TabNavigation}
           options={{headerShown: false}}
         />
       </RootStack.Navigator>
