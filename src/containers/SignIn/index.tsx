@@ -14,7 +14,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (pageName: string) => {
+  const handlePage = (pageName: string) => {
     navigation.navigate(pageName);
   };
 
@@ -38,18 +38,18 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             secureTextEntry
           />
           <TouchableOpacity
-            onPress={() => handleLogin('Root')}
+            onPress={() => handlePage('Root')}
             style={styles.button}>
             <Text style={styles.textWhite}>로그인</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={() => handleLogin('SignUp')}
+          onPress={() => handlePage('SignUp')}
           style={styles.button}>
           <Text style={styles.textWhite}>회원가입</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleLogin('findPassword')}
+          onPress={() => handlePage('FindPassword')}
           style={styles.button}>
           <Text style={styles.textWhite}>비밀번호 찾기</Text>
         </TouchableOpacity>
