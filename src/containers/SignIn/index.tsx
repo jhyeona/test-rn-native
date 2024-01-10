@@ -49,7 +49,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           <Text style={styles.textWhite}>회원가입</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleLogin('findPassword')}
+          onPress={() => handleLogin('FindPassword')}
           style={styles.button}>
           <Text style={styles.textWhite}>비밀번호 찾기</Text>
         </TouchableOpacity>
