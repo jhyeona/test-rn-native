@@ -7,6 +7,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignIn from '../../containers/SignIn';
 import TabNavigation from '../TabNavigation';
 import {logFBScreenView} from '../../utils/firebaseLogHelper.ts';
+import SignUp from '../../containers/SignUp';
 
 const RootStack = createNativeStackNavigator();
 
@@ -38,6 +39,11 @@ const RootStackNavigation = () => {
           name="SignIn"
           component={SignIn}
           options={{headerShown: false}}
+        />
+        <RootStack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{headerTitle: ''}}
         />
         <RootStack.Screen
           name="Root"
