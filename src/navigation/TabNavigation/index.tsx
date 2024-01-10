@@ -1,5 +1,5 @@
 import React from 'react';
-import Schedule from '../../container/schedule';
+import Schedule from '../../container/Schedule';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
