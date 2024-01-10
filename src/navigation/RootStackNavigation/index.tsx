@@ -4,9 +4,9 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SignIn from '../../container/SignIn';
+import SignIn from '../../containers/SignIn';
 import TabNavigation from '../TabNavigation';
-import {logFBScreenView} from '../../common/firebaseLogHelper.ts';
+import {logFBScreenView} from '../../utils/firebaseLogHelper.ts';
 
 const RootStack = createNativeStackNavigator();
 
