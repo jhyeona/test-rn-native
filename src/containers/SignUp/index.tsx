@@ -16,9 +16,12 @@ import {
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/moment';
+import axios from 'axios';
+import {requestPostPhone} from '../../apis/SignUp.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
+  const [isDoubleCheckPhone, setIsDoubleCheckPhone] = useState(false);
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [name, setName] = useState('');
@@ -30,13 +33,22 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [isPicker, setIsPicker] = useState(false);
   const refInput = useRef<TextInput>(null);
 
-  const handleSendSms = () => {
-    // SMS 인증 번호 발송
+  const doubleCheckPhone = async () => {
+    // 휴대폰 번호 중복 확인
     if (!checkPhone(phone)) {
       Alert.alert('올바른 휴대폰 번호를 입력하세요.');
       refInput?.current?.focus();
       return;
     }
+    const url = 'http://192.168.219.184:8081/api/v3/user/signup/phone';
+    const data = new FormData();
+    data.append('phone', phone);
+    await requestPostPhone(url, data);
+    setIsDoubleCheckPhone(true);
+  };
+
+  const handleSendSms = () => {
+    // SMS 인증 번호 발송
     //TODO - SMS 인증 요청 API
     setIsSmsId(true);
   };
@@ -67,7 +79,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       Alert.alert('이름을 바르게 입력해 주세요.');
       return;
     }
-    if (!isSms) {
+    if (!isSmsCompleted) {
       Alert.alert('휴대폰 인증을 해주세요.');
       return;
     }
@@ -106,27 +118,46 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             placeholder="휴대폰 번호 (아이디)"
             value={phone}
             onChangeText={setPhone}
+            onChange={() => setIsDoubleCheckPhone(false)}
             ref={refInput}
             maxLength={11}
             readOnly={isSms}
           />
-          {isSms ? (
-            <TouchableOpacity onPress={confirmSms} disabled={isSmsCompleted}>
-              <Text>완료</Text>
-            </TouchableOpacity>
+          {isDoubleCheckPhone ? (
+            !isSms && (
+              <TouchableOpacity
+                onPress={handleSendSms}
+                disabled={!isDoubleCheckPhone}>
+                <Text>인증번호 발송</Text>
+              </TouchableOpacity>
+            )
           ) : (
-            <TouchableOpacity onPress={handleSendSms} disabled={isSms}>
-              <Text>발송</Text>
+            <TouchableOpacity onPress={doubleCheckPhone}>
+              <Text>중복확인</Text>
             </TouchableOpacity>
           )}
         </View>
-        <TextInput
-          placeholder="인증번호"
-          value={smsId}
-          onChangeText={setSmsId}
-          maxLength={6}
-          readOnly={isSmsCompleted}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <TextInput
+            placeholder="인증번호"
+            value={smsId}
+            onChangeText={setSmsId}
+            maxLength={6}
+            readOnly={isSmsCompleted}
+          />
+          {isSms && !isSmsCompleted ? (
+            <TouchableOpacity onPress={confirmSms} disabled={isSmsCompleted}>
+              <Text>인증번호 확인</Text>
+            </TouchableOpacity>
+          ) : (
+            ''
+          )}
+        </View>
         <TextInput
           placeholder="비밀번호: 8자리 이상 영문+숫자"
           value={password}
