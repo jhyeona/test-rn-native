@@ -8,18 +8,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {checkPassword, checkPhone} from '../../utils/regExpHelper.ts';
+import {
+  checkPassword,
+  checkPhone,
+  checkName,
+} from '../../utils/regExpHelper.ts';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment/moment';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [name, setName] = useState('');
+  const [birthday, setBirthday] = useState('');
   const [smsId, setSmsId] = useState('');
   const [isSms, setIsSmsId] = useState(false);
   const [isSmsCompleted, setIsSmsCompleted] = useState(false);
   const [samePassword, setSamePassword] = useState(true);
+  const [isPicker, setIsPicker] = useState(false);
   const refInput = useRef<TextInput>(null);
 
   const handleSendSms = () => {
@@ -55,6 +63,10 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       Alert.alert('이름을 입력해 주세요.');
       return;
     }
+    if (!checkName(name)) {
+      Alert.alert('이름을 바르게 입력해 주세요.');
+      return;
+    }
     if (!isSms) {
       Alert.alert('휴대폰 인증을 해주세요.');
       return;
@@ -65,6 +77,12 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     }
     Alert.alert('회원가입이 완료되었습니다. 로그인해 주세요.');
     navigation.navigate('SignIn');
+  };
+
+  const setDate = (date: Date | undefined) => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setBirthday(formattedDate);
+    setIsPicker(false);
   };
 
   useEffect(() => {
@@ -126,10 +144,24 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         ) : (
           <Text style={{color: 'red'}}>비밀번호가 일치하지 않습니다.</Text>
         )}
+        <TouchableOpacity onPress={() => setIsPicker(true)}>
+          <Text>{birthday ? birthday : '생년월일 (선택)'}</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={handleSignUp}>
         <Text>회원가입</Text>
       </TouchableOpacity>
+      {isPicker ? (
+        <DateTimePicker
+          value={new Date()}
+          onChange={(e, date) => setDate(date)}
+          display="spinner"
+          maximumDate={new Date()}
+          timeZoneName={'Asia/Seoul'}
+        />
+      ) : (
+        ''
+      )}
     </SafeAreaView>
   );
 };
