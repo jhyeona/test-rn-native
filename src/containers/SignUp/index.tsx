@@ -10,14 +10,15 @@ import {
 } from 'react-native';
 import {
   checkPassword,
-  checkPhone,
   checkName,
+  checkPhone,
 } from '../../utils/regExpHelper.ts';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/moment';
+import {postSignUpPhone} from '../../hooks/useSignUp.ts';
 import axios from 'axios';
-import {requestPostPhone} from '../../apis/SignUp.ts';
+import {apiResponse} from '../../types/common.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
@@ -40,11 +41,18 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       refInput?.current?.focus();
       return;
     }
-    const url = 'http://192.168.219.184:8081/api/v3/user/signup/phone';
-    const data = new FormData();
-    data.append('phone', phone);
-    await requestPostPhone(url, data);
-    setIsDoubleCheckPhone(true);
+    const args = {
+      url: 'http://192.168.219.184:8081/api/v3/user/signup/phone',
+      data: {phone: phone},
+    };
+    try {
+      await postSignUpPhone(args);
+      setIsDoubleCheckPhone(true);
+    } catch (error) {
+      if (axios.isAxiosError<apiResponse, any>(error)) {
+        console.log('e', error?.response?.data.message);
+      }
+    }
   };
 
   const handleSendSms = () => {
@@ -65,12 +73,12 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   const handleSignUp = () => {
     // 회원가입 진행
-    const params = {
-      phone: phone,
-      smsId: smsId,
-      password: password,
-      name: name,
-    };
+    // const params = {
+    //   phone: phone,
+    //   smsId: smsId,
+    //   password: password,
+    //   name: name,
+    // };
     if (!name) {
       Alert.alert('이름을 입력해 주세요.');
       return;
