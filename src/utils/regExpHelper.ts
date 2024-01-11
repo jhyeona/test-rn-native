@@ -9,3 +9,8 @@ export const checkPassword = (password: string) => {
   const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,30}$/;
   return regExp.test(password);
 };
+
+export const checkName = (name: string) => {
+  const regExp = /^[가-힣]{2,4}$/;
+  return regExp.test(name);
+};
