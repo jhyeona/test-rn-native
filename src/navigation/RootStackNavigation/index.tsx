@@ -8,6 +8,7 @@ import SignIn from '../../containers/SignIn';
 import TabNavigation from '../TabNavigation';
 import {logFBScreenView} from '../../utils/firebaseLogHelper.ts';
 import SignUp from '../../containers/SignUp';
+import FindPassword from '../../containers/FindPassword';
 
 const RootStack = createNativeStackNavigator();
 
@@ -43,6 +44,11 @@ const RootStackNavigation = () => {
         <RootStack.Screen
           name="SignUp"
           component={SignUp}
+          options={{headerTitle: ''}}
+        />
+        <RootStack.Screen
+          name="FindPassword"
+          component={FindPassword}
           options={{headerTitle: ''}}
         />
         <RootStack.Screen
