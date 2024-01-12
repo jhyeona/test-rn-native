@@ -1,4 +1,4 @@
-import {requestPost} from '../utils/requestHelper.ts';
+import {requestPost} from './index.ts';
 
 export const requestPostSignUp = async (args: {data: {}}) => {
   // 최종 회원가입

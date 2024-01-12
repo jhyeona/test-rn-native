@@ -9,7 +9,7 @@ import {
 import DatePicker from '../../components/common/DatePicker.tsx';
 import moment from 'moment';
 import {checkName, checkPhone} from '../../utils/regExpHelper.ts';
-import {requestPostFindPassword} from '../../apis/FindPassword.ts';
+import {requestPostFindPassword} from '../../apis/findPassword.ts';
 
 const FindPassword = () => {
   const [phone, setPhone] = useState('');

@@ -21,6 +21,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(true);
+
   const onValueChangeHandler = (checked: boolean) => {
     setIsChecked(checked);
   };
@@ -37,12 +38,12 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       return;
     }
     const args = {
-      url: '/token/authenticate',
       data: {phone: id, password: password},
     };
     try {
       const response = await postGetToken(args);
       storage.set('jwtToken', response.data.access_token);
+      storage.set('refreshToken', response.data.refresh_token);
       if (isChecked) {
         storage.set('user.phone', id);
       }
@@ -56,7 +57,6 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       }
     }
   };
-
   const handlePage = (pageName: string) => {
     // 네비게이션 이동
     navigation.navigate(pageName);
