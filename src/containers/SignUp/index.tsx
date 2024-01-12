@@ -16,7 +16,13 @@ import {
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/moment';
-import {postSignUpPhone} from '../../hooks/useSignUp.ts';
+import {
+  postSignUp,
+  postSignUpPhone,
+  postSignUpSMS,
+  postSignUpSMSConfirm,
+  postSignUpTAS,
+} from '../../hooks/useSignUp.ts';
 import axios from 'axios';
 import {apiResponse} from '../../types/common.ts';
 
@@ -32,53 +38,83 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [isSmsCompleted, setIsSmsCompleted] = useState(false);
   const [samePassword, setSamePassword] = useState(true);
   const [isPicker, setIsPicker] = useState(false);
-  const refInput = useRef<TextInput>(null);
 
   const doubleCheckPhone = async () => {
     // 휴대폰 번호 중복 확인
     if (!checkPhone(phone)) {
       Alert.alert('올바른 휴대폰 번호를 입력하세요.');
-      refInput?.current?.focus();
       return;
     }
     const args = {
-      url: 'http://192.168.219.184:8081/api/v3/user/signup/phone',
       data: {phone: phone},
     };
     try {
       await postSignUpPhone(args);
       setIsDoubleCheckPhone(true);
+      Alert.alert('가입 가능한 번호입니다.');
     } catch (error) {
+      console.log('error:', error);
       if (axios.isAxiosError<apiResponse, any>(error)) {
-        console.log('e', error?.response?.data.message);
+        console.log('API Error:', error?.response?.data.message);
       }
     }
   };
 
-  const handleSendSms = () => {
-    // SMS 인증 번호 발송
-    //TODO - SMS 인증 요청 API
-    setIsSmsId(true);
+  const onPressSendTAS = async () => {
+    // TAS + SMS 인증
+    if (!isDoubleCheckPhone) {
+      Alert.alert('휴대폰 중복 확인을 해주세요.');
+      return;
+    }
+    const args = {
+      data: {phone: phone},
+    };
+    const tasArgs = {
+      data: {...args.data, birth: '', phone: '', telecom: ''},
+    };
+
+    try {
+      const tasResponse = await postSignUpTAS(tasArgs);
+      if (tasResponse.status === 200) {
+        // tas 요청 성공 시 바로 sms 인증 코드 요청
+        await postSignUpSMS(args);
+        setIsSmsId(true);
+      }
+    } catch (error) {
+      console.log('[ERROR]', error);
+      Alert.alert(`error: ${error}`);
+    }
   };
 
-  const confirmSms = () => {
+  const confirmSms = async () => {
     // SMS 인증 완료
     if (!smsId) {
       Alert.alert('인증 번호를 입력하세요.');
       return;
     }
-    //TODO - SMS 인증 완료 API
-    setIsSmsCompleted(true);
+    const args = {
+      data: {
+        phone: phone,
+        verifyCode: smsId,
+      },
+    };
+    try {
+      await postSignUpSMSConfirm(args);
+      setIsSmsCompleted(true);
+    } catch (error) {
+      console.log('[ERROR]', error);
+    }
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     // 회원가입 진행
-    // const params = {
-    //   phone: phone,
-    //   smsId: smsId,
-    //   password: password,
-    //   name: name,
-    // };
+    const params = {
+      phone: phone,
+      name: name,
+      birth: moment(birthday).format('YYMMDD'),
+      password: password,
+    };
+    const args = {data: params};
     if (!name) {
       Alert.alert('이름을 입력해 주세요.');
       return;
@@ -95,11 +131,18 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       Alert.alert('비밀번호 형식이 올바르지 않습니다.');
       return;
     }
-    Alert.alert('회원가입이 완료되었습니다. 로그인해 주세요.');
-    navigation.navigate('SignIn');
+
+    try {
+      await postSignUp(args);
+      Alert.alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+      navigation.navigate('SignIn');
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   const setDate = (date: Date | undefined) => {
+    // 생년월일 선택
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setBirthday(formattedDate);
     setIsPicker(false);
@@ -115,7 +158,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     <SafeAreaView style={styles.container}>
       <Text>회원가입</Text>
       <View>
-        <TextInput placeholder="이름" value={name} onChangeText={setName} />
         <View
           style={{
             flexDirection: 'row',
@@ -127,24 +169,45 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             value={phone}
             onChangeText={setPhone}
             onChange={() => setIsDoubleCheckPhone(false)}
-            ref={refInput}
             maxLength={11}
             readOnly={isSms}
           />
           {isDoubleCheckPhone ? (
-            !isSms && (
-              <TouchableOpacity
-                onPress={handleSendSms}
-                disabled={!isDoubleCheckPhone}>
-                <Text>인증번호 발송</Text>
-              </TouchableOpacity>
-            )
+            ''
           ) : (
             <TouchableOpacity onPress={doubleCheckPhone}>
               <Text>중복확인</Text>
             </TouchableOpacity>
           )}
         </View>
+        <TextInput
+          placeholder="이름"
+          value={name}
+          onChangeText={setName}
+          readOnly={isSmsCompleted}
+        />
+        <TouchableOpacity
+          onPress={() => setIsPicker(true)}
+          disabled={isSmsCompleted}>
+          <Text>{birthday ? birthday : '생년월일'}</Text>
+        </TouchableOpacity>
+        <View>
+          <Text>통신사 선택</Text>
+        </View>
+        {isSms ? (
+          ''
+        ) : (
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              marginTop: 10,
+              backgroundColor: isDoubleCheckPhone ? 'white' : 'grey',
+            }}
+            onPress={onPressSendTAS}
+            disabled={!isDoubleCheckPhone}>
+            <Text>인증번호 발송</Text>
+          </TouchableOpacity>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -183,9 +246,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         ) : (
           <Text style={{color: 'red'}}>비밀번호가 일치하지 않습니다.</Text>
         )}
-        <TouchableOpacity onPress={() => setIsPicker(true)}>
-          <Text>{birthday ? birthday : '생년월일 (선택)'}</Text>
-        </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={handleSignUp}>
         <Text>회원가입</Text>
