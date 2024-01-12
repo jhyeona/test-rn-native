@@ -50,7 +50,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     };
     try {
       await postSignUpPhone(args);
-      setIsDoubleCheckPhone(true);
+      // setIsDoubleCheckPhone(true);
       Alert.alert('가입 가능한 번호입니다.');
     } catch (error) {
       console.log('error:', error);

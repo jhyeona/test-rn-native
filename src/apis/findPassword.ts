@@ -1,4 +1,4 @@
-import {requestPost} from '../utils/requestHelper.ts';
+import {requestPost} from './index.ts';
 
 export const requestPostFindPassword = async (args: {data: {}}) => {
   // 비밀번호 찾기

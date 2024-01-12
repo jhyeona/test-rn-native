@@ -4,7 +4,7 @@ import {
   requestPostSignUpSMSCode,
   requestPostSignUpSMSConfirm,
   requestPostSignUpTAS,
-} from '../apis/SignUp.ts';
+} from '../apis/signUp.ts';
 
 export const postSignUpPhone = async (args: {data: {}}) => {
   const response = await requestPostSignUpPhone(args);
