@@ -12,12 +12,16 @@ import {
 } from 'react-native';
 import {storage} from '../../utils/storageHelper.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {requestPatchUserUpdate} from '../../apis/Mypage.ts';
 import {patchUserUpdate} from '../../hooks/useMypage.ts';
 import {checkPassword} from '../../utils/regExpHelper.ts';
+import {useRecoilValue} from 'recoil';
+import userState from '../../recoil/user';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
-  const [isPushApp, setIsPushApp] = useState(false);
+  const userData = useRecoilValue(userState.userInfoState);
+  const [isPushApp, setIsPushApp] = useState(
+    userData ? userData?.settingPushApp : true,
+  );
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
