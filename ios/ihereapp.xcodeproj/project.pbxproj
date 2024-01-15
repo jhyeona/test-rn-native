@@ -15,6 +15,7 @@
 		3D2DD8671D65134CC5DE8D88 /* Pods_ihereapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3092656C223793A40D5F10F /* Pods_ihereapp.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */; };
+		C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4D783C52B54DE840086145F /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		87875EE5708D437760512BD2 /* Pods-ihereapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp.release.xcconfig"; path = "Target Support Files/Pods-ihereapp/Pods-ihereapp.release.xcconfig"; sourceTree = "<group>"; };
 		B3092656C223793A40D5F10F /* Pods_ihereapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ihereapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C4D783C52B54DE840086145F /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = ihereapp/BootSplash.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F50E0D6BC0801DA404B57FCD /* Pods-ihereapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp.debug.xcconfig"; path = "Target Support Files/Pods-ihereapp/Pods-ihereapp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +95,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
+				C4D783C52B54DE840086145F /* BootSplash.storyboard */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -249,6 +252,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */,
+				C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

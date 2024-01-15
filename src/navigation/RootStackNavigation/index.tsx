@@ -12,7 +12,12 @@ import FindPassword from '../../containers/FindPassword';
 
 const RootStack = createNativeStackNavigator();
 
-const RootStackNavigation = () => {
+interface Props {
+  isLoggedIn: boolean;
+}
+
+const RootStackNavigation = (props: Props) => {
+  const {isLoggedIn} = props;
   const navigationRef = useNavigationContainerRef();
   const routeNameRef = useRef<string>();
 
@@ -35,7 +40,7 @@ const RootStackNavigation = () => {
           navigationRef?.current?.getCurrentRoute()?.name ?? '';
       }}
       onStateChange={onStateChangeHandler}>
-      <RootStack.Navigator initialRouteName="SignIn">
+      <RootStack.Navigator initialRouteName={isLoggedIn ? 'Root' : 'SignIn'}>
         <RootStack.Screen
           name="SignIn"
           component={SignIn}
