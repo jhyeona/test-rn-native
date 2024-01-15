@@ -2,7 +2,7 @@ import {AxiosRequestConfig} from 'axios';
 import instance from './instance.ts';
 
 export const requestGet = async (url: string, config?: AxiosRequestConfig) => {
-  return instance.post(url, config);
+  return instance.get(url, config);
 };
 
 export const requestPut = async (

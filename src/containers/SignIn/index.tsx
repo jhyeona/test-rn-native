@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -21,41 +22,40 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(true);
-
   const onValueChangeHandler = (checked: boolean) => {
     setIsChecked(checked);
   };
   const onPressSignIn = async () => {
     // 로그인
-    Keyboard.dismiss();
-
-    if (!id) {
-      Alert.alert('아이디(휴대폰 번호)를 입력하세요.');
-      return;
-    }
-    if (!password) {
-      Alert.alert('비밀번호를 입력하세요.');
-      return;
-    }
-    const args = {
-      data: {phone: id, password: password},
-    };
-    try {
-      const response = await postGetToken(args);
-      storage.set('jwtToken', response.data.access_token);
-      storage.set('refreshToken', response.data.refresh_token);
-      if (isChecked) {
-        storage.set('user.phone', id);
-      }
-
-      handlePage('Root');
-    } catch (error) {
-      console.log('error,', error);
-      if (axios.isAxiosError<apiResponse, any>(error)) {
-        console.log('[ERROR]', error?.response?.data.message);
-        Alert.alert('아이디와 비밀번호를 확인하세요.');
-      }
-    }
+    // Keyboard.dismiss();
+    //
+    // if (!id) {
+    //   Alert.alert('아이디(휴대폰 번호)를 입력하세요.');
+    //   return;
+    // }
+    // if (!password) {
+    //   Alert.alert('비밀번호를 입력하세요.');
+    //   return;
+    // }
+    // const args = {
+    //   data: {phone: id, password: password},
+    // };
+    // try {
+    //   const response = await postGetToken(args);
+    //   storage.set('jwtToken', response.data.access_token);
+    //   storage.set('refreshToken', response.data.refresh_token);
+    //   if (isChecked) {
+    //     storage.set('user.phone', id);
+    //   }
+    //
+    handlePage('Root');
+    // } catch (error) {
+    //   console.log('error,', error);
+    //   if (axios.isAxiosError<apiResponse, any>(error)) {
+    //     console.log('[ERROR]', error?.response?.data.message);
+    //     Alert.alert('아이디와 비밀번호를 확인하세요.');
+    //   }
+    // }
   };
   const handlePage = (pageName: string) => {
     // 네비게이션 이동
