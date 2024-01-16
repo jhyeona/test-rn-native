@@ -1,4 +1,4 @@
-import {AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import instance from './instance.ts';
 
 export const requestGet = async (url: string, config?: AxiosRequestConfig) => {
@@ -33,5 +33,5 @@ export const requestDelete = async (
   url: string,
   config?: AxiosRequestConfig,
 ) => {
-  return instance.post(url, config);
+  return instance.delete(url, config);
 };

@@ -1,4 +1,4 @@
-import {requestPatchUserUpdate} from '../apis/Mypage.ts';
+import {requestPatchUserUpdate} from '../apis/mypage.ts';
 
 export const patchUserUpdate = async (args: {data: {}}) => {
   const response = await requestPatchUserUpdate(args);

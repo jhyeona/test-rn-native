@@ -3,7 +3,6 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
-  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -15,52 +14,63 @@ import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/type
 import axios from 'axios';
 import {apiResponse} from '../../types/common.ts';
 import Checkbox from '../../components/common/Checkbox.tsx';
-import {storage} from '../../utils/storageHelper.ts';
 import {postGetToken} from '../../hooks/useSignIn.ts';
+import {useSetRecoilState} from 'recoil';
+import globalState from '../../recoil/Global';
+import {storage} from '../../utils/storageHelper.ts';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [isChecked, setIsChecked] = useState(true);
+  const setIsLogin = useSetRecoilState(globalState.isLoginState);
+
   const onValueChangeHandler = (checked: boolean) => {
     setIsChecked(checked);
   };
   const onPressSignIn = async () => {
     // 로그인
-    // Keyboard.dismiss();
-    //
-    // if (!id) {
-    //   Alert.alert('아이디(휴대폰 번호)를 입력하세요.');
-    //   return;
-    // }
-    // if (!password) {
-    //   Alert.alert('비밀번호를 입력하세요.');
-    //   return;
-    // }
-    // const args = {
-    //   data: {phone: id, password: password},
-    // };
-    // try {
-    //   const response = await postGetToken(args);
-    //   storage.set('jwtToken', response.data.access_token);
-    //   storage.set('refreshToken', response.data.refresh_token);
-    //   if (isChecked) {
-    //     storage.set('user.phone', id);
-    //   }
-    //
-    handlePage('Root');
-    // } catch (error) {
-    //   console.log('error,', error);
-    //   if (axios.isAxiosError<apiResponse, any>(error)) {
-    //     console.log('[ERROR]', error?.response?.data.message);
-    //     Alert.alert('아이디와 비밀번호를 확인하세요.');
-    //   }
-    // }
+    Keyboard.dismiss();
+
+    if (!id) {
+      Alert.alert('아이디(휴대폰 번호)를 입력하세요.');
+      return;
+    }
+    if (!password) {
+      Alert.alert('비밀번호를 입력하세요.');
+      return;
+    }
+    const args = {
+      data: {phone: id, password: password},
+    };
+    try {
+      const response = await postGetToken(args);
+      storage.set('access_token', response.data.access_token);
+      storage.set('refresh_token', response.data.refresh_token);
+      setIsLogin(true);
+      if (isChecked) {
+        storage.set('user_phone', id);
+      }
+
+      handlePage('Root');
+    } catch (error) {
+      console.log('error,', error);
+      if (axios.isAxiosError<apiResponse, any>(error)) {
+        console.log('[ERROR]', error?.response?.data.message);
+        Alert.alert('아이디와 비밀번호를 확인하세요.');
+      }
+    }
   };
   const handlePage = (pageName: string) => {
     // 네비게이션 이동
     navigation.navigate(pageName);
   };
+
+  useEffect(() => {
+    // 스토리지에 아이디 있으면 불러오기
+    const storagePhone = storage.getString('user_phone');
+    if (storagePhone) setId(storagePhone);
+  }, []);
 
   return (
     <SafeAreaView>
