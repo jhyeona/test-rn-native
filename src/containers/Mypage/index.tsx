@@ -53,8 +53,8 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
   };
   const onPressLogout = () => {
-    storage.delete('jwtToken');
-    storage.delete('refreshToken');
+    storage.delete('access_token');
+    storage.delete('refresh_token');
     navigation.navigate('SignIn');
   };
 

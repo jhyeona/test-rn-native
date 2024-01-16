@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   SafeAreaView,
@@ -172,9 +172,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             maxLength={11}
             readOnly={isSms}
           />
-          {isDoubleCheckPhone ? (
-            ''
-          ) : (
+          {!isDoubleCheckPhone && (
             <TouchableOpacity onPress={doubleCheckPhone}>
               <Text>중복확인</Text>
             </TouchableOpacity>
