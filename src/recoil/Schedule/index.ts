@@ -1,7 +1,7 @@
-import {testTestState} from './atom.ts';
+import {dayScheduleState} from './atom.ts';
 
-const testState = {
-  testTestState,
+const scheduleState = {
+  dayScheduleState,
 };
 
-export default testState;
+export default scheduleState;

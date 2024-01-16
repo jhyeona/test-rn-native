@@ -14,6 +14,7 @@ import {useRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
 import {storage} from '../../utils/storageHelper.ts';
 import {useMMKVListener} from 'react-native-mmkv';
+import Initialize from '../../containers/Initialize';
 
 const RootStack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ const RootStackNavigation = () => {
   const navigationRef = useNavigationContainerRef();
   const [isLogin, setIsLogin] = useRecoilState(globalState.isLoginState);
   const routeNameRef = useRef<string>();
-
+  console.log(isLogin);
   const handleOnReady = () => {
     routeNameRef.current =
       navigationRef?.current?.getCurrentRoute()?.name ?? '';
@@ -60,6 +61,11 @@ const RootStackNavigation = () => {
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
       <RootStack.Navigator>
+        {/*<RootStack.Screen*/}
+        {/*  name="Initialize"*/}
+        {/*  component={Initialize}*/}
+        {/*  options={{headerShown: false}}*/}
+        {/*/>*/}
         {!isLogin ? (
           <>
             <RootStack.Screen

@@ -1,9 +1,7 @@
 import {atom} from 'recoil';
-import {testProps} from '../../types/common.ts';
+import {DayScheduleProps} from '../../types/schedule.ts';
 
-export const testTestState = atom<testProps>({
-  key: 'testState',
-  default: {
-    text: 'RECOIL :D',
-  },
+export const dayScheduleState = atom<DayScheduleProps | null>({
+  key: 'dayScheduleState',
+  default: null,
 });

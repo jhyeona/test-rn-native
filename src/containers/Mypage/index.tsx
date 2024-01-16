@@ -14,8 +14,9 @@ import {storage} from '../../utils/storageHelper.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {patchUserUpdate} from '../../hooks/useMypage.ts';
 import {checkPassword} from '../../utils/regExpHelper.ts';
-import {useRecoilValue} from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import userState from '../../recoil/user';
+import globalState from '../../recoil/Global';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -25,7 +26,7 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
-
+  const setIsLogin = useSetRecoilState(globalState.isLoginState);
   const toggleSwitch = () => setIsPushApp(previousState => !previousState);
 
   const onPressUpdate = async () => {
@@ -53,6 +54,8 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
   };
   const onPressLogout = () => {
+    //TODO: StackNavigation -> isLogin ...
+    setIsLogin(false);
     storage.delete('access_token');
     storage.delete('refresh_token');
     navigation.navigate('SignIn');
