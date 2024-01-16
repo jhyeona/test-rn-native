@@ -20,14 +20,7 @@ const DayScheduleTable = (props: Props) => {
       '[]',
     );
   };
-  // data.scheduleList.map((value, index) => {
-  //   onSetTimeLine(
-  //     moment(value.scheduleStartTime).format('YYYY-MM-DD HH:mm'),
-  //     moment(value.scheduleStartTime)
-  //       .add(value.scheduleMinutes, 'minutes')
-  //       .format('YYYY-MM-DD HH:mm'),
-  //   );
-  // });
+
   return (
     <ScrollView style={styles.table}>
       <View style={[styles.row, styles.borderStyle, {backgroundColor: 'grey'}]}>

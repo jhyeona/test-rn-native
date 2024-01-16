@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Pressable,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Switch,
   Text,
@@ -14,33 +13,36 @@ import 'moment/locale/ko';
 import DayScheduleTable from '../../components/Schedule/DayScheduleTable.tsx';
 import {DayScheduleProps} from '../../types/schedule.ts';
 import WeekScheduleTable from '../../components/Schedule/WeekScheduleTable.tsx';
+import Dropdown from '../../components/common/Dropdown.tsx';
 
 const Schedule = () => {
-  const date = moment().format('YYYY년 M월');
   const [isWeekend, setIsWeekend] = useState(false);
+  const [selectDate, setSelectDate] = useState(moment());
+  const [dropDownValue, setDropDownValue] = useState({label: '', value: ''});
 
   const toggleSwitch = () => {
     setIsWeekend(!isWeekend);
   };
 
-  let datesWhitelist = [
-    {
-      start: moment(),
-      end: moment().add(3, 'days'), // total 4 days enabled
-    },
-  ];
+  // let datesWhitelist = [
+  //   {
+  //     start: moment(),
+  //     end: moment().add(3, 'days'), // total 4 days enabled
+  //   },
+  // ];
   const datesBlacklist = [
     {
       start: moment().add(1, 'days'),
       end: moment().add(3, 'days'),
     },
-  ]; // 1 day disabled
+  ];
 
-  const onDateSelected = date => {
-    console.log(moment(date));
+  const onDateSelected = async (selectedDate: moment.Moment) => {
+    const date = moment(selectedDate);
+    setSelectDate(date);
   };
 
-  const headers = ['시간', '예정 강의'];
+  const dayHeaders = ['시간', '예정 강의'];
   const scheduleData: DayScheduleProps = {
     scheduleList: [
       {
@@ -61,8 +63,19 @@ const Schedule = () => {
       },
     ],
   };
+  const dropList = [
+    {label: '기관1', value: '1'},
+    {label: '기관2', value: '2'},
+    {label: '기관3', value: '3'},
+  ];
+  const onChangeDropList = (selectedValue: {label: string; value: string}) => {
+    setDropDownValue(selectedValue);
+    console.log('selected:', dropDownValue.label);
+  };
+
   return (
     <SafeAreaView>
+      <Dropdown list={dropList} setDropDownList={onChangeDropList} />
       <View
         style={{
           flexDirection: 'row',
@@ -95,12 +108,6 @@ const Schedule = () => {
         scrollable
         scrollerPaging
         calendarAnimation={{type: 'parallel', duration: 300}}
-        daySelectionAnimation={{
-          // type: 'border',
-          duration: 200,
-          // borderWidth: 10,
-          // borderHighlightColor: 'green',
-        }}
         style={{height: 100, paddingTop: 20, paddingBottom: 10}}
         calendarHeaderStyle={{color: 'black'}}
         calendarColor={'white'}
@@ -113,9 +120,9 @@ const Schedule = () => {
         disabledDateNumberStyle={{color: 'grey'}}
         // datesWhitelist={datesWhitelist}
         datesBlacklist={datesBlacklist}
-        selectedDate={moment()}
+        selectedDate={selectDate}
         maxDate={moment().add(3, 'days')}
-        onDateSelected={date => onDateSelected(date)}
+        onDateSelected={selectedDate => onDateSelected(selectedDate)}
         iconLeft={require('../../assets/logo.png')}
         iconRight={require('../../assets/logo.png')}
         iconContainer={{flex: 0.1}}
@@ -125,7 +132,7 @@ const Schedule = () => {
       {isWeekend ? (
         <WeekScheduleTable />
       ) : (
-        <DayScheduleTable headers={headers} data={scheduleData} />
+        <DayScheduleTable headers={dayHeaders} data={scheduleData} />
       )}
       <Pressable
         style={{
