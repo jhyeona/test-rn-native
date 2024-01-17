@@ -6,27 +6,27 @@ import {
   requestPostSignUpTAS,
 } from '../apis/signUp.ts';
 
-export const postSignUpPhone = async (args: {data: {}}) => {
-  const response = await requestPostSignUpPhone(args);
+export const postSignUpPhone = async (phone: string) => {
+  const response = await requestPostSignUpPhone(phone);
   return response.data;
 };
 
-export const postSignUpTAS = async (args: {data: {}}) => {
-  const response = await requestPostSignUpTAS(args);
+export const postSignUpTAS = async (data: {}) => {
+  const response = await requestPostSignUpTAS(data);
   return response.data;
 };
 
-export const postSignUpSMS = async (args: {data: {}}) => {
-  const response = await requestPostSignUpSMSCode(args);
+export const postSignUpSMS = async (data: {}) => {
+  const response = await requestPostSignUpSMSCode(data);
   return response.data;
 };
 
-export const postSignUpSMSConfirm = async (args: {data: {}}) => {
-  const response = await requestPostSignUpSMSConfirm(args);
+export const postSignUpSMSConfirm = async (data: {}) => {
+  const response = await requestPostSignUpSMSConfirm(data);
   return response.data;
 };
 
-export const postSignUp = async (args: {data: {}}) => {
-  const response = await requestPostSignUp(args);
+export const postSignUp = async (data: {}) => {
+  const response = await requestPostSignUp(data);
   return response.data;
 };

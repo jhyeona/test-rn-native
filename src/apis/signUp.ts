@@ -1,36 +1,31 @@
-import {requestPost} from './index.ts';
+import {instanceWithoutToken} from './instance.ts';
 
-export const requestPostSignUp = async (args: {data: {}}) => {
-  // 최종 회원가입
-  const url = '/user/signup';
-  const {data} = args;
-  return requestPost(url, data);
-};
-
-export const requestPostSignUpPhone = async (args: {data: {}}) => {
+export const requestPostSignUpPhone = async (phone: string) => {
   // 아이디 (휴대폰) 중복 여부 체크
-  const url = '/user/signup/phone';
-  const {data} = args;
-  return requestPost(url, data);
+  const url = `/user/signup/phone/${phone}`;
+  return instanceWithoutToken.get(url);
 };
 
-export const requestPostSignUpTAS = async (args: {data: {}}) => {
+export const requestPostSignUpTAS = async (data: {}) => {
   // 본인 확인용 TAS 요청
   const url = '/user/signup/tas/request';
-  const {data} = args;
-  return requestPost(url, data);
+  return instanceWithoutToken.post(url, data);
 };
 
-export const requestPostSignUpSMSCode = async (args: {data: {}}) => {
+export const requestPostSignUpSMSCode = async (data: {}) => {
   // 회원가입 시 SMS 코드 요청
   const url = '/user/signup/sms/request';
-  const {data} = args;
-  return requestPost(url, data);
+  return instanceWithoutToken.post(url, data);
 };
 
-export const requestPostSignUpSMSConfirm = async (args: {data: {}}) => {
+export const requestPostSignUpSMSConfirm = async (data: {}) => {
   // 회원가입 시 SMS 코드 확인
   const url = '/user/signup/sms/confirm';
-  const {data} = args;
-  return requestPost(url, data);
+  return instanceWithoutToken.post(url, data);
+};
+
+export const requestPostSignUp = async (data: {}) => {
+  // 최종 회원가입
+  const url = '/user/signup';
+  return instanceWithoutToken.post(url, data);
 };

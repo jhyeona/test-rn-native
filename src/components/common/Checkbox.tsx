@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    zIndex: -1,
   },
   checkbox: {
     height: 24,
