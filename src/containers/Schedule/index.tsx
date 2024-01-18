@@ -3,7 +3,6 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Switch,
   Text,
   View,
@@ -17,15 +16,18 @@ import {useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {useGetDaySchedule} from '../../hooks/useSchedule.ts';
 import {useGetUserInfo} from '../../hooks/useUser.ts';
-import scheduleState from '../../recoil/Schedule';
 import WeeklyCalendar from '../../components/common/WeekCalendar.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {StudentInfoProps} from '../../types/user.ts';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
   // const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
   const [isWeekend, setIsWeekend] = useState(false);
   const [selectDate, setSelectDate] = useState(moment());
+  const [selectStudentInfo, setSelectStudentInfo] = useState<
+    StudentInfoProps | undefined
+  >(undefined);
   const [academyList, setAcademyList] = useState([{label: '', value: ''}]);
   const [selectAcademy, setSelectAcademy] = useState<number | undefined>(
     userData ? userData.studentList[0].academy.academyId : undefined,
@@ -36,8 +38,22 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       {
         scheduleId: 1,
         scheduleParentId: null,
-        scheduleStartTime: '2024-01-16T18:35:00',
-        scheduleMinutes: 50,
+        scheduleStartTime: '2024-01-18T17:04:00',
+        scheduleMinutes: 60,
+        lecture: {
+          lectureId: 1,
+          lectureName: 'Java 테스트',
+          lectureAllowMinus: 5,
+          lectureAllowPlus: 5,
+          lectureAllowLatePlus: 0,
+          lectureCheckInterval: 60,
+        },
+      },
+      {
+        scheduleId: 2,
+        scheduleParentId: null,
+        scheduleStartTime: '2024-01-18T18:05:00',
+        scheduleMinutes: 60,
         lecture: {
           lectureId: 1,
           lectureName: 'Java 테스트',
@@ -57,6 +73,10 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   });
 
   const onChangeDropList = (value: string) => {
+    const studentInfo = userData?.studentList.filter(val => {
+      return val.academy.academyId === Number(value);
+    });
+    setSelectStudentInfo(studentInfo);
     setSelectAcademy(Number(value));
   };
 
@@ -128,7 +148,8 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           <DayScheduleTable
             navigation={navigation}
             headers={['시간', '예정 강의']}
-            data={dayScheduleData ?? {scheduleList: []}}
+            scheduleData={dayScheduleData ?? {scheduleList: []}}
+            studentInfo={selectStudentInfo}
           />
         )}
         <Pressable

@@ -3,6 +3,7 @@ import {storage} from '../utils/storageHelper.ts';
 import {tokenRefresh} from './common.ts';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../recoil/Global';
+import {Alert} from 'react-native';
 
 // TODO: 환경변수로?
 const baseURL = 'http://192.168.219.184:8081/api/v3';
@@ -36,6 +37,7 @@ instance.interceptors.response.use(
     return response;
   },
   async function (error) {
+    console.log('error', error.response.data);
     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 오류가 있는 작업 수행
     const originalRequest = error.config;
@@ -48,6 +50,12 @@ instance.interceptors.response.use(
       if (isRefreshSuccessful) {
         return instance(originalRequest);
       }
+    }
+    if (error.response.data.code === '4103') {
+      // 유효하지 않은 토큰
+      Alert.alert('토큰 X');
+      storage.delete('access_token');
+      storage.delete('refresh_token');
     }
     return Promise.reject(error);
   },

@@ -1,3 +1,13 @@
+export interface StudentInfoProps {
+  attendeeId: number;
+  // typeAttendee: string;
+  academy: {
+    academyId: number;
+    name: string;
+    picture?: string;
+  };
+}
+
 export interface UserInfoProps {
   userId: number;
   name: string;
@@ -5,15 +15,7 @@ export interface UserInfoProps {
   email: string;
   dateVerifyPhone: string;
   dateVerifyEmail: string;
-  studentList: Array<{
-    attendeeId: string;
-    typeAttendee: string;
-    academy: {
-      academyId: number;
-      name: string;
-      picture: string;
-    };
-  }>;
+  studentList: Array<StudentInfoProps>;
   teacherList: Array<{}>;
   settingPushApp: boolean;
 }

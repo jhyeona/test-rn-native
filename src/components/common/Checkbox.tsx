@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, View, Pressable, Text} from 'react-native';
 import Check from './Check.tsx';
-import {checkboxProps} from '../../types/common.ts';
+import {CheckboxProps} from '../../types/common.ts';
 
-const Checkbox = (props: checkboxProps) => {
+const Checkbox = (props: CheckboxProps) => {
   const {isChecked, disabled, onValueChangeHandler, labelMessage} = props;
   const triggerCheckbox = () => {
     if (!disabled) {

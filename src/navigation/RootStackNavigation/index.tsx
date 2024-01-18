@@ -1,6 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {
   NavigationContainer,
+  useNavigation,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -48,6 +49,7 @@ const RootStackNavigation = () => {
   useMMKVListener(key => {
     if (key === 'access_token') {
       const changedValue = storage.getString(key);
+      console.log('changedValue', changedValue);
       changedValue ? setIsLogin(true) : setIsLogin(false);
     }
   });
@@ -61,12 +63,7 @@ const RootStackNavigation = () => {
       ref={navigationRef}
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
-      <RootStack.Navigator initialRouteName={isLogin ? 'Root' : 'SignIn'}>
-        {/*<RootStack.Screen*/}
-        {/*  name="Initialize"*/}
-        {/*  component={Initialize}*/}
-        {/*  options={{headerShown: false}}*/}
-        {/*/>*/}
+      <RootStack.Navigator>
         <>
           <RootStack.Screen
             name="SignIn"

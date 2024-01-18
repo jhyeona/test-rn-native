@@ -6,7 +6,8 @@ import {useEffect} from 'react';
 
 export const getUserInfo = async () => {
   const response = await requestGetUserInfo();
-  return response.data.data;
+  console.log('test', response);
+  return response.data;
 };
 
 export const useGetUserInfo = () => {
