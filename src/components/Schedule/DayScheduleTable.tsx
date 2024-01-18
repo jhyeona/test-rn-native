@@ -2,13 +2,17 @@ import React from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {DayScheduleProps} from '../../types/schedule.ts';
 import moment from 'moment';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 
 interface Props {
   headers: Array<String>;
   data: DayScheduleProps;
 }
 
-const DayScheduleTable = (props: Props) => {
+const DayScheduleTable = (
+  props: Props,
+  {navigation}: {navigation: BottomTabNavigationHelpers},
+) => {
   const {headers, data} = props;
 
   const onSetTimeLine = (startTime: string, endTime: string) => {
@@ -19,6 +23,10 @@ const DayScheduleTable = (props: Props) => {
       undefined,
       '[]',
     );
+  };
+
+  const onPressLectureDetail = () => {
+    // navigation.navigate('LectureDetail');
   };
 
   return (
@@ -65,10 +73,10 @@ const DayScheduleTable = (props: Props) => {
                     flexGrow: 1,
                     marginRight: 5,
                   }}>
-                  <Text>{value.lectureName}</Text>
+                  <Text>{value.lecture.lectureName}</Text>
                   <Text>강의 기간</Text>
                 </View>
-                <Pressable>
+                <Pressable onPress={onPressLectureDetail}>
                   <Text>↔️</Text>
                 </Pressable>
               </View>

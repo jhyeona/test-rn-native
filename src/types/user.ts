@@ -8,11 +8,11 @@ export interface UserInfoProps {
   studentList: Array<{
     attendeeId: string;
     typeAttendee: string;
-    academy: Array<{
+    academy: {
       academyId: number;
       name: string;
       picture: string;
-    }>;
+    };
   }>;
   teacherList: Array<{}>;
   settingPushApp: boolean;

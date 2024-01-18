@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {StyleSheet} from 'react-native';
 
@@ -11,17 +11,19 @@ const Dropdown = (props: Props) => {
   const {list, disabled, onChangeValue} = props;
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(list[0].value);
-  const [items, setItems] = useState(list);
+
+  useEffect(() => {
+    setValue(list[0].value);
+  }, [list]);
 
   return (
     <DropDownPicker
       style={styles.dropdown}
       open={open}
       value={value}
-      items={items}
+      items={list}
       setOpen={setOpen}
       setValue={setValue}
-      setItems={setItems}
       onChangeValue={onChangeValue}
       placeholder="선택"
       disabled={disabled}

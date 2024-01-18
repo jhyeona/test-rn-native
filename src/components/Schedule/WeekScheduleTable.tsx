@@ -1,12 +1,8 @@
 import React from 'react';
-import {ScrollView, Text} from 'react-native';
+import TimeTable from './TimeTable.tsx';
 
 const WeekScheduleTable = () => {
-  return (
-    <ScrollView>
-      <Text>test</Text>
-    </ScrollView>
-  );
+  return <TimeTable />;
 };
 
 export default WeekScheduleTable;
