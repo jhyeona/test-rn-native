@@ -19,8 +19,9 @@ import {useGetDaySchedule} from '../../hooks/useSchedule.ts';
 import {useGetUserInfo} from '../../hooks/useUser.ts';
 import scheduleState from '../../recoil/Schedule';
 import WeeklyCalendar from '../../components/common/WeekCalendar.tsx';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 
-const Schedule = () => {
+const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
   // const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
   const [isWeekend, setIsWeekend] = useState(false);
@@ -65,6 +66,10 @@ const Schedule = () => {
 
   const toggleSwitch = () => {
     setIsWeekend(!isWeekend);
+  };
+
+  const onPressHistory = () => {
+    navigation.navigate('ScheduleHistory');
   };
 
   useEffect(() => {
@@ -121,11 +126,13 @@ const Schedule = () => {
           <WeekScheduleTable />
         ) : (
           <DayScheduleTable
+            navigation={navigation}
             headers={['시간', '예정 강의']}
             data={dayScheduleData ?? {scheduleList: []}}
           />
         )}
         <Pressable
+          onPress={onPressHistory}
           style={{
             backgroundColor: 'lightgrey',
             alignItems: 'center',

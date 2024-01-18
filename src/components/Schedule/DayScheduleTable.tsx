@@ -7,13 +7,11 @@ import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/type
 interface Props {
   headers: Array<String>;
   data: DayScheduleProps;
+  navigation: BottomTabNavigationHelpers;
 }
 
-const DayScheduleTable = (
-  props: Props,
-  {navigation}: {navigation: BottomTabNavigationHelpers},
-) => {
-  const {headers, data} = props;
+const DayScheduleTable = (props: Props) => {
+  const {headers, data, navigation} = props;
 
   const onSetTimeLine = (startTime: string, endTime: string) => {
     // 2024-01-15 를 현재 시간으로 변경해서 처리
@@ -26,7 +24,7 @@ const DayScheduleTable = (
   };
 
   const onPressLectureDetail = () => {
-    // navigation.navigate('LectureDetail');
+    navigation.navigate('LectureDetail');
   };
 
   return (
