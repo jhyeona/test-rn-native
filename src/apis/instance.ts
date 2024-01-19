@@ -37,7 +37,6 @@ instance.interceptors.response.use(
     return response;
   },
   async function (error) {
-    console.log('error', error.response.data);
     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 오류가 있는 작업 수행
     const originalRequest = error.config;

@@ -4,7 +4,6 @@ import {DayScheduleProps} from '../../types/schedule.ts';
 import moment from 'moment';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {StudentInfoProps} from '../../types/user.ts';
-import {postEventLeave} from '../../hooks/useSchedule.ts';
 
 interface Props {
   headers: Array<String>;

@@ -10,15 +10,15 @@ import {
 import moment from 'moment';
 import 'moment/locale/ko';
 import DayScheduleTable from '../../components/Schedule/DayScheduleTable.tsx';
-import WeekScheduleTable from '../../components/Schedule/WeekScheduleTable.tsx';
 import Dropdown from '../../components/common/Dropdown.tsx';
 import {useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {useGetDaySchedule} from '../../hooks/useSchedule.ts';
 import {useGetUserInfo} from '../../hooks/useUser.ts';
-import WeeklyCalendar from '../../components/common/WeekCalendar.tsx';
+import WeeklyCalendar from '../../components/Schedule/WeekCalendar.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {StudentInfoProps} from '../../types/user.ts';
+import TimeTable from '../../components/Schedule/TimeTable.tsx';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -53,6 +53,34 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         scheduleId: 2,
         scheduleParentId: null,
         scheduleStartTime: '2024-01-18T18:05:00',
+        scheduleMinutes: 60,
+        lecture: {
+          lectureId: 1,
+          lectureName: 'Java 테스트',
+          lectureAllowMinus: 5,
+          lectureAllowPlus: 5,
+          lectureAllowLatePlus: 0,
+          lectureCheckInterval: 60,
+        },
+      },
+      {
+        scheduleId: 3,
+        scheduleParentId: null,
+        scheduleStartTime: '2024-01-18T17:04:00',
+        scheduleMinutes: 60,
+        lecture: {
+          lectureId: 1,
+          lectureName: 'Java 테스트',
+          lectureAllowMinus: 5,
+          lectureAllowPlus: 5,
+          lectureAllowLatePlus: 0,
+          lectureCheckInterval: 60,
+        },
+      },
+      {
+        scheduleId: 4,
+        scheduleParentId: null,
+        scheduleStartTime: '2024-01-18T17:04:00',
         scheduleMinutes: 60,
         lecture: {
           lectureId: 1,
@@ -107,12 +135,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   return (
     <SafeAreaView>
-      <ScrollView>
-        <Dropdown
-          list={academyList}
-          onChangeValue={onChangeDropList}
-          disabled={userData ? userData.studentList.length <= 1 : false}
-        />
+      <View>
         <View
           style={{
             flexDirection: 'row',
@@ -141,28 +164,40 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             />
           </View>
         </View>
-        <WeeklyCalendar onChangeDate={onChangeDate} />
-        {isWeekend ? (
-          <WeekScheduleTable />
-        ) : (
+        <Dropdown
+          list={academyList}
+          onChangeValue={onChangeDropList}
+          disabled={userData ? userData.studentList.length <= 1 : false}
+        />
+      </View>
+      {isWeekend ? (
+        <View style={{height: '80%', paddingBottom: 120}}>
+          <TimeTable />
+        </View>
+      ) : (
+        <View>
+          <WeeklyCalendar
+            calendarType={isWeekend ? 'week' : 'day'}
+            onChangeDate={onChangeDate}
+          />
           <DayScheduleTable
             navigation={navigation}
             headers={['시간', '예정 강의']}
             scheduleData={dayScheduleData ?? {scheduleList: []}}
             studentInfo={selectStudentInfo}
           />
-        )}
-        <Pressable
-          onPress={onPressHistory}
-          style={{
-            backgroundColor: 'lightgrey',
-            alignItems: 'center',
-            margin: 10,
-            padding: 10,
-          }}>
-          <Text>내 출석 기록 보기</Text>
-        </Pressable>
-      </ScrollView>
+        </View>
+      )}
+      <Pressable
+        onPress={onPressHistory}
+        style={{
+          backgroundColor: 'lightgrey',
+          alignItems: 'center',
+          margin: 10,
+          padding: 10,
+        }}>
+        <Text>내 출석 기록 보기</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

@@ -49,7 +49,6 @@ const RootStackNavigation = () => {
   useMMKVListener(key => {
     if (key === 'access_token') {
       const changedValue = storage.getString(key);
-      console.log('changedValue', changedValue);
       changedValue ? setIsLogin(true) : setIsLogin(false);
     }
   });

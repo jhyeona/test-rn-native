@@ -18,13 +18,15 @@ import {
 } from 'react-native-gesture-handler';
 
 interface Props {
+  calendarType: string; // day: 일일 데이터 -> 날짜 선택 가능, 스와이프 시 날짜만 이동 / week: 주간 데이터 -> 날짜 선택 불가능, 스와이프 시 데이터 새로 고침
   onChangeDate: any;
 }
 
 const WeekCalendar = (props: Props) => {
-  const {onChangeDate} = props;
+  const {calendarType, onChangeDate} = props;
   const [weeks, setWeeks] = useState<string[][]>([]);
   const [selectDate, setSelectDate] = useState('');
+  const [selectDateDay, setSelectDateDay] = useState<number>(moment().day()); // 날짜 선택시 해당 날짜의 인덱스 번호로 selected style 지정
   const [month, setMonth] = useState('');
   const windowWidth = Dimensions.get('window').width;
   const flatListRef = useRef<FlatList | null>(null);
@@ -79,11 +81,8 @@ const WeekCalendar = (props: Props) => {
       <TouchableOpacity style={styles.weekContainer}>
         {item.map((day, index) => {
           const isToday = moment(day).isSame(moment(), 'day');
-          // setCurrentWeekIndex()
-          // const isSelected =
-          //   moment(day).format('YYYY-MM-DD') ===
-          //   weeks[currentWeekIndex][moment(day).day()];
-          // console.log(day);
+          const isSelected =
+            moment(day).format('YYYY-MM-DD') === weeks[1][selectDateDay - 1];
           return (
             <TouchableOpacity
               key={index}
@@ -91,7 +90,7 @@ const WeekCalendar = (props: Props) => {
               style={[
                 styles.dayContainer,
                 {width: dayContainerWidth},
-                // isSelected && styles.selectedDayContainer,
+                isSelected && styles.selectedDayContainer,
               ]}>
               <Text>{moment(day).format('dd')}</Text>
               <Text style={[styles.dayText, isToday && styles.todayText]}>
@@ -105,9 +104,14 @@ const WeekCalendar = (props: Props) => {
   };
 
   const setSelectedDate = (date: string) => {
-    // console.log('Selected Date:', date);
-    setSelectDate(date);
-    onChangeDate(date);
+    if (calendarType === 'day') {
+      let day = moment(date).day();
+      if (day === 0) day = 7; // 일요일일 경우
+      setSelectDateDay(day);
+      setSelectDate(date);
+      onChangeDate(date);
+      return;
+    }
   };
 
   return (
@@ -160,7 +164,7 @@ const WeekCalendar = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
+    // height: 100,
     width: '100%',
   },
   headerContainer: {
