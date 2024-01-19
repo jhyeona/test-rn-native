@@ -7,8 +7,16 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Schedule" component={Schedule} />
-      <Tab.Screen name="Mypage" component={Mypage} />
+      <Tab.Screen
+        name="Schedule"
+        component={Schedule}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Mypage"
+        component={Mypage}
+        options={{headerShown: false}}
+      />
     </Tab.Navigator>
   );
 };

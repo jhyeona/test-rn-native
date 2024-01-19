@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig} from 'axios';
+import {AxiosRequestConfig} from 'axios';
 import instance from './instance.ts';
 
 export const requestGet = async (url: string, config?: AxiosRequestConfig) => {

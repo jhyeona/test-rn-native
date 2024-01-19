@@ -1,15 +1,17 @@
 import React from 'react';
-import 'react-native-gesture-handler';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {RecoilRoot} from 'recoil';
-import RootStackNavigation from './src/navigation/RootStackNavigation';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import RootStackNavigation from './src/navigation/RootStackNavigation';
 
 const queryClient = new QueryClient();
 function App(): React.JSX.Element {
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <RootStackNavigation />
+        <GestureHandlerRootView style={{flex: 1}}>
+          <RootStackNavigation />
+        </GestureHandlerRootView>
       </QueryClientProvider>
     </RecoilRoot>
   );

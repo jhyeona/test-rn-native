@@ -1,6 +1,6 @@
 import {ViewStyle} from 'react-native';
 
-export interface apiResponse {
+export interface ApiResponse {
   txid: string;
   code: string;
   message: string;

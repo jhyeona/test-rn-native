@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import axios from 'axios';
-import {apiResponse} from '../../types/common.ts';
 import Checkbox from '../../components/common/Checkbox.tsx';
 import {postGetToken} from '../../hooks/useSignIn.ts';
 import {useSetRecoilState} from 'recoil';
@@ -45,8 +44,9 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     };
     try {
       const response = await postGetToken(args);
-      storage.set('access_token', response.data.access_token);
-      storage.set('refresh_token', response.data.refresh_token);
+
+      storage.set('access_token', response.access_token);
+      storage.set('refresh_token', response.refresh_token);
       setIsLogin(true);
       if (isChecked) {
         storage.set('user_phone', id);
@@ -54,8 +54,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
       handlePage('Root');
     } catch (error) {
-      console.log('error,', error);
-      if (axios.isAxiosError<apiResponse, any>(error)) {
+      console.log('ERROR,', error);
+      if (axios.isAxiosError<any>(error)) {
         console.log('[ERROR]', error?.response?.data.message);
         Alert.alert('아이디와 비밀번호를 확인하세요.');
       }
