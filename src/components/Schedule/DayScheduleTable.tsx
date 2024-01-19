@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {DayScheduleProps} from '../../types/schedule.ts';
 import moment from 'moment';
@@ -100,19 +100,20 @@ const DayScheduleTable = (props: Props) => {
     // }
   };
 
-  // useEffect(() => {
-  //   // 매 분마다 실행
-  //   const intervalId = setInterval(() => {
-  //     const newMinute = moment().minute();
-  //     console.log(newMinute);
-  //   }, 60000); // 1분마다 갱신
-  //
-  //   // 컴포넌트가 언마운트되면 clearInterval을 통해 interval을 정리
-  //   return () => clearInterval(intervalId);
-  // }, []); // 빈 배열은 컴포넌트 마운트 시에만 실행
+  useEffect(() => {
+    // 매 분마다 실행
+    const intervalId = setInterval(() => {
+      const newMinute = moment().minute();
+      console.log(newMinute);
+      // 출석 기록을 계속 갱신
+    }, 60000); // 1분마다 갱신
+
+    // 컴포넌트가 언마운트되면 clearInterval을 통해 interval을 정리
+    return () => clearInterval(intervalId);
+  }, []); // 빈 배열은 컴포넌트 마운트 시에만 실행
 
   return (
-    <ScrollView style={styles.table}>
+    <View style={styles.table}>
       <View style={[styles.row, styles.borderStyle, {backgroundColor: 'grey'}]}>
         {headers.map((header, index) => (
           <View
@@ -125,83 +126,91 @@ const DayScheduleTable = (props: Props) => {
           </View>
         ))}
       </View>
-      {scheduleData.scheduleList.map((value, index) => (
-        <View key={index} style={[styles.row, styles.borderStyle]}>
-          <View style={[styles.rowItem, index < 2 && {width: '30%'}]}>
-            <Text>
-              {moment(value.scheduleStartTime).format('HH:mm')} ~{' '}
-              {moment(value.scheduleStartTime)
-                .add(value.scheduleMinutes, 'minutes')
-                .format('HH:mm')}
-            </Text>
-            {onSetTimeLine(
-              moment(value.scheduleStartTime).format('YYYY-MM-DD HH:mm'),
-              moment(value.scheduleStartTime)
-                .add(value.scheduleMinutes, 'minutes')
-                .format('YYYY-MM-DD HH:mm'),
-            ) && <Text> ---timeline--- </Text>}
-          </View>
-          <View style={{flexGrow: 1, padding: 5}}>
-            <View
-              style={{
-                flexGrow: 1,
-                padding: 10,
-                backgroundColor: 'lightgrey',
-              }}>
+      <ScrollView>
+        {scheduleData.scheduleList.map((value, index) => (
+          <View key={index} style={[styles.row, styles.borderStyle]}>
+            <View style={[styles.rowItem]}>
+              <Text>
+                {moment(value.scheduleStartTime).format('HH:mm')} ~{' '}
+                {moment(value.scheduleStartTime)
+                  .add(value.scheduleMinutes, 'minutes')
+                  .format('HH:mm')}
+              </Text>
+              {onSetTimeLine(
+                moment(value.scheduleStartTime).format('YYYY-MM-DD HH:mm'),
+                moment(value.scheduleStartTime)
+                  .add(value.scheduleMinutes, 'minutes')
+                  .format('YYYY-MM-DD HH:mm'),
+              ) && <Text> ---timeline--- </Text>}
+            </View>
+            <View style={{flexGrow: 1, padding: 5}}>
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                style={{
+                  flexGrow: 1,
+                  padding: 10,
+                  backgroundColor: 'lightgrey',
+                }}>
                 <View
                   style={{
-                    flexGrow: 1,
-                    marginRight: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
-                  <Text>{value.lecture.lectureName}</Text>
-                  <Text>강의 기간</Text>
+                  <View
+                    style={{
+                      flexGrow: 1,
+                      marginRight: 5,
+                    }}>
+                    <Text>{value.lecture.lectureName}</Text>
+                    <Text>강의 기간</Text>
+                  </View>
+                  <Pressable onPress={onPressLectureDetail}>
+                    <Text>↔️</Text>
+                  </Pressable>
                 </View>
-                <Pressable onPress={onPressLectureDetail}>
-                  <Text>↔️</Text>
-                </Pressable>
-              </View>
-              <View style={[styles.row, {justifyContent: 'space-between'}]}>
-                <View style={styles.row}>
-                  <Text>[지도아이콘] </Text>
-                  <Text> 강의장소</Text>
+                <View style={[styles.row, {justifyContent: 'space-between'}]}>
+                  <View style={styles.row}>
+                    <Text>[지도아이콘] </Text>
+                    <Text> 강의장소</Text>
+                  </View>
+                  <Pressable style={styles.button}>
+                    <Text>출석 완료</Text>
+                  </Pressable>
                 </View>
-                <Pressable style={styles.button}>
-                  <Text>출석 완료</Text>
-                </Pressable>
-              </View>
-              {isEnter ? (
-                <Pressable
-                  style={[styles.button, {width: '100%'}]}
-                  onPress={() => onPressComplete(value.scheduleId)}>
-                  <Text>퇴실</Text>
-                </Pressable>
-              ) : (
-                <Pressable
-                  style={[styles.button, {width: '100%'}]}
-                  onPress={() => onPressEnter(value.scheduleId)}>
-                  <Text>출석체크</Text>
-                </Pressable>
-              )}
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Pressable style={styles.button} onPress={onPressLeave}>
-                  <Text>외출 시작</Text>
-                </Pressable>
-                <Pressable style={styles.button} onPress={onPressComeback}>
-                  <Text>외출 종료</Text>
-                </Pressable>
+                {isEnter ? (
+                  <Pressable
+                    style={[styles.button, {width: '100%'}]}
+                    onPress={() => onPressComplete(value.scheduleId)}>
+                    <Text>퇴실</Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    style={[styles.button, {width: '100%'}]}
+                    onPress={() => onPressEnter(value.scheduleId)}>
+                    <Text>출석체크</Text>
+                  </Pressable>
+                )}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Pressable style={styles.button} onPress={onPressLeave}>
+                    <Text>외출 시작</Text>
+                  </Pressable>
+                  <Pressable style={styles.button} onPress={onPressComeback}>
+                    <Text>외출 종료</Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      ))}
-    </ScrollView>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
-  table: {backgroundColor: 'white'},
+  table: {backgroundColor: 'white', height: 350},
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -212,6 +221,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 4,
     minHeight: 50,
+    width: '20%',
   },
   rowItemText: {textAlign: 'center'},
   borderStyle: {

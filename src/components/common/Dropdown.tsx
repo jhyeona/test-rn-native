@@ -7,6 +7,7 @@ interface Props {
   disabled: boolean;
   onChangeValue: any;
 }
+
 const Dropdown = (props: Props) => {
   const {list, disabled, onChangeValue} = props;
   const [open, setOpen] = useState(false);
@@ -33,7 +34,9 @@ const Dropdown = (props: Props) => {
 
 const styles = StyleSheet.create({
   dropdown: {
-    // zIndex: 1,
+    backgroundColor: 'grey',
+    borderWidth: 0,
+    marginBottom: 10,
   },
 });
 export default Dropdown;

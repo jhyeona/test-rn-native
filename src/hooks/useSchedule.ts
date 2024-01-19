@@ -1,5 +1,7 @@
 import {
   requestGetDaySchedule,
+  requestGetScheduleHistory,
+  requestGetWeekSchedule,
   requestPostEventComeback,
   requestPostEventComplete,
   requestPostEventEnter,
@@ -8,7 +10,7 @@ import {
 import {useSetRecoilState} from 'recoil';
 import {useEffect} from 'react';
 import scheduleState from '../recoil/Schedule';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {EventProps, GetScheduleProps} from '../types/schedule.ts';
 
 export const getDaySchedule = async (data: GetScheduleProps) => {
@@ -29,6 +31,20 @@ export const useGetDaySchedule = (args: GetScheduleProps) => {
     if (!data) return;
     setDaySchedule(data);
   });
+};
+
+export const getWeekSchedule = async (data: GetScheduleProps) => {
+  const response = await requestGetWeekSchedule(data);
+  return response.data.data;
+};
+
+export const useGetWeekSchedule = () => {
+  const {mutateAsync, data, status} = useMutation({
+    mutationFn: async (args: GetScheduleProps) => {
+      return getWeekSchedule(args);
+    },
+  });
+  return {mutateAsync, data, status};
 };
 
 export const postEventEnter = async (data: EventProps) => {

@@ -1,74 +1,3 @@
-// import React from 'react';
-// import {View, Text, StyleSheet} from 'react-native';
-//
-// const TimeTable = () => {
-//   const daysOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
-//   const startTime = '09:00';
-//   const endTime = '12:30';
-//
-//   const timeSlots = [];
-//   let current = new Date(`2021-01-01 ${startTime}`);
-//
-//   while (current <= new Date(`2021-01-01 ${endTime}`)) {
-//     const formattedTime = `${current
-//       .getHours()
-//       .toString()
-//       .padStart(2, '0')}:${current.getMinutes().toString().padStart(2, '0')}`;
-//     timeSlots.push(formattedTime);
-//
-//     // Add 10 minutes
-//     current.setMinutes(current.getMinutes() + 10);
-//   }
-//
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.timeColumn}>
-//         {timeSlots.map(formattedTime => (
-//           <View key={formattedTime} style={styles.timeCell}>
-//             <Text>{formattedTime}</Text>
-//           </View>
-//         ))}
-//       </View>
-//       <View style={styles.weekColumns}>
-//         {daysOfWeek.map((day, index) => (
-//           <View key={day} style={styles.dayColumn} />
-//         ))}
-//       </View>
-//     </View>
-//   );
-// };
-//
-// const styles = StyleSheet.create({
-//   container: {
-//     flexDirection: 'row',
-//   },
-//   timeColumn: {
-//     marginRight: 10,
-//     borderRightWidth: 1,
-//     borderColor: 'gray',
-//   },
-//   timeCell: {
-//     height: 40, // 고정된 높이
-//     borderBottomWidth: 1,
-//     borderColor: 'gray',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   dayColumn: {
-//     flex: 1,
-//     padding: 10,
-//     borderRightWidth: 1,
-//     borderColor: 'gray',
-//     height: 40, // 고정된 높이
-//   },
-//   weekColumns: {
-//     flex: 1,
-//     flexDirection: 'row',
-//   },
-// });
-//
-// export default TimeTable;
-
 import React, {useEffect, useMemo, useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {
@@ -78,78 +7,79 @@ import {
   TimelineCalendar,
 } from '@howljs/calendar-kit';
 import moment from 'moment/moment';
+import {WeekScheduleProps} from '../../types/schedule.ts';
 
-const fetchData = (props: {from: string; to: string}) =>
-  new Promise<EventItem[]>(resolve => {
-    //Fake api
-    setTimeout(() => {
-      // console.log(props);
-      resolve([]);
-    }, 1000);
-  });
+interface Props {
+  weekData: WeekScheduleProps;
+  onChangeWeek: (date: string) => void;
+}
+const TimeTable = (props: Props) => {
+  const {weekData, onChangeWeek} = props;
 
-const TimeTable = () => {
-  const exampleEvents: EventItem[] = [
-    {
-      id: '1',
-      title: 'Event 1',
-      start: moment().toISOString(),
-      end: moment().add(1, 'hour').toISOString(),
-      color: '#A3C7D6',
-    },
-    {
-      id: '2',
-      title: 'Event 2',
-      start: '2024-01-18T11:00:05.313Z',
-      end: '2024-01-18T14:00:05.313Z',
-      color: '#B1AFFF',
-    },
-  ];
+  const dummyData = {
+    scheduleBunchList: [
+      {
+        lecture: {
+          lectureId: 1,
+          lectureName: 'Java 테스트',
+          lectureStartDate: '2024-01-01',
+          lectureEndDate: '2024-10-31',
+          lectureAllowMinus: 5,
+          lectureAllowPlus: 5,
+          lectureAllowLatePlus: 0,
+          lectureCheckInterval: 60,
+        },
+        scheduleBunchStartTime: '2024-01-17T12:10:00',
+        scheduleBunchMinutes: 220,
+      },
+      {
+        lecture: {
+          lectureId: 1,
+          lectureName: 'Java 테스트',
+          lectureStartDate: '2024-01-01',
+          lectureEndDate: '2024-10-31',
+          lectureAllowMinus: 5,
+          lectureAllowPlus: 5,
+          lectureAllowLatePlus: 0,
+          lectureCheckInterval: 60,
+        },
+        scheduleBunchStartTime: '2024-01-19T09:10:00',
+        scheduleBunchMinutes: 120,
+      },
+    ],
+  };
 
-  const [events, setEvents] = useState<EventItem[]>(exampleEvents);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const numOfDays = 7;
-    const fromDate = new Date();
-    const toDate = new Date();
-    toDate.setDate(new Date().getDate() + numOfDays);
-    fetchData({
-      from: fromDate.toISOString(),
-      to: toDate.toISOString(),
-    })
-      .then(res => {
-        setEvents(prev => [...prev, ...res]);
-      })
-      .finally(() => {
-        setIsLoading(false);
+  const formattedData = () => {
+    const formatted: EventItem[] = [];
+    dummyData.scheduleBunchList.map((info, i) => {
+      formatted.push({
+        id: i.toString(),
+        title: info.lecture.lectureName,
+        start: moment(info.scheduleBunchStartTime).toISOString(),
+        end: moment(info.scheduleBunchStartTime)
+          .add(info.scheduleBunchMinutes, 'minutes')
+          .toISOString(),
+        color: '#A3C7D6',
       });
-  }, []);
+    });
+    return formatted;
+  };
+
+  const [events, setEvents] = useState<EventItem[]>(formattedData());
+  const [isLoading, setIsLoading] = useState(true);
 
   MomentConfig.updateLocale('ko', {
     weekdaysShort: '일_월_화_수_목_금_토'.split('_'),
   });
 
-  const onPressDayNum = (date: string) => {
-    console.log(date);
-  };
-
   const _onDateChanged = (date: string) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const numOfDays = 7;
     const fromDate = new Date(date);
     const toDate = new Date(date);
     toDate.setDate(toDate.getDate() + numOfDays);
-    fetchData({
-      from: fromDate.toISOString(),
-      to: toDate.toISOString(),
-    })
-      .then(res => {
-        setEvents(prev => [...prev, ...res]);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    onChangeWeek(moment(fromDate).format('YYYYMMDD'));
+    // setIsLoading(false);
   };
 
   const highlightDates: HighlightDates = useMemo(
@@ -189,15 +119,19 @@ const TimeTable = () => {
     loadingBarColor: '#D61C4E',
   };
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, [events]);
+
   return (
     <SafeAreaView style={styles.container}>
       <TimelineCalendar
         viewMode="week"
-        events={exampleEvents}
+        events={events}
         isLoading={isLoading}
         highlightDates={highlightDates}
-        // onDateChanged={_onDateChanged}
-        onPressDayNum={date => onPressDayNum(date)}
+        onDateChanged={_onDateChanged}
+        // onPressDayNum={date => onPressDayNum(date)}
         locale="ko"
         start={9}
         end={24}

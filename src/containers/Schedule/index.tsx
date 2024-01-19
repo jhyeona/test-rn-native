@@ -13,12 +13,18 @@ import DayScheduleTable from '../../components/Schedule/DayScheduleTable.tsx';
 import Dropdown from '../../components/common/Dropdown.tsx';
 import {useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
-import {useGetDaySchedule} from '../../hooks/useSchedule.ts';
+import {
+  getWeekSchedule,
+  useGetDaySchedule,
+  useGetWeekSchedule,
+} from '../../hooks/useSchedule.ts';
 import {useGetUserInfo} from '../../hooks/useUser.ts';
 import WeeklyCalendar from '../../components/Schedule/WeekCalendar.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {StudentInfoProps} from '../../types/user.ts';
 import TimeTable from '../../components/Schedule/TimeTable.tsx';
+import scheduleState from '../../recoil/Schedule';
+import {GetScheduleProps} from '../../types/schedule.ts';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -99,6 +105,11 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     academyId: selectAcademy,
     date: moment(selectDate).format('YYYYMMDD'),
   });
+  const {
+    mutateAsync: mutateGetWeekSchedule,
+    data: weekData,
+    status: weekDataStatus,
+  } = useGetWeekSchedule();
 
   const onChangeDropList = (value: string) => {
     const studentInfo = userData?.studentList.filter(val => {
@@ -110,6 +121,14 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   const onChangeDate = (date: string) => {
     setSelectDate(moment(date));
+  };
+
+  const onChangeWeek = async (date: string) => {
+    const args = {
+      academyId: selectAcademy,
+      date: date,
+    };
+    await mutateGetWeekSchedule(args);
   };
 
   const toggleSwitch = () => {
@@ -135,12 +154,13 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   return (
     <SafeAreaView>
-      <View>
+      <View style={{zIndex: 2}}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            padding: 30,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
           }}>
           {isWeekend ? (
             <>
@@ -154,7 +174,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             </>
           )}
           <View>
-            <Text>오늘/주간 설정</Text>
+            {/*<Text>오늘/주간 설정</Text>*/}
             <Switch
               trackColor={{false: 'skyblue', true: 'gold'}}
               thumbColor={isWeekend ? 'gold' : 'skyblue'}
@@ -169,10 +189,21 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           onChangeValue={onChangeDropList}
           disabled={userData ? userData.studentList.length <= 1 : false}
         />
+
+        <Pressable
+          onPress={onPressHistory}
+          style={{
+            backgroundColor: 'lightgrey',
+            alignItems: 'center',
+            margin: 10,
+            padding: 10,
+          }}>
+          <Text>내 출석 기록 보기</Text>
+        </Pressable>
       </View>
       {isWeekend ? (
         <View style={{height: '80%', paddingBottom: 120}}>
-          <TimeTable />
+          <TimeTable weekData={weekData} onChangeWeek={onChangeWeek} />
         </View>
       ) : (
         <View>
@@ -188,16 +219,6 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           />
         </View>
       )}
-      <Pressable
-        onPress={onPressHistory}
-        style={{
-          backgroundColor: 'lightgrey',
-          alignItems: 'center',
-          margin: 10,
-          padding: 10,
-        }}>
-        <Text>내 출석 기록 보기</Text>
-      </Pressable>
     </SafeAreaView>
   );
 };

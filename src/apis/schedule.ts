@@ -12,9 +12,10 @@ export const requestGetDaySchedule = async (data: GetScheduleProps) => {
   return requestGet(url);
 };
 
-export const requestGetWeekSchedule = async (date: string) => {
+export const requestGetWeekSchedule = async (data: GetScheduleProps) => {
   // 주간 일정 리스트
-  const url = `/schedule/week/${date}`;
+  const {academyId, date} = data;
+  const url = `/schedule/week/academy/${academyId}/date/${date}`;
   return requestGet(url);
 };
 
