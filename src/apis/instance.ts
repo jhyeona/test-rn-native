@@ -32,7 +32,6 @@ instance.interceptors.request.use(
 // 응답 인터셉터
 instance.interceptors.response.use(
   function (response) {
-    // console.log('RESPONSE:', response.data);
     // 응답 데이터가 있는 작업 수행
     return response;
   },
@@ -55,6 +54,10 @@ instance.interceptors.response.use(
       Alert.alert('토큰 X');
       storage.delete('access_token');
       storage.delete('refresh_token');
+    }
+
+    if (axios.isAxiosError<any>(error)) {
+      return Promise.reject(error?.response?.data);
     }
     return Promise.reject(error);
   },

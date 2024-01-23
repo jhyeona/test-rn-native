@@ -4,25 +4,30 @@ export interface GetScheduleProps {
 }
 
 export interface GetScheduleHistoryProps {
-  attendeeId: string;
-  scheduleId: string;
+  attendeeId: number;
+  scheduleId?: number;
+}
+export interface LectureProps {
+  lectureId: number;
+  lectureName: string;
+  lecturePlaceName: string;
+  lectureStartDate: string;
+  lectureEndDate: string;
+  lectureAllowMinus: number;
+  lectureAllowPlus: number;
+  lectureAllowLatePlus: number;
+  lectureCheckInterval: number;
 }
 
+export interface DayScheduleDetailProps {
+  scheduleId: number;
+  scheduleParentId: number | null;
+  scheduleStartTime: string;
+  scheduleMinutes: number;
+  lecture: LectureProps;
+}
 export interface DayScheduleProps {
-  scheduleList: Array<{
-    scheduleId: number;
-    scheduleParentId: number | null;
-    scheduleStartTime: string;
-    scheduleMinutes: number;
-    lecture: {
-      lectureId: number;
-      lectureName: string;
-      lectureAllowMinus: number;
-      lectureAllowPlus: number;
-      lectureAllowLatePlus: number;
-      lectureCheckInterval: number;
-    };
-  }>;
+  scheduleList: Array<DayScheduleDetailProps>;
 }
 
 export interface WeekScheduleProps {
@@ -34,28 +39,23 @@ export interface WeekScheduleProps {
   }>;
 }
 
-export interface EventDetailProps {
-  scheduleList: Array<{
-    scheduleId: number;
-    scheduleParentId: number | null;
-    scheduleStartTime: string;
-    scheduleMinutes: number;
-    lecture: {
-      lectureId: number;
-      lectureName: string;
-      lectureAllowMinus: number;
-      lectureAllowPlus: number;
-      lectureAllowLatePlus: number;
-      lectureCheckInterval: number;
-    };
-    attendeeId: number;
-    eventList: Array<{
-      eventId: number;
-      eventType: string;
-      eventTime: string;
-      status: string;
-    }>;
+export interface ScheduleProps {
+  scheduleId: number;
+  scheduleParentId: number | null;
+  scheduleStartTime: string;
+  scheduleMinutes: number;
+  lecture: LectureProps;
+  attendeeId: number;
+  eventList: Array<{
+    eventId: number;
+    eventType: string;
+    eventTime: string;
+    status: string;
   }>;
+}
+
+export interface EventDetailProps {
+  scheduleList: Array<ScheduleProps>;
 }
 
 export interface EventProps {
