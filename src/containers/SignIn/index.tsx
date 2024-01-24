@@ -39,27 +39,21 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       Alert.alert('비밀번호를 입력하세요.');
       return;
     }
-    const args = {
-      data: {phone: id, password: password},
-    };
+    const payload = {phone: id, password: password};
     try {
-      // const response = await postGetToken(args);
-      await postGetToken(args);
+      const response = await postGetToken(payload);
+      if (response) {
+        storage.set('access_token', response.access_token);
+        storage.set('refresh_token', response.refresh_token);
+      }
+      setIsLogin(true);
+      if (isChecked) {
+        storage.set('user_phone', id);
+      }
 
-      // storage.set('access_token', response.access_token);
-      // storage.set('refresh_token', response.refresh_token);
-      // setIsLogin(true);
-      // if (isChecked) {
-      //   storage.set('user_phone', id);
-      // }
-
-      // handlePage('Root');
+      handlePage('Root');
     } catch (error) {
       console.log('ERROR,', error);
-      // if (axios.isAxiosError<any>(error)) {
-      //   console.log('[ERROR]', error?.response?.data.message);
-      //   Alert.alert('아이디와 비밀번호를 확인하세요.');
-      // }
     }
   };
   const handlePage = (pageName: string) => {

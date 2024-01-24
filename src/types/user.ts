@@ -14,7 +14,7 @@ export interface SmsConfirmProps {
 
 export interface StudentInfoProps {
   attendeeId: number;
-  // typeAttendee: string;
+  typeAttendee: string;
   academy: {
     academyId: number;
     name: string;

@@ -14,7 +14,6 @@ import Dropdown from '../../components/common/Dropdown.tsx';
 import {useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {
-  getWeekSchedule,
   useGetDaySchedule,
   useGetWeekSchedule,
 } from '../../hooks/useSchedule.ts';
@@ -24,11 +23,10 @@ import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/type
 import {StudentInfoProps} from '../../types/user.ts';
 import TimeTable from '../../components/Schedule/TimeTable.tsx';
 import scheduleState from '../../recoil/Schedule';
-import {GetScheduleProps} from '../../types/schedule.ts';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
-  // const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
+  const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
   const [isWeekend, setIsWeekend] = useState(false);
   const [selectDate, setSelectDate] = useState(moment());
   const [selectStudentInfo, setSelectStudentInfo] = useState<
@@ -39,103 +37,43 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     userData ? userData.studentList[0].academy.academyId : undefined,
   );
 
-  const dayScheduleData = {
-    scheduleList: [
-      {
-        scheduleId: 1,
-        scheduleParentId: null,
-        scheduleStartTime: '2024-01-18T17:04:00',
-        scheduleMinutes: 60,
-        lecture: {
-          lectureId: 1,
-          lectureName: 'Java 테스트',
-          lectureAllowMinus: 5,
-          lectureAllowPlus: 5,
-          lectureAllowLatePlus: 0,
-          lectureCheckInterval: 60,
-        },
-      },
-      {
-        scheduleId: 2,
-        scheduleParentId: null,
-        scheduleStartTime: '2024-01-18T18:05:00',
-        scheduleMinutes: 60,
-        lecture: {
-          lectureId: 1,
-          lectureName: 'Java 테스트',
-          lectureAllowMinus: 5,
-          lectureAllowPlus: 5,
-          lectureAllowLatePlus: 0,
-          lectureCheckInterval: 60,
-        },
-      },
-      {
-        scheduleId: 3,
-        scheduleParentId: null,
-        scheduleStartTime: '2024-01-18T17:04:00',
-        scheduleMinutes: 60,
-        lecture: {
-          lectureId: 1,
-          lectureName: 'Java 테스트',
-          lectureAllowMinus: 5,
-          lectureAllowPlus: 5,
-          lectureAllowLatePlus: 0,
-          lectureCheckInterval: 60,
-        },
-      },
-      {
-        scheduleId: 4,
-        scheduleParentId: null,
-        scheduleStartTime: '2024-01-18T17:04:00',
-        scheduleMinutes: 60,
-        lecture: {
-          lectureId: 1,
-          lectureName: 'Java 테스트',
-          lectureAllowMinus: 5,
-          lectureAllowPlus: 5,
-          lectureAllowLatePlus: 0,
-          lectureCheckInterval: 60,
-        },
-      },
-    ],
-  };
-
-  useGetUserInfo();
+  useGetUserInfo(); //유저 정보
   useGetDaySchedule({
+    // 일일 데이터
     academyId: selectAcademy,
     date: moment(selectDate).format('YYYYMMDD'),
   });
-  const {
-    mutateAsync: mutateGetWeekSchedule,
-    data: weekData,
-    status: weekDataStatus,
-  } = useGetWeekSchedule();
+  useGetWeekSchedule({
+    // 주간 데이터
+    academyId: selectAcademy,
+    date: moment(selectDate).format('YYYYMMDD'),
+  });
 
   const onChangeDropList = (value: string) => {
+    // 기관 리스트
     const studentInfo = userData?.studentList.filter(val => {
       return val.academy.academyId === Number(value);
     });
-    setSelectStudentInfo(studentInfo);
+    setSelectStudentInfo(studentInfo && studentInfo[0]);
     setSelectAcademy(Number(value));
   };
 
   const onChangeDate = (date: string) => {
+    // 일일 데이터 - 날짜 선택
     setSelectDate(moment(date));
   };
 
   const onChangeWeek = async (date: string) => {
-    const args = {
-      academyId: selectAcademy,
-      date: date,
-    };
-    await mutateGetWeekSchedule(args);
+    setSelectDate(moment(date));
   };
 
   const toggleSwitch = () => {
+    // 일일 / 주간 토글 스위치
     setIsWeekend(!isWeekend);
   };
 
   const onPressHistory = () => {
+    // 내 출석 기록 보기 페이지로 이동
     navigation.navigate('ScheduleHistory');
   };
 
@@ -153,7 +91,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   }, [userData]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <View style={{zIndex: 2}}>
         <View
           style={{
@@ -170,11 +108,10 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           ) : (
             <>
               <Text>오늘 일정</Text>
-              <Text>2024.01.01</Text>
+              <Text>{moment().format('YYYY.MM.DD')}</Text>
             </>
           )}
           <View>
-            {/*<Text>오늘/주간 설정</Text>*/}
             <Switch
               trackColor={{false: 'skyblue', true: 'gold'}}
               thumbColor={isWeekend ? 'gold' : 'skyblue'}
@@ -189,36 +126,37 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           onChangeValue={onChangeDropList}
           disabled={userData ? userData.studentList.length <= 1 : false}
         />
-
-        <Pressable
-          onPress={onPressHistory}
-          style={{
-            backgroundColor: 'lightgrey',
-            alignItems: 'center',
-            margin: 10,
-            padding: 10,
-          }}>
-          <Text>내 출석 기록 보기</Text>
-        </Pressable>
       </View>
       {isWeekend ? (
-        <View style={{height: '80%', paddingBottom: 120}}>
-          <TimeTable weekData={weekData} onChangeWeek={onChangeWeek} />
+        <View style={{flexGrow: 1}}>
+          <TimeTable onChangeWeek={onChangeWeek} />
         </View>
       ) : (
-        <View>
+        <>
           <WeeklyCalendar
             calendarType={isWeekend ? 'week' : 'day'}
             onChangeDate={onChangeDate}
           />
-          <DayScheduleTable
-            navigation={navigation}
-            headers={['시간', '예정 강의']}
-            scheduleData={dayScheduleData ?? {scheduleList: []}}
-            studentInfo={selectStudentInfo}
-          />
-        </View>
+          {selectStudentInfo && (
+            <DayScheduleTable
+              navigation={navigation}
+              headers={['시간', '예정 강의']}
+              scheduleData={dayScheduleData ?? {scheduleList: []}}
+              studentInfo={selectStudentInfo}
+            />
+          )}
+        </>
       )}
+      <Pressable
+        onPress={onPressHistory}
+        style={{
+          backgroundColor: 'lightgrey',
+          alignItems: 'center',
+          margin: 10,
+          padding: 10,
+        }}>
+        <Text>내 출석 기록 보기</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
