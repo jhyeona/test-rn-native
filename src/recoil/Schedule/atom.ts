@@ -1,8 +1,17 @@
 import {atom} from 'recoil';
-import {DayScheduleProps, ScheduleProps} from '../../types/schedule.ts';
+import {
+  DayScheduleProps,
+  ScheduleProps,
+  WeekScheduleProps,
+} from '../../types/schedule.ts';
 
 export const dayScheduleState = atom<DayScheduleProps | null>({
   key: 'dayScheduleState',
+  default: null,
+});
+
+export const weekScheduleState = atom<WeekScheduleProps | null>({
+  key: 'weekScheduleState',
   default: null,
 });
 

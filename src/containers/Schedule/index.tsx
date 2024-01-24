@@ -43,12 +43,11 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     academyId: selectAcademy,
     date: moment(selectDate).format('YYYYMMDD'),
   });
-
-  const {
+  useGetWeekSchedule({
     // 주간 데이터
-    mutateAsync: mutateGetWeekSchedule,
-    data: weekData,
-  } = useGetWeekSchedule();
+    academyId: selectAcademy,
+    date: moment(selectDate).format('YYYYMMDD'),
+  });
 
   const onChangeDropList = (value: string) => {
     // 기관 리스트
@@ -65,12 +64,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   };
 
   const onChangeWeek = async (date: string) => {
-    // 주간 데이터 - 주간 변경
-    const args = {
-      academyId: selectAcademy,
-      date: date,
-    };
-    await mutateGetWeekSchedule(args);
+    setSelectDate(moment(date));
   };
 
   const toggleSwitch = () => {
@@ -97,74 +91,72 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   }, [userData]);
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={{zIndex: 2}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}>
-            {isWeekend ? (
-              <>
-                <Text>주간 일정</Text>
-                <Text>2024.01</Text>
-              </>
-            ) : (
-              <>
-                <Text>오늘 일정</Text>
-                <Text>2024.01.01</Text>
-              </>
-            )}
-            <View>
-              <Switch
-                trackColor={{false: 'skyblue', true: 'gold'}}
-                thumbColor={isWeekend ? 'gold' : 'skyblue'}
-                ios_backgroundColor="white"
-                onValueChange={toggleSwitch}
-                value={isWeekend}
-              />
-            </View>
-          </View>
-          <Dropdown
-            list={academyList}
-            onChangeValue={onChangeDropList}
-            disabled={userData ? userData.studentList.length <= 1 : false}
-          />
-        </View>
-        {isWeekend ? (
-          <View>
-            <TimeTable weekData={weekData} onChangeWeek={onChangeWeek} />
-          </View>
-        ) : (
-          <View>
-            <WeeklyCalendar
-              calendarType={isWeekend ? 'week' : 'day'}
-              onChangeDate={onChangeDate}
-            />
-            {selectStudentInfo && (
-              <DayScheduleTable
-                navigation={navigation}
-                headers={['시간', '예정 강의']}
-                scheduleData={dayScheduleData ?? {scheduleList: []}}
-                studentInfo={selectStudentInfo}
-              />
-            )}
-          </View>
-        )}
-        <Pressable
-          onPress={onPressHistory}
+    <SafeAreaView style={{flex: 1}}>
+      <View style={{zIndex: 2}}>
+        <View
           style={{
-            backgroundColor: 'lightgrey',
-            alignItems: 'center',
-            margin: 10,
-            padding: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 20,
+            paddingVertical: 10,
           }}>
-          <Text>내 출석 기록 보기</Text>
-        </Pressable>
-      </ScrollView>
+          {isWeekend ? (
+            <>
+              <Text>주간 일정</Text>
+              <Text>2024.01</Text>
+            </>
+          ) : (
+            <>
+              <Text>오늘 일정</Text>
+              <Text>{moment().format('YYYY.MM.DD')}</Text>
+            </>
+          )}
+          <View>
+            <Switch
+              trackColor={{false: 'skyblue', true: 'gold'}}
+              thumbColor={isWeekend ? 'gold' : 'skyblue'}
+              ios_backgroundColor="white"
+              onValueChange={toggleSwitch}
+              value={isWeekend}
+            />
+          </View>
+        </View>
+        <Dropdown
+          list={academyList}
+          onChangeValue={onChangeDropList}
+          disabled={userData ? userData.studentList.length <= 1 : false}
+        />
+      </View>
+      {isWeekend ? (
+        <View style={{flexGrow: 1}}>
+          <TimeTable onChangeWeek={onChangeWeek} />
+        </View>
+      ) : (
+        <>
+          <WeeklyCalendar
+            calendarType={isWeekend ? 'week' : 'day'}
+            onChangeDate={onChangeDate}
+          />
+          {selectStudentInfo && (
+            <DayScheduleTable
+              navigation={navigation}
+              headers={['시간', '예정 강의']}
+              scheduleData={dayScheduleData ?? {scheduleList: []}}
+              studentInfo={selectStudentInfo}
+            />
+          )}
+        </>
+      )}
+      <Pressable
+        onPress={onPressHistory}
+        style={{
+          backgroundColor: 'lightgrey',
+          alignItems: 'center',
+          margin: 10,
+          padding: 10,
+        }}>
+        <Text>내 출석 기록 보기</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

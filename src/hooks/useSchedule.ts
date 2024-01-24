@@ -10,9 +10,8 @@ import {
 import {useSetRecoilState} from 'recoil';
 import {useEffect} from 'react';
 import scheduleState from '../recoil/Schedule';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {
-  EventDetailProps,
   EventProps,
   GetScheduleHistoryProps,
   GetScheduleProps,
@@ -44,13 +43,19 @@ export const getWeekSchedule = async (data: GetScheduleProps) => {
   return response.data.data;
 };
 
-export const useGetWeekSchedule = () => {
-  const {mutateAsync, data, status} = useMutation({
-    mutationFn: async (args: GetScheduleProps) => {
+export const useGetWeekSchedule = (args: GetScheduleProps) => {
+  const setWeekSchedule = useSetRecoilState(scheduleState.weekScheduleState);
+  const {data} = useQuery({
+    queryKey: ['weekSchedule', args],
+    queryFn: async () => {
       return getWeekSchedule(args);
     },
+    enabled: !!args.academyId,
   });
-  return {mutateAsync, data, status};
+  useEffect(() => {
+    if (!data) return;
+    setWeekSchedule(data);
+  });
 };
 
 export const postEventEnter = async (data: EventProps) => {

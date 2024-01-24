@@ -32,10 +32,9 @@ export interface DayScheduleProps {
 
 export interface WeekScheduleProps {
   scheduleBunchList: Array<{
-    lectureId: number;
-    lectureName: string;
-    scheduleStartTime: string;
-    scheduleMinutes: number;
+    lecture: LectureProps;
+    scheduleBunchStartTime: string;
+    scheduleBunchMinutes: number;
   }>;
 }
 

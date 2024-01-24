@@ -131,15 +131,15 @@ const WeekCalendar = (props: Props) => {
           }
         }}>
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={goToPreviousWeek}>
-              <Text style={styles.arrowText}>{'<'}</Text>
-            </TouchableOpacity>
-            <Text style={styles.dateText}>{month}</Text>
-            <TouchableOpacity onPress={goToNextWeek}>
-              <Text style={styles.arrowText}>{'>'}</Text>
-            </TouchableOpacity>
-          </View>
+          {/*<View style={styles.headerContainer}>*/}
+          {/*  <TouchableOpacity onPress={goToPreviousWeek}>*/}
+          {/*    <Text style={styles.arrowText}>{'<'}</Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <Text style={styles.dateText}>{month}</Text>*/}
+          {/*  <TouchableOpacity onPress={goToNextWeek}>*/}
+          {/*    <Text style={styles.arrowText}>{'>'}</Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</View>*/}
           <FlatList
             ref={ref => (flatListRef.current = ref)}
             horizontal
