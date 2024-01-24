@@ -1,3 +1,17 @@
+export interface GetAccessTokenProps {
+  role: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
+}
+
+export interface SmsConfirmProps {
+  smsConfirmedId: string;
+  phone: string;
+  ttl: number;
+}
+
 export interface StudentInfoProps {
   attendeeId: number;
   // typeAttendee: string;
