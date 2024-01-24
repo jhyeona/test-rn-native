@@ -8,7 +8,7 @@ import {
   requestPostEventLeave,
 } from '../apis/schedule.ts';
 import {useSetRecoilState} from 'recoil';
-import {useEffect} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import scheduleState from '../recoil/Schedule';
 import {useQuery} from '@tanstack/react-query';
 import {
@@ -23,6 +23,7 @@ export const getDaySchedule = async (data: GetScheduleProps) => {
 };
 
 export const useGetDaySchedule = (args: GetScheduleProps) => {
+  const [test, setTest] = useState(null);
   const setDaySchedule = useSetRecoilState(scheduleState.dayScheduleState);
   const {data} = useQuery({
     queryKey: ['daySchedule', args],
@@ -35,7 +36,8 @@ export const useGetDaySchedule = (args: GetScheduleProps) => {
   useEffect(() => {
     if (!data) return;
     setDaySchedule(data);
-  });
+    setTest(data.scheduleList.filter(item => item.lecture.length > 0));
+  }, [data]);
 };
 
 export const getWeekSchedule = async (data: GetScheduleProps) => {

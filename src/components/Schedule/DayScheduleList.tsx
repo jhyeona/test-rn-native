@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import {
   postEventComeback,
@@ -9,6 +9,7 @@ import {
 } from '../../hooks/useSchedule.ts';
 import {EventProps, ScheduleProps} from '../../types/schedule.ts';
 import {StudentInfoProps} from '../../types/user.ts';
+import {ApiResponseProps} from '../../types/common.ts';
 
 interface Props {
   scheduleId: number;
@@ -16,9 +17,10 @@ interface Props {
   isBefore?: boolean;
   isAfter?: boolean;
   isNow?: boolean;
+  testList: Array<ReactNode>;
 }
 const DayScheduleList = (props: Props) => {
-  const {scheduleId, studentInfo, isBefore, isAfter, isNow} = props;
+  const {scheduleId, studentInfo, isBefore, isAfter, isNow, testList} = props;
   const [args, setArgs] = useState<EventProps>({
     attendeeId: studentInfo.attendeeId,
     scheduleId: scheduleId,
@@ -57,7 +59,7 @@ const DayScheduleList = (props: Props) => {
       console.log('RESPONSE:', response);
 
       Alert.alert('입실 처리 되었습니다.');
-    } catch (e) {
+    } catch (e: any) {
       if (e.code === '1004') {
         Alert.alert('이미 입실 처리 되었습니다.');
         return;
@@ -81,7 +83,7 @@ const DayScheduleList = (props: Props) => {
       console.log('퇴실:', response);
       setIsComplete(true);
       Alert.alert('퇴실 처리 되었습니다.');
-    } catch (e) {
+    } catch (e: any) {
       if (e.code === '1004') {
         Alert.alert('이미 퇴실 처리 되었습니다.');
         return;
@@ -188,6 +190,7 @@ const DayScheduleList = (props: Props) => {
               </Pressable>
             )}
           </View>
+          {testList.length > 0 && testList}
         </>
       )}
     </View>

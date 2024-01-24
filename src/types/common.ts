@@ -1,12 +1,19 @@
 import {ViewStyle} from 'react-native';
 
-export interface ApiResponse {
+export interface CommonResponseProps<T> {
   txid: string;
   code: string;
   message: string;
   description: string;
   timestamp: number;
-  data?: null;
+  data?: T;
+}
+
+export interface ApiResponseProps<T> {
+  code: string;
+  data: CommonResponseProps<T>;
+  message: string;
+  statusCode: number;
 }
 
 export interface checkboxProps {

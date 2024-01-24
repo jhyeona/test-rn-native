@@ -1,6 +1,9 @@
 import {requestPostGetToken} from '../apis/signIn.ts';
 
-export const postGetToken = async (args: {data: {}}) => {
-  const response = await requestPostGetToken(args);
+export const postGetToken = async (payload: {
+  phone: string;
+  password: string;
+}) => {
+  const response = await requestPostGetToken(payload);
   return response.data.data;
 };

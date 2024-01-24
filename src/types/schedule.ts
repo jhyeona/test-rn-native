@@ -16,12 +16,15 @@ export interface LectureProps {
   lectureAllowMinus: number;
   lectureAllowPlus: number;
   lectureAllowLatePlus: number;
+  lectureAllowEndMinus: number;
+  lectureAllowEndPlus: number;
   lectureCheckInterval: number;
 }
 
 export interface DayScheduleDetailProps {
   scheduleId: number;
   scheduleParentId: number | null;
+  scheduleChildId: number | null;
   scheduleStartTime: string;
   scheduleMinutes: number;
   lecture: LectureProps;
@@ -41,6 +44,7 @@ export interface WeekScheduleProps {
 export interface ScheduleProps {
   scheduleId: number;
   scheduleParentId: number | null;
+  scheduleChildId: number | null;
   scheduleStartTime: string;
   scheduleMinutes: number;
   lecture: LectureProps;
@@ -72,5 +76,17 @@ export interface EventProps {
     id: string;
     major: number;
     minor: number;
+  }>;
+}
+
+export interface ScheduleHistoryProps extends ScheduleProps {
+  completeEvent: string | null;
+  isLeaved: boolean;
+  intervalTimeList: Array<string>;
+  intervalEventList: Array<{
+    eventId: number;
+    eventType: string;
+    eventTime: string;
+    status: string;
   }>;
 }
