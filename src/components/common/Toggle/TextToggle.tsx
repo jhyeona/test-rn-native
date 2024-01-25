@@ -25,7 +25,7 @@ const TextToggle = (props: Props) => {
 
   const circlePosition = toggleAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [2, 43], // Adjust this value to control the smoothness of the animation
+    outputRange: [2, 44], // Adjust this value to control the smoothness of the animation
   });
 
   return (
@@ -64,8 +64,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   circle: {
-    width: 20,
-    height: 20,
+    width: 19,
+    height: 19,
     borderRadius: 13.5,
     backgroundColor: 'white',
   },

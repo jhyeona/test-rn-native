@@ -37,9 +37,10 @@ const CInput = (props: Props) => {
           placeholder={placeholder}
           placeholderTextColor={COLORS.placeholder}
           onChangeText={text => setInputValue(text)}
-          value={inputValue}
+          value=""
           style={styles.input}
           secureTextEntry={secureTextEntry}
+          autoCapitalize="none"
         />
       </View>
     </View>
@@ -49,7 +50,8 @@ const CInput = (props: Props) => {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
-    padding: 16,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
     height: 52,
     marginBottom: 24,
     borderWidth: 1,
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 16,
+    color: 'black',
   },
   errorMessage: {marginLeft: 8, color: COLORS.warning, fontSize: 12},
 });

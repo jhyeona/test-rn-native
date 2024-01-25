@@ -31,7 +31,7 @@ const Dropdown = (props: Props) => {
   };
 
   return (
-    <View>
+    <View style={{zIndex: 2}}>
       <View style={styles.container}>
         <TouchableOpacity
           disabled={disabled}
@@ -64,6 +64,7 @@ const Dropdown = (props: Props) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    marginBottom: 10,
     paddingHorizontal: 15,
     width: '100%',
     height: 42,
