@@ -24,11 +24,7 @@ import {
   postSignUpSMSConfirm,
   postSignUpTAS,
 } from '../../hooks/useSignUp.ts';
-import axios from 'axios';
-import {apiResponse} from '../../types/common.ts';
-import Dropdown from '../../components/common/Dropdown.tsx';
 import {TextInputChangeEventData} from 'react-native/Libraries/Components/TextInput/TextInput';
-import Checkbox from '../../components/common/Checkbox.tsx';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
@@ -91,10 +87,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       await postSignUpPhone(phone);
       return true;
     } catch (error) {
-      console.log('error:', error);
-      if (axios.isAxiosError<apiResponse, any>(error)) {
-        console.log('API Error:', error?.response?.data.message);
-      }
       return false;
     }
   };
@@ -151,17 +143,17 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       return;
     }
 
-    const resultTasCertification = await tasCertification();
-    if (resultTasCertification.status === 200) {
-      console.log('TAS Success:', resultTasCertification);
-    } else {
-      console.log('TAS Error:', resultTasCertification);
-      return;
-    }
-
-    const resultSMS = await smsCertification();
-    console.log(resultSMS);
-    if (resultSMS.code === '0000') Alert.alert('인증번호가 전송되었습니다.');
+    // const resultTasCertification = await tasCertification();
+    // if (resultTasCertification.status === 200) {
+    //   console.log('TAS Success:', resultTasCertification);
+    // } else {
+    //   console.log('TAS Error:', resultTasCertification);
+    //   return;
+    // }
+    //
+    // const resultSMS = await smsCertification();
+    // console.log(resultSMS);
+    // if (resultSMS.code === '0000') Alert.alert('인증번호가 전송되었습니다.');
   };
 
   const onPressConfirm = async () => {
@@ -179,9 +171,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       await postSignUpSMSConfirm(data);
       setIsCertification(true);
     } catch (error) {
-      if (axios.isAxiosError<apiResponse, any>(error)) {
-        console.log('API Error:', error?.response?.data.message);
-      }
+      console.log(error);
     }
   };
 
@@ -273,11 +263,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             </Text>
           </TouchableOpacity>
           <View style={styles.dropdown}>
-            <Dropdown
-              list={genderList}
-              disabled={isCertification}
-              onChangeValue={onChangeGenderValue}
-            />
+            {/*<Dropdown*/}
+            {/*  list={genderList}*/}
+            {/*  disabled={isCertification}*/}
+            {/*  onChangeValue={onChangeGenderValue}*/}
+            {/*/>*/}
           </View>
         </View>
         <View
@@ -296,11 +286,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             readOnly={isCertification}
           />
           <View style={styles.dropdown}>
-            <Dropdown
-              list={telecomList}
-              onChangeValue={onChangeTelecomValue}
-              disabled={isCertification}
-            />
+            {/*<Dropdown*/}
+            {/*  list={telecomList}*/}
+            {/*  onChangeValue={onChangeTelecomValue}*/}
+            {/*  disabled={isCertification}*/}
+            {/*/>*/}
           </View>
         </View>
         <View
@@ -351,18 +341,18 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           <Text style={{color: 'red'}}>비밀번호가 일치하지 않습니다.</Text>
         )}
       </View>
-      <Checkbox
-        isChecked={isFirstChecked}
-        disabled={false}
-        onValueChangeHandler={onChangeFirstCheck}
-        labelMessage="서비스 이용약관 동의 [보기]"
-      />
-      <Checkbox
-        isChecked={isSecondChecked}
-        disabled={false}
-        onValueChangeHandler={onChangeSecondCheck}
-        labelMessage="개인정보 수집, 이용 동의 [보기]"
-      />
+      {/*<Checkbox*/}
+      {/*  isChecked={isFirstChecked}*/}
+      {/*  disabled={false}*/}
+      {/*  onValueChangeHandler={onChangeFirstCheck}*/}
+      {/*  labelMessage="서비스 이용약관 동의 [보기]"*/}
+      {/*/>*/}
+      {/*<Checkbox*/}
+      {/*  isChecked={isSecondChecked}*/}
+      {/*  disabled={false}*/}
+      {/*  onValueChangeHandler={onChangeSecondCheck}*/}
+      {/*  labelMessage="개인정보 수집, 이용 동의 [보기]"*/}
+      {/*/>*/}
       <TouchableOpacity onPress={handleSignUp}>
         <Text>회원가입</Text>
       </TouchableOpacity>

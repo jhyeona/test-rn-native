@@ -5,7 +5,7 @@ interface Props {
   text: string;
   color?: string;
   fontSize?: number;
-  fontWeight?: '400' | '500' | '600' | '700';
+  fontWeight?: '400' | '500' | '600' | '700' | '800';
 }
 const CText = (props: Props) => {
   const {text, fontSize, fontWeight, color} = props;
