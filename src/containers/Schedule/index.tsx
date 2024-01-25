@@ -10,7 +10,6 @@ import {
 import moment from 'moment';
 import 'moment/locale/ko';
 import DayScheduleTable from '../../components/Schedule/DayScheduleTable.tsx';
-import Dropdown from '../../components/common/Dropdown.tsx';
 import {useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {
@@ -121,11 +120,11 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             />
           </View>
         </View>
-        <Dropdown
-          list={academyList}
-          onChangeValue={onChangeDropList}
-          disabled={userData ? userData.studentList.length <= 1 : false}
-        />
+        {/*<Dropdown*/}
+        {/*  list={academyList}*/}
+        {/*  onChangeValue={onChangeDropList}*/}
+        {/*  disabled={userData ? userData.studentList.length <= 1 : false}*/}
+        {/*/>*/}
       </View>
       {isWeekend ? (
         <View style={{flexGrow: 1}}>

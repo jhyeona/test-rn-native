@@ -11,34 +11,63 @@ import {
   View,
 } from 'react-native';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import axios from 'axios';
-import Checkbox from '../../components/common/Checkbox.tsx';
 import {postGetToken} from '../../hooks/useSignIn.ts';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
 import {storage} from '../../utils/storageHelper.ts';
+import CText from '../../components/common/CustomText/CText.tsx';
+import CInput from '../../components/common/CustomInput/CInput.tsx';
+import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
+import CView from '../../components/common/CommonView/CView.tsx';
+import CButton from '../../components/common/CommonButton/CButton.tsx';
+import {COLORS} from '../../constants/colors.ts';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [isIdWarning, setIsIdWarning] = useState(false);
+  const [isPasswordWarning, setIsPasswordWarning] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
 
   const onValueChangeHandler = (checked: boolean) => {
     setIsChecked(checked);
   };
+
+  const onChangeId = (id: string) => {
+    setId(id);
+    if (id) {
+      setIsIdWarning(false);
+      setIsPasswordWarning(false);
+      return;
+    }
+  };
+  const onChangePassword = (id: string) => {
+    setPassword(id);
+    if (id) {
+      setIsIdWarning(false);
+      setIsPasswordWarning(false);
+      return;
+    }
+  };
+
   const onPressSignIn = async () => {
     // 로그인
     Keyboard.dismiss();
 
+    // warning 초기화
+    setIsIdWarning(false);
+    setIsPasswordWarning(false);
+
     if (!id) {
-      Alert.alert('아이디(휴대폰 번호)를 입력하세요.');
+      setIsIdWarning(true);
       return;
     }
     if (!password) {
-      Alert.alert('비밀번호를 입력하세요.');
+      setIsPasswordWarning(true);
       return;
     }
+
     const payload = {phone: id, password: password};
     try {
       const response = await postGetToken(payload);
@@ -52,10 +81,15 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       }
 
       handlePage('Root');
-    } catch (error) {
+    } catch (error: any) {
       console.log('ERROR,', error);
+      if (error.code === '4000') {
+        setIsIdWarning(true);
+        setIsPasswordWarning(true);
+      }
     }
   };
+
   const handlePage = (pageName: string) => {
     // 네비게이션 이동
     navigation.navigate(pageName);
@@ -68,77 +102,71 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   }, []);
 
   return (
-    <SafeAreaView>
-      <KeyboardAvoidingView style={styles.container}>
-        <Text>로그인페이지</Text>
-        <View style={styles.textInputWrap}>
-          <TextInput
-            style={styles.textInput}
-            value={id}
-            onChangeText={setId}
-            placeholder="아이디(휴대폰 번호)를 입력하세요."
-            maxLength={11}
-          />
-          <TextInput
-            style={styles.textInput}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="비밀번호를 입력하세요."
-            secureTextEntry
-          />
-          <Checkbox
-            isChecked={isChecked}
-            disabled={false}
-            onValueChangeHandler={onValueChangeHandler}
-            labelMessage={'아이디 기억하기'}
-          />
-          <TouchableOpacity
-            onPress={() => onPressSignIn()}
-            style={styles.button}>
-            <Text style={styles.textWhite}>로그인</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          onPress={() => handlePage('SignUp')}
-          style={styles.button}>
-          <Text style={styles.textWhite}>회원가입</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => handlePage('FindPassword')}
-          style={styles.button}>
-          <Text style={styles.textWhite}>비밀번호 찾기</Text>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <CSafeAreaView>
+      <CView>
+        <KeyboardAvoidingView style={styles.container}>
+          <View style={styles.logo}>
+            <CText text="통합출결관리 서비스" fontSize={20} fontWeight="600" />
+            <CText text="체크히어" fontSize={40} fontWeight="800" />
+          </View>
+          <View style={styles.textInputWrap}>
+            <CInput
+              title="휴대폰 번호"
+              inputValue={id}
+              setInputValue={onChangeId}
+              isWarning={isIdWarning}
+              errorMessage="올바른 휴대폰 번호를 입력해 주세요."
+            />
+            <CInput
+              title="비밀번호"
+              inputValue={password}
+              setInputValue={onChangePassword}
+              isWarning={isPasswordWarning}
+              errorMessage="올바른 비밀번호를 입력해 주세요."
+              secureTextEntry
+            />
+            <CButton text="로그인하기" onPress={onPressSignIn} />
+          </View>
+          <View style={styles.footerTextContainer}>
+            <TouchableOpacity
+              style={styles.footerText}
+              onPress={() => handlePage('SignUp')}>
+              <CText text="회원가입" fontSize={12} color={COLORS.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.footerText}
+              onPress={() => handlePage('FindPassword')}>
+              <CText text="비밀번호 재발급" fontSize={12} color={COLORS.gray} />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </CView>
+    </CSafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    paddingBottom: 60,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logo: {
+    height: 80,
+    marginBottom: 43,
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   textInputWrap: {
     width: '100%',
     alignItems: 'center',
   },
-  textInput: {
-    marginBottom: 10,
-    padding: 10,
-    width: '80%',
-    borderWidth: 1,
-    borderColor: 'grey',
+  footerTextContainer: {
+    flexDirection: 'row',
   },
-  button: {
-    marginTop: 10,
-    padding: 10,
-    width: '50%',
-    backgroundColor: 'navy',
-    alignItems: 'center',
-  },
-  textWhite: {
-    color: 'white',
+  footerText: {
+    paddingHorizontal: 10,
   },
 });
 

@@ -37,7 +37,7 @@ const CInput = (props: Props) => {
           placeholder={placeholder}
           placeholderTextColor={COLORS.placeholder}
           onChangeText={text => setInputValue(text)}
-          value=""
+          value={inputValue}
           style={styles.input}
           secureTextEntry={secureTextEntry}
           autoCapitalize="none"
