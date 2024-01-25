@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {StyleSheet, View, Pressable, Text, ViewStyle} from 'react-native';
+import {StyleSheet, View, Pressable} from 'react-native';
 import CheckIcon from './CheckIcon.tsx';
 import CText from '../CustomText/CText.tsx';
 import {COLORS} from '../../../constants/colors.ts';

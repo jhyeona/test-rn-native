@@ -4,6 +4,7 @@ import {COLORS} from '../../constants/colors.ts';
 import CText from '../common/CustomText/CText.tsx';
 import moment from 'moment';
 import TextToggle from '../common/Toggle/TextToggle.tsx';
+import SvgIcon from '../common/Icon/Icon.tsx';
 
 interface Props {
   isWeekend: boolean;
@@ -21,7 +22,7 @@ const ScheduleHeader = (props: Props) => {
           fontWeight="700"
           fontSize={22}
         />
-        <Image style={styles.icon} source={require('../../assets/logo.png')} />
+        <SvgIcon style={styles.icon} name="Calendar" size={24} />
         <CText text={moment().format('YYYY.MM.DD')} fontSize={16} />
       </View>
       <TextToggle onToggle={value => setIsWeekend(value)} />
@@ -45,8 +46,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: 20,
-    height: 20,
     marginHorizontal: 10,
   },
 });
