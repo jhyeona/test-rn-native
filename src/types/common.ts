@@ -15,11 +15,3 @@ export interface ApiResponseProps<T> {
   message: string;
   statusCode: number;
 }
-
-export interface checkboxProps {
-  isChecked: boolean;
-  disabled?: boolean;
-  onValueChangeHandler: (checked: boolean) => void;
-  labelMessage?: string;
-  style?: ViewStyle;
-}
