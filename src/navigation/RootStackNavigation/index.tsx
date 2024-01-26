@@ -17,6 +17,7 @@ import {storage} from '../../utils/storageHelper.ts';
 import {useMMKVListener} from 'react-native-mmkv';
 import LectureDetail from '../../containers/LectureDetail/index.tsx';
 import ScheduleHistory from '../../containers/ScheduleHistory';
+import Initialize from '../../containers/Initialize';
 
 const RootStack = createNativeStackNavigator();
 
@@ -63,40 +64,43 @@ const RootStackNavigation = () => {
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
       <RootStack.Navigator>
-        <>
-          <RootStack.Screen
-            name="SignIn"
-            component={SignIn}
-            options={{headerShown: false}}
-          />
-          <RootStack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{headerTitle: ''}}
-          />
-          <RootStack.Screen
-            name="FindPassword"
-            component={FindPassword}
-            options={{headerTitle: ''}}
-          />
-          <RootStack.Screen
-            name="LectureDetail"
-            component={LectureDetail}
-            options={{headerTitle: '강의 상세'}}
-          />
-          <RootStack.Screen
-            name="ScheduleHistory"
-            component={ScheduleHistory}
-            options={{headerTitle: '내 출석 기록'}}
-          />
-        </>
-        <>
-          <RootStack.Screen
-            name="Root"
-            component={TabNavigation}
-            options={{headerShown: false}}
-          />
-        </>
+        {!isLogin ? (
+          <>
+            <RootStack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="SignUp"
+              component={SignUp}
+              options={{headerTitle: ''}}
+            />
+            <RootStack.Screen
+              name="FindPassword"
+              component={FindPassword}
+              options={{headerTitle: ''}}
+            />
+          </>
+        ) : (
+          <>
+            <RootStack.Screen
+              name="Root"
+              component={TabNavigation}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="LectureDetail"
+              component={LectureDetail}
+              options={{headerTitle: '강의 상세'}}
+            />
+            <RootStack.Screen
+              name="ScheduleHistory"
+              component={ScheduleHistory}
+              options={{headerTitle: '내 출석 기록'}}
+            />
+          </>
+        )}
       </RootStack.Navigator>
     </NavigationContainer>
   );
