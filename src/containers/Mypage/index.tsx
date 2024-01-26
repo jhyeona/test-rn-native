@@ -54,11 +54,9 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
   };
   const onPressLogout = () => {
-    //TODO: StackNavigation -> isLogin ...
     setIsLogin(false);
     storage.delete('access_token');
     storage.delete('refresh_token');
-    navigation.navigate('SignIn');
   };
 
   useEffect(() => {
