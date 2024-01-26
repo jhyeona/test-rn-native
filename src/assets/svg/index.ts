@@ -5,3 +5,5 @@ export {default as Home} from './home.svg';
 export {default as MapPoint} from './mapPoint.svg';
 export {default as Pencil} from './pencil.svg';
 export {default as Setting} from './setting.svg';
+export {default as CheckboxOn} from './checkboxOn.svg';
+export {default as CheckboxOff} from './checkboxOff.svg';

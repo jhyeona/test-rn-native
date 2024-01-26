@@ -1,17 +1,29 @@
 import React, {useState} from 'react';
-import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import {COLORS} from '../../../constants/colors.ts';
 import CText from '../CustomText/CText.tsx';
+import {DimensionValue} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import SvgIcon from '../../../components/common/Icon/Icon.tsx';
+import {DownArrow} from '../../../assets/svg';
 
 interface ItemProps {
   label: string;
-  id: number;
+  id: string;
 }
 interface Props {
   items: Array<ItemProps>;
   onSelect: (item: ItemProps) => void;
   placeholder?: string;
   disabled?: boolean;
+  fullWidth?: DimensionValue;
+  fullHeight?: DimensionValue;
+  fontSize?: number;
 }
 
 const Dropdown = (props: Props) => {
@@ -20,44 +32,48 @@ const Dropdown = (props: Props) => {
     onSelect,
     placeholder = '옵션을 선택하세요.',
     disabled = false,
+    fullWidth,
+    fullHeight,
+    fontSize,
   } = props;
   const [isVisible, setIsVisible] = useState(false);
-  const [option, setOption] = useState({label: '', id: -1});
+  const [option, setOption] = useState({label: '', id: ''});
 
   const handleSelect = (item: ItemProps) => {
     onSelect(item);
-    setOption({label: item.label, id: item.id});
+    setOption(item);
     setIsVisible(false);
   };
 
   return (
-    <View style={{zIndex: 2}}>
-      <View style={styles.container}>
-        <TouchableOpacity
-          disabled={disabled}
-          style={styles.dropdownButton}
-          onPress={() => setIsVisible(!isVisible)}>
-          {option.label.length > 0 ? (
-            <CText text={option.label} />
-          ) : (
-            <CText text={placeholder} color={COLORS.dark.gray} />
-          )}
-          <Text>{isVisible ? '🔺' : '🔻'}</Text>
-        </TouchableOpacity>
+    <Pressable
+      style={[
+        styles.container,
+        {width: fullWidth ?? '100%', height: fullHeight ?? 42},
+      ]}
+      disabled={disabled}
+      onPress={() => setIsVisible(!isVisible)}>
+      <View style={styles.dropdownButton}>
+        {option.label.length > 0 ? (
+          <CText text={option.label} fontSize={fontSize ?? 14} />
+        ) : (
+          <CText text={placeholder} color={COLORS.dark.gray} />
+        )}
+        <SvgIcon name="DownArrow" size={20} />
       </View>
       {isVisible && (
-        <View style={styles.optionsContainer}>
-          {items.map(item => (
+        <View style={[styles.optionsContainer, {top: fullHeight ?? 42}]}>
+          {items.map((item, index) => (
             <TouchableOpacity
               style={styles.optionItem}
-              key={item.id}
+              key={Number(index)}
               onPress={() => handleSelect(item)}>
-              <Text>{item.label}</Text>
+              <CText text={item.label} fontSize={fontSize ?? 14} />
             </TouchableOpacity>
           ))}
         </View>
       )}
-    </View>
+    </Pressable>
   );
 };
 
@@ -66,8 +82,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10,
     paddingHorizontal: 15,
-    width: '100%',
-    height: 42,
     borderWidth: 1,
     borderRadius: 7,
     borderColor: COLORS.layout,
@@ -75,10 +89,10 @@ const styles = StyleSheet.create({
   dropdownButton: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   optionsContainer: {
     position: 'absolute',
-    top: 42,
     paddingVertical: 6,
     paddingHorizontal: 15,
     borderWidth: 1,

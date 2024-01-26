@@ -2,6 +2,8 @@ import React from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import CText from '../CustomText/CText.tsx';
 import {COLORS} from '../../../constants/colors.ts';
+import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
+import {DimensionValue} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 interface Props {
   title: string;
@@ -11,6 +13,10 @@ interface Props {
   setInputValue: (text: string) => void;
   isWarning?: boolean;
   secureTextEntry?: boolean;
+  readOnly?: boolean;
+  maxLength?: number;
+  inputMode?: InputModeOptions;
+  fullWidth?: DimensionValue;
 }
 const CInput = (props: Props) => {
   const {
@@ -21,9 +27,13 @@ const CInput = (props: Props) => {
     setInputValue,
     isWarning,
     secureTextEntry,
+    readOnly,
+    maxLength,
+    inputMode,
+    fullWidth,
   } = props;
   return (
-    <View style={{width: '100%'}}>
+    <View style={{width: fullWidth ?? '100%'}}>
       <View style={styles.titleContainer}>
         <CText text={title} fontWeight="600" />
         {isWarning && <Text style={styles.errorMessage}>{errorMessage}</Text>}
@@ -41,6 +51,9 @@ const CInput = (props: Props) => {
           style={styles.input}
           secureTextEntry={secureTextEntry}
           autoCapitalize="none"
+          readOnly={readOnly}
+          maxLength={maxLength}
+          inputMode={inputMode}
         />
       </View>
     </View>

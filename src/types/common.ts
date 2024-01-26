@@ -11,7 +11,7 @@ export interface CommonResponseProps<T> {
 
 export interface ApiResponseProps<T> {
   code: string;
-  data: CommonResponseProps<T>;
+  data?: CommonResponseProps<T>;
   message: string;
   statusCode: number;
 }

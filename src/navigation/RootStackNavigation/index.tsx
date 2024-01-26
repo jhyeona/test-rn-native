@@ -74,7 +74,7 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="SignUp"
               component={SignUp}
-              options={{headerTitle: ''}}
+              options={{headerShown: false}}
             />
             <RootStack.Screen
               name="FindPassword"
