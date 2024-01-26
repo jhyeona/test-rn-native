@@ -4,14 +4,14 @@ import {SmsConfirmProps} from '../types/user.ts';
 
 export const requestPostSignUpPhone = async (
   phone: string,
-): Promise<ApiResponseProps<null>> => {
+): Promise<ApiResponseProps<any>> => {
   // 아이디 (휴대폰) 중복 여부 체크
   const url = `/user/signup/phone/${phone}`;
   return instanceWithoutToken.get(url);
 };
 
 export const requestPostSignUpTAS = async (payload: {}): Promise<
-  ApiResponseProps<null>
+  ApiResponseProps<any>
 > => {
   // 본인 확인용 TAS 요청
   const url = '/user/signup/tas/request';
@@ -35,7 +35,7 @@ export const requestPostSignUpSMSConfirm = async (payload: {}): Promise<
 };
 
 export const requestPostSignUp = async (payload: {}): Promise<
-  ApiResponseProps<null>
+  ApiResponseProps<any>
 > => {
   // 최종 회원가입
   const url = '/user/signup';

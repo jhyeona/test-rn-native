@@ -11,19 +11,11 @@ export interface Props {
   labelMessage?: string;
   fontSize?: number;
   children?: ReactNode;
-  bold?: boolean;
 }
 
 const Checkbox = (props: Props) => {
-  const {
-    isChecked,
-    fontSize,
-    bold,
-    disabled,
-    onValueChangeHandler,
-    labelMessage,
-    children,
-  } = props;
+  const {isChecked, disabled, onValueChangeHandler, labelMessage, children} =
+    props;
 
   const onPressedHandler = () => {
     onValueChangeHandler(!isChecked);
@@ -40,13 +32,9 @@ const Checkbox = (props: Props) => {
         <SvgIcon name="CheckboxOff" size={18} />
       )}
       <View style={styles.labelContainer}>
-        <CText
-          text={labelMessage ?? ''}
-          fontWeight={bold ? '700' : '400'}
-          fontSize={fontSize ?? 12}
-        />
+        <CText text={labelMessage ?? ''} fontWeight="400" fontSize={12} />
+        {children}
       </View>
-      {children}
     </Pressable>
   );
 };

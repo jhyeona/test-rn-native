@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 import {COLORS} from '../../../constants/colors.ts';
 import CText from '../CustomText/CText.tsx';
 
@@ -15,7 +15,11 @@ const CButton = (props: Props) => {
     <Pressable
       style={[
         styles.button,
-        whiteButton ? styles.whiteButton : styles.primaryButton,
+        disabled
+          ? styles.disabled
+          : whiteButton
+            ? styles.whiteButton
+            : styles.primaryButton,
       ]}
       onPress={() => onPress()}
       disabled={disabled}>
@@ -23,7 +27,7 @@ const CButton = (props: Props) => {
         text={text}
         fontWeight="600"
         fontSize={16}
-        color={whiteButton ? COLORS.primary : 'white'}
+        color={disabled ? COLORS.gray : whiteButton ? COLORS.primary : 'white'}
       />
     </Pressable>
   );
@@ -47,6 +51,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: COLORS.primary,
+  },
+  disabled: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: COLORS.layout,
   },
 });
 

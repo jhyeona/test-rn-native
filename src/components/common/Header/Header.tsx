@@ -2,14 +2,13 @@ import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import CText from '../CustomText/CText.tsx';
 import {COLORS} from '../../../constants/colors.ts';
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import SvgIcon from '../Icon/Icon.tsx';
-import {LeftArrow} from '../../../assets/svg';
+import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 
 interface Props {
   title: string;
   isBack?: boolean;
-  navigation?: BottomTabNavigationHelpers;
+  navigation?: NativeStackNavigationHelpers;
 }
 
 const Header = (props: Props) => {

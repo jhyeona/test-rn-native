@@ -2,21 +2,17 @@ import React, {useEffect, useState} from 'react';
 import {
   Alert,
   NativeSyntheticEvent,
-  SafeAreaView,
+  ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {
+  checkDate,
   checkName,
   checkPassword,
   checkPhone,
 } from '../../utils/regExpHelper.ts';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment/moment';
 import {
   postSignUp,
   postSignUpPhone,
@@ -25,6 +21,16 @@ import {
   postSignUpTAS,
 } from '../../hooks/useSignUp.ts';
 import {TextInputChangeEventData} from 'react-native/Libraries/Components/TextInput/TextInput';
+import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
+import CView from '../../components/common/CommonView/CView.tsx';
+import Header from '../../components/common/Header/Header.tsx';
+import CInput from '../../components/common/CustomInput/CInput.tsx';
+import Checkbox from '../../components/common/Checkbox/Checkbox.tsx';
+import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
+import CButton from '../../components/common/CommonButton/CButton.tsx';
+import CText from '../../components/common/CustomText/CText.tsx';
+import moment from 'moment';
+import {ApiResponseProps} from '../../types/common.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
@@ -35,46 +41,33 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [birthday, setBirthday] = useState('');
   const [telecom, setTelecom] = useState('');
   const [smsCode, setSmsCode] = useState('');
-  const [isPhone, setIsPhone] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [isCertification, setIsCertification] = useState(false);
-  const [samePassword, setSamePassword] = useState(true);
-  const [isFirstChecked, setIsFirstChecked] = useState(false);
-  const [isSecondChecked, setIsSecondChecked] = useState(false);
-  const [isPicker, setIsPicker] = useState(false);
+  const [samePassword, setSamePassword] = useState(false);
+  const [isAllCheck, setIsAllCheck] = useState(true);
+  const [isFirstChecked, setIsFirstChecked] = useState(true);
+  const [isSecondChecked, setIsSecondChecked] = useState(true);
 
   const genderList = [
     // 성별 선택 드롭다운
-    {label: '남', value: 'M'},
-    {label: '여', value: 'F'},
+    {label: '남', id: 'M'},
+    {label: '여', id: 'F'},
   ];
-  const onChangeGenderValue = (value: string) => {
+  const onChangeGenderValue = (value: {label: string; id: string}) => {
     // 성별 선택
-    setGender(value);
+    setGender(value.id);
   };
 
   const telecomList = [
     // 통신사 선택 드롭다운
-    {label: 'SKT', value: 'SKT'},
-    {label: 'KT', value: 'KT'},
-    {label: 'LG U+', value: 'LGT'},
+    {label: 'SKT', id: 'SKT'},
+    {label: 'KT', id: 'KT'},
+    {label: 'LG U+', id: 'LGT'},
   ];
 
-  const onChangeTelecomValue = (value: string) => {
+  const onChangeTelecomValue = (value: {label: string; id: string}) => {
     // 통신사 선택
-    setTelecom(value);
-  };
-
-  const setDate = (date: Date | undefined) => {
-    // 생년월일 선택
-    const formattedDate = moment(date).format('YYYY-MM-DD');
-    setBirthday(formattedDate);
-    setIsPicker(false);
-  };
-
-  const onChangePhone = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    // 휴대폰 번호 입력 유효성 체크
-    setIsPhone(checkPhone(e.nativeEvent.text));
+    setTelecom(value.id);
   };
 
   const doubleCheckPhone = async () => {
@@ -97,44 +90,65 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       phone: phone,
       name: name,
       gender: gender,
-      birth: birthday,
+      birth: birthday.substring(2),
       telecom: telecom,
     };
 
     try {
-      return await postSignUpTAS(data);
+      const response = await postSignUpTAS(data);
+      if (response?.code === '0000') {
+        return true;
+      }
     } catch (error) {
-      console.log('[ERROR]', error);
-      // Alert.alert(`error: ${error}`);
-      return error;
+      console.log(error);
+      return false;
     }
   };
 
   const smsCertification = async () => {
+    setSmsCode('');
+
     // SMS 인증 요청
     const data = {phone: phone};
     try {
-      return await postSignUpSMS(data);
+      const response = await postSignUpSMS(data);
+      if (response) {
+        setIsSend(true);
+      }
     } catch (e) {
-      return e;
+      console.log(e);
+      Alert.alert('SMS 인증 요청에 실패했습니다.');
+    }
+  };
+
+  const handleConfirm = async (code: string) => {
+    // SMS 인증 완료 요청
+    const data = {
+      phone: phone,
+      verifyCode: code,
+    };
+
+    try {
+      await postSignUpSMSConfirm(data);
+      setIsCertification(true);
+    } catch (error) {
+      console.log(error);
+      Alert.alert('인증에 실패했습니다. \n정보를 확인해주세요.');
     }
   };
 
   const onPressCertification = async () => {
     // 전체 인증 요청
-    if (!name) {
-      Alert.alert('이름을 입력해 주세요.');
+    if (
+      !checkName(name) ||
+      !checkDate(birthday) ||
+      !gender ||
+      !checkPhone(phone) ||
+      !telecom
+    ) {
+      Alert.alert('입력을 확인해주세요.');
       return;
     }
-    if (!checkName(name)) {
-      Alert.alert('이름을 바르게 입력해 주세요.');
-      return;
-    }
-    if (!isPhone) {
-      Alert.alert('휴대폰 번호를 바르게 입력하세요.');
-      return;
-    }
-    setIsSend(true);
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
@@ -143,82 +157,38 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       return;
     }
 
-    // const resultTasCertification = await tasCertification();
-    // if (resultTasCertification.status === 200) {
-    //   console.log('TAS Success:', resultTasCertification);
-    // } else {
-    //   console.log('TAS Error:', resultTasCertification);
-    //   return;
-    // }
-    //
-    // const resultSMS = await smsCertification();
-    // console.log(resultSMS);
-    // if (resultSMS.code === '0000') Alert.alert('인증번호가 전송되었습니다.');
-  };
-
-  const onPressConfirm = async () => {
-    // 휴대폰 인증 완료 버튼 클릭
-    if (!smsCode) {
-      Alert.alert('인증 번호를 입력하세요.');
+    const resultTasCertification = await tasCertification();
+    if (!resultTasCertification) {
+      Alert.alert('인증에 실패했습니다.\n정보를 확인해주세요.');
+      setIsSend(false);
       return;
     }
-    const data = {
-      phone: phone,
-      verifyCode: smsCode,
-    };
 
-    try {
-      await postSignUpSMSConfirm(data);
-      setIsCertification(true);
-    } catch (error) {
-      console.log(error);
-    }
+    await smsCertification();
   };
 
-  const onChangeConfirm = async (
-    e: NativeSyntheticEvent<TextInputChangeEventData>,
-  ) => {
-    // 휴대폰 인증 완료 자동
-    const value = e.nativeEvent.text;
-    if (value.length === 6) {
-      setIsSend(true);
-      await onPressConfirm();
-    }
-  };
-
-  const onChangeFirstCheck = (isCheck: boolean) => {
-    // 서비스 이용약관 동의
-    setIsFirstChecked(isCheck);
-  };
-
-  const onChangeSecondCheck = (isCheck: boolean) => {
-    // 개인정보 수집, 이용 동의
-    setIsSecondChecked(isCheck);
-  };
-
-  const handleSignUp = async () => {
-    // 회원가입 진행
+  const onPressSignUp = async () => {
+    // 가입하기 버튼 클릭
     if (!isCertification) {
-      Alert.alert('휴대폰 인증을 해주세요.');
-      return;
-    }
-    if (!checkPassword(password) || !checkPassword(rePassword)) {
-      Alert.alert('비밀번호 형식이 올바르지 않습니다.');
-      return;
-    }
-    if (!isFirstChecked) {
-      Alert.alert('서비스 이용약관에 동의해주세요.');
-      return;
-    }
-    if (!isSecondChecked) {
-      Alert.alert('개인정보 수집, 이용에 동의해주세요.');
+      Alert.alert('휴대폰 인증을 먼저 진행해주세요.');
       return;
     }
 
+    if (!checkPassword(password) || !samePassword) {
+      Alert.alert('비밀번호를 확인해주세요.');
+      return;
+    }
+
+    if (!isFirstChecked || !isSecondChecked) {
+      Alert.alert('약관에 모두 동의해주세요.');
+      return;
+    }
+
+    // 회원가입 진행
     const data = {
       phone: phone,
       name: name,
-      birth: birthday, //moment(birthday).format('YYMMDD'),
+      birth: birthday.substring(2),
       password: password,
       gender: gender,
     };
@@ -232,141 +202,147 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     }
   };
 
+  const handleChangeSmsCode = async (value: string) => {
+    setSmsCode(value);
+    if (value.length === 6) {
+      await handleConfirm(value);
+    }
+  };
+
   useEffect(() => {
     // 비밀번호와 재입력 비밀번호 비교
-    const isSame = password === rePassword;
+    const isSame = password === rePassword && checkPassword(rePassword);
     setSamePassword(isSame);
   }, [password, rePassword]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>회원가입</Text>
-      <View style={{width: '80%'}}>
-        <TextInput
-          placeholder="성명"
-          value={name}
-          onChangeText={setName}
-          readOnly={isCertification}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            zIndex: 2,
-          }}>
-          <TouchableOpacity
-            style={{flexGrow: 1}}
-            onPress={() => setIsPicker(true)}
-            disabled={isCertification}>
-            <Text disabled={isCertification}>
-              {birthday ? birthday : '생년월일'}
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.dropdown}>
-            {/*<Dropdown*/}
-            {/*  list={genderList}*/}
-            {/*  disabled={isCertification}*/}
-            {/*  onChangeValue={onChangeGenderValue}*/}
-            {/*/>*/}
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            zIndex: 1,
-          }}>
-          <TextInput
-            placeholder="휴대폰 번호"
-            value={phone}
-            onChangeText={setPhone}
-            onChange={e => onChangePhone(e)}
-            maxLength={11}
-            readOnly={isCertification}
+    <CSafeAreaView>
+      <Header title="회원가입" navigation={navigation} isBack />
+      <CView>
+        <ScrollView>
+          <CInput
+            title="성명"
+            inputValue={name}
+            setInputValue={setName}
+            errorMessage="이름을 입력해 주세요."
+            isWarning={!checkName(name)}
+            maxLength={4}
+            inputMode="text"
+            readOnly={isSend}
           />
-          <View style={styles.dropdown}>
-            {/*<Dropdown*/}
-            {/*  list={telecomList}*/}
-            {/*  onChangeValue={onChangeTelecomValue}*/}
-            {/*  disabled={isCertification}*/}
-            {/*/>*/}
+          <View style={[styles.inputRow, {zIndex: 3}]}>
+            <CInput
+              title="생년월일"
+              inputValue={birthday}
+              setInputValue={setBirthday}
+              placeholder="YYYYMMDD"
+              errorMessage="생년월일을 입력해 주세요."
+              isWarning={!checkDate(birthday)}
+              maxLength={8}
+              inputMode="numeric"
+              fullWidth="58%"
+              readOnly={isSend}
+            />
+            <View style={{marginTop: 11, width: '40%'}}>
+              <Dropdown
+                items={genderList}
+                onSelect={onChangeGenderValue}
+                fullHeight={52}
+                fontSize={16}
+                placeholder="성별"
+                disabled={isSend}
+              />
+            </View>
           </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <TextInput
-            placeholder="인증번호"
-            value={smsCode}
-            onChangeText={setSmsCode}
-            onChange={e => onChangeConfirm(e)}
-            maxLength={6}
-            readOnly={isCertification}
+          <View style={[styles.inputRow, {zIndex: 2}]}>
+            <CInput
+              title="휴대폰 번호"
+              inputValue={phone}
+              setInputValue={setPhone}
+              placeholder="01012341234"
+              errorMessage="휴대폰 번호를 바르게 입력해 주세요."
+              isWarning={!checkPhone(phone)}
+              maxLength={11}
+              inputMode="tel"
+              fullWidth="58%"
+              readOnly={isSend}
+            />
+            <View style={{marginTop: 11, width: '40%'}}>
+              <Dropdown
+                items={telecomList}
+                onSelect={onChangeTelecomValue}
+                fullHeight={52}
+                fontSize={16}
+                placeholder="통신사"
+                disabled={isSend}
+              />
+            </View>
+          </View>
+          <View style={styles.inputRow}>
+            <CInput
+              title="인증번호"
+              inputValue={smsCode}
+              setInputValue={handleChangeSmsCode}
+              errorMessage="올바른 인증번호를 입력해 주세요."
+              isWarning={
+                isSend ? smsCode.length > 0 && smsCode.length < 6 : false
+              }
+              maxLength={6}
+              inputMode="numeric"
+              fullWidth="58%"
+              readOnly={!isSend || isCertification}
+            />
+            <View style={{width: '40%'}}>
+              {isSend ? (
+                <CButton
+                  text={isCertification ? '인증 완료' : '재발송'}
+                  onPress={onPressCertification}
+                  disabled={isCertification}
+                />
+              ) : (
+                <CButton text="인증 문자 발송" onPress={onPressCertification} />
+              )}
+            </View>
+          </View>
+          <CInput
+            title="비밀번호 입력"
+            inputValue={password}
+            setInputValue={setPassword}
+            errorMessage="영문+숫자 조합 8자리 이상 입력해 주세요."
+            isWarning={!checkPassword(password)}
+            secureTextEntry
           />
-          {isSend && isPhone ? (
-            <TouchableOpacity
-              onPress={onPressConfirm}
-              disabled={isCertification}>
-              <Text>인증번호 확인</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                marginTop: 10,
-              }}
-              onPress={onPressCertification}
-              disabled={isCertification}>
-              <Text>인증번호 발송</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        <TextInput
-          placeholder="비밀번호: 8자리 이상 영문+숫자"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <TextInput
-          placeholder="비밀번호 재입력"
-          value={rePassword}
-          onChangeText={setRePassword}
-          secureTextEntry
-        />
-        {!samePassword && (
-          <Text style={{color: 'red'}}>비밀번호가 일치하지 않습니다.</Text>
-        )}
-      </View>
-      {/*<Checkbox*/}
-      {/*  isChecked={isFirstChecked}*/}
-      {/*  disabled={false}*/}
-      {/*  onValueChangeHandler={onChangeFirstCheck}*/}
-      {/*  labelMessage="서비스 이용약관 동의 [보기]"*/}
-      {/*/>*/}
-      {/*<Checkbox*/}
-      {/*  isChecked={isSecondChecked}*/}
-      {/*  disabled={false}*/}
-      {/*  onValueChangeHandler={onChangeSecondCheck}*/}
-      {/*  labelMessage="개인정보 수집, 이용 동의 [보기]"*/}
-      {/*/>*/}
-      <TouchableOpacity onPress={handleSignUp}>
-        <Text>회원가입</Text>
-      </TouchableOpacity>
-      {isPicker && (
-        <DateTimePicker
-          value={new Date()}
-          locale="ko-KR"
-          onChange={(e, date) => setDate(date)}
-          display="spinner"
-          maximumDate={new Date()}
-          timeZoneName={'Asia/Seoul'}
-        />
-      )}
-    </SafeAreaView>
+          <CInput
+            title="비밀번호 입력 확인"
+            inputValue={rePassword}
+            setInputValue={setRePassword}
+            errorMessage="동일한 비밀번호를 입력해 주세요."
+            isWarning={!samePassword}
+            secureTextEntry
+          />
+          <Checkbox
+            isChecked={isFirstChecked && isSecondChecked}
+            onValueChangeHandler={setIsAllCheck}
+            labelMessage="전체동의"
+            fontSize={14}
+            bold
+          />
+          <Checkbox
+            isChecked={isFirstChecked}
+            onValueChangeHandler={setIsFirstChecked}
+            labelMessage="서비스 이용약관 동의">
+            <CText text="[보기]" fontWeight="600" fontSize={12} />
+          </Checkbox>
+          <Checkbox
+            isChecked={isSecondChecked}
+            onValueChangeHandler={setIsSecondChecked}
+            labelMessage="개인정보 수집 이용 동의">
+            <CText text="[보기]" fontWeight="600" fontSize={12} />
+          </Checkbox>
+          <CButton text="가입하기" onPress={onPressSignUp} />
+        </ScrollView>
+      </CView>
+    </CSafeAreaView>
   );
 };
 
@@ -375,8 +351,10 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
   },
-  dropdown: {
-    width: 100,
+  inputRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 export default SignUp;

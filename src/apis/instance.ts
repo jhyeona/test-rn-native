@@ -6,10 +6,22 @@ import {Alert} from 'react-native';
 // TODO: 환경변수로?
 const baseURL = 'http://192.168.219.184:8081/api/v3';
 
+// 토큰 미사용 인스턴스
 export const instanceWithoutToken = axios.create({
   baseURL: baseURL,
 });
 
+instanceWithoutToken.interceptors.response.use(
+  async function (error): Promise<AxiosResponse> {
+    // 서버 에러 시 서버에러 내용 전달
+    if (axios.isAxiosError<any>(error)) {
+      return Promise.reject(error?.response?.data);
+    }
+    return Promise.reject(error);
+  },
+);
+
+// 토큰 사용 인스턴스
 const instance = axios.create({
   baseURL: baseURL,
 });
