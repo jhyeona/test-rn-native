@@ -1,15 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Alert, Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {storage} from '../../utils/storageHelper.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {patchUserUpdate} from '../../hooks/useMypage.ts';
@@ -17,6 +7,15 @@ import {checkPassword} from '../../utils/regExpHelper.ts';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 import userState from '../../recoil/user';
 import globalState from '../../recoil/Global';
+import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
+import Header from '../../components/common/Header/Header.tsx';
+import CText from '../../components/common/CustomText/CText.tsx';
+import Toggle from '../../components/common/Toggle/Toggle.tsx';
+import {COLORS} from '../../constants/colors.ts';
+import CInput from '../../components/common/CustomInput/CInput.tsx';
+import CButton from '../../components/common/CommonButton/CButton.tsx';
+import SvgIcon from '../../components/common/Icon/Icon.tsx';
+import {useGetUserInfo} from '../../hooks/useUser.ts';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -27,32 +26,32 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
-  const toggleSwitch = () => setIsPushApp(previousState => !previousState);
 
   const onPressUpdate = async () => {
-    if (!isSamePassword) {
-      if (!checkPassword(password))
-        Alert.alert('비밀번호는 영문 숫자 혼합 8자리 이상이어야 합니다.');
-      Alert.alert('비밀번호를 확인해주세요.');
-      return;
-    }
+    // if (!isSamePassword || !checkPassword(password)) {
+    //   Alert.alert('비밀번호를 확인해주세요.');
+    //   return;
+    // }
     let data: {settingPushApp: boolean; password?: string} = {
       settingPushApp: isPushApp,
     };
     if (password) {
       data = {...data, password: password};
     }
-
-    const args = {data};
-
     try {
-      await patchUserUpdate(args);
+      await patchUserUpdate(data);
       Alert.alert('정보가 변경되었습니다.');
-      // TODO: 변경된 정보 상태 관리;
+      setPassword('');
+      setRePassword('');
     } catch (error) {
       console.log('[ERROR]', error);
     }
   };
+
+  const onPressChangeAcademy = () => {
+    navigation.navigate('Academy');
+  };
+
   const onPressLogout = () => {
     setIsLogin(false);
     storage.delete('access_token');
@@ -65,73 +64,75 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     setIsSamePassword(isSame);
   }, [password, rePassword]);
 
-  //TODO: password 입력 -> component
   return (
-    <SafeAreaView>
-      <Text>설정</Text>
-      <ScrollView bounces={false}>
-        <View style={styles.viewContainer}>
-          <Text>PUSH 알림 설정</Text>
-          <Text style={styles.textInput}>
-            <Switch
-              trackColor={{false: '#767577', true: '#81b0ff'}}
-              thumbColor={isPushApp ? '#f5dd4b' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleSwitch}
-              value={isPushApp}
-            />
-          </Text>
+    <CSafeAreaView>
+      <Header title="설정" />
+      <ScrollView>
+        <View
+          style={[
+            styles.containerRow,
+            {
+              paddingBottom: 16,
+            },
+          ]}>
+          <CText text="PUSH 알림 설정" fontSize={20} fontWeight="500" />
+          <Toggle isActive={isPushApp} onToggle={setIsPushApp} />
         </View>
-        <View style={styles.viewContainer}>
-          <Text>비밀번호 변경</Text>
-          <TextInput
-            style={styles.textInput}
+        <View style={styles.container}>
+          <CInput
+            title=""
+            inputValue={password}
+            setInputValue={setPassword}
             placeholder="영문, 숫자 혼합 8자리 이상"
-            value={password}
-            onChangeText={setPassword}
-          />
+            fontSize={16}
+            secureTextEntry>
+            <CText text="비밀번호 변경" fontSize={20} />
+          </CInput>
+          <CInput
+            title=""
+            inputValue={rePassword}
+            setInputValue={setRePassword}
+            placeholder="한 번 더 입력해주세요."
+            fontSize={16}
+            secureTextEntry>
+            <CText text="비밀번호 변경 확인" fontSize={20} />
+          </CInput>
+          <CButton text="변경 사항 저장" onPress={onPressUpdate} noMargin />
         </View>
-        <View style={styles.viewContainer}>
-          <Text>비밀번호 변경 확인</Text>
-          <TextInput
-            style={styles.textInput}
-            placeholder="한번 더 입력하세요."
-            value={rePassword}
-            onChangeText={setRePassword}
-          />
-        </View>
-        {isSamePassword ? (
-          ''
-        ) : (
-          <Text style={{color: 'red'}}>비밀번호가 일치하지 않습니다.</Text>
-        )}
-        <Pressable style={styles.press} onPress={onPressUpdate}>
-          <Text>변경 사항 저장</Text>
+        <Pressable style={styles.containerRow} onPress={onPressChangeAcademy}>
+          <CText text="기관변경" fontSize={20} />
+          <SvgIcon name="RightArrow" size={24} />
         </Pressable>
-        <Pressable style={styles.press} onPress={onPressLogout}>
-          <Text>로그아웃</Text>
+        <Pressable style={styles.containerRow} onPress={onPressLogout}>
+          <CText text="로그아웃" fontSize={20} />
+          <SvgIcon name="RightArrow" size={24} />
         </Pressable>
-        <Pressable style={styles.press}>
-          <Text>회원탈퇴</Text>
-        </Pressable>
+        {/*<Pressable style={styles.containerRow} onPress={}>*/}
+        {/*  <CText text="회원탈퇴" fontSize={20} />*/}
+        {/*  <SvgIcon name="RightArrow" size={24} />*/}
+        {/*</Pressable>*/}
       </ScrollView>
-    </SafeAreaView>
+    </CSafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  viewContainer: {
-    padding: 10,
+  container: {
+    marginBottom: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.layout,
+  },
+  containerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  textInput: {
-    width: '60%',
-  },
-  press: {
-    padding: 10,
     alignItems: 'center',
-    borderWidth: 1,
+    justifyContent: 'space-between',
+    marginBottom: 16,
+    paddingHorizontal: 24,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.layout,
   },
 });
 

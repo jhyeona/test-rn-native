@@ -2,7 +2,6 @@ import React, {ReactNode} from 'react';
 import {StyleSheet, View, Pressable} from 'react-native';
 import SvgIcon from '../../../components/common/Icon/Icon.tsx';
 import CText from '../CustomText/CText.tsx';
-import {COLORS} from '../../../constants/colors.ts';
 
 export interface Props {
   isChecked: boolean;
@@ -14,8 +13,14 @@ export interface Props {
 }
 
 const Checkbox = (props: Props) => {
-  const {isChecked, disabled, onValueChangeHandler, labelMessage, children} =
-    props;
+  const {
+    isChecked,
+    disabled,
+    onValueChangeHandler,
+    fontSize,
+    labelMessage,
+    children,
+  } = props;
 
   const onPressedHandler = () => {
     onValueChangeHandler(!isChecked);
@@ -27,12 +32,16 @@ const Checkbox = (props: Props) => {
       onPress={onPressedHandler}
       style={[styles.container]}>
       {isChecked ? (
-        <SvgIcon name="CheckboxOn" size={18} />
+        <SvgIcon name="CheckboxCircleOn" size={fontSize ? fontSize + 8 : 18} />
       ) : (
-        <SvgIcon name="CheckboxOff" size={18} />
+        <SvgIcon name="CheckboxCircleOff" size={fontSize ? fontSize + 8 : 18} />
       )}
       <View style={styles.labelContainer}>
-        <CText text={labelMessage ?? ''} fontWeight="400" fontSize={12} />
+        <CText
+          text={labelMessage ?? ''}
+          fontWeight="400"
+          fontSize={fontSize ?? 14}
+        />
         {children}
       </View>
     </Pressable>

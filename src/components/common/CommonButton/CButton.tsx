@@ -8,9 +8,10 @@ interface Props {
   onPress: () => void;
   whiteButton?: boolean;
   disabled?: boolean;
+  noMargin?: boolean;
 }
 const CButton = (props: Props) => {
-  const {text, whiteButton, onPress, disabled} = props;
+  const {text, whiteButton, onPress, noMargin, disabled} = props;
   return (
     <Pressable
       style={[
@@ -20,6 +21,7 @@ const CButton = (props: Props) => {
           : whiteButton
             ? styles.whiteButton
             : styles.primaryButton,
+        {marginVertical: noMargin ? 0 : 17},
       ]}
       onPress={() => onPress()}
       disabled={disabled}>
@@ -40,7 +42,6 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 17,
   },
   primaryButton: {
     backgroundColor: COLORS.primary,

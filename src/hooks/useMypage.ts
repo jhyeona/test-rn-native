@@ -1,6 +1,6 @@
 import {requestPatchUserUpdate} from '../apis/user.ts';
 
-export const patchUserUpdate = async (args: {data: {}}) => {
-  const response = await requestPatchUserUpdate(args);
-  return response.data.data;
+export const patchUserUpdate = async (payload: {}) => {
+  const response = await requestPatchUserUpdate(payload);
+  return response.data;
 };

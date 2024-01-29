@@ -3,16 +3,15 @@ import {Pressable, StyleSheet, Animated} from 'react-native';
 import {COLORS} from '../../../constants/colors';
 
 interface Props {
+  isActive: boolean;
   onToggle: (value: boolean) => void;
 }
 
 const Toggle = (props: Props) => {
-  const {onToggle} = props;
-  const [isActive, setIsActive] = useState(false);
+  const {isActive, onToggle} = props;
   const toggleAnimation = useRef(new Animated.Value(0)).current;
 
   const handleToggle = () => {
-    setIsActive(!isActive);
     onToggle(!isActive);
   };
 
@@ -27,7 +26,6 @@ const Toggle = (props: Props) => {
   const backgroundStyle = isActive
     ? styles.activeBackground
     : styles.background;
-  const circleStyle = styles.circle;
 
   const circlePosition = toggleAnimation.interpolate({
     inputRange: [0, 1],
