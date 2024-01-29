@@ -7,3 +7,6 @@ export {default as Pencil} from './pencil.svg';
 export {default as Setting} from './setting.svg';
 export {default as CheckboxOn} from './checkboxOn.svg';
 export {default as CheckboxOff} from './checkboxOff.svg';
+export {default as CheckboxCircleOn} from './checkboxCircleOn.svg';
+export {default as CheckboxCircleOff} from './checkboxCircleOff.svg';
+export {default as RightArrow} from './rightArrow.svg';

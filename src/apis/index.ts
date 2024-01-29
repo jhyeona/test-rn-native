@@ -1,4 +1,4 @@
-import {AxiosRequestConfig} from 'axios';
+import {AxiosRequestConfig, AxiosResponse} from 'axios';
 import instance from './instance.ts';
 import {ApiResponseProps} from '../types/common.ts';
 

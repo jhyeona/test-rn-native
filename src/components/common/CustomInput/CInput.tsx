@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import CText from '../CustomText/CText.tsx';
 import {COLORS} from '../../../constants/colors.ts';
@@ -17,6 +17,8 @@ interface Props {
   maxLength?: number;
   inputMode?: InputModeOptions;
   fullWidth?: DimensionValue;
+  fontSize?: number;
+  children?: ReactNode;
 }
 const CInput = (props: Props) => {
   const {
@@ -31,11 +33,15 @@ const CInput = (props: Props) => {
     maxLength,
     inputMode,
     fullWidth,
+    fontSize,
+    children,
   } = props;
   return (
     <View style={{width: fullWidth ?? '100%'}}>
       <View style={styles.titleContainer}>
-        <CText text={title} fontWeight="600" />
+        {children ?? (
+          <CText text={title} fontWeight={'500'} fontSize={fontSize} />
+        )}
         {isWarning && <Text style={styles.errorMessage}>{errorMessage}</Text>}
       </View>
       <View
@@ -48,7 +54,7 @@ const CInput = (props: Props) => {
           placeholderTextColor={COLORS.placeholder}
           onChangeText={text => setInputValue(text)}
           value={inputValue}
-          style={styles.input}
+          style={[styles.input, {fontSize: fontSize ?? 14}]}
           secureTextEntry={secureTextEntry}
           autoCapitalize="none"
           readOnly={readOnly}

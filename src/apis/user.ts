@@ -2,6 +2,7 @@ import {requestGet, requestPatch} from './index.ts';
 import {instanceWithoutToken} from './instance.ts';
 import {ApiResponseProps} from '../types/common.ts';
 import {SmsConfirmProps, UserInfoProps} from '../types/user.ts';
+import {AxiosResponse} from 'axios';
 
 export const requestPostFindPassword = async (payload: {}): Promise<
   ApiResponseProps<null>
@@ -19,11 +20,10 @@ export const requestGetUserInfo = async (): Promise<
   return requestGet(url);
 };
 
-export const requestPatchUserUpdate = async (args: {
-  payload: {};
-}): Promise<ApiResponseProps<UserInfoProps>> => {
+export const requestPatchUserUpdate = async (payload: {}): Promise<
+  ApiResponseProps<UserInfoProps>
+> => {
   // 유저 정보 수정
   const url = '/user/update';
-  const {payload} = args;
   return requestPatch(url, payload);
 };
