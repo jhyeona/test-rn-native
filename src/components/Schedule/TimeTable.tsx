@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {
   EventItem,
   HighlightDates,
@@ -8,6 +8,9 @@ import {
 import moment from 'moment/moment';
 import {useRecoilValue} from 'recoil';
 import scheduleState from '../../recoil/Schedule';
+import {Dimensions} from 'react-native';
+import {COLORS} from '../../constants/colors';
+import globalState from '../../recoil/Global';
 
 interface Props {
   onChangeWeek: (date: string) => void;
@@ -15,21 +18,21 @@ interface Props {
 const TimeTable = (props: Props) => {
   const {onChangeWeek} = props;
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
-  console.log(weekData);
+  const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
+  const calendarWidth = Dimensions.get('window').width - 48; // 기본 padding 24X2 뺀 값
+
   const formattedData = () => {
     const formatted: EventItem[] = [];
-    weekData &&
-      weekData.scheduleBunchList.map((info, i) => {
+    weekData?.scheduleList &&
+      weekData.scheduleList.map((info, i) => {
         formatted.push({
           id: i.toString(),
           title: info.lecture.lectureName,
-          start: moment(info.scheduleBunchStartTime).toISOString(),
-          end: moment(info.scheduleBunchStartTime)
-            .add(info.scheduleBunchMinutes, 'minutes')
-            .toISOString(),
-          color: '#A3C7D6',
+          start: moment(info.scheduleStartTime).toISOString(),
+          end: moment(info.scheduleEndTime).toISOString(),
           containerStyle: {
-            borderRadius: 5,
+            borderRadius: 0,
+            backgroundColor: '#E5F3FF',
           },
         });
       });
@@ -37,20 +40,17 @@ const TimeTable = (props: Props) => {
   };
 
   const events: EventItem[] = formattedData();
-  const [isLoading, setIsLoading] = useState(true);
 
   MomentConfig.updateLocale('ko', {
     weekdaysShort: '일_월_화_수_목_금_토'.split('_'),
   });
 
   const _onDateChanged = (date: string) => {
-    // setIsLoading(true);
     const numOfDays = 7;
     const fromDate = new Date(date);
     const toDate = new Date(date);
     toDate.setDate(toDate.getDate() + numOfDays);
     onChangeWeek(moment(fromDate).format('YYYYMMDD'));
-    // setIsLoading(false);
   };
 
   const highlightDates: HighlightDates = useMemo(
@@ -65,53 +65,63 @@ const TimeTable = (props: Props) => {
     [],
   );
 
-  const theme = {
-    //Saturday style
-    saturdayName: {color: 'blue'},
-    saturdayNumber: {color: 'blue'},
-    saturdayNumberContainer: {backgroundColor: 'white'},
+  const theme = useMemo(
+    () => ({
+      cellBorderColor: COLORS.layout,
 
-    //Sunday style
-    sundayName: {color: 'red'},
-    sundayNumber: {color: 'red'},
-    sundayNumberContainer: {backgroundColor: 'white'},
+      //event title
+      eventTitle: {color: COLORS.dark.blue, fontSize: 11},
 
-    //Today style
-    todayName: {color: 'green'},
-    todayNumber: {color: 'green'},
-    todayNumberContainer: {backgroundColor: 'transparent'},
+      //Saturday style
+      saturdayName: {color: 'black'},
+      saturdayNumber: {color: 'black'},
+      // saturdayNumberContainer: {backgroundColor: 'white'},
 
-    //Normal style
-    dayName: {color: 'black'},
-    dayNumber: {color: 'black'},
-    dayNumberContainer: {backgroundColor: 'white'},
+      //Sunday style
+      sundayName: {color: 'black'},
+      sundayNumber: {color: 'black'},
+      // sundayNumberContainer: {backgroundColor: 'white'},
 
-    //Loading style
-    loadingBarColor: '#D61C4E',
-  };
+      //Today style
+      todayName: {color: 'white'},
+      todayNumber: {color: 'white'},
+      todayNumberContainer: {backgroundColor: COLORS.primary},
+
+      //Normal style
+      dayName: {color: 'black'},
+      dayNumber: {color: 'black'},
+      dayNumberContainer: {backgroundColor: 'white'},
+
+      //Loading style
+      // loadingBarColor: '#D61C4E',
+    }),
+    [],
+  );
 
   useEffect(() => {
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [events]);
 
   return (
     <TimelineCalendar
+      initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}
+      calendarWidth={calendarWidth}
       viewMode="week"
       events={events}
-      isLoading={isLoading}
       highlightDates={highlightDates}
       onDateChanged={_onDateChanged}
-      // onPressDayNum={date => onPressDayNum(date)}
       locale="ko"
-      start={9}
-      end={24}
-      firstDay={1}
-      maxDate={moment().add(1, 'week').isoWeekday(0).format('YYYY-MM-DD')}
+      start={7} // time 시작 시간
+      end={24.5} // time 종료 시간
+      firstDay={1} // 1: 월요일
+      maxDate={moment().add(1, 'week').isoWeekday(0).format('YYYY-MM-DD')} // 다음주 일요일이 마지막
       theme={theme}
       showNowIndicator
-      scrollToNow
-      allowPinchToZoom //확대
-      // initialTimeIntervalHeight={60}
+      // scrollToNow
+      isShowHalfLine={false}
+      timeInterval={30}
+      initialTimeIntervalHeight={27}
+      // allowPinchToZoom // 줌 확대 가능 여부
       // minTimeIntervalHeight={29}
       // maxTimeIntervalHeight={110}
     />

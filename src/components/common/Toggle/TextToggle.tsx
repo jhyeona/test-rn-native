@@ -38,7 +38,7 @@ const TextToggle = (props: Props) => {
       <Animated.View style={[styles.circle, {left: circlePosition}]} />
       <View
         style={isActive ? styles.activeTextContainer : styles.textContainer}>
-        <Text style={{color: 'white'}}>{isActive ? '주간' : '오늘'}</Text>
+        <Text style={{color: 'white'}}>{isActive ? '오늘' : '주간'}</Text>
       </View>
     </Pressable>
   );

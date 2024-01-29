@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 24,
     height: 54,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.layout,
+    // borderBottomWidth: 1,
+    // borderBottomColor: COLORS.layout,
   },
   rowContainer: {
     flexDirection: 'row',

@@ -1,0 +1,270 @@
+diff --git a/node_modules/@howljs/calendar-kit/src/components/Timeline/EventBlock.tsx b/node_modules/@howljs/calendar-kit/src/components/Timeline/EventBlock.tsx
+index d628657..21ac642 100644
+--- a/node_modules/@howljs/calendar-kit/src/components/Timeline/EventBlock.tsx
++++ b/node_modules/@howljs/calendar-kit/src/components/Timeline/EventBlock.tsx
+@@ -99,6 +99,8 @@ const EventBlock = ({
+   const _renderEventContent = () => {
+     return (
+       <Text
++        textBreakStrategy="highQuality"
++        lineBreakStrategyIOS="hangul-word"
+         allowFontScaling={theme.allowFontScaling}
+         style={[styles.title, theme.eventTitle]}
+       >
+@@ -125,7 +127,9 @@ const EventBlock = ({
+         onLongPress={_onLongPress}
+         style={[
+           StyleSheet.absoluteFill,
+-          { backgroundColor: event.color || EVENT_DEFAULT_COLOR },
++          event.containerStyle,
++          {justifyContent:'center'},
++          // { backgroundColor: event.color || EVENT_DEFAULT_COLOR},
+         ]}
+         activeOpacity={0.6}
+       >
+@@ -151,13 +155,15 @@ export default memo(EventBlock, areEqual);
+ const styles = StyleSheet.create({
+   eventBlock: {
+     position: 'absolute',
+-    borderRadius: 4,
++    // borderRadius: 4,
+     overflow: 'hidden',
+   },
+   title: {
+-    paddingVertical: 4,
+-    paddingHorizontal: 2,
+-    fontSize: 10,
++    paddingVertical: 3,
++    paddingHorizontal: 3,
++    fontSize: 11,
++    fontWeight: '500',
++    textAlign: 'center',
+     color: DEFAULT_PROPS.BLACK_COLOR,
+   },
+ });
+diff --git a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineBoard/index.tsx b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineBoard/index.tsx
+index 2c9377b..c6434d3 100644
+--- a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineBoard/index.tsx
++++ b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineBoard/index.tsx
+@@ -57,7 +57,7 @@ const TimelineBoard = ({
+             containerStyle={halfLineContainerStyle}
+           />
+         )}
+-        {index === hours.length - 1 && <HorizontalLine hourIndex={index + 1} />}
++        {/*{index === hours.length - 1 && <HorizontalLine hourIndex={index + 1} />}*/}
+       </React.Fragment>
+     );
+   };
+@@ -131,7 +131,7 @@ const TimelineBoard = ({
+   return (
+     <View style={StyleSheet.absoluteFill}>
+       {_renderOutsideDateLimit()}
+-      {times(numOfDays, _renderVerticalBlock)}
++      {/*{times(numOfDays, _renderVerticalBlock)}*/}
+       {hours.map(_renderHorizontalLine)}
+       <TouchableWithoutFeedback
+         delayLongPress={300}
+diff --git a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/MultipleDayBar.tsx b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/MultipleDayBar.tsx
+index 64a5ca8..594f771 100644
+--- a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/MultipleDayBar.tsx
++++ b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/MultipleDayBar.tsx
+@@ -37,7 +37,7 @@ const MultipleDayBar = ({
+     return (
+       <View
+         key={`${startDate}_${dayIndex}`}
+-        style={[styles.dayItem, { width: columnWidth }]}
++        style={[styles.dayItem, dayNumberContainer, { width: columnWidth }]}
+       >
+         <Text
+           allowFontScaling={theme.allowFontScaling}
+@@ -49,7 +49,8 @@ const MultipleDayBar = ({
+           activeOpacity={0.6}
+           disabled={!onPressDayNum}
+           onPress={() => onPressDayNum?.(dateStr)}
+-          style={[styles.dayNumBtn, dayNumberContainer]}
++          // style={[styles.dayNumBtn, dayNumberContainer]}
++          style={[styles.dayNumBtn]}
+         >
+           <Text
+             allowFontScaling={theme.allowFontScaling}
+@@ -81,16 +82,16 @@ const styles = StyleSheet.create({
+     flexDirection: 'row',
+     alignItems: 'center',
+   },
+-  dayItem: { alignItems: 'center' },
++  dayItem: { alignItems: 'center', paddingVertical: 6, borderRadius: 7 },
+   dayNumBtn: {
+     alignItems: 'center',
+     justifyContent: 'center',
+-    marginTop: 2,
+-    borderRadius: 14,
+-    width: 28,
+-    height: 28,
+-    backgroundColor: DEFAULT_PROPS.WHITE_COLOR,
++    marginTop: 4,
++    borderRadius: 7,
++    // width: 28,
++    // height: 28,
++    // backgroundColor: DEFAULT_PROPS.WHITE_COLOR,
+   },
+-  dayName: { color: DEFAULT_PROPS.SECONDARY_COLOR, fontSize: 12 },
+-  dayNumber: { color: DEFAULT_PROPS.SECONDARY_COLOR, fontSize: 16 },
++  dayName: { color: DEFAULT_PROPS.SECONDARY_COLOR, fontSize: 14, fontWeight: '500' },
++  dayNumber: { color: DEFAULT_PROPS.SECONDARY_COLOR, fontSize: 18, fontWeight: '600'},
+ });
+diff --git a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/index.tsx b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/index.tsx
+index dc09737..0c0e809 100644
+--- a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/index.tsx
++++ b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHeader/index.tsx
+@@ -143,7 +143,8 @@ const TimelineHeader = ({
+ 
+     return (
+       <View style={styles.multipleDayContainer}>
+-        <View style={{ width: hourWidth }} />
++        {/*<View style={{ width: hourWidth }} />*/}
++        <View style={{ width: 40 }} />
+         <View style={{ width: rightSideWidth }}>
+           <AnimatedFlashList
+             {...listProps}
+@@ -213,14 +214,14 @@ export default TimelineHeader;
+ 
+ const styles = StyleSheet.create({
+   container: {
+-    shadowColor: '#000',
+-    shadowOffset: {
+-      width: 0,
+-      height: 1,
+-    },
+-    shadowOpacity: 0.22,
+-    shadowRadius: 2.22,
+-    elevation: 3,
++    // shadowColor: '#000',
++    // shadowOffset: {
++    //   width: 0,
++    //   height: 1,
++    // },
++    // shadowOpacity: 0.22,
++    // shadowRadius: 2.22,
++    // elevation: 3,
+     zIndex: 99,
+   },
+   multipleDayContainer: { flexDirection: 'row' },
+diff --git a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHours.tsx b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHours.tsx
+index 1059ac5..41c4c23 100644
+--- a/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHours.tsx
++++ b/node_modules/@howljs/calendar-kit/src/components/Timeline/TimelineHours.tsx
+@@ -32,7 +32,8 @@ const TimelineHours = () => {
+       style={[
+         styles.hours,
+         {
+-          width: hourWidth,
++          // width: hourWidth,
++          width: 40,
+           backgroundColor: theme.backgroundColor,
+           marginBottom: spaceFromTop,
+         },
+@@ -81,19 +82,19 @@ const HourItem = ({
+ 
+ const styles = StyleSheet.create({
+   hours: {
+-    alignItems: 'center',
++    alignItems: 'flex-start',
+     overflow: 'hidden',
+   },
+   hourText: {
+     position: 'absolute',
+-    fontSize: 10,
++    fontSize: 11,
+     color: DEFAULT_PROPS.BLACK_COLOR,
+   },
+   verticalLine: {
+-    width: 1,
+-    backgroundColor: DEFAULT_PROPS.CELL_BORDER_COLOR,
+-    position: 'absolute',
+-    right: 0,
+-    height: '100%',
++    // width: 1,
++    // backgroundColor: DEFAULT_PROPS.CELL_BORDER_COLOR,
++    // position: 'absolute',
++    // right: 0,
++    // height: '100%',
+   },
+ });
+diff --git a/node_modules/@howljs/calendar-kit/src/components/Timeline/index.tsx b/node_modules/@howljs/calendar-kit/src/components/Timeline/index.tsx
+index 23f2b14..93fbfa8 100644
+--- a/node_modules/@howljs/calendar-kit/src/components/Timeline/index.tsx
++++ b/node_modules/@howljs/calendar-kit/src/components/Timeline/index.tsx
+@@ -295,25 +295,29 @@ const Timeline: React.ForwardRefRenderFunction<
+           selectedEventId={selectedEvent?.id}
+         />
+       )}
+-      <View style={styles.content} onLayout={_onContentLayout}>
+-        <GestureDetector gesture={Gesture.Race(dragCreateGesture, zoomGesture)}>
+-          <TimelineSlots
+-            {...other}
+-            events={groupedEvents}
+-            selectedEvent={selectedEvent}
+-            isDragging={isDraggingCreate}
+-            isLoading={isLoading}
+-            onLongPressBackground={_onLongPressBackground}
+-          />
+-        </GestureDetector>
+-        {isDraggingCreate && (
+-          <DragCreateItem
+-            offsetX={dragXPosition}
+-            offsetY={dragYPosition}
+-            currentHour={currentHour}
+-          />
+-        )}
+-      </View>
++      {viewMode !== 'weekWithNoEvent' &&
++        <>
++          <View style={styles.content} onLayout={_onContentLayout}>
++            <GestureDetector gesture={Gesture.Race(dragCreateGesture, zoomGesture)}>
++              <TimelineSlots
++                {...other}
++                events={groupedEvents}
++                selectedEvent={selectedEvent}
++                isDragging={isDraggingCreate}
++                isLoading={isLoading}
++                onLongPressBackground={_onLongPressBackground}
++              />
++            </GestureDetector>
++            {isDraggingCreate && (
++              <DragCreateItem
++                offsetX={dragXPosition}
++                offsetY={dragYPosition}
++                currentHour={currentHour}
++              />
++            )}
++          </View>
++        </>
++      }
+     </GestureHandlerRootView>
+   );
+ };
+diff --git a/node_modules/@howljs/calendar-kit/src/constants.ts b/node_modules/@howljs/calendar-kit/src/constants.ts
+index 242c64d..c85ccfa 100644
+--- a/node_modules/@howljs/calendar-kit/src/constants.ts
++++ b/node_modules/@howljs/calendar-kit/src/constants.ts
+@@ -36,6 +36,6 @@ export const DEFAULT_PROPS = {
+   EDIT_SAVE_MODE: 'manual' as const,
+ };
+ 
+-export const COLUMNS = { week: 7, threeDays: 3, workWeek: 5, day: 1 };
++export const COLUMNS = { week: 7, threeDays: 3, workWeek: 5, day: 1,  weekWithNoEvent: 7 };
+ 
+ export const SECONDS_IN_DAY = 86400;
+diff --git a/node_modules/@howljs/calendar-kit/src/types.ts b/node_modules/@howljs/calendar-kit/src/types.ts
+index 6afea46..5b00e35 100644
+--- a/node_modules/@howljs/calendar-kit/src/types.ts
++++ b/node_modules/@howljs/calendar-kit/src/types.ts
+@@ -118,7 +118,7 @@ export interface UnavailableItemProps {
+   width: number;
+ }
+ 
+-export type CalendarViewMode = 'day' | 'week' | 'threeDays' | 'workWeek';
++export type CalendarViewMode = 'day' | 'week' | 'threeDays' | 'workWeek' | 'weekWithNoEvent';
+ 
+ export interface TimelineProviderProps {
+   /** Calendar view mode.

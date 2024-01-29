@@ -1,4 +1,3 @@
-// WeekCalendar.tsx
 import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
@@ -7,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  Animated,
 } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/ko';
@@ -43,6 +41,7 @@ const WeekCalendar = (props: Props) => {
   };
 
   const goToPreviousWeek = () => {
+    // 이전 주로 이동
     const newPrevWeek = generateWeeks(moment(weeks[0][0]));
     setWeeks(newPrevWeek);
     setMonth(moment(weeks[0][0]).format('YYYY-MM'));
