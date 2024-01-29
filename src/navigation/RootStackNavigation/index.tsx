@@ -18,6 +18,7 @@ import {useMMKVListener} from 'react-native-mmkv';
 import LectureDetail from '../../containers/LectureDetail/index.tsx';
 import ScheduleHistory from '../../containers/ScheduleHistory';
 import Initialize from '../../containers/Initialize';
+import Academy from '../../containers/Academy';
 
 const RootStack = createNativeStackNavigator();
 
@@ -98,6 +99,11 @@ const RootStackNavigation = () => {
               name="ScheduleHistory"
               component={ScheduleHistory}
               options={{headerTitle: '내 출석 기록'}}
+            />
+            <RootStack.Screen
+              name="Academy"
+              component={Academy}
+              options={{headerShown: false}}
             />
           </>
         )}
