@@ -12,8 +12,10 @@ export const instanceWithoutToken = axios.create({
 });
 
 instanceWithoutToken.interceptors.response.use(
+  function (response: AxiosResponse) {
+    return response;
+  },
   async function (error): Promise<AxiosResponse> {
-    // 서버 에러 시 서버에러 내용 전달
     if (axios.isAxiosError<any>(error)) {
       return Promise.reject(error?.response?.data);
     }

@@ -27,9 +27,9 @@ export interface UserInfoProps {
   name: string;
   phone: string;
   email: string;
-  dateVerifyPhone: string;
   dateVerifyEmail: string;
   studentList: Array<StudentInfoProps>;
   teacherList: Array<{}>;
   settingPushApp: boolean;
+  dateDelete: string | null;
 }

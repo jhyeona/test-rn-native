@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
+import {View} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/ko';
 import DayScheduleTable from '../../components/Schedule/DayScheduleTable.tsx';
@@ -17,7 +10,7 @@ import {
   useGetWeekSchedule,
 } from '../../hooks/useSchedule.ts';
 import {useGetUserInfo} from '../../hooks/useUser.ts';
-import WeeklyCalendar from '../../components/Schedule/WeekCalendar.tsx';
+import WeekCalendar from '../../components/Schedule/WeekCalendar.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {StudentInfoProps} from '../../types/user.ts';
 import TimeTable from '../../components/Schedule/TimeTable.tsx';
@@ -28,7 +21,6 @@ import ScheduleHeader from '../../components/Schedule/ScheduleHeader.tsx';
 import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import globalState from '../../recoil/Global';
-import {selectWeekScheduleDate} from '../../recoil/Global/atom.ts';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -123,9 +115,9 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           </View>
         ) : (
           <>
-            <WeeklyCalendar
-              calendarType={isWeekend ? 'week' : 'day'}
-              onChangeDate={onChangeDate}
+            <WeekCalendar
+              initialDate={selectDayDate}
+              onDayClick={onChangeDate}
             />
             {selectStudentInfo && (
               <DayScheduleTable
