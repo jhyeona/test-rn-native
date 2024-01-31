@@ -8,7 +8,7 @@ export const isLoginState = atom<boolean>({
 
 export const selectDayScheduleDate = atom<string>({
   key: 'selectDayScheduleDate',
-  default: moment().format('YYYYMMDD'),
+  default: moment().format('YYYY-MM-DD'),
 });
 
 export const selectWeekScheduleDate = atom<string>({

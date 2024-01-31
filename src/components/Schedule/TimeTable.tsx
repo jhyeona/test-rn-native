@@ -6,20 +6,24 @@ import {
   TimelineCalendar,
 } from '@howljs/calendar-kit';
 import moment from 'moment/moment';
-import {useRecoilValue} from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import scheduleState from '../../recoil/Schedule';
 import {Dimensions} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import globalState from '../../recoil/Global';
 
-interface Props {
-  onChangeWeek: (date: string) => void;
-}
-const TimeTable = (props: Props) => {
-  const {onChangeWeek} = props;
+const TimeTable = () => {
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
   const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
   const calendarWidth = Dimensions.get('window').width - 48; // 기본 padding 24X2 뺀 값
+  const setSelectWeekDate = useSetRecoilState(
+    globalState.selectWeekScheduleDate,
+  );
+
+  const onChangeWeek = async (date: string) => {
+    // 주간 날짜
+    setSelectWeekDate(date);
+  };
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
@@ -111,13 +115,12 @@ const TimeTable = (props: Props) => {
       highlightDates={highlightDates}
       onDateChanged={_onDateChanged}
       locale="ko"
-      start={7} // time 시작 시간
+      start={0} // time 시작 시간
       end={24.5} // time 종료 시간
       firstDay={1} // 1: 월요일
       maxDate={moment().add(1, 'week').isoWeekday(0).format('YYYY-MM-DD')} // 다음주 일요일이 마지막
       theme={theme}
       showNowIndicator
-      // scrollToNow
       isShowHalfLine={false}
       timeInterval={30}
       initialTimeIntervalHeight={27}

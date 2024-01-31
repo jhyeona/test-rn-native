@@ -2,6 +2,7 @@ import {
   requestGetDaySchedule,
   requestGetScheduleHistory,
   requestGetWeekSchedule,
+  requestPostEventAttend,
   requestPostEventComeback,
   requestPostEventComplete,
   requestPostEventEnter,
@@ -17,19 +18,19 @@ import {
   PostEventProps,
 } from '../types/schedule.ts';
 
-export const getDaySchedule = async (data: GetScheduleProps) => {
-  const response = await requestGetDaySchedule(data);
+export const getDaySchedule = async (payload: GetScheduleProps) => {
+  const response = await requestGetDaySchedule(payload);
   return response.data?.data;
 };
 
-export const useGetDaySchedule = (args: GetScheduleProps) => {
+export const useGetDaySchedule = (payload: GetScheduleProps) => {
   const setDaySchedule = useSetRecoilState(scheduleState.dayScheduleState);
   const {data} = useQuery({
-    queryKey: ['daySchedule', args],
+    queryKey: ['daySchedule', payload],
     queryFn: async () => {
-      return getDaySchedule(args);
+      return getDaySchedule(payload);
     },
-    enabled: !!args.academyId,
+    enabled: !!payload.academyId,
     refetchInterval: 1000,
   });
   useEffect(() => {
@@ -38,19 +39,19 @@ export const useGetDaySchedule = (args: GetScheduleProps) => {
   }, [data, setDaySchedule]);
 };
 
-export const getWeekSchedule = async (data: GetScheduleProps) => {
-  const response = await requestGetWeekSchedule(data);
+export const getWeekSchedule = async (payload: GetScheduleProps) => {
+  const response = await requestGetWeekSchedule(payload);
   return response.data?.data;
 };
 
-export const useGetWeekSchedule = (args: GetScheduleProps) => {
+export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   const setWeekSchedule = useSetRecoilState(scheduleState.weekScheduleState);
   const {data} = useQuery({
-    queryKey: ['weekSchedule', args],
+    queryKey: ['weekSchedule', payload],
     queryFn: async () => {
-      return getWeekSchedule(args);
+      return getWeekSchedule(payload);
     },
-    enabled: !!args.academyId,
+    enabled: !!payload.academyId,
   });
   useEffect(() => {
     if (!data) return;
@@ -58,27 +59,44 @@ export const useGetWeekSchedule = (args: GetScheduleProps) => {
   }, [data, setWeekSchedule]);
 };
 
-export const postEventEnter = async (data: PostEventProps) => {
-  const response = await requestPostEventEnter(data);
+export const postEventEnter = async (payload: PostEventProps) => {
+  const response = await requestPostEventEnter(payload);
   return response.data?.data;
 };
 
-export const postEventComplete = async (data: PostEventProps) => {
-  const response = await requestPostEventComplete(data);
+export const postEventComplete = async (payload: PostEventProps) => {
+  const response = await requestPostEventComplete(payload);
   return response.data?.data;
 };
 
-export const postEventLeave = async (data: PostEventProps) => {
-  const response = await requestPostEventLeave(data);
+export const postEventLeave = async (payload: PostEventProps) => {
+  const response = await requestPostEventLeave(payload);
   return response.data?.data;
 };
 
-export const postEventComeback = async (data: PostEventProps) => {
-  const response = await requestPostEventComeback(data);
+export const postEventAttend = async (payload: PostEventProps) => {
+  const response = await requestPostEventAttend(payload);
   return response.data?.data;
 };
 
-export const getScheduleHistory = async (data: GetScheduleHistoryProps) => {
-  const response = await requestGetScheduleHistory(data);
+export const postEventComeback = async (payload: PostEventProps) => {
+  const response = await requestPostEventComeback(payload);
   return response.data?.data;
+};
+
+export const getScheduleHistory = async (payload: GetScheduleHistoryProps) => {
+  const response = await requestGetScheduleHistory(payload);
+  return response.data?.data;
+};
+
+export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
+  const {data} = useQuery({
+    queryKey: ['weekSchedule', payload],
+    queryFn: async () => {
+      return getScheduleHistory(payload);
+    },
+    enabled: !!payload.scheduleId,
+    refetchInterval: 1000,
+  });
+  return data;
 };

@@ -5,6 +5,8 @@ import CText from '../common/CustomText/CText.tsx';
 import moment from 'moment';
 import TextToggle from '../common/Toggle/TextToggle.tsx';
 import SvgIcon from '../common/Icon/Icon.tsx';
+import {useRecoilValue} from 'recoil';
+import globalState from '../../recoil/Global';
 
 interface Props {
   isWeekend: boolean;
@@ -13,6 +15,8 @@ interface Props {
 
 const ScheduleHeader = (props: Props) => {
   const {isWeekend, setIsWeekend} = props;
+  const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
+  const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
 
   return (
     <View style={styles.container}>
@@ -23,7 +27,14 @@ const ScheduleHeader = (props: Props) => {
           fontSize={22}
         />
         <SvgIcon style={styles.icon} name="Calendar" size={24} />
-        <CText text={moment().format('YYYY.MM.DD')} fontSize={16} />
+        <CText
+          text={
+            isWeekend
+              ? moment(selectWeekDate).format('YYYY.MM')
+              : moment(selectDayDate).format('YYYY.MM.DD')
+          }
+          fontSize={16}
+        />
       </View>
       <TextToggle onToggle={value => setIsWeekend(value)} />
     </View>

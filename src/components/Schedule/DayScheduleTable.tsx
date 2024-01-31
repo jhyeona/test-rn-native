@@ -1,330 +1,161 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
-import {
-  DayScheduleDetailProps,
-  DayScheduleProps,
-} from '../../types/schedule.ts';
-import moment from 'moment';
+import React, {useEffect, useState} from 'react';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {useRecoilValue} from 'recoil';
+import scheduleState from '../../recoil/Schedule';
+import CText from '../common/CustomText/CText.tsx';
+import {COLORS} from '../../constants/colors.ts';
+import SvgIcon from '../common/Icon/Icon.tsx';
+import moment from 'moment';
+
 import {StudentInfoProps} from '../../types/user.ts';
-import DayScheduleList from './DayScheduleList.tsx';
+import DayScheduleHistory from './DayScheduleHistory.tsx';
 
 interface Props {
-  headers: Array<String>;
-  scheduleData: DayScheduleProps;
   navigation: BottomTabNavigationHelpers;
   studentInfo: StudentInfoProps;
 }
 
 const DayScheduleTable = (props: Props) => {
-  const {headers, scheduleData, studentInfo, navigation} = props;
-  const [scheduleTime, setScheduleTime] = useState(
-    moment().format('YYYY-MM-DD HH:ss'),
-  );
+  const {navigation, studentInfo} = props;
+  const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
 
-  const isBetweenTime = (startTime: string, endTime: string) => {
-    return moment().isBetween(startTime, endTime, undefined, '[]');
+  const onPressHandlePage = (page: string) => {
+    navigation.navigate(page);
   };
-
-  const timeSet = useCallback((value: DayScheduleDetailProps) => {
-    // 강의 시간 관리
-    const startTime = moment(value.scheduleStartTime).format(
-      'YYYY-MM-DD HH:mm',
-    );
-    const allowStartTime = moment(value.scheduleStartTime)
-      .subtract(value.lecture.lectureAllowMinus, 'minutes')
-      .format('YYYY-MM-DD HH:mm');
-    const endTime = moment(startTime)
-      .add(value.scheduleMinutes, 'minutes')
-      .format('YYYY-MM-DD HH:mm');
-    const isNow = isBetweenTime(allowStartTime, endTime); // 현재 강의
-    const isBefore = moment(endTime).isBefore(moment()) && !isNow; // 지난 강의
-    const isAfter = moment(startTime).isAfter(moment()) && !isNow; // 예정 강의
-    return {startTime, allowStartTime, endTime, isBefore, isNow, isAfter};
-  }, []);
-
-  const onPressLectureDetail = () => {
-    navigation.navigate('LectureDetail');
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      scheduleData.scheduleList.map(value => {
-        const {allowStartTime, endTime} = timeSet(value);
-        if (
-          moment().format('YYYY-MM-DD HH:mm') === allowStartTime ||
-          moment().format('YYYY-MM-DD HH:mm') === endTime
-        ) {
-          // 현재 시간이 시작시간 또는 종료시간일 때 값을 지정하여 리렌더링 되도록
-          setScheduleTime(allowStartTime);
-          return;
-        }
-      });
-    }, 1000); // 1초
-    return () => clearInterval(intervalId);
-  }, [scheduleData.scheduleList, timeSet]);
-  const testItemList = useMemo(() => {
-    return scheduleData.scheduleList.map(
-      (value: DayScheduleDetailProps, index: number) => {
-        const {startTime, endTime, isBefore, isNow, isAfter} = timeSet(value);
-
-        const classArray = [];
-        if (!value.scheduleParentId && value.scheduleChildId) {
-          // 묶인 강의 중 첫번째 : 부모 스케쥴이 없고 하위스케쥴이 있음
-          const nthClass = Math.floor(
-            // value.lecture.lectureCheckInterval 이 있을 경우
-            value.scheduleMinutes / value.lecture.lectureCheckInterval,
-          );
-
-          for (let i = 0; i <= nthClass; i++) {
-            classArray.push(
-              <Text style={{borderWidth: 1, borderRadius: 5, padding: 10}}>
-                {i}교시: {value.scheduleStartTime} ~{' '}
-                {moment(value.scheduleStartTime)
-                  .add(value.lecture.lectureCheckInterval, 'minutes')
-                  .format('HH:mm')}
-              </Text>,
-            );
-          }
-        }
-        if (value.scheduleParentId && value.scheduleChildId) {
-          // 묶인 강의 중 가운데 : 부모 스케쥴이 있고 하위 스케쥴도 있음
-        }
-        if (value.scheduleParentId && !value.scheduleChildId) {
-          // 묶인 강의 중 마지막 : 부모 스케쥴이 있고 하위 스케쥴이 없음
-        }
-        return (
-          <View key={index} style={[styles.row, styles.borderStyle]}>
-            <View style={[styles.rowItem]}>
-              <Text>
-                {moment(startTime).format('HH:mm')} ~{' '}
-                {moment(endTime).format('HH:mm')}
-              </Text>
-            </View>
-            <View style={{flexGrow: 1, padding: 5}}>
-              <View
-                style={{
-                  flexGrow: 1,
-                  padding: 10,
-                  backgroundColor: 'lightgrey',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <View
-                    style={{
-                      flexGrow: 1,
-                      marginRight: 5,
-                    }}>
-                    <Text>{value.lecture.lectureName}</Text>
-                    <Text>
-                      {value.lecture.lectureStartDate} ~{' '}
-                      {value.lecture.lectureEndDate}
-                    </Text>
-                  </View>
-                  <Pressable onPress={onPressLectureDetail}>
-                    <Text>↔️</Text>
-                  </Pressable>
-                </View>
-                <View style={[styles.row, {justifyContent: 'space-between'}]}>
-                  {value.lecture.lecturePlaceName && (
-                    <View style={styles.row}>
-                      <Text>[지도아이콘] </Text>
-                      <Text>{value.lecture.lecturePlaceName}</Text>
-                    </View>
-                  )}
-                </View>
-                {isBefore && (
-                  <DayScheduleList
-                    isBefore
-                    testList={classArray}
-                    scheduleId={value.scheduleId}
-                    studentInfo={studentInfo}
-                  />
-                )}
-                {isAfter && (
-                  <DayScheduleList
-                    isAfter
-                    testList={classArray}
-                    scheduleId={value.scheduleId}
-                    studentInfo={studentInfo}
-                  />
-                )}
-                {isNow && (
-                  <DayScheduleList
-                    isNow
-                    testList={classArray}
-                    scheduleId={value.scheduleId}
-                    studentInfo={studentInfo}
-                  />
-                )}
-              </View>
-            </View>
-          </View>
-        );
-      },
-    );
-  }, [scheduleData.scheduleList]);
-  console.log('testItemList: ', testItemList);
 
   return (
-    <View style={styles.table}>
-      <View style={[styles.row, styles.borderStyle, {backgroundColor: 'grey'}]}>
-        {headers.map((header, index) => (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      bounces={false}
+      style={styles.container}>
+      <View style={styles.table}>
+        <View
+          style={[
+            styles.row,
+            {borderBottomWidth: 1, borderColor: COLORS.lineBlue},
+          ]}>
           <View
-            key={index}
             style={[
-              styles.rowItem,
-              index < 1 ? {width: '30%'} : {flexGrow: 1},
+              styles.cell,
+              {flex: 0.3, borderRightWidth: 1, borderColor: COLORS.lineBlue},
             ]}>
-            <Text style={[styles.rowItemText, {color: 'white'}]}>{header}</Text>
+            <Text style={styles.headerText}>시간</Text>
           </View>
-        ))}
+          <View style={styles.cell}>
+            <Text style={styles.headerText}>예정 강의</Text>
+          </View>
+        </View>
+        {dayScheduleData?.scheduleList.map(schedule => {
+          const payload = {
+            attendeeId: studentInfo.attendeeId,
+            scheduleId: schedule.scheduleId,
+          };
+          return (
+            <View key={schedule.scheduleId} style={styles.row}>
+              <View
+                style={[
+                  styles.cell,
+                  {
+                    flex: 0.3,
+                    alignItems: 'flex-start',
+                    paddingVertical: 10,
+                    borderRightWidth: 1,
+                    borderColor: COLORS.lineBlue,
+                  },
+                ]}>
+                <Text style={styles.timeText}>
+                  {moment(schedule.scheduleStartTime).format('HH:mm')}
+                  {`\n~\n`}
+                  {moment(schedule.scheduleEndTime).format('HH:mm')}
+                </Text>
+              </View>
+              <View style={styles.cell}>
+                <View style={styles.lectureBox}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <CText
+                      text={schedule.lecture.lectureName}
+                      fontSize={15}
+                      fontWeight="600"
+                    />
+                    <Pressable
+                      onPress={() => onPressHandlePage('LectureDetail')}>
+                      <SvgIcon name="Pencil" width={20} />
+                    </Pressable>
+                  </View>
+                  <Text style={{color: 'black'}}>
+                    {moment(schedule.lecture.lectureStartDate).format(
+                      'YYYY.MM.DD',
+                    )}
+                    ~
+                    {moment(schedule.lecture.lectureEndDate).format(
+                      'YYYY.MM.DD',
+                    )}
+                  </Text>
+                  <DayScheduleHistory schedule={schedule} payload={payload} />
+                </View>
+              </View>
+            </View>
+          );
+        })}
       </View>
-      <ScrollView>
-        {testItemList}
-        {/*{scheduleTime &&*/}
-        {/*  scheduleData.scheduleList.map(*/}
-        {/*    (value: DayScheduleDetailProps, index: number) => {*/}
-        {/*      const {startTime, endTime, isBefore, isNow, isAfter} =*/}
-        {/*        timeSet(value);*/}
-
-        {/*      const classArray = [];*/}
-        {/*      if (!value.scheduleParentId && value.scheduleChildId) {*/}
-        {/*        // 묶인 강의 중 첫번째 : 부모 스케쥴이 없고 하위스케쥴이 있음*/}
-        {/*        const nthClass = Math.floor(*/}
-        {/*          // value.lecture.lectureCheckInterval 이 있을 경우*/}
-        {/*          value.scheduleMinutes / value.lecture.lectureCheckInterval,*/}
-        {/*        );*/}
-
-        {/*        for (let i = 0; i <= nthClass; i++) {*/}
-        {/*          classArray.push(*/}
-        {/*            <Text*/}
-        {/*              style={{borderWidth: 1, borderRadius: 5, padding: 10}}>*/}
-        {/*              {i}교시: {value.scheduleStartTime} ~{' '}*/}
-        {/*              {moment(value.scheduleStartTime)*/}
-        {/*                .add(value.lecture.lectureCheckInterval, 'minutes')*/}
-        {/*                .format('HH:mm')}*/}
-        {/*            </Text>,*/}
-        {/*          );*/}
-        {/*        }*/}
-        {/*      }*/}
-        {/*      if (value.scheduleParentId && value.scheduleChildId) {*/}
-        {/*        // 묶인 강의 중 가운데 : 부모 스케쥴이 있고 하위 스케쥴도 있음*/}
-        {/*      }*/}
-        {/*      if (value.scheduleParentId && !value.scheduleChildId) {*/}
-        {/*        // 묶인 강의 중 마지막 : 부모 스케쥴이 있고 하위 스케쥴이 없음*/}
-        {/*      }*/}
-        {/*      return (*/}
-        {/*        <View key={index} style={[styles.row, styles.borderStyle]}>*/}
-        {/*          <View style={[styles.rowItem]}>*/}
-        {/*            <Text>*/}
-        {/*              {moment(startTime).format('HH:mm')} ~{' '}*/}
-        {/*              {moment(endTime).format('HH:mm')}*/}
-        {/*            </Text>*/}
-        {/*          </View>*/}
-        {/*          <View style={{flexGrow: 1, padding: 5}}>*/}
-        {/*            <View*/}
-        {/*              style={{*/}
-        {/*                flexGrow: 1,*/}
-        {/*                padding: 10,*/}
-        {/*                backgroundColor: 'lightgrey',*/}
-        {/*              }}>*/}
-        {/*              <View*/}
-        {/*                style={{*/}
-        {/*                  flexDirection: 'row',*/}
-        {/*                  justifyContent: 'space-between',*/}
-        {/*                }}>*/}
-        {/*                <View*/}
-        {/*                  style={{*/}
-        {/*                    flexGrow: 1,*/}
-        {/*                    marginRight: 5,*/}
-        {/*                  }}>*/}
-        {/*                  <Text>{value.lecture.lectureName}</Text>*/}
-        {/*                  <Text>*/}
-        {/*                    {value.lecture.lectureStartDate} ~{' '}*/}
-        {/*                    {value.lecture.lectureEndDate}*/}
-        {/*                  </Text>*/}
-        {/*                </View>*/}
-        {/*                <Pressable onPress={onPressLectureDetail}>*/}
-        {/*                  <Text>↔️</Text>*/}
-        {/*                </Pressable>*/}
-        {/*              </View>*/}
-        {/*              <View*/}
-        {/*                style={[styles.row, {justifyContent: 'space-between'}]}>*/}
-        {/*                {value.lecture.lecturePlaceName && (*/}
-        {/*                  <View style={styles.row}>*/}
-        {/*                    <Text>[지도아이콘] </Text>*/}
-        {/*                    <Text>{value.lecture.lecturePlaceName}</Text>*/}
-        {/*                  </View>*/}
-        {/*                )}*/}
-        {/*              </View>*/}
-        {/*              {isBefore && (*/}
-        {/*                <DayScheduleList*/}
-        {/*                  isBefore*/}
-        {/*                  testList={classArray}*/}
-        {/*                  scheduleId={value.scheduleId}*/}
-        {/*                  studentInfo={studentInfo}*/}
-        {/*                />*/}
-        {/*              )}*/}
-        {/*              {isAfter && (*/}
-        {/*                <DayScheduleList*/}
-        {/*                  isAfter*/}
-        {/*                  testList={classArray}*/}
-        {/*                  scheduleId={value.scheduleId}*/}
-        {/*                  studentInfo={studentInfo}*/}
-        {/*                />*/}
-        {/*              )}*/}
-        {/*              {isNow && (*/}
-        {/*                <DayScheduleList*/}
-        {/*                  isNow*/}
-        {/*                  testList={classArray}*/}
-        {/*                  scheduleId={value.scheduleId}*/}
-        {/*                  studentInfo={studentInfo}*/}
-        {/*                />*/}
-        {/*              )}*/}
-        {/*            </View>*/}
-        {/*          </View>*/}
-        {/*        </View>*/}
-        {/*      );*/}
-        {/*    },*/}
-        {/*  )}*/}
-      </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
-  table: {backgroundColor: 'white', flex: 1},
+  container: {
+    flex: 1,
+    marginVertical: 16,
+    backgroundColor: COLORS.primaryLight,
+    borderColor: COLORS.primary,
+    borderRadius: 7,
+  },
+  headerText: {
+    paddingVertical: 10,
+    textAlign: 'center',
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  timeText: {
+    marginTop: 14,
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: 'black',
+  },
+  lectureBox: {
+    flex: 1,
+    marginHorizontal: 16,
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 7,
+  },
+  table: {
+    flexDirection: 'column',
+  },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
-  rowItem: {
+  cell: {
+    flex: 1,
+    paddingVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    minHeight: 50,
-    width: '20%',
-  },
-  rowItemText: {textAlign: 'center'},
-  borderStyle: {
-    borderBottomWidth: 1,
-    borderBottomColor: 'grey',
-  },
-  locationButton: {
-    width: 34,
-    height: 34,
-  },
-  button: {
-    backgroundColor: 'grey',
-    borderRadius: 5,
-    borderWidth: 0.4,
-    width: 100,
-    alignItems: 'center',
-    marginTop: 5,
+    flexDirection: 'row',
   },
 });
+
 export default DayScheduleTable;

@@ -5,6 +5,8 @@ export const COLORS = {
   warning: '#FF6666',
   disabled: '#D9D9D9',
   placeholder: '#A0A0A0',
+  primaryLight: '#EFF6FF',
+  lineBlue: '#1251D433',
 
   // calendar event color
   light: {

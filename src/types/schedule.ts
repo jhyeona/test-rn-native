@@ -14,6 +14,13 @@ export interface GetScheduleHistoryWeekProps {
   endDate: string;
 }
 
+export interface ScheduleTimeProps {
+  timeStart: string;
+  timeEnd: string;
+  check: boolean;
+  eventType?: string;
+}
+
 export interface LectureProps {
   lectureId: number;
   lectureName: string;
@@ -26,6 +33,14 @@ export interface LectureProps {
   lectureAllowEndPlus: number;
 }
 
+export interface ScheduleDefaultProps {
+  scheduleId: number;
+  scheduleStartTime: string;
+  scheduleEndTime: string;
+  scheduleTimeList: Array<ScheduleTimeProps>;
+  lecture: LectureProps;
+}
+
 export interface EventProps {
   eventId: number;
   eventType: string;
@@ -34,16 +49,10 @@ export interface EventProps {
 }
 
 export interface ScheduleDataProps {
-  scheduleList: Array<{
-    scheduleId: number;
-    scheduleStartTime: string;
-    scheduleEndTime: string;
-    scheduleIntervalTimeList: Array<string>;
-    lecture: LectureProps;
-  }>;
+  scheduleList: Array<ScheduleDefaultProps>;
 }
 
-export interface ScheduleHistoryDataProps extends ScheduleDataProps {
+export interface ScheduleHistoryDataProps extends ScheduleDefaultProps {
   attendeeId: number;
   eventList: Array<EventProps>;
   enterEvent: EventProps;
@@ -52,16 +61,13 @@ export interface ScheduleHistoryDataProps extends ScheduleDataProps {
   intervalEventList: Array<EventProps> | null;
 }
 
-export interface ScheduleHistoryWeekDataProps {
+export interface ScheduleHistoryWeekDataProps
+  extends Pick<
+    ScheduleDefaultProps,
+    Exclude<keyof ScheduleDefaultProps, 'eventList'>
+  > {
   academyId: number;
-  historyList: Array<{
-    scheduleId: number;
-    scheduleStartTime: string;
-    scheduleEndTime: string;
-    scheduleIntervalTimeList: Array<string>;
-    lecture: LectureProps;
-    eventList: Array<EventProps>;
-  }>;
+  historyList: Array<ScheduleDefaultProps & {eventList: Array<EventProps>}>;
 }
 
 export interface PostEventProps {

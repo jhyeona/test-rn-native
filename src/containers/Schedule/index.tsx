@@ -1,38 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/ko';
-import DayScheduleTable from '../../components/Schedule/DayScheduleTable.tsx';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {
   useGetDaySchedule,
   useGetWeekSchedule,
 } from '../../hooks/useSchedule.ts';
 import {useGetUserInfo} from '../../hooks/useUser.ts';
-import WeekCalendar from '../../components/Schedule/WeekCalendar.tsx';
+import DayCalendar from '../../components/Schedule/DayCalendar.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {StudentInfoProps} from '../../types/user.ts';
 import TimeTable from '../../components/Schedule/TimeTable.tsx';
-import scheduleState from '../../recoil/Schedule';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
 import CView from '../../components/common/CommonView/CView.tsx';
 import ScheduleHeader from '../../components/Schedule/ScheduleHeader.tsx';
 import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import globalState from '../../recoil/Global';
+import {View} from 'react-native';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
-  const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
-  const [selectDayDate, setSelectDayDate] = useRecoilState(
-    globalState.selectDayScheduleDate,
-  );
-  const [selectWeekDate, setSelectWeekDate] = useRecoilState(
-    globalState.selectWeekScheduleDate,
-  );
+
+  const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
+  const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
   const [isWeekend, setIsWeekend] = useState(false);
-  // const [selectDate, setSelectDate] = useState(moment());
   const [selectStudentInfo, setSelectStudentInfo] = useState<
     StudentInfoProps | undefined
   >(undefined);
@@ -42,12 +35,11 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   );
 
   useGetUserInfo(); //유저 정보
-  // useGetDaySchedule({
-  //   // 일일 데이터
-  //   academyId: selectAcademy,
-  //   date: moment(selectDayDate).format('YYYYMMDD'),
-  // });
-  //
+  useGetDaySchedule({
+    // 일일 데이터
+    academyId: selectAcademy,
+    date: moment(selectDayDate).format('YYYYMMDD'),
+  });
   useGetWeekSchedule({
     // 주간 데이터
     academyId: selectAcademy,
@@ -60,22 +52,19 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   };
 
   const onChangeDropList = (item: {label: string; id: string}) => {
-    // 기관 변경
-    const studentInfo = userData?.studentList.filter(val => {
-      return val.academy.academyId === Number(item.id);
-    });
+    const studentInfo = selectedStudentInfo(item.id);
     setSelectStudentInfo(studentInfo && studentInfo[0]);
     setSelectAcademy(Number(item.id));
   };
 
-  const onChangeDate = (date: string) => {
-    // 일일 데이터 - 날짜 선택
-    setSelectDayDate(date);
-  };
-
-  const onChangeWeek = async (date: string) => {
-    // 주간 날짜
-    setSelectWeekDate(date);
+  const selectedStudentInfo = (id: string) => {
+    // 선택된 기관의 학생(또는 강사)의 정보
+    return userData?.studentList.filter(val => {
+      if (id) {
+        return val.academy.academyId === Number(id);
+      }
+      return userData.studentList[0];
+    });
   };
 
   const onPressHistory = () => {
@@ -97,6 +86,11 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    const studentInfo = selectedStudentInfo(academyList[0].id); // 처음 선택된 기관의 유저 정보
+    setSelectStudentInfo(studentInfo && studentInfo[0]);
+  }, [academyList]);
+
   return (
     <CSafeAreaView>
       <ScheduleHeader isWeekend={isWeekend} setIsWeekend={handleToggle} />
@@ -111,41 +105,24 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         />
         {isWeekend ? (
           <View style={{flexGrow: 1, paddingTop: 4}}>
-            <TimeTable onChangeWeek={onChangeWeek} />
+            <TimeTable />
           </View>
         ) : (
-          <>
-            <WeekCalendar
-              initialDate={selectDayDate}
-              onDayClick={onChangeDate}
-            />
-            {selectStudentInfo && (
-              <DayScheduleTable
-                navigation={navigation}
-                headers={['시간', '예정 강의']}
-                scheduleData={dayScheduleData ?? {scheduleList: []}}
+          selectStudentInfo && (
+            <>
+              <DayCalendar
                 studentInfo={selectStudentInfo}
+                navigation={navigation}
               />
-            )}
-            <CButton
-              text="내 출석 기록 보기"
-              onPress={onPressHistory}
-              noMargin
-            />
-          </>
+              <CButton
+                text="내 출석 기록 보기"
+                onPress={onPressHistory}
+                noMargin
+              />
+            </>
+          )
         )}
       </CView>
-
-      {/*<Pressable*/}
-      {/*  onPress={onPressHistory}*/}
-      {/*  style={{*/}
-      {/*    backgroundColor: 'lightgrey',*/}
-      {/*    alignItems: 'center',*/}
-      {/*    margin: 10,*/}
-      {/*    padding: 10,*/}
-      {/*  }}>*/}
-      {/*  <Text>내 출석 기록 보기</Text>*/}
-      {/*</Pressable>*/}
     </CSafeAreaView>
   );
 };

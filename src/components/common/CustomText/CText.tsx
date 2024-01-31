@@ -1,23 +1,62 @@
 import React from 'react';
 import {Text} from 'react-native';
+import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {TextStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 interface Props {
   text: string;
   color?: string;
   fontSize?: number;
-  fontWeight?: '400' | '500' | '600' | '700' | '800';
+  fontWeight?: string;
   lineHeight?: number;
+  style?: StyleProp<TextStyle>;
 }
 const CText = (props: Props) => {
-  const {text, fontSize, fontWeight, lineHeight, color} = props;
+  const {text, fontSize, fontWeight, lineHeight, color, style} = props;
+  const fontWeightToFontFamily = (weight: string) => {
+    let family;
+    switch (weight) {
+      case '300': {
+        family = 'Pretendard-Thin';
+        break;
+      }
+      case '400': {
+        family = 'Pretendard-Light';
+        break;
+      }
+      case '500': {
+        family = 'Pretendard-Medium';
+        break;
+      }
+      case '600': {
+        family = 'Pretendard-SemiBold';
+        break;
+      }
+      case '700': {
+        family = 'Pretendard-Bold';
+        break;
+      }
+      case '800': {
+        family = 'Pretendard-ExtraBold';
+        break;
+      }
+    }
+
+    return family;
+  };
   return (
     <Text
-      style={{
-        color: color ?? 'black',
-        fontSize: fontSize ?? 14,
-        fontWeight: fontWeight ?? '500',
-        lineHeight: lineHeight,
-      }}>
+      style={[
+        style,
+        {
+          color: color ?? 'black',
+          fontSize: fontSize ?? 14,
+          lineHeight: lineHeight,
+          fontFamily: fontWeight
+            ? fontWeightToFontFamily(fontWeight)
+            : 'Pretendard-Medium',
+        },
+      ]}>
       {text}
     </Text>
   );
