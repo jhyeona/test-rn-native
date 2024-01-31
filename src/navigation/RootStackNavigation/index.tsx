@@ -93,7 +93,7 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="LectureDetail"
               component={LectureDetail}
-              options={{headerTitle: '강의 상세'}}
+              options={{headerShown: false}}
             />
             <RootStack.Screen
               name="ScheduleHistory"

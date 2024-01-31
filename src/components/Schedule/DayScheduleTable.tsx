@@ -1,13 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import scheduleState from '../../recoil/Schedule';
 import CText from '../common/CustomText/CText.tsx';
@@ -27,8 +20,11 @@ const DayScheduleTable = (props: Props) => {
   const {navigation, studentInfo} = props;
   const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
 
-  const onPressHandlePage = (page: string) => {
-    navigation.navigate(page);
+  const onPressHandlePage = (page: string, scheduleId: number) => {
+    navigation.navigate(page, {
+      attendeeId: studentInfo.attendeeId,
+      scheduleId: scheduleId,
+    });
   };
 
   return (
@@ -90,7 +86,9 @@ const DayScheduleTable = (props: Props) => {
                       fontWeight="600"
                     />
                     <Pressable
-                      onPress={() => onPressHandlePage('LectureDetail')}>
+                      onPress={() =>
+                        onPressHandlePage('LectureDetail', schedule.scheduleId)
+                      }>
                       <SvgIcon name="Pencil" width={20} />
                     </Pressable>
                   </View>
