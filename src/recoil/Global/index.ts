@@ -1,7 +1,13 @@
-import {isLoginState} from './atom.ts';
+import {
+  isLoginState,
+  selectDayScheduleDate,
+  selectWeekScheduleDate,
+} from './atom.ts';
 
 const globalState = {
   isLoginState,
+  selectDayScheduleDate,
+  selectWeekScheduleDate,
 };
 
 export default globalState;

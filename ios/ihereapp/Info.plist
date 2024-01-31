@@ -33,6 +33,16 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>fonts/Pretendard-Regular.otf</string>
+		<string>fonts/Pretendard-Light.otf</string>
+		<string>fonts/Pretendard-Bold.otf</string>
+		<string>fonts/Pretendard-ExtraBold.otf</string>
+		<string>fonts/Pretendard-ExtraLight.otf</string>
+		<string>fonts/Pretendard-SemiBold.otf</string>
+		<string>fonts/Pretendard-Thin.otf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -19,6 +19,7 @@ interface ItemProps {
 interface Props {
   items: Array<ItemProps>;
   onSelect: (item: ItemProps) => void;
+  selected?: ItemProps;
   placeholder?: string;
   disabled?: boolean;
   fullWidth?: DimensionValue;
@@ -30,6 +31,7 @@ const Dropdown = (props: Props) => {
   const {
     items,
     onSelect,
+    selected,
     placeholder = '옵션을 선택하세요.',
     disabled = false,
     fullWidth,
@@ -37,13 +39,17 @@ const Dropdown = (props: Props) => {
     fontSize,
   } = props;
   const [isVisible, setIsVisible] = useState(false);
-  const [option, setOption] = useState({label: '', id: ''});
+  const [option, setOption] = useState(selected ?? {label: '', id: ''});
 
   const handleSelect = (item: ItemProps) => {
     onSelect(item);
     setOption(item);
     setIsVisible(false);
   };
+
+  useEffect(() => {
+    selected && setOption(selected);
+  }, [selected]);
 
   return (
     <Pressable
@@ -81,17 +87,19 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     marginBottom: 10,
-    paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 7,
     borderColor: COLORS.layout,
+    zIndex: 3,
   },
   dropdownButton: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 15,
   },
   optionsContainer: {
+    zIndex: 3,
     position: 'absolute',
     paddingVertical: 6,
     paddingHorizontal: 15,
@@ -102,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
   },
   optionItem: {
-    paddingVertical: 6,
+    paddingVertical: 10,
   },
 });
 
