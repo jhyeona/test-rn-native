@@ -83,3 +83,10 @@ export const requestPostEventAttend = async (
   const url = `/event/attend`;
   return requestPost(url, payload);
 };
+
+export const requestGetLectureInfo = async (
+  payload: GetScheduleHistoryProps,
+): Promise<ApiResponseProps<ScheduleHistoryDataProps>> => {
+  const url = `/event/history/attendee/${payload.attendeeId}/schedule/${payload.scheduleId}`;
+  return requestGet(url);
+};
