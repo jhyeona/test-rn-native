@@ -19,6 +19,7 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
+import {ApiResponseProps, CommonResponseProps} from '../../types/common.ts';
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -92,6 +93,7 @@ const DayScheduleHistory = (props: Props) => {
 
       Alert.alert('입실 처리 되었습니다.');
     } catch (e: any) {
+      // TODO: e: any 의 에러처리
       if (e.code === '1004') {
         Alert.alert('이미 입실 처리 되었습니다.');
         return;
@@ -133,8 +135,24 @@ const DayScheduleHistory = (props: Props) => {
       const response = await postEventAttend(eventPayload);
       console.log('시간별체크:', response);
       Alert.alert('확인 되었습니다.');
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
+      if (e.code === '1004') {
+        Alert.alert('이미 퇴실한 강의입니다.');
+        return;
+      }
+      if (e.code === '1005') {
+        Alert.alert('출석 인정 시간이 아닙니다.');
+        return;
+      }
+      if (e.code === '1006') {
+        Alert.alert('해당 강의는 주기적으로 확인하는 강의가 아닙니다.');
+        return;
+      }
+      if (e.code === '4061') {
+        Alert.alert('위치 정보가 올바르지 않습니다.');
+        return;
+      }
     }
   };
 
@@ -144,8 +162,16 @@ const DayScheduleHistory = (props: Props) => {
       const response = await postEventLeave(eventPayload);
       console.log('외출:', response);
       Alert.alert('외출이 시작되었습니다.');
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
+      if (e.code === '1004') {
+        Alert.alert('이미 외출중입니다.');
+        return;
+      }
+      if (e.code === '1005') {
+        Alert.alert('현재 진행중인 강의가 아닙니다.');
+        return;
+      }
     }
   };
 
@@ -155,8 +181,16 @@ const DayScheduleHistory = (props: Props) => {
       const response = await postEventComeback(eventPayload);
       console.log('컴백:', response);
       Alert.alert('외출이 종료되었습니다.');
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
+      if (e.code === '1004') {
+        Alert.alert('외출중이 아닙니다.');
+        return;
+      }
+      if (e.code === '1005') {
+        Alert.alert('현재 진행중인 강의가 아닙니다.');
+        return;
+      }
     }
   };
 
@@ -185,20 +219,16 @@ const DayScheduleHistory = (props: Props) => {
 
   useEffect(() => {
     timeSet();
+  }, []);
+
+  useEffect(() => {
     if (historyData) {
-      const timeList = historyData.scheduleTimeList;
-      const attendTrueList = historyData.scheduleTimeList.filter(val => {
+      const newHistoryData = JSON.parse(JSON.stringify(historyData));
+      const timeList = newHistoryData.scheduleTimeList;
+      const attendTrueList = newHistoryData.scheduleTimeList.filter(val => {
         return val.check;
       });
-      // const intervalEventList = historyData.intervalEventList;
-      const intervalEventList = [
-        {
-          eventId: 31,
-          eventType: 'ATTEND',
-          eventTime: '2024-01-25T13:46:11.420703',
-          status: 'NORMAL',
-        },
-      ];
+      const intervalEventList = newHistoryData.intervalEventList;
 
       const result = timeList.map(item => {
         if (item.check) {
@@ -289,10 +319,18 @@ const DayScheduleHistory = (props: Props) => {
         </View>
       )}
 
-      {/*{isNow && schedule.scheduleIntervalTimeList // history.intervalEventList */}
       {schedule.scheduleTimeList &&
-        // schedule.scheduleTimeList.map((val, index) => {
         intervalFormatted.map((val, index) => {
+          // const startTime = moment(val.timeStart)
+          //   .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
+          //   .format('YYYY-MM-DD HH:mm');
+          //
+          // const endTime = moment(val.timeEnd)
+          //   .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
+          //   .format('YYYY-MM-DD HH:mm');
+          //
+          // const intervalIsBetween = isBetween(startTime, endTime);
+
           return (
             <View
               key={index}
@@ -325,9 +363,8 @@ const DayScheduleHistory = (props: Props) => {
                   fontSize={12}
                 />
               </View>
-              {/*{historyData.eventList}*/}
-              {val.check ? (
-                val.eventType ? (
+              {val.check ? ( // 시간별 체크 = true
+                val.eventType ? ( // 시간별 체크에 체크가 있는 값
                   <Pressable
                     style={[styles.attendButton, styles.attendButtonEntered]}
                     disabled>
@@ -340,9 +377,15 @@ const DayScheduleHistory = (props: Props) => {
                 ) : (
                   <Pressable
                     style={[styles.attendButton]}
-                    onPress={onPressAttend}>
+                    onPress={onPressAttend}
+                    disabled={
+                      !isNow ||
+                      historyData?.completeEvent?.eventType === 'COMPLETE'
+                    }>
                     <CText
-                      text={isBefore ? '미출석' : '출석예정'}
+                      text={
+                        isNow ? '미출석' : isBefore ? '출석종료' : '출석예정'
+                      }
                       fontSize={11}
                       color={COLORS.dark.red}
                     />
