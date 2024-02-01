@@ -19,7 +19,7 @@ const TextToggle = (props: Props) => {
   useEffect(() => {
     Animated.timing(toggleAnimation, {
       toValue: isActive ? 1 : 0,
-      duration: 300,
+      duration: 200,
       useNativeDriver: false,
     }).start();
   }, [isActive, toggleAnimation]);
