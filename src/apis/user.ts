@@ -1,7 +1,12 @@
-import {requestGet, requestPatch} from './index.ts';
+import {requestGet, requestPatch, requestPost} from './index.ts';
 import {instanceWithoutToken} from './instance.ts';
 import {ApiResponseProps} from '../types/common.ts';
-import {SmsConfirmProps, UserInfoProps} from '../types/user.ts';
+import {
+  InvitedAcademyListProps,
+  JoinAcademyProps,
+  SmsConfirmProps,
+  UserInfoProps,
+} from '../types/user.ts';
 import {AxiosResponse} from 'axios';
 
 export const requestPostFindPassword = async (payload: {}): Promise<
@@ -26,4 +31,18 @@ export const requestPatchUserUpdate = async (payload: {}): Promise<
   // 유저 정보 수정
   const url = '/user/update';
   return requestPatch(url, payload);
+};
+
+export const requestGetInvitedAcademyList = async (): Promise<
+  ApiResponseProps<InvitedAcademyListProps>
+> => {
+  const url = `/academy/invite/list`;
+  return requestGet(url);
+};
+
+export const requestPostJoinAcademy = async (
+  payload: Array<number>,
+): Promise<ApiResponseProps<JoinAcademyProps>> => {
+  const url = `/academy/invite/join`;
+  return requestPost(url, payload);
 };

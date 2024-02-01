@@ -1,7 +1,11 @@
-import {requestGetUserInfo} from '../apis/user.ts';
+import {
+  requestGetInvitedAcademyList,
+  requestGetUserInfo,
+  requestPostJoinAcademy,
+} from '../apis/user.ts';
 import {useSetRecoilState} from 'recoil';
 import userState from '../recoil/user';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useEffect} from 'react';
 
 export const getUserInfo = async () => {
@@ -21,4 +25,24 @@ export const useGetUserInfo = () => {
     if (!data) return;
     setUserInfo(data);
   }, [data, setUserInfo]);
+};
+
+export const getInvitedAcademyList = async () => {
+  const response = await requestGetInvitedAcademyList();
+  return response.data?.data;
+};
+
+export const useGetInvitedList = () => {
+  const {data, refetch} = useQuery({
+    queryKey: ['invitedList'],
+    queryFn: async () => {
+      return getInvitedAcademyList();
+    },
+  });
+  return {data, refetch};
+};
+
+export const postJoinAcademy = async (payload: Array<number>) => {
+  const response = await requestPostJoinAcademy(payload);
+  return response.data?.data;
 };
