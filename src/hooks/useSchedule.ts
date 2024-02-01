@@ -1,5 +1,6 @@
 import {
   requestGetDaySchedule,
+  requestGetEventHistory,
   requestGetLectureInfo,
   requestGetScheduleHistory,
   requestGetWeekSchedule,
@@ -100,6 +101,15 @@ export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
     refetchInterval: 1000,
   });
   return data;
+};
+
+export const getEventHistory = async (payload: {
+  academyId: number;
+  startDate: string;
+  endDate: string;
+}) => {
+  const response = await requestGetEventHistory(payload);
+  return response.data?.data;
 };
 
 export const getLectureInfo = async (payload: GetScheduleHistoryProps) => {

@@ -98,7 +98,7 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="ScheduleHistory"
               component={ScheduleHistory}
-              options={{headerTitle: '내 출석 기록'}}
+              options={{headerShown: false}}
             />
             <RootStack.Screen
               name="Academy"

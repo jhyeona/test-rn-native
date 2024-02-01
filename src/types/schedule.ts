@@ -43,9 +43,9 @@ export interface ScheduleDefaultProps {
 
 export interface EventProps {
   eventId: number;
-  eventType: string;
+  eventType: 'ENTER' | 'LEAVE' | 'COMEBACK' | 'ATTEND' | 'COMPLETE';
   eventTime: string;
-  status: string;
+  status: 'NORMAL' | 'LATE' | 'EARLY';
 }
 
 export interface ScheduleDataProps {
@@ -59,6 +59,14 @@ export interface ScheduleHistoryDataProps extends ScheduleDefaultProps {
   completeEvent: EventProps | null;
   isLeaved: boolean;
   intervalEventList: Array<EventProps> | null;
+}
+
+export interface SchedulePeriodDataProps {
+  academyId: number;
+  historyList: Array<{
+    schedule: ScheduleDefaultProps;
+    eventList: Array<EventProps>;
+  }>;
 }
 
 export interface ScheduleHistoryWeekDataProps

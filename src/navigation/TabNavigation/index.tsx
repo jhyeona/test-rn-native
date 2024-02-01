@@ -3,7 +3,6 @@ import Schedule from '../../containers/Schedule';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Mypage from '../../containers/Mypage';
 import SvgIcon from '../../components/common/Icon/Icon.tsx';
-import SignIn from '../../containers/SignIn';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {

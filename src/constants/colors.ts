@@ -2,6 +2,7 @@ export const COLORS = {
   primary: '#1251D4',
   layout: '#D8D8D8',
   gray: '#828282',
+  lightGray: '#F1F1F1',
   warning: '#FF6666',
   disabled: '#D9D9D9',
   placeholder: '#A0A0A0',
