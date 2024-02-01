@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {
   useGetDaySchedule,
@@ -25,14 +25,14 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
   const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
+  const [selectAcademy, setSelectAcademy] = useRecoilState(
+    globalState.selectedAcademy,
+  );
   const [isWeekend, setIsWeekend] = useState(false);
   const [selectStudentInfo, setSelectStudentInfo] = useState<
     StudentInfoProps | undefined
   >(undefined);
   const [academyList, setAcademyList] = useState([{label: '', id: ''}]);
-  const [selectAcademy, setSelectAcademy] = useState<number | undefined>(
-    userData ? userData.studentList[0].academy.academyId : undefined,
-  );
 
   useGetUserInfo(); //유저 정보
   useGetDaySchedule({
@@ -117,6 +117,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               <CButton
                 text="내 출석 기록 보기"
                 onPress={onPressHistory}
+                buttonStyle={{marginBottom: 10}}
                 noMargin
               />
             </>

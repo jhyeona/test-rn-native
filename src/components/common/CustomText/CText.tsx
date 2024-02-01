@@ -10,9 +10,11 @@ interface Props {
   fontWeight?: string;
   lineHeight?: number;
   style?: StyleProp<TextStyle>;
+  lineBreak?: boolean;
 }
 const CText = (props: Props) => {
-  const {text, fontSize, fontWeight, lineHeight, color, style} = props;
+  const {text, fontSize, fontWeight, lineHeight, color, style, lineBreak} =
+    props;
   const fontWeightToFontFamily = (weight: string) => {
     let family;
     switch (weight) {
@@ -46,6 +48,8 @@ const CText = (props: Props) => {
   };
   return (
     <Text
+      textBreakStrategy={lineBreak ? 'highQuality' : 'simple'}
+      lineBreakStrategyIOS={lineBreak ? 'hangul-word' : 'none'}
       style={[
         style,
         {

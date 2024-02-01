@@ -7,7 +7,7 @@ import {StyleSheet} from 'react-native';
 const CSafeAreaView = (props: {edges?: Edge[]; children?: ReactNode}) => {
   const {edges, children} = props;
   return (
-    <RNSafeAreaView edges={edges ?? ['top', 'bottom']} style={styles.container}>
+    <RNSafeAreaView edges={edges ?? ['top']} style={styles.container}>
       {children}
     </RNSafeAreaView>
   );

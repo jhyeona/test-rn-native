@@ -7,6 +7,7 @@ import {
   ScheduleDataProps,
   ScheduleHistoryDataProps,
   ScheduleHistoryWeekDataProps,
+  SchedulePeriodDataProps,
 } from '../types/schedule.ts';
 import {ApiResponseProps} from '../types/common.ts';
 
@@ -40,6 +41,16 @@ export const requestGetScheduleWeekHistory = async (
   payload: GetScheduleHistoryWeekProps,
 ): Promise<ApiResponseProps<ScheduleHistoryWeekDataProps>> => {
   // 스케쥴에 대한 기간별 이벤트 히스토리
+  const url = `/event/history/academy/${payload.academyId}/start/${payload.startDate}/end/${payload.endDate}`;
+  return requestGet(url);
+};
+
+export const requestGetEventHistory = async (payload: {
+  academyId: number;
+  startDate: string;
+  endDate: string;
+}): Promise<ApiResponseProps<SchedulePeriodDataProps>> => {
+  // 기간별 이벤트 히스토리 조회
   const url = `/event/history/academy/${payload.academyId}/start/${payload.startDate}/end/${payload.endDate}`;
   return requestGet(url);
 };
@@ -87,6 +98,7 @@ export const requestPostEventAttend = async (
 export const requestGetLectureInfo = async (
   payload: GetScheduleHistoryProps,
 ): Promise<ApiResponseProps<ScheduleHistoryDataProps>> => {
+  // 강의 상세
   const url = `/event/history/attendee/${payload.attendeeId}/schedule/${payload.scheduleId}`;
   return requestGet(url);
 };

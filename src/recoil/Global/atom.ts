@@ -15,3 +15,8 @@ export const selectWeekScheduleDate = atom<string>({
   key: 'selectWeekScheduleDate',
   default: moment().format('YYYYMMDD'),
 });
+
+export const selectedAcademy = atom<number>({
+  key: 'selectedAcademy',
+  default: 0,
+});
