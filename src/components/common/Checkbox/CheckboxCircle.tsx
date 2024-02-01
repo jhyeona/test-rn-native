@@ -37,11 +37,7 @@ const Checkbox = (props: Props) => {
         <SvgIcon name="CheckboxCircleOff" size={fontSize ? fontSize + 8 : 18} />
       )}
       <View style={styles.labelContainer}>
-        <CText
-          text={labelMessage ?? ''}
-          fontWeight="400"
-          fontSize={fontSize ?? 14}
-        />
+        <CText text={labelMessage ?? ''} fontSize={fontSize ?? 14} lineBreak />
         {children}
       </View>
     </Pressable>
@@ -55,9 +51,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   labelContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 8,
+    flex: 1,
+    paddingHorizontal: 8,
   },
 });
 export default Checkbox;

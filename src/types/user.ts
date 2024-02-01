@@ -33,3 +33,26 @@ export interface UserInfoProps {
   settingPushApp: boolean;
   dateDelete: string | null;
 }
+
+export interface AcademyProps {
+  academyId: number;
+  name: string;
+  picture?: string | null;
+}
+
+export interface InvitedAcademyListProps {
+  invitedList: Array<{
+    id: number;
+    type: string;
+    time: string;
+    academy: AcademyProps;
+  }>;
+}
+
+export interface JoinAcademyProps {
+  attendeeList: Array<{
+    attendeeId: number;
+    typeAttendee: string;
+    academy: AcademyProps;
+  }>;
+}
