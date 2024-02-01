@@ -4,14 +4,14 @@ import {ApiResponseProps} from '../types/common.ts';
 import {
   InvitedAcademyListProps,
   JoinAcademyProps,
-  SmsConfirmProps,
   UserInfoProps,
 } from '../types/user.ts';
-import {AxiosResponse} from 'axios';
 
-export const requestPostFindPassword = async (payload: {}): Promise<
-  ApiResponseProps<null>
-> => {
+export const requestPostFindPassword = async (payload: {
+  phone: string;
+  name: string;
+  birth: string;
+}): Promise<ApiResponseProps<null>> => {
   // 비밀번호 찾기
   const url = '/user/forgot';
   return instanceWithoutToken.post(url, payload);

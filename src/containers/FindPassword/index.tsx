@@ -1,24 +1,23 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
-import DatePicker from '../../components/common/DatePicker.tsx';
+import {Alert, View} from 'react-native';
 import moment from 'moment';
-import {checkName, checkPhone} from '../../utils/regExpHelper.ts';
-import {requestPostFindPassword} from '../../apis/user.ts';
+import {checkDate, checkName, checkPhone} from '../../utils/regExpHelper.ts';
+import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
+import CView from '../../components/common/CommonView/CView.tsx';
+import Header from '../../components/common/Header/Header.tsx';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import CInput from '../../components/common/CustomInput/CInput.tsx';
+import CButton from '../../components/common/CommonButton/CButton.tsx';
+import {postFindPassword} from '../../hooks/useUser.ts';
 
-const FindPassword = () => {
+const FindPassword = ({
+  navigation,
+}: {
+  navigation: BottomTabNavigationHelpers;
+}) => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
-
-  const handleSetBirthday = (pickerDate: string) => {
-    setBirthday(moment(pickerDate).format('YYMMDD'));
-  };
 
   const onPressFind = async () => {
     if (!phone || !checkPhone(phone)) {
@@ -29,50 +28,69 @@ const FindPassword = () => {
       Alert.alert('이름을 확인하세요.');
       return;
     }
-    if (!birthday) {
-      Alert.alert('생일을 입력하세요.');
+    if (!birthday || !checkDate(birthday)) {
+      Alert.alert('생년월일을 확인하세요.');
       return;
     }
-    const args = {
-      data: {
-        phone: phone,
-        name: name,
-        birth: birthday,
-      },
+    const payload = {
+      phone: phone,
+      name: name,
+      birth: birthday.substring(2),
     };
+
     try {
-      await requestPostFindPassword(args);
+      const response = await postFindPassword(payload);
+      Alert.alert(
+        '임시 비밀번호를 전송하였습니다.\n임시 비밀번호로 로그인해주세요.',
+      );
+      console.log(response);
     } catch (e) {
+      console.log(e);
+      if (e.code === '4003') {
+        Alert.alert('일치하는 정보가 없습니다.');
+        return;
+      }
+      if (e.code === '9100') {
+        Alert.alert(
+          '메세지 전송에 실패했습니다. \n번호 확인 후 다시 시도해 주세요.',
+        );
+      }
       // 400: message: 해당하는 사용자가 없습니다.
       // 500: message: 메세지 전송이 실패했습니다. 번호 확인 후 다시 시도해 주세요. / description: SENS 서비스에 발송을 요청하였으나, 올바른 응답이 오지 않았습니다!
     }
   };
 
   return (
-    <SafeAreaView style={{height: '100%', alignItems: 'center'}}>
-      <Text>비밀번호 찾기</Text>
-      <TextInput
-        placeholder="아이디(휴대폰 번호)를 입력하세요."
-        value={phone}
-        onChangeText={setPhone}
-      />
-      <TextInput
-        placeholder="이름를 입력하세요."
-        value={name}
-        onChangeText={setName}
-      />
-      <DatePicker handleSetDate={handleSetBirthday} />
-      <TouchableOpacity
-        onPress={onPressFind}
-        style={{
-          backgroundColor: 'black',
-          width: '50%',
-          padding: 10,
-          alignItems: 'center',
-        }}>
-        <Text style={{color: 'white'}}>찾기</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <CSafeAreaView>
+      <Header title="비밀번호 재발급" navigation={navigation} isBack />
+      <CView>
+        <View style={{marginTop: 20}} />
+        <CInput
+          title="휴대폰 번호"
+          inputValue={phone}
+          setInputValue={setPhone}
+          placeholder="01012341234"
+          maxLength={11}
+          inputMode="numeric"
+        />
+        <CInput
+          title="성명"
+          inputValue={name}
+          setInputValue={setName}
+          placeholder="홍길동"
+          inputMode="text"
+        />
+        <CInput
+          title="생년월일"
+          inputValue={birthday}
+          setInputValue={setBirthday}
+          inputMode="numeric"
+          placeholder="YYYYMMDD"
+          maxLength={8}
+        />
+        <CButton text="임시 비밀번호 발급" onPress={onPressFind} />
+      </CView>
+    </CSafeAreaView>
   );
 };
 

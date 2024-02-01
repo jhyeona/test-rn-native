@@ -1,12 +1,22 @@
 import {
   requestGetInvitedAcademyList,
   requestGetUserInfo,
+  requestPostFindPassword,
   requestPostJoinAcademy,
 } from '../apis/user.ts';
 import {useSetRecoilState} from 'recoil';
 import userState from '../recoil/user';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {useEffect} from 'react';
+
+export const postFindPassword = async (payload: {
+  phone: string;
+  name: string;
+  birth: string;
+}) => {
+  const response = await requestPostFindPassword(payload);
+  return response.data?.data;
+};
 
 export const getUserInfo = async () => {
   const response = await requestGetUserInfo();

@@ -80,7 +80,7 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="FindPassword"
               component={FindPassword}
-              options={{headerTitle: ''}}
+              options={{headerShown: false}}
             />
           </>
         ) : (
