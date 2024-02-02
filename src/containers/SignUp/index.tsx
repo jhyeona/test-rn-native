@@ -31,6 +31,7 @@ import CButton from '../../components/common/CommonButton/CButton.tsx';
 import CText from '../../components/common/CustomText/CText.tsx';
 import moment from 'moment';
 import {ApiResponseProps} from '../../types/common.ts';
+import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
@@ -231,31 +232,25 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             readOnly={isSend}
           />
           <View style={[styles.inputRow, {zIndex: 3}]}>
-            <CInput
+            <CInputWithDropdown
               title="생년월일"
               inputValue={birthday}
               setInputValue={setBirthday}
               placeholder="YYYYMMDD"
               errorMessage="생년월일을 입력해 주세요."
+              dropDownItems={genderList}
+              dropDownOnSelect={onChangeGenderValue}
+              dropDownDisabled={isSend}
+              dropDownPlaceHolder="성별"
               isWarning={!checkDate(birthday)}
               maxLength={8}
               inputMode="numeric"
-              fullWidth="58%"
               readOnly={isSend}
+              dropDownStyle={{flex: 1}}
             />
-            <View style={{marginTop: 11, width: '40%'}}>
-              <Dropdown
-                items={genderList}
-                onSelect={onChangeGenderValue}
-                fullHeight={52}
-                fontSize={16}
-                placeholder="성별"
-                disabled={isSend}
-              />
-            </View>
           </View>
           <View style={[styles.inputRow, {zIndex: 2}]}>
-            <CInput
+            <CInputWithDropdown
               title="휴대폰 번호"
               inputValue={phone}
               setInputValue={setPhone}
@@ -264,19 +259,13 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               isWarning={!checkPhone(phone)}
               maxLength={11}
               inputMode="tel"
-              fullWidth="58%"
               readOnly={isSend}
+              dropDownItems={telecomList}
+              dropDownOnSelect={onChangeTelecomValue}
+              dropDownDisabled={isSend}
+              dropDownPlaceHolder="통신사"
+              dropDownStyle={{flex: 1}}
             />
-            <View style={{marginTop: 11, width: '40%'}}>
-              <Dropdown
-                items={telecomList}
-                onSelect={onChangeTelecomValue}
-                fullHeight={52}
-                fontSize={16}
-                placeholder="통신사"
-                disabled={isSend}
-              />
-            </View>
           </View>
           <View style={styles.inputRow}>
             <CInput
