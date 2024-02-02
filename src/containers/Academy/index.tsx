@@ -29,6 +29,7 @@ interface CheckboxStateProps {
 const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const prevScreenName = usePreviousScreenName(navigation);
   const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
+
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>();
   const queryClient = useQueryClient();
 
@@ -66,14 +67,14 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   useEffect(() => {
     if (invitedList) {
-      const copyList = deepCopy(invitedList);
-      const checkboxList = copyList.invitedList.map(item => ({
-        ...item,
-        isChecked: false,
-      }));
-      setCheckboxState(checkboxList);
+      setCheckboxState(() => {
+        return invitedList.invitedList.map(item => ({
+          ...item,
+          isChecked: false,
+        }));
+      });
     }
-  }, []);
+  }, [invitedList]);
 
   return (
     <CSafeAreaView>
