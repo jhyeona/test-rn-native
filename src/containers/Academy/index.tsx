@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
 import Header from '../../components/common/Header/Header.tsx';
 import CView from '../../components/common/CommonView/CView.tsx';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {usePreviousScreenName} from '../../hooks/useNavigation.ts';
@@ -48,18 +48,26 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     const checkedList = checkboxState?.filter(value => {
       return value.isChecked;
     });
-    const selectedAcademyIdList = checkedList
-      ? checkedList?.map(val => {
-          return val.academy.academyId;
-        })
-      : [];
+    const payload = {
+      inviteIdList: checkedList
+        ? checkedList?.map(val => {
+            return val.academy.academyId;
+          })
+        : [],
+    };
+
+    if (payload.inviteIdList.length === 0) {
+      Alert.alert('기관을 선택하세요.');
+      return;
+    }
 
     try {
-      const response = await postJoinAcademy(selectedAcademyIdList);
+      const response = await postJoinAcademy(payload);
       const refetchResponse = await invitedRefetch();
       await queryClient.invalidateQueries({queryKey: ['userInfo']});
       console.log('1', response);
       console.log('2', refetchResponse);
+      Alert.alert('선택한 기관이 추가되었습니다.');
     } catch (e: any) {
       console.log('Error:', e);
     }

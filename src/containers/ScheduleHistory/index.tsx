@@ -171,7 +171,7 @@ const ScheduleHistory = ({
               <CText text="퇴실" fontWeight="600" />
             </View>
           </View>
-          {historyData?.historyList.length > 0 ? (
+          {historyData && historyData?.historyList.length > 0 ? (
             historyData?.historyList.map((history, i) => {
               const {statusType, enteredTime, completedTime} = eventStatus(
                 history.eventList,
@@ -220,6 +220,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.layout,
   },
   tableHeader: {
+    borderTopLeftRadius: 7,
+    borderTopRightRadius: 7,
     backgroundColor: COLORS.lightGray,
   },
   row: {

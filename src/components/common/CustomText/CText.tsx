@@ -2,6 +2,7 @@ import React from 'react';
 import {Text} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {TextStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import {IS_ANDROID} from '../../../constants/common.ts';
 
 interface Props {
   text: string;
@@ -13,8 +14,18 @@ interface Props {
   lineBreak?: boolean;
 }
 const CText = (props: Props) => {
-  const {text, fontSize, fontWeight, lineHeight, color, style, lineBreak} =
-    props;
+  const {
+    text,
+    fontSize = 14,
+    fontWeight,
+    lineHeight,
+    color,
+    style,
+    lineBreak,
+  } = props;
+
+  const realFontSize = IS_ANDROID ? fontSize - 2 : fontSize;
+
   const fontWeightToFontFamily = (weight: string) => {
     let family;
     switch (weight) {
@@ -54,7 +65,7 @@ const CText = (props: Props) => {
         style,
         {
           color: color ?? 'black',
-          fontSize: fontSize ?? 14,
+          fontSize: realFontSize,
           lineHeight: lineHeight,
           fontFamily: fontWeight
             ? fontWeightToFontFamily(fontWeight)

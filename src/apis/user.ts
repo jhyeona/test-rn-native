@@ -40,9 +40,9 @@ export const requestGetInvitedAcademyList = async (): Promise<
   return requestGet(url);
 };
 
-export const requestPostJoinAcademy = async (
-  payload: Array<number>,
-): Promise<ApiResponseProps<JoinAcademyProps>> => {
+export const requestPostJoinAcademy = async (payload: {
+  inviteIdList: Array<number>;
+}): Promise<ApiResponseProps<JoinAcademyProps>> => {
   const url = `/academy/invite/join`;
   return requestPost(url, payload);
 };

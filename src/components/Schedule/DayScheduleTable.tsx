@@ -1,6 +1,6 @@
 import React from 'react';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import scheduleState from '../../recoil/Schedule';
 import CText from '../common/CustomText/CText.tsx';
@@ -43,70 +43,86 @@ const DayScheduleTable = (props: Props) => {
               styles.cell,
               {flex: 0.3, borderRightWidth: 1, borderColor: COLORS.lineBlue},
             ]}>
-            <Text style={styles.headerText}>시간</Text>
+            <CText
+              text="시간"
+              style={styles.headerText}
+              color={COLORS.primary}
+            />
           </View>
           <View style={styles.cell}>
-            <Text style={styles.headerText}>예정 강의</Text>
+            <CText
+              text="예정 강의"
+              style={styles.headerText}
+              color={COLORS.primary}
+            />
           </View>
         </View>
-        {dayScheduleData?.scheduleList.map(schedule => {
-          const payload = {
-            attendeeId: studentInfo.attendeeId,
-            scheduleId: schedule.scheduleId,
-          };
-          return (
-            <View key={schedule.scheduleId} style={styles.row}>
-              <View
-                style={[
-                  styles.cell,
-                  {
-                    flex: 0.3,
-                    alignItems: 'flex-start',
-                    paddingVertical: 10,
-                    borderRightWidth: 1,
-                    borderColor: COLORS.lineBlue,
-                  },
-                ]}>
-                <Text style={styles.timeText}>
-                  {moment(schedule.scheduleStartTime).format('HH:mm')}
-                  {`\n~\n`}
-                  {moment(schedule.scheduleEndTime).format('HH:mm')}
-                </Text>
-              </View>
-              <View style={styles.cell}>
-                <View style={styles.lectureBox}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
+        {dayScheduleData && dayScheduleData.scheduleList.length > 0 ? (
+          dayScheduleData.scheduleList.map(schedule => {
+            const payload = {
+              attendeeId: studentInfo.attendeeId,
+              scheduleId: schedule.scheduleId,
+            };
+            return (
+              <View key={schedule.scheduleId} style={styles.row}>
+                <View
+                  style={[
+                    styles.cell,
+                    {
+                      flex: 0.3,
+                      alignItems: 'flex-start',
+                      paddingVertical: 10,
+                      borderRightWidth: 1,
+                      borderColor: COLORS.lineBlue,
+                    },
+                  ]}>
+                  <CText
+                    style={styles.timeText}
+                    text={`${moment(schedule.scheduleStartTime).format(
+                      'HH:mm',
+                    )}\n~\n${moment(schedule.scheduleEndTime).format('HH:mm')}`}
+                  />
+                </View>
+                <View style={styles.cell}>
+                  <View style={styles.lectureBox}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <CText
+                        text={schedule.lecture.lectureName}
+                        fontSize={15}
+                        fontWeight="600"
+                      />
+                      <Pressable
+                        onPress={() =>
+                          onPressHandlePage(
+                            'LectureDetail',
+                            schedule.scheduleId,
+                          )
+                        }>
+                        <SvgIcon name="Pencil" width={20} />
+                      </Pressable>
+                    </View>
                     <CText
-                      text={schedule.lecture.lectureName}
-                      fontSize={15}
-                      fontWeight="600"
+                      text={`${moment(schedule.lecture.lectureStartDate).format(
+                        'YYYY.MM.DD',
+                      )} ~ ${moment(schedule.lecture.lectureEndDate).format(
+                        'YYYY.MM.DD',
+                      )}`}
                     />
-                    <Pressable
-                      onPress={() =>
-                        onPressHandlePage('LectureDetail', schedule.scheduleId)
-                      }>
-                      <SvgIcon name="Pencil" width={20} />
-                    </Pressable>
+                    <DayScheduleHistory schedule={schedule} payload={payload} />
                   </View>
-                  <Text style={{color: 'black'}}>
-                    {moment(schedule.lecture.lectureStartDate).format(
-                      'YYYY.MM.DD',
-                    )}
-                    ~
-                    {moment(schedule.lecture.lectureEndDate).format(
-                      'YYYY.MM.DD',
-                    )}
-                  </Text>
-                  <DayScheduleHistory schedule={schedule} payload={payload} />
                 </View>
               </View>
-            </View>
-          );
-        })}
+            );
+          })
+        ) : (
+          <View style={styles.noData}>
+            <CText text="강의가 없습니다." fontSize={20} color={COLORS.gray} />
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -153,6 +169,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  noData: {
+    marginTop: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

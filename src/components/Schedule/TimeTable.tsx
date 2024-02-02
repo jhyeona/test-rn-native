@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   EventItem,
   HighlightDates,
@@ -8,9 +8,10 @@ import {
 import moment from 'moment/moment';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 import scheduleState from '../../recoil/Schedule';
-import {Dimensions} from 'react-native';
+import {Dimensions, Text} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import globalState from '../../recoil/Global';
+import CText from '../common/CustomText/CText';
 
 const TimeTable = () => {
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
@@ -19,6 +20,7 @@ const TimeTable = () => {
   const setSelectWeekDate = useSetRecoilState(
     globalState.selectWeekScheduleDate,
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   const onChangeWeek = async (date: string) => {
     // 주간 날짜
@@ -49,22 +51,22 @@ const TimeTable = () => {
     weekdaysShort: '일_월_화_수_목_금_토'.split('_'),
   });
 
-  const _onDateChanged = (date: string) => {
+  const _onDateChanged = async (date: string) => {
     const numOfDays = 7;
     const fromDate = new Date(date);
     const toDate = new Date(date);
     toDate.setDate(toDate.getDate() + numOfDays);
-    onChangeWeek(moment(fromDate).format('YYYYMMDD'));
+    await onChangeWeek(moment(fromDate).format('YYYYMMDD'));
   };
 
   const highlightDates: HighlightDates = useMemo(
     // 공휴일 색 표시할 때 사용
     () => ({
-      '2024-02-09': {
-        dayNameColor: 'red',
-        dayNumberColor: 'red',
-        dayNumberBackgroundColor: '#FFF',
-      },
+      // '2024-02-09': {
+      //   dayNameColor: 'red',
+      //   dayNumberColor: 'red',
+      //   dayNumberBackgroundColor: '#FFF',
+      // },
     }),
     [],
   );
@@ -97,37 +99,46 @@ const TimeTable = () => {
       dayNumberContainer: {backgroundColor: 'white'},
 
       //Loading style
-      // loadingBarColor: '#D61C4E',
+      loadingBarColor: COLORS.primary,
     }),
     [],
   );
 
   useEffect(() => {
-    // setIsLoading(false);
-  }, [events]);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
+  }, []);
 
   return (
-    <TimelineCalendar
-      initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}
-      calendarWidth={calendarWidth}
-      viewMode="week"
-      events={events}
-      highlightDates={highlightDates}
-      onDateChanged={_onDateChanged}
-      locale="ko"
-      start={0} // time 시작 시간
-      end={24.5} // time 종료 시간
-      firstDay={1} // 1: 월요일
-      maxDate={moment().add(1, 'week').isoWeekday(0).format('YYYY-MM-DD')} // 다음주 일요일이 마지막
-      theme={theme}
-      showNowIndicator
-      isShowHalfLine={false}
-      timeInterval={30}
-      initialTimeIntervalHeight={27}
-      // allowPinchToZoom // 줌 확대 가능 여부
-      // minTimeIntervalHeight={29}
-      // maxTimeIntervalHeight={110}
-    />
+    <>
+      {isLoading ? (
+        <CText text="loading..." fontSize={20} />
+      ) : (
+        <TimelineCalendar
+          initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}
+          calendarWidth={calendarWidth}
+          viewMode="week"
+          events={events}
+          isLoading={isLoading}
+          highlightDates={highlightDates}
+          onDateChanged={_onDateChanged}
+          locale="ko"
+          start={0} // time 시작 시간
+          end={24.5} // time 종료 시간
+          firstDay={1} // 1: 월요일
+          // maxDate={moment().add(1, 'week').isoWeekday(0).format('YYYY-MM-DD')} // 다음주 일요일이 마지막
+          theme={theme}
+          showNowIndicator
+          isShowHalfLine={false}
+          timeInterval={30}
+          initialTimeIntervalHeight={27}
+          allowPinchToZoom // 줌 확대 가능 여부
+          // minTimeIntervalHeight={29}
+          // maxTimeIntervalHeight={110}
+        />
+      )}
+    </>
   );
 };
 
