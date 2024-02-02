@@ -19,7 +19,6 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
-import {ApiResponseProps, CommonResponseProps} from '../../types/common.ts';
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -44,14 +43,7 @@ const lightButton = (color: 'BLUE' | 'GRAY', text: string) => {
         borderColor: borderColor,
         borderRadius: 7,
       }}>
-      <Text
-        style={{
-          color: textColor,
-          fontSize: 11,
-          fontWeight: '700',
-        }}>
-        {text}
-      </Text>
+      <CText text={text} fontSize={11} fontWeight="700" color={textColor} />
     </Pressable>
   );
 };
@@ -223,12 +215,16 @@ const DayScheduleHistory = (props: Props) => {
 
   useEffect(() => {
     if (historyData) {
-      const newHistoryData = JSON.parse(JSON.stringify(historyData));
-      const timeList = newHistoryData.scheduleTimeList;
-      const attendTrueList = newHistoryData.scheduleTimeList.filter(val => {
-        return val.check;
-      });
-      const intervalEventList = newHistoryData.intervalEventList;
+      const timeList = historyData.scheduleTimeList;
+      const attendTrueList = historyData.scheduleTimeList
+        .filter(val => {
+          return val.check;
+        })
+        .map(item => ({...item}));
+
+      const intervalEventList = historyData.intervalEventList?.map(item => ({
+        ...item,
+      }));
 
       const result = timeList.map(item => {
         if (item.check) {
@@ -258,7 +254,7 @@ const DayScheduleHistory = (props: Props) => {
         }}>
         <View style={{flexDirection: 'row'}}>
           <SvgIcon name="MapPoint" size={15} />
-          <Text>{schedule.lecture.lecturePlaceName}</Text>
+          <CText text={schedule.lecture.lecturePlaceName} />
         </View>
         {isBefore &&
           lightButton(
@@ -279,7 +275,7 @@ const DayScheduleHistory = (props: Props) => {
             }
             onPress={onPressComplete}
             buttonStyle={{height: 28, marginBottom: 10}}
-            fontSize={12}
+            fontSize={11}
             disabled={historyData.completeEvent?.eventType === 'COMPLETE'}
             noMargin
           />
@@ -288,7 +284,7 @@ const DayScheduleHistory = (props: Props) => {
             text="출석체크"
             onPress={onPressEnter}
             buttonStyle={{height: 28, marginBottom: 10}}
-            fontSize={12}
+            fontSize={11}
             noMargin
           />
         ))}
@@ -339,9 +335,9 @@ const DayScheduleHistory = (props: Props) => {
                 style={{
                   flex: 1,
                   flexDirection: 'row',
-                  justifyContent: 'space-around',
+                  justifyContent: 'space-evenly',
                   alignItems: 'center',
-                  paddingHorizontal: 14,
+                  // paddingHorizontal: 14,
                   borderTopWidth: 1,
                   borderBottomWidth: 1,
                   borderLeftWidth: 1,
@@ -351,9 +347,8 @@ const DayScheduleHistory = (props: Props) => {
                   height: 40,
                 }}>
                 <CText
-                  text={index + 1 + '번째'}
+                  text={index + 1 + '교시'}
                   color={COLORS.primary}
-                  fontSize={14}
                   fontWeight="600"
                 />
                 <CText
@@ -395,7 +390,7 @@ const DayScheduleHistory = (props: Props) => {
                 <Pressable
                   style={[styles.attendButton, styles.attendButtonDisabled]}
                   disabled>
-                  <Text style={{fontSize: 11, color: 'black'}}>PASS</Text>
+                  <CText text="PASS" fontSize={11} />
                 </Pressable>
               )}
             </View>

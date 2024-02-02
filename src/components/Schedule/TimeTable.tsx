@@ -11,6 +11,7 @@ import scheduleState from '../../recoil/Schedule';
 import {Dimensions, Text} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import globalState from '../../recoil/Global';
+import CText from '../common/CustomText/CText';
 
 const TimeTable = () => {
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
@@ -112,11 +113,7 @@ const TimeTable = () => {
   return (
     <>
       {isLoading ? (
-        <Text
-          style={{justifyContent: 'center', alignSelf: 'center', fontSize: 20}}>
-          {' '}
-          loading...{' '}
-        </Text>
+        <CText text="loading..." fontSize={20} />
       ) : (
         <TimelineCalendar
           initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Alert,
+  PanResponder,
+  Platform,
 } from 'react-native';
 import {COLORS} from '../../constants/colors.ts';
 import {useRecoilState} from 'recoil';
@@ -14,6 +17,8 @@ import globalState from '../../recoil/Global/index.ts';
 import {StudentInfoProps} from '../../types/user.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import DayScheduleTable from './DayScheduleTable.tsx';
+import {IS_ANDROID, IS_IOS} from '../../constants/common.ts';
+import CText from '../common/CustomText/CText.tsx';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -61,31 +66,29 @@ const DayCalendar = (props: Props) => {
                   styles.headerCellInner,
                   selected && styles.selectedHeaderCell,
                 ]}>
-                <Text
+                <CText
                   style={{
                     color: selected
                       ? 'white'
                       : isToday
                         ? COLORS.primary
                         : 'black',
-                    fontSize: 14,
-                    fontWeight: '500',
-                  }}>
-                  {day}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: 4,
-                    color: selected
-                      ? 'white'
-                      : isToday
-                        ? COLORS.primary
-                        : 'black',
-                    fontSize: 18,
-                    fontWeight: '600',
-                  }}>
-                  {date.format('DD')}
-                </Text>
+                  }}
+                  color={
+                    selected ? 'white' : isToday ? COLORS.primary : 'black'
+                  }
+                  text={day}
+                  fontWeight="500"
+                />
+                <CText
+                  style={{marginTop: 4}}
+                  color={
+                    selected ? 'white' : isToday ? COLORS.primary : 'black'
+                  }
+                  fontSize={18}
+                  fontWeight="600"
+                  text={date.format('DD')}
+                />
               </View>
             </TouchableOpacity>
           );
@@ -109,8 +112,14 @@ const DayCalendar = (props: Props) => {
   };
 
   const handleBodyScroll = (event: any) => {
-    const offsetX = event.nativeEvent.contentOffset.x;
-    const isNext = offsetX > 0 ? 1 : -1; // true : 다음주 / false: 이전 주
+    const velocity = event.nativeEvent.velocity.x; // velocity 값이 양수이면 IOS 는 좌 -> 우 / ANDROID 는 우 -> 좌
+
+    let isNext = 0;
+    if (velocity > 0) {
+      IS_IOS ? (isNext = 1) : (isNext = -1);
+    } else if (velocity < 0) {
+      IS_IOS ? (isNext = -1) : (isNext = 1);
+    }
     const nextWeekFirstDay = moment(selectedDate).add(isNext, 'week');
 
     setHeaderUpdateCounter(prev => prev + isNext);
@@ -145,6 +154,7 @@ const styles = StyleSheet.create({
   selectedHeaderCell: {
     borderWidth: 1,
     borderRadius: 7,
+    borderColor: COLORS.primary,
     backgroundColor: COLORS.primary,
   },
 });

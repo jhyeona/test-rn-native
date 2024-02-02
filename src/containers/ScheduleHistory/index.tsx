@@ -220,6 +220,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.layout,
   },
   tableHeader: {
+    borderTopLeftRadius: 7,
+    borderTopRightRadius: 7,
     backgroundColor: COLORS.lightGray,
   },
   row: {

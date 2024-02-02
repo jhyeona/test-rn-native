@@ -52,7 +52,9 @@ export const useGetInvitedList = () => {
   return {data, refetch};
 };
 
-export const postJoinAcademy = async (payload: Array<number>) => {
+export const postJoinAcademy = async (payload: {
+  inviteIdList: Array<number>;
+}) => {
   const response = await requestPostJoinAcademy(payload);
   return response.data?.data;
 };
