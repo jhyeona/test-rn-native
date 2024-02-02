@@ -1,16 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  View,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Pressable} from 'react-native';
 import {COLORS} from '../../../constants/colors.ts';
 import CText from '../CustomText/CText.tsx';
-import {DimensionValue} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import {
+  DimensionValue,
+  ViewStyle,
+} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import SvgIcon from '../../../components/common/Icon/Icon.tsx';
-import {DownArrow} from '../../../assets/svg';
+import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 
 interface ItemProps {
   label: string;
@@ -25,6 +22,7 @@ interface Props {
   fullWidth?: DimensionValue;
   fullHeight?: DimensionValue;
   fontSize?: number;
+  style?: StyleProp<ViewStyle>;
 }
 
 const Dropdown = (props: Props) => {
@@ -37,6 +35,7 @@ const Dropdown = (props: Props) => {
     fullWidth,
     fullHeight,
     fontSize,
+    style,
   } = props;
   const [isVisible, setIsVisible] = useState(false);
   const [option, setOption] = useState(selected ?? {label: '', id: ''});
@@ -53,13 +52,10 @@ const Dropdown = (props: Props) => {
 
   return (
     <Pressable
-      style={[
-        styles.container,
-        {width: fullWidth ?? '100%', height: fullHeight ?? 42},
-      ]}
+      style={[styles.container, style, {height: fullHeight ?? 42}]}
       disabled={disabled}
       onPress={() => setIsVisible(!isVisible)}>
-      <View style={styles.dropdownButton}>
+      <View style={[styles.dropdownButton]}>
         {option.label.length > 0 ? (
           <CText text={option.label} fontSize={fontSize ?? 14} />
         ) : (
