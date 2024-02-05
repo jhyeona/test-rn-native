@@ -1,4 +1,5 @@
 import {
+  globalModalState,
   isLoginState,
   selectDayScheduleDate,
   selectedAcademy,
@@ -6,6 +7,7 @@ import {
 } from './atom.ts';
 
 const globalState = {
+  globalModalState,
   isLoginState,
   selectDayScheduleDate,
   selectWeekScheduleDate,
