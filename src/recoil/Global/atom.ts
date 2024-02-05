@@ -1,9 +1,17 @@
 import {atom} from 'recoil';
 import moment from 'moment';
 
+export const globalToastState = atom<{isVisible: boolean; message: string}>({
+  key: 'globalLoadingState',
+  default: {
+    isVisible: false,
+    message: '',
+  },
+});
+
 export const globalLoadingState = atom<boolean>({
   key: 'globalLoadingState',
-  default: true,
+  default: false,
 });
 
 export const globalModalState = atom<{
