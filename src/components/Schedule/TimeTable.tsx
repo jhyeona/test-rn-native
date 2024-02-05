@@ -1,12 +1,13 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   EventItem,
   HighlightDates,
   MomentConfig,
   TimelineCalendar,
+  TimelineCalendarHandle,
 } from '@howljs/calendar-kit';
 import moment from 'moment/moment';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import scheduleState from '../../recoil/Schedule';
 import {Dimensions} from 'react-native';
 import {COLORS} from '../../constants/colors';
@@ -19,15 +20,9 @@ const TimeTable = () => {
   const setSelectWeekDate = useSetRecoilState(
     globalState.selectWeekScheduleDate,
   );
-  const [isLoading, setIsLoading] = useRecoilState(
-    globalState.globalLoadingState,
-  );
-  const [isInitLendering, setIsInitLendering] = useState(false);
-
-  const onChangeWeek = async (date: string) => {
-    // 주간 날짜
-    setSelectWeekDate(date);
-  };
+  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
+  const [isInitRendering, setIsInitRendering] = useState(false);
+  const calendarRef = useRef<TimelineCalendarHandle>(null);
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
@@ -47,11 +42,14 @@ const TimeTable = () => {
     return formatted;
   };
 
-  const events: EventItem[] = formattedData();
-
   MomentConfig.updateLocale('ko', {
     weekdaysShort: '일_월_화_수_목_금_토'.split('_'),
   });
+
+  const onChangeWeek = async (date: string) => {
+    // 주간 날짜
+    setSelectWeekDate(date);
+  };
 
   const _onDateChanged = async (date: string) => {
     const numOfDays = 7;
@@ -109,19 +107,21 @@ const TimeTable = () => {
   useEffect(() => {
     setIsLoading(true);
     setTimeout(() => {
-      setIsInitLendering(true);
+      setIsInitRendering(true);
       setIsLoading(false);
+      calendarRef.current?.goToHour(moment().hour());
     }, 200);
   }, []);
 
   return (
     <>
-      {isInitLendering && (
+      {isInitRendering && (
         <TimelineCalendar
+          ref={calendarRef}
           initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}
           calendarWidth={calendarWidth}
           viewMode="week"
-          events={events}
+          events={formattedData()}
           highlightDates={highlightDates}
           onDateChanged={_onDateChanged}
           locale="ko"
