@@ -1,6 +1,11 @@
 import {atom} from 'recoil';
 import moment from 'moment';
 
+export const globalLoadingState = atom<boolean>({
+  key: 'globalLoadingState',
+  default: true,
+});
+
 export const globalModalState = atom<{
   isVisible: boolean;
   title: string;
