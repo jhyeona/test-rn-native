@@ -31,6 +31,7 @@ export interface LectureProps {
   lectureAllowPlus: number;
   lectureAllowEndMinus: number;
   lectureAllowEndPlus: number;
+  lectureIsAllowedAfterEnd: boolean; // 인정 시간 이후에도 퇴실 버튼 클릭이 가능한지 여부
 }
 
 export interface ScheduleDefaultProps {
@@ -57,7 +58,9 @@ export interface ScheduleHistoryDataProps extends ScheduleDefaultProps {
   eventList: Array<EventProps>;
   enterEvent: EventProps;
   completeEvent: EventProps | null;
+  isAllowedEnter: boolean; // 현재 입실 가능한 시간인지에 대한 여부
   isLeaved: boolean;
+  isAllowedComplete: boolean; // 현재 퇴실 가능한 상황인지에 대한 여부 (전제 조건: isAllowedEnter === true + 퇴실 인정 시간 이내)
   intervalEventList: Array<EventProps> | null;
 }
 

@@ -19,6 +19,7 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
+import scheduleHistory from '../../containers/ScheduleHistory';
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -128,10 +129,18 @@ const DayScheduleHistory = (props: Props) => {
       console.log('시간별체크:', response);
       Alert.alert('확인 되었습니다.');
     } catch (e: any) {
-      console.log(e);
       if (e.code === '1004') {
-        Alert.alert('이미 퇴실한 강의입니다.');
-        return;
+        const enter = e.description.indexOf('입실');
+        const complete = e.description.indexOf('퇴실');
+
+        if (enter >= 0) {
+          Alert.alert('출석체크를 먼저 진행해주세요.');
+          return;
+        }
+        if (complete >= 0) {
+          Alert.alert('이미 퇴실 처리 된 강의입니다.');
+          return;
+        }
       }
       if (e.code === '1005') {
         Alert.alert('출석 인정 시간이 아닙니다.');
@@ -210,11 +219,8 @@ const DayScheduleHistory = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    timeSet();
-  }, []);
-
-  useEffect(() => {
     if (historyData) {
+      timeSet();
       const timeList = historyData.scheduleTimeList;
       const attendTrueList = historyData.scheduleTimeList
         .filter(val => {
@@ -224,17 +230,16 @@ const DayScheduleHistory = (props: Props) => {
 
       const intervalEventList = historyData.intervalEventList?.map(item => ({
         ...item,
-      }));
+      })); // map 을 사용하여 깊은 복사
 
       const result = timeList.map(item => {
         if (item.check) {
-          const matchedTime = attendTrueList.shift();
-          const matchedEvent = intervalEventList?.shift();
-
+          const matchedTime = attendTrueList.shift(); // 시간별 체크 리스트
+          const matchedEvent = intervalEventList?.shift(); // 시간별 체크의 이벤트 리스트
           return {
             ...item,
             ...(matchedTime && {check: matchedTime.check}),
-            ...(matchedEvent && {eventType: matchedEvent.eventType}),
+            ...(matchedEvent?.eventType && {eventType: matchedEvent.eventType}),
           };
         } else {
           return item;
@@ -243,7 +248,6 @@ const DayScheduleHistory = (props: Props) => {
       setIntervalFormatted(result);
     }
   }, [historyData]);
-
   return (
     <View>
       <View
@@ -265,37 +269,31 @@ const DayScheduleHistory = (props: Props) => {
           )}
         {isAfter && lightButton('GRAY', '출석 전')}
       </View>
-      {isNow &&
-        (historyData?.enterEvent ? (
-          <CButton
-            text={
-              historyData.completeEvent?.eventType === 'COMPLETE'
-                ? '퇴실 완료'
-                : '퇴실'
-            }
-            onPress={onPressComplete}
-            buttonStyle={{height: 28, marginBottom: 10}}
-            fontSize={11}
-            disabled={historyData.completeEvent?.eventType === 'COMPLETE'}
-            noMargin
-          />
-        ) : (
-          <CButton
-            text="출석체크"
-            onPress={onPressEnter}
-            buttonStyle={{height: 28, marginBottom: 10}}
-            fontSize={11}
-            noMargin
-          />
-        ))}
+      {isNow && !historyData?.enterEvent && (
+        <CButton
+          text="출석체크"
+          onPress={onPressEnter}
+          buttonStyle={{height: 28, marginBottom: 10}}
+          fontSize={11}
+          noMargin
+        />
+      )}
+      {historyData?.enterEvent && historyData?.isAllowedComplete && (
+        <CButton
+          text={
+            historyData.completeEvent?.eventType === 'COMPLETE'
+              ? '퇴실 완료'
+              : '퇴실'
+          }
+          onPress={onPressComplete}
+          buttonStyle={{height: 28, marginBottom: 10}}
+          fontSize={11}
+          disabled={historyData.completeEvent?.eventType === 'COMPLETE'}
+          noMargin
+        />
+      )}
       {isNow && historyData?.enterEvent && !historyData.completeEvent && (
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            justifyContent: 'space-between',
-            marginBottom: 10,
-          }}>
+        <View style={styles.leaveButtons}>
           <CButton
             text="외출시작"
             onPress={onPressLeave}
@@ -314,38 +312,22 @@ const DayScheduleHistory = (props: Props) => {
           />
         </View>
       )}
-
       {schedule.scheduleTimeList &&
         intervalFormatted.map((val, index) => {
           // const startTime = moment(val.timeStart)
           //   .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
           //   .format('YYYY-MM-DD HH:mm');
-          //
           // const endTime = moment(val.timeEnd)
           //   .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
           //   .format('YYYY-MM-DD HH:mm');
           //
-          // const intervalIsBetween = isBetween(startTime, endTime);
+          // const intervalIsBetween = isBetween(startTime, endTime); // 사용 예정
 
           return (
             <View
               key={index}
               style={{flexDirection: 'row', flex: 1, marginBottom: 8}}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                  // paddingHorizontal: 14,
-                  borderTopWidth: 1,
-                  borderBottomWidth: 1,
-                  borderLeftWidth: 1,
-                  borderColor: COLORS.layout,
-                  borderTopLeftRadius: 7,
-                  borderBottomLeftRadius: 7,
-                  height: 40,
-                }}>
+              <View style={styles.attendInfo}>
                 <CText
                   text={index + 1 + '교시'}
                   color={COLORS.primary}
@@ -359,7 +341,7 @@ const DayScheduleHistory = (props: Props) => {
                 />
               </View>
               {val.check ? ( // 시간별 체크 = true
-                val.eventType ? ( // 시간별 체크에 체크가 있는 값
+                val.eventType ? ( // 시간별 체크에 출석 값이 있을 때
                   <Pressable
                     style={[styles.attendButton, styles.attendButtonEntered]}
                     disabled>
@@ -374,8 +356,8 @@ const DayScheduleHistory = (props: Props) => {
                     style={[styles.attendButton]}
                     onPress={onPressAttend}
                     disabled={
-                      !isNow ||
-                      historyData?.completeEvent?.eventType === 'COMPLETE'
+                      historyData?.completeEvent?.eventType === 'COMPLETE' || // 퇴실 처리 했을 경우
+                      !isNow
                     }>
                     <CText
                       text={
@@ -410,6 +392,25 @@ const styles = StyleSheet.create({
     borderColor: COLORS.dark.red,
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
+    height: 40,
+  },
+  leaveButtons: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  attendInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: COLORS.layout,
+    borderTopLeftRadius: 7,
+    borderBottomLeftRadius: 7,
     height: 40,
   },
   attendButtonEntered: {

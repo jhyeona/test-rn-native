@@ -113,21 +113,21 @@ export const getScheduleHistory = async (payload: GetScheduleHistoryProps) => {
 
 export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
   const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const {data, fetchStatus} = useQuery({
+  const {data, status} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
       return getScheduleHistory(payload);
     },
     enabled: !!payload.scheduleId,
-    // refetchInterval: 1000,
+    refetchInterval: 1000,
   });
 
   useEffect(() => {
     setIsLoading(true);
-    if (fetchStatus === 'idle') {
+    if (status === 'success') {
       setIsLoading(false);
     }
-  }, [fetchStatus, setIsLoading]);
+  }, [status, setIsLoading]);
 
   return data;
 };

@@ -41,17 +41,26 @@ const DayScheduleTable = (props: Props) => {
           <View
             style={[
               styles.cell,
-              {flex: 0.3, borderRightWidth: 1, borderColor: COLORS.lineBlue},
+              {
+                flex: 0.3,
+                borderRightWidth: 1,
+                borderColor: COLORS.lineBlue,
+                paddingVertical: 5,
+              },
             ]}>
             <CText
               text="시간"
-              style={styles.headerText}
+              fontWeight="800"
+              fontSize={16}
               color={COLORS.primary}
+              style={styles.headerText}
             />
           </View>
-          <View style={styles.cell}>
+          <View style={[styles.cell, {paddingVertical: 5}]}>
             <CText
-              text="예정 강의"
+              text="예정강의"
+              fontWeight="800"
+              fontSize={16}
               style={styles.headerText}
               color={COLORS.primary}
             />
@@ -77,6 +86,7 @@ const DayScheduleTable = (props: Props) => {
                     },
                   ]}>
                   <CText
+                    fontWeight="700"
                     style={styles.timeText}
                     text={`${moment(schedule.scheduleStartTime).format(
                       'HH:mm',
@@ -130,7 +140,8 @@ const DayScheduleTable = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    flexGrow: 0,
     marginVertical: 16,
     backgroundColor: COLORS.primaryLight,
     borderColor: COLORS.primary,
@@ -139,9 +150,6 @@ const styles = StyleSheet.create({
   headerText: {
     paddingVertical: 10,
     textAlign: 'center',
-    color: COLORS.primary,
-    fontSize: 14,
-    fontWeight: '700',
   },
   timeText: {
     marginTop: 14,
@@ -165,13 +173,13 @@ const styles = StyleSheet.create({
   },
   cell: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 16,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
   },
   noData: {
-    marginTop: 100,
+    marginVertical: 200,
     justifyContent: 'center',
     alignItems: 'center',
   },
