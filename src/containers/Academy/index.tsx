@@ -2,32 +2,34 @@ import React, {useEffect, useState} from 'react';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
 import Header from '../../components/common/Header/Header.tsx';
 import CView from '../../components/common/CommonView/CView.tsx';
-import {Alert, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {usePreviousScreenName} from '../../hooks/useNavigation.ts';
 import CText from '../../components/common/CustomText/CText.tsx';
 import CheckboxCircle from '../../components/common/Checkbox/CheckboxCircle.tsx';
 import {COLORS} from '../../constants/colors.ts';
-import {DeepCopy, deepCopy} from '../../services/deepCopy.ts';
 import moment from 'moment';
 import {postJoinAcademy, useGetInvitedList} from '../../hooks/useUser.ts';
 import {useQueryClient} from '@tanstack/react-query';
+import {useSetRecoilState} from 'recoil';
+import globalState from '../../recoil/Global';
 
 interface CheckboxStateProps {
   isChecked: boolean;
   id: number;
   type: string;
   time: string;
-  academy: DeepCopy<{
+  academy: {
     academyId: number;
     name: string;
     picture?: string | null;
-  }>;
+  };
 }
 
 const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const prevScreenName = usePreviousScreenName(navigation);
+  const setModalState = useSetRecoilState(globalState.globalModalState);
   const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
 
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>();
@@ -57,7 +59,11 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     };
 
     if (payload.inviteIdList.length === 0) {
-      Alert.alert('기관을 선택하세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '기관을 선택하세요.',
+      });
       return;
     }
 
@@ -67,7 +73,11 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       await queryClient.invalidateQueries({queryKey: ['userInfo']});
       console.log('1', response);
       console.log('2', refetchResponse);
-      Alert.alert('선택한 기관이 추가되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '선택한 기관이 추가되었습니다.',
+      });
     } catch (e: any) {
       console.log('Error:', e);
     }

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Pressable, StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {EventProps, SchedulePeriodDataProps} from '../../types/schedule.ts';
 import {getEventHistory} from '../../hooks/useSchedule.ts';
-import {useRecoilValue} from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
 import moment from 'moment';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
@@ -22,6 +22,7 @@ const ScheduleHistory = ({
 }) => {
   const selectedAcademy = useRecoilValue(globalState.selectedAcademy);
   const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
+  const setModalState = useSetRecoilState(globalState.globalModalState);
   const [historyData, setHistoryData] = useState<SchedulePeriodDataProps>();
   const [startDate, setStartDate] = useState(moment(selectDayDate));
   const [endDate, setEndDate] = useState(moment(selectDayDate));
@@ -97,12 +98,20 @@ const ScheduleHistory = ({
   useEffect(() => {
     if (selectedIsStart && moment(selectedDate).isAfter(endDate, 'date')) {
       setStartDate(endDate);
-      Alert.alert('종료 날짜보다 이전으로 선택하세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '종료 날짜보다 이전으로 선택하세요.',
+      });
       return;
     }
     if (!selectedIsStart && moment(selectedDate).isBefore(startDate, 'date')) {
       setEndDate(startDate);
-      Alert.alert('시작 날짜보다 이후로 선택하세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '시작 날짜보다 이후로 선택하세요.',
+      });
       return;
     }
     selectedIsStart
