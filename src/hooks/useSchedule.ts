@@ -19,6 +19,7 @@ import {
   GetScheduleProps,
   PostEventProps,
 } from '../types/schedule.ts';
+import globalState from '../recoil/Global/index.ts';
 
 export const getDaySchedule = async (payload: GetScheduleProps) => {
   const response = await requestGetDaySchedule(payload);
@@ -27,6 +28,7 @@ export const getDaySchedule = async (payload: GetScheduleProps) => {
 
 export const useGetDaySchedule = (payload: GetScheduleProps) => {
   const setDaySchedule = useSetRecoilState(scheduleState.dayScheduleState);
+
   const {data} = useQuery({
     queryKey: ['daySchedule', payload],
     queryFn: async () => {
@@ -35,6 +37,7 @@ export const useGetDaySchedule = (payload: GetScheduleProps) => {
     enabled: !!payload.academyId,
     refetchInterval: 1000,
   });
+
   useEffect(() => {
     if (!data) return;
     setDaySchedule(data);
