@@ -1,8 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {
   View,
-  Text,
-  TouchableOpacity,
   StyleSheet,
   Animated,
   TouchableWithoutFeedback,
@@ -66,22 +64,11 @@ const GlobalModal = () => {
                   fontWeight="700"
                   style={styles.titleText}
                 />
-                <View
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+                <View style={styles.messageText}>
                   <CText text={modalState.message} />
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  padding: 10,
-                }}>
+              <View style={styles.buttonContainer}>
                 <CButton
                   text="확인"
                   onPress={() => setModalState(initModal)}
@@ -117,6 +104,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 1,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
   titleText: {
     textAlign: 'center',
     marginBottom: 15,
@@ -124,6 +116,12 @@ const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
     padding: 10,
+    alignItems: 'center',
+  },
+  messageText: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });
