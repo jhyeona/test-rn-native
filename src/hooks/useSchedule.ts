@@ -27,16 +27,24 @@ export const getDaySchedule = async (payload: GetScheduleProps) => {
 };
 
 export const useGetDaySchedule = (payload: GetScheduleProps) => {
+  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
   const setDaySchedule = useSetRecoilState(scheduleState.dayScheduleState);
 
-  const {data} = useQuery({
+  const {data, fetchStatus} = useQuery({
     queryKey: ['daySchedule', payload],
     queryFn: async () => {
       return getDaySchedule(payload);
     },
     enabled: !!payload.academyId,
-    refetchInterval: 1000,
+    // refetchInterval: 1000,
   });
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (fetchStatus === 'idle') {
+      setIsLoading(false);
+    }
+  }, [fetchStatus, setIsLoading]);
 
   useEffect(() => {
     if (!data) return;
@@ -50,14 +58,23 @@ export const getWeekSchedule = async (payload: GetScheduleProps) => {
 };
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
+  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
   const setWeekSchedule = useSetRecoilState(scheduleState.weekScheduleState);
-  const {data} = useQuery({
+  const {data, fetchStatus} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
       return getWeekSchedule(payload);
     },
     enabled: !!payload.academyId,
   });
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (fetchStatus === 'idle') {
+      setIsLoading(false);
+    }
+  }, [fetchStatus, setIsLoading]);
+
   useEffect(() => {
     if (!data) return;
     setWeekSchedule(data);
@@ -95,14 +112,23 @@ export const getScheduleHistory = async (payload: GetScheduleHistoryProps) => {
 };
 
 export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
-  const {data} = useQuery({
+  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
+  const {data, fetchStatus} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
       return getScheduleHistory(payload);
     },
     enabled: !!payload.scheduleId,
-    refetchInterval: 1000,
+    // refetchInterval: 1000,
   });
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (fetchStatus === 'idle') {
+      setIsLoading(false);
+    }
+  }, [fetchStatus, setIsLoading]);
+
   return data;
 };
 
