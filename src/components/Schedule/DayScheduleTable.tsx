@@ -31,7 +31,10 @@ const DayScheduleTable = (props: Props) => {
     <ScrollView
       showsVerticalScrollIndicator={false}
       bounces={false}
-      style={styles.container}>
+      style={[
+        styles.container,
+        {flexGrow: dayScheduleData?.scheduleList.length === 0 ? 1 : 0},
+      ]}>
       <View style={styles.table}>
         <View
           style={[
@@ -179,9 +182,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   noData: {
-    marginVertical: 200,
+    marginTop: 100,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignSelf: 'center',
   },
 });
 
