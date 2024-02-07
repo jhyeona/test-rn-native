@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>ihereapp</string>
+	<string>체크히어</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -48,6 +48,7 @@
 		<string>fonts/Pretendard-ExtraLight.otf</string>
 		<string>fonts/Pretendard-SemiBold.otf</string>
 		<string>fonts/Pretendard-Thin.otf</string>
+		<string>fonts/Pretendard-Medium.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash.storyboard</string>
