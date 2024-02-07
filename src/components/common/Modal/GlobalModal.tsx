@@ -16,15 +16,41 @@ const GlobalModal = () => {
   const [modalState, setModalState] = useRecoilState(
     globalState.globalModalState,
   );
+  const {isVisible, title, message, isConfirm, onPressConfirm, onPressCancel} =
+    modalState;
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const initModal = {isVisible: false, title: '', message: ''};
+  const initModal = {
+    isVisible: false,
+    title: '',
+    message: '',
+    isConfirm: false,
+    onPressConfirm: () => {},
+    onPressCancel: () => {},
+  };
+
   const closeModal = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 300,
       useNativeDriver: false,
     }).start(() => setModalState(initModal));
+  };
+
+  const handleConfirm = () => {
+    if (onPressConfirm) {
+      onPressConfirm();
+    }
+    setModalState(initModal);
+    closeModal();
+  };
+
+  const handleCancel = () => {
+    if (onPressCancel) {
+      onPressCancel();
+    }
+    setModalState(initModal);
+    closeModal();
   };
 
   const handleContainerPress = (event: GestureResponderEvent) => {
@@ -42,38 +68,53 @@ const GlobalModal = () => {
   };
 
   useEffect(() => {
-    if (modalState.isVisible) {
+    if (isVisible) {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
         useNativeDriver: false,
       }).start();
     }
-  }, [modalState.isVisible, fadeAnim]);
+  }, [isVisible, fadeAnim]);
 
   return (
     <>
-      {modalState.isVisible && (
+      {isVisible && (
         <TouchableWithoutFeedback onPress={handleContainerPress}>
           <View style={styles.container}>
             <Animated.View style={[styles.modalContainer, {opacity: fadeAnim}]}>
               <View style={styles.modalContent}>
                 <CText
-                  text={modalState.title}
+                  text={title}
                   fontSize={18}
                   fontWeight="700"
                   style={styles.titleText}
                 />
                 <View style={styles.messageText}>
-                  <CText text={modalState.message} />
+                  <CText
+                    text={message}
+                    lineHeight={24}
+                    fontSize={16}
+                    style={{textAlign: 'center'}}
+                  />
                 </View>
               </View>
               <View style={styles.buttonContainer}>
                 <CButton
                   text="확인"
-                  onPress={() => setModalState(initModal)}
+                  onPress={handleConfirm}
                   noMargin
+                  buttonStyle={{flex: 1}}
                 />
+                {isConfirm && (
+                  <CButton
+                    text="취소"
+                    onPress={handleCancel}
+                    noMargin
+                    whiteButton
+                    buttonStyle={{flex: 1, marginLeft: 10}}
+                  />
+                )}
               </View>
             </Animated.View>
           </View>

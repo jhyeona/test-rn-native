@@ -5,7 +5,7 @@ import {
   ScheduleDefaultProps,
   ScheduleTimeProps,
 } from '../../types/schedule.ts';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants/colors.ts';
 import SvgIcon from '../common/Icon/Icon.tsx';
 import CButton from '../common/CommonButton/CButton.tsx';
@@ -19,6 +19,12 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
+import {useSetRecoilState} from 'recoil';
+import globalState from '../../recoil/Global';
+import {
+  handleOpenSettings,
+  requestLocationPermissions,
+} from '../../utils/permissionsHelper.ts';
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -51,6 +57,7 @@ const lightButton = (color: 'BLUE' | 'GRAY', text: string) => {
 const DayScheduleHistory = (props: Props) => {
   const {payload, schedule} = props;
   const historyData = useGetScheduleHistory(payload);
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [intervalFormatted, setIntervalFormatted] = useState<
     Array<ScheduleTimeProps>
   >([]);
@@ -68,6 +75,20 @@ const DayScheduleHistory = (props: Props) => {
   });
 
   const onPressEnter = async () => {
+    const grantedResult = await requestLocationPermissions();
+    if (grantedResult !== true) {
+      setGlobalModalState({
+        isVisible: true,
+        title: '권한 설정 안내',
+        message: `출결을 위해 ${
+          grantedResult === 'locationBlock' ? '위치' : '근처 기기'
+        } 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
+        isConfirm: true,
+        onPressConfirm: () => handleOpenSettings(),
+      });
+      return;
+    }
+
     // 출석 체크
     // setEventPayload({
     //   attendeeId: attendeeId,

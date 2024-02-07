@@ -15,10 +15,16 @@ import {COLORS} from '../../constants/colors.ts';
 import CInput from '../../components/common/CustomInput/CInput.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import SvgIcon from '../../components/common/Icon/Icon.tsx';
-import {useGetUserInfo} from '../../hooks/useUser.ts';
+import {
+  handleOpenSettings,
+  requestNotificationsPermission,
+} from '../../utils/permissionsHelper.ts';
+import {RESULTS} from 'react-native-permissions';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
+  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [isPushApp, setIsPushApp] = useState(
     userData ? userData?.settingPushApp : true,
   );
@@ -28,16 +34,26 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
 
   const onPressUpdate = async () => {
-    // if (!isSamePassword || !checkPassword(password)) {
-    //   Alert.alert('비밀번호를 확인해주세요.');
-    //   return;
-    // }
+    if (
+      (password.length > 0 || rePassword.length > 0) &&
+      (!checkPassword(password) ||
+        !checkPassword(rePassword) ||
+        !isSamePassword)
+    ) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호를 확인해주세요.',
+      });
+      return;
+    }
     let data: {settingPushApp: boolean; password?: string} = {
       settingPushApp: isPushApp,
     };
     if (password) {
       data = {...data, password: password};
     }
+    console.log(data);
     try {
       await patchUserUpdate(data);
       Alert.alert('정보가 변경되었습니다.');
@@ -63,6 +79,24 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     const isSame = password === rePassword;
     setIsSamePassword(isSame);
   }, [password, rePassword]);
+
+  useEffect(() => {
+    (async () => {
+      if (isPushApp) {
+        const notificationResult = await requestNotificationsPermission();
+        if (notificationResult === RESULTS.BLOCKED) {
+          setIsPushApp(false);
+          setGlobalModalState({
+            isVisible: true,
+            title: '권한 설정 안내',
+            message: `알림 설정을 위해 알림 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
+            isConfirm: true,
+            onPressConfirm: () => handleOpenSettings(),
+          });
+        }
+      }
+    })();
+  }, [isPushApp, setGlobalModalState]);
 
   return (
     <CSafeAreaView>

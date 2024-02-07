@@ -2,7 +2,7 @@ import {atom} from 'recoil';
 import moment from 'moment';
 
 export const globalToastState = atom<{isVisible: boolean; message: string}>({
-  key: 'globalLoadingState',
+  key: 'globalToastState',
   default: {
     isVisible: false,
     message: '',
@@ -18,12 +18,16 @@ export const globalModalState = atom<{
   isVisible: boolean;
   title: string;
   message: string;
+  isConfirm?: boolean;
+  onPressConfirm?: () => void;
+  onPressCancel?: () => void;
 }>({
   key: 'globalModalState',
   default: {
     isVisible: false,
     title: '',
     message: '',
+    isConfirm: false,
   },
 });
 

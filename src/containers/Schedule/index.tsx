@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import userState from '../../recoil/user';
 import {
   useGetDaySchedule,
@@ -19,6 +19,11 @@ import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import globalState from '../../recoil/Global';
 import {View} from 'react-native';
+import {
+  handleOpenSettings,
+  requestLocationPermissions,
+  requestNotificationsPermission,
+} from '../../utils/permissionsHelper.ts';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -28,6 +33,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [selectAcademy, setSelectAcademy] = useRecoilState(
     globalState.selectedAcademy,
   );
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [isWeekend, setIsWeekend] = useState(false);
   const [selectStudentInfo, setSelectStudentInfo] = useState<
     StudentInfoProps | undefined
@@ -90,6 +96,25 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     const studentInfo = selectedStudentInfo(academyList[0].id); // 처음 선택된 기관의 유저 정보
     setSelectStudentInfo(studentInfo && studentInfo[0]);
   }, [academyList]);
+
+  useEffect(() => {
+    (async () => {
+      await requestNotificationsPermission(); // 여기서 알림 권한 블락시 푸시 알림 설정 시에 재 안내
+      const grantedResult = await requestLocationPermissions();
+      if (grantedResult !== true) {
+        // 위치 또는 근처기기(블루투스) 권한은 한 번 더 안내
+        setGlobalModalState({
+          isVisible: true,
+          title: '권한 설정 안내',
+          message: `출결을 위해 ${
+            grantedResult === 'locationBlock' ? '위치' : '근처 기기'
+          } 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
+          isConfirm: true,
+          onPressConfirm: () => handleOpenSettings(),
+        });
+      }
+    })();
+  }, [setGlobalModalState]);
 
   return (
     <CSafeAreaView>
