@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {storage} from '../../utils/storageHelper.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {patchUserUpdate} from '../../hooks/useMypage.ts';
@@ -25,9 +25,11 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
   const setModalState = useSetRecoilState(globalState.globalModalState);
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+
   const [isPushApp, setIsPushApp] = useState(
     userData ? userData?.settingPushApp : true,
   );
+
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
@@ -56,7 +58,11 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     console.log(data);
     try {
       await patchUserUpdate(data);
-      Alert.alert('정보가 변경되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '정보가 변경되었습니다.',
+      });
       setPassword('');
       setRePassword('');
     } catch (error) {

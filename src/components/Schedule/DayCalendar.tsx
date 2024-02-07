@@ -106,7 +106,9 @@ const DayCalendar = (props: Props) => {
         onScrollEndDrag={handleBodyScroll}
         pagingEnabled
         scrollEventThrottle={16}>
-        <DayScheduleTable navigation={navigation} studentInfo={studentInfo} />
+        <View style={{width: '100%'}}>
+          <DayScheduleTable navigation={navigation} studentInfo={studentInfo} />
+        </View>
       </ScrollView>
     );
   };

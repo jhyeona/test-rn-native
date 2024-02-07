@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  NativeSyntheticEvent,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {
   checkDate,
   checkName,
@@ -20,20 +14,19 @@ import {
   postSignUpSMSConfirm,
   postSignUpTAS,
 } from '../../hooks/useSignUp.ts';
-import {TextInputChangeEventData} from 'react-native/Libraries/Components/TextInput/TextInput';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
 import CView from '../../components/common/CommonView/CView.tsx';
 import Header from '../../components/common/Header/Header.tsx';
 import CInput from '../../components/common/CustomInput/CInput.tsx';
 import Checkbox from '../../components/common/Checkbox/Checkbox.tsx';
-import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import CText from '../../components/common/CustomText/CText.tsx';
-import moment from 'moment';
-import {ApiResponseProps} from '../../types/common.ts';
 import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
+import {useSetRecoilState} from 'recoil';
+import globalState from '../../recoil/Global';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
+  const setModalState = useSetRecoilState(globalState.globalModalState);
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -74,7 +67,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const doubleCheckPhone = async () => {
     // 휴대폰 번호 중복 확인
     if (!checkPhone(phone)) {
-      Alert.alert('올바른 휴대폰 번호를 입력하세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '올바른 휴대폰 번호를 입력하세요.',
+      });
       return;
     }
     try {
@@ -118,7 +115,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       }
     } catch (e) {
       console.log(e);
-      Alert.alert('SMS 인증 요청에 실패했습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: 'SMS 인증 요청에 실패했습니다.',
+      });
     }
   };
 
@@ -134,7 +135,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       setIsCertification(true);
     } catch (error) {
       console.log(error);
-      Alert.alert('인증에 실패했습니다. \n정보를 확인해주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '인증에 실패했습니다. \n정보를 확인해주세요.',
+      });
     }
   };
 
@@ -147,20 +152,32 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       !checkPhone(phone) ||
       !telecom
     ) {
-      Alert.alert('입력을 확인해주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '입력을 확인해주세요.',
+      });
       return;
     }
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
-      Alert.alert('이미 사용중인 휴대폰 번호입니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '이미 사용중인 휴대폰 번호입니다.',
+      });
       setIsSend(false);
       return;
     }
 
     const resultTasCertification = await tasCertification();
     if (!resultTasCertification) {
-      Alert.alert('인증에 실패했습니다.\n정보를 확인해주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '인증에 실패했습니다.\n정보를 확인해주세요.',
+      });
       setIsSend(false);
       return;
     }
@@ -171,17 +188,29 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const onPressSignUp = async () => {
     // 가입하기 버튼 클릭
     if (!isCertification) {
-      Alert.alert('휴대폰 인증을 먼저 진행해주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '휴대폰 인증을 먼저 진행해주세요.',
+      });
       return;
     }
 
     if (!checkPassword(password) || !samePassword) {
-      Alert.alert('비밀번호를 확인해주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호를 확인해주세요.',
+      });
       return;
     }
 
     if (!isFirstChecked || !isSecondChecked) {
-      Alert.alert('약관에 모두 동의해주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '약관에 모두 동의해주세요.',
+      });
       return;
     }
 
@@ -196,7 +225,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
     try {
       await postSignUp(data);
-      Alert.alert('회원가입이 완료되었습니다. 로그인해 주세요.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '회원가입이 완료되었습니다. 로그인해 주세요.',
+      });
       navigation.navigate('SignIn');
     } catch (error) {
       console.log('error', error);
