@@ -24,7 +24,7 @@ const CText = (props: Props) => {
     lineBreak,
   } = props;
 
-  const realFontSize = IS_ANDROID ? fontSize - 2 : fontSize;
+  const realFontSize = IS_ANDROID ? fontSize - 1 : fontSize;
 
   const fontWeightToFontFamily = (weight: string) => {
     let family;

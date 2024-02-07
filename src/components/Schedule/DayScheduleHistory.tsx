@@ -5,7 +5,7 @@ import {
   ScheduleDefaultProps,
   ScheduleTimeProps,
 } from '../../types/schedule.ts';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants/colors.ts';
 import SvgIcon from '../common/Icon/Icon.tsx';
 import CButton from '../common/CommonButton/CButton.tsx';
@@ -19,6 +19,9 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
+import scheduleHistory from '../../containers/ScheduleHistory';
+import {useSetRecoilState} from 'recoil';
+import globalState from '../../recoil/Global';
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -51,6 +54,7 @@ const lightButton = (color: 'BLUE' | 'GRAY', text: string) => {
 const DayScheduleHistory = (props: Props) => {
   const {payload, schedule} = props;
   const historyData = useGetScheduleHistory(payload);
+  const setModalState = useSetRecoilState(globalState.globalModalState);
   const [intervalFormatted, setIntervalFormatted] = useState<
     Array<ScheduleTimeProps>
   >([]);
@@ -83,19 +87,35 @@ const DayScheduleHistory = (props: Props) => {
       const response = await postEventEnter(eventPayload);
       console.log('RESPONSE:', response);
 
-      Alert.alert('입실 처리 되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '입실 처리 되었습니다.',
+      });
     } catch (e: any) {
       // TODO: e: any 의 에러처리
       if (e.code === '1004') {
-        Alert.alert('이미 입실 처리 되었습니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '이미 입실 처리 되었습니다.',
+        });
         return;
       }
       if (e.code === '1005') {
-        Alert.alert('현재 진행중인 강의가 아닙니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '현재 진행중인 강의가 아닙니다.',
+        });
         return;
       }
       if (e.code === '4061') {
-        Alert.alert('강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.',
+        });
         return;
       }
       console.log(e);
@@ -107,14 +127,26 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventComplete(eventPayload);
       console.log('퇴실:', response);
-      Alert.alert('퇴실 처리 되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '퇴실 처리 되었습니다.',
+      });
     } catch (e: any) {
       if (e.code === '1004') {
-        Alert.alert('이미 퇴실 처리 되었습니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '이미 퇴실 처리 되었습니다.',
+        });
         return;
       }
       if (e.code === '4061') {
-        Alert.alert('강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.',
+        });
         return;
       }
       console.log(e);
@@ -126,23 +158,55 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventAttend(eventPayload);
       console.log('시간별체크:', response);
-      Alert.alert('확인 되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '확인 되었습니다.',
+      });
     } catch (e: any) {
-      console.log(e);
       if (e.code === '1004') {
-        Alert.alert('이미 퇴실한 강의입니다.');
-        return;
+        const enter = e.description.indexOf('입실');
+        const complete = e.description.indexOf('퇴실');
+
+        if (enter >= 0) {
+          setModalState({
+            isVisible: true,
+            title: '안내',
+            message: '출석체크를 먼저 진행해주세요.',
+          });
+          return;
+        }
+        if (complete >= 0) {
+          setModalState({
+            isVisible: true,
+            title: '안내',
+            message: '이미 퇴실 처리 된 강의입니다.',
+          });
+          return;
+        }
       }
       if (e.code === '1005') {
-        Alert.alert('출석 인정 시간이 아닙니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '출석 인정 시간이 아닙니다.',
+        });
         return;
       }
       if (e.code === '1006') {
-        Alert.alert('해당 강의는 주기적으로 확인하는 강의가 아닙니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '해당 강의는 주기적으로 확인하는 강의가 아닙니다.',
+        });
         return;
       }
       if (e.code === '4061') {
-        Alert.alert('위치 정보가 올바르지 않습니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '위치 정보가 올바르지 않습니다.',
+        });
         return;
       }
     }
@@ -153,15 +217,27 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventLeave(eventPayload);
       console.log('외출:', response);
-      Alert.alert('외출이 시작되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '외출이 시작되었습니다.',
+      });
     } catch (e: any) {
       console.log(e);
       if (e.code === '1004') {
-        Alert.alert('이미 외출중입니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '이미 외출중입니다.',
+        });
         return;
       }
       if (e.code === '1005') {
-        Alert.alert('현재 진행중인 강의가 아닙니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '현재 진행중인 강의가 아닙니다.',
+        });
         return;
       }
     }
@@ -172,15 +248,27 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventComeback(eventPayload);
       console.log('컴백:', response);
-      Alert.alert('외출이 종료되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '외출이 종료되었습니다.',
+      });
     } catch (e: any) {
       console.log(e);
       if (e.code === '1004') {
-        Alert.alert('외출중이 아닙니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '외출중이 아닙니다.',
+        });
         return;
       }
       if (e.code === '1005') {
-        Alert.alert('현재 진행중인 강의가 아닙니다.');
+        setModalState({
+          isVisible: true,
+          title: '안내',
+          message: '현재 진행중인 강의가 아닙니다.',
+        });
         return;
       }
     }
@@ -210,11 +298,8 @@ const DayScheduleHistory = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    timeSet();
-  }, []);
-
-  useEffect(() => {
     if (historyData) {
+      timeSet();
       const timeList = historyData.scheduleTimeList;
       const attendTrueList = historyData.scheduleTimeList
         .filter(val => {
@@ -224,17 +309,16 @@ const DayScheduleHistory = (props: Props) => {
 
       const intervalEventList = historyData.intervalEventList?.map(item => ({
         ...item,
-      }));
+      })); // map 을 사용하여 깊은 복사
 
       const result = timeList.map(item => {
         if (item.check) {
-          const matchedTime = attendTrueList.shift();
-          const matchedEvent = intervalEventList?.shift();
-
+          const matchedTime = attendTrueList.shift(); // 시간별 체크 리스트
+          const matchedEvent = intervalEventList?.shift(); // 시간별 체크의 이벤트 리스트
           return {
             ...item,
             ...(matchedTime && {check: matchedTime.check}),
-            ...(matchedEvent && {eventType: matchedEvent.eventType}),
+            ...(matchedEvent?.eventType && {eventType: matchedEvent.eventType}),
           };
         } else {
           return item;
@@ -243,7 +327,6 @@ const DayScheduleHistory = (props: Props) => {
       setIntervalFormatted(result);
     }
   }, [historyData]);
-
   return (
     <View>
       <View
@@ -265,37 +348,31 @@ const DayScheduleHistory = (props: Props) => {
           )}
         {isAfter && lightButton('GRAY', '출석 전')}
       </View>
-      {isNow &&
-        (historyData?.enterEvent ? (
-          <CButton
-            text={
-              historyData.completeEvent?.eventType === 'COMPLETE'
-                ? '퇴실 완료'
-                : '퇴실'
-            }
-            onPress={onPressComplete}
-            buttonStyle={{height: 28, marginBottom: 10}}
-            fontSize={11}
-            disabled={historyData.completeEvent?.eventType === 'COMPLETE'}
-            noMargin
-          />
-        ) : (
-          <CButton
-            text="출석체크"
-            onPress={onPressEnter}
-            buttonStyle={{height: 28, marginBottom: 10}}
-            fontSize={11}
-            noMargin
-          />
-        ))}
+      {isNow && !historyData?.enterEvent && (
+        <CButton
+          text="출석체크"
+          onPress={onPressEnter}
+          buttonStyle={{height: 28, marginBottom: 10}}
+          fontSize={11}
+          noMargin
+        />
+      )}
+      {historyData?.enterEvent && historyData?.isAllowedComplete && (
+        <CButton
+          text={
+            historyData.completeEvent?.eventType === 'COMPLETE'
+              ? '퇴실 완료'
+              : '퇴실'
+          }
+          onPress={onPressComplete}
+          buttonStyle={{height: 28, marginBottom: 10}}
+          fontSize={11}
+          disabled={historyData.completeEvent?.eventType === 'COMPLETE'}
+          noMargin
+        />
+      )}
       {isNow && historyData?.enterEvent && !historyData.completeEvent && (
-        <View
-          style={{
-            flexDirection: 'row',
-            flex: 1,
-            justifyContent: 'space-between',
-            marginBottom: 10,
-          }}>
+        <View style={styles.leaveButtons}>
           <CButton
             text="외출시작"
             onPress={onPressLeave}
@@ -314,38 +391,22 @@ const DayScheduleHistory = (props: Props) => {
           />
         </View>
       )}
-
       {schedule.scheduleTimeList &&
         intervalFormatted.map((val, index) => {
           // const startTime = moment(val.timeStart)
           //   .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
           //   .format('YYYY-MM-DD HH:mm');
-          //
           // const endTime = moment(val.timeEnd)
           //   .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
           //   .format('YYYY-MM-DD HH:mm');
           //
-          // const intervalIsBetween = isBetween(startTime, endTime);
+          // const intervalIsBetween = isBetween(startTime, endTime); // 사용 예정
 
           return (
             <View
               key={index}
               style={{flexDirection: 'row', flex: 1, marginBottom: 8}}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                  // paddingHorizontal: 14,
-                  borderTopWidth: 1,
-                  borderBottomWidth: 1,
-                  borderLeftWidth: 1,
-                  borderColor: COLORS.layout,
-                  borderTopLeftRadius: 7,
-                  borderBottomLeftRadius: 7,
-                  height: 40,
-                }}>
+              <View style={styles.attendInfo}>
                 <CText
                   text={index + 1 + '교시'}
                   color={COLORS.primary}
@@ -359,7 +420,7 @@ const DayScheduleHistory = (props: Props) => {
                 />
               </View>
               {val.check ? ( // 시간별 체크 = true
-                val.eventType ? ( // 시간별 체크에 체크가 있는 값
+                val.eventType ? ( // 시간별 체크에 출석 값이 있을 때
                   <Pressable
                     style={[styles.attendButton, styles.attendButtonEntered]}
                     disabled>
@@ -374,8 +435,8 @@ const DayScheduleHistory = (props: Props) => {
                     style={[styles.attendButton]}
                     onPress={onPressAttend}
                     disabled={
-                      !isNow ||
-                      historyData?.completeEvent?.eventType === 'COMPLETE'
+                      historyData?.completeEvent?.eventType === 'COMPLETE' || // 퇴실 처리 했을 경우
+                      !isNow
                     }>
                     <CText
                       text={
@@ -410,6 +471,25 @@ const styles = StyleSheet.create({
     borderColor: COLORS.dark.red,
     borderTopRightRadius: 7,
     borderBottomRightRadius: 7,
+    height: 40,
+  },
+  leaveButtons: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  attendInfo: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: COLORS.layout,
+    borderTopLeftRadius: 7,
+    borderBottomLeftRadius: 7,
     height: 40,
   },
   attendButtonEntered: {

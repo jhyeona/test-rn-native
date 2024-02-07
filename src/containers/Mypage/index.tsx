@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {storage} from '../../utils/storageHelper.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {patchUserUpdate} from '../../hooks/useMypage.ts';
@@ -15,23 +15,28 @@ import {COLORS} from '../../constants/colors.ts';
 import CInput from '../../components/common/CustomInput/CInput.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import SvgIcon from '../../components/common/Icon/Icon.tsx';
-import {useGetUserInfo} from '../../hooks/useUser.ts';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
+  const setModalState = useSetRecoilState(globalState.globalModalState);
   const [isPushApp, setIsPushApp] = useState(
     userData ? userData?.settingPushApp : true,
   );
+
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
 
   const onPressUpdate = async () => {
-    // if (!isSamePassword || !checkPassword(password)) {
-    //   Alert.alert('비밀번호를 확인해주세요.');
-    //   return;
-    // }
+    if (!isSamePassword || !checkPassword(password)) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호를 확인해주세요.',
+      });
+      return;
+    }
     let data: {settingPushApp: boolean; password?: string} = {
       settingPushApp: isPushApp,
     };
@@ -40,7 +45,11 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
     try {
       await patchUserUpdate(data);
-      Alert.alert('정보가 변경되었습니다.');
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '정보가 변경되었습니다.',
+      });
       setPassword('');
       setRePassword('');
     } catch (error) {
