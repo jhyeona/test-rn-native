@@ -18,12 +18,16 @@ export const globalModalState = atom<{
   isVisible: boolean;
   title: string;
   message: string;
+  isConfirm?: boolean;
+  onPressConfirm?: () => void;
+  onPressCancel?: () => void;
 }>({
   key: 'globalModalState',
   default: {
     isVisible: false,
     title: '',
     message: '',
+    isConfirm: false,
   },
 });
 

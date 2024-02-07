@@ -19,9 +19,12 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
-import scheduleHistory from '../../containers/ScheduleHistory';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
+import {
+  handleOpenSettings,
+  requestLocationPermissions,
+} from '../../utils/permissionsHelper.ts';
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -54,7 +57,7 @@ const lightButton = (color: 'BLUE' | 'GRAY', text: string) => {
 const DayScheduleHistory = (props: Props) => {
   const {payload, schedule} = props;
   const historyData = useGetScheduleHistory(payload);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [intervalFormatted, setIntervalFormatted] = useState<
     Array<ScheduleTimeProps>
   >([]);
@@ -72,6 +75,20 @@ const DayScheduleHistory = (props: Props) => {
   });
 
   const onPressEnter = async () => {
+    const grantedResult = await requestLocationPermissions();
+    if (grantedResult !== true) {
+      setGlobalModalState({
+        isVisible: true,
+        title: '권한 설정 안내',
+        message: `출결을 위해 ${
+          grantedResult === 'locationBlock' ? '위치' : '근처 기기'
+        } 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
+        isConfirm: true,
+        onPressConfirm: () => handleOpenSettings(),
+      });
+      return;
+    }
+
     // 출석 체크
     // setEventPayload({
     //   attendeeId: attendeeId,
@@ -87,7 +104,7 @@ const DayScheduleHistory = (props: Props) => {
       const response = await postEventEnter(eventPayload);
       console.log('RESPONSE:', response);
 
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '입실 처리 되었습니다.',
@@ -95,7 +112,7 @@ const DayScheduleHistory = (props: Props) => {
     } catch (e: any) {
       // TODO: e: any 의 에러처리
       if (e.code === '1004') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '이미 입실 처리 되었습니다.',
@@ -103,7 +120,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '1005') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '현재 진행중인 강의가 아닙니다.',
@@ -111,7 +128,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '4061') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.',
@@ -127,14 +144,14 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventComplete(eventPayload);
       console.log('퇴실:', response);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '퇴실 처리 되었습니다.',
       });
     } catch (e: any) {
       if (e.code === '1004') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '이미 퇴실 처리 되었습니다.',
@@ -142,7 +159,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '4061') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.',
@@ -158,7 +175,7 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventAttend(eventPayload);
       console.log('시간별체크:', response);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '확인 되었습니다.',
@@ -169,7 +186,7 @@ const DayScheduleHistory = (props: Props) => {
         const complete = e.description.indexOf('퇴실');
 
         if (enter >= 0) {
-          setModalState({
+          setGlobalModalState({
             isVisible: true,
             title: '안내',
             message: '출석체크를 먼저 진행해주세요.',
@@ -177,7 +194,7 @@ const DayScheduleHistory = (props: Props) => {
           return;
         }
         if (complete >= 0) {
-          setModalState({
+          setGlobalModalState({
             isVisible: true,
             title: '안내',
             message: '이미 퇴실 처리 된 강의입니다.',
@@ -186,7 +203,7 @@ const DayScheduleHistory = (props: Props) => {
         }
       }
       if (e.code === '1005') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '출석 인정 시간이 아닙니다.',
@@ -194,7 +211,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '1006') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '해당 강의는 주기적으로 확인하는 강의가 아닙니다.',
@@ -202,7 +219,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '4061') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '위치 정보가 올바르지 않습니다.',
@@ -217,7 +234,7 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventLeave(eventPayload);
       console.log('외출:', response);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '외출이 시작되었습니다.',
@@ -225,7 +242,7 @@ const DayScheduleHistory = (props: Props) => {
     } catch (e: any) {
       console.log(e);
       if (e.code === '1004') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '이미 외출중입니다.',
@@ -233,7 +250,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '1005') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '현재 진행중인 강의가 아닙니다.',
@@ -248,7 +265,7 @@ const DayScheduleHistory = (props: Props) => {
     try {
       const response = await postEventComeback(eventPayload);
       console.log('컴백:', response);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '외출이 종료되었습니다.',
@@ -256,7 +273,7 @@ const DayScheduleHistory = (props: Props) => {
     } catch (e: any) {
       console.log(e);
       if (e.code === '1004') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '외출중이 아닙니다.',
@@ -264,7 +281,7 @@ const DayScheduleHistory = (props: Props) => {
         return;
       }
       if (e.code === '1005') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '현재 진행중인 강의가 아닙니다.',

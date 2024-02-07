@@ -15,6 +15,16 @@
 		3D2DD8671D65134CC5DE8D88 /* Pods_ihereapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3092656C223793A40D5F10F /* Pods_ihereapp.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */; };
+		C4A261F82B73426A00571C2A /* WiFiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F22B73426A00571C2A /* WiFiHelper.swift */; };
+		C4A261F92B73426A00571C2A /* WiFiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F22B73426A00571C2A /* WiFiHelper.swift */; };
+		C4A261FA2B73426A00571C2A /* BeaconModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F42B73426A00571C2A /* BeaconModule.swift */; };
+		C4A261FB2B73426A00571C2A /* BeaconModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F42B73426A00571C2A /* BeaconModule.swift */; };
+		C4A261FC2B73426A00571C2A /* BeaconModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F52B73426A00571C2A /* BeaconModule.m */; };
+		C4A261FD2B73426A00571C2A /* BeaconModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F52B73426A00571C2A /* BeaconModule.m */; };
+		C4A261FE2B73426A00571C2A /* LocationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F62B73426A00571C2A /* LocationModule.m */; };
+		C4A261FF2B73426A00571C2A /* LocationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F62B73426A00571C2A /* LocationModule.m */; };
+		C4A262002B73426A00571C2A /* LocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F72B73426A00571C2A /* LocationModule.swift */; };
+		C4A262012B73426A00571C2A /* LocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F72B73426A00571C2A /* LocationModule.swift */; };
 		C4CE30D52B6A185A001A01CC /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = C4CE30D42B6A185A001A01CC /* fonts */; };
 		C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4D783C52B54DE840086145F /* BootSplash.storyboard */; };
 /* End PBXBuildFile section */
@@ -46,6 +56,13 @@
 		87875EE5708D437760512BD2 /* Pods-ihereapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp.release.xcconfig"; path = "Target Support Files/Pods-ihereapp/Pods-ihereapp.release.xcconfig"; sourceTree = "<group>"; };
 		B3092656C223793A40D5F10F /* Pods_ihereapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ihereapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C432D78D2B7361260086F715 /* ihereapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ihereapp.entitlements; path = ihereapp/ihereapp.entitlements; sourceTree = "<group>"; };
+		C4A261F22B73426A00571C2A /* WiFiHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiHelper.swift; sourceTree = "<group>"; };
+		C4A261F42B73426A00571C2A /* BeaconModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconModule.swift; sourceTree = "<group>"; };
+		C4A261F52B73426A00571C2A /* BeaconModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconModule.m; sourceTree = "<group>"; };
+		C4A261F62B73426A00571C2A /* LocationModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationModule.m; sourceTree = "<group>"; };
+		C4A261F72B73426A00571C2A /* LocationModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationModule.swift; sourceTree = "<group>"; };
+		C4A262022B73472100571C2A /* imhereV2-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "imhereV2-Bridging-Header.h"; sourceTree = "<group>"; };
 		C4CE30D42B6A185A001A01CC /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		C4D783C52B54DE840086145F /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = ihereapp/BootSplash.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -92,6 +109,10 @@
 		13B07FAE1A68108700A75B9A /* ihereapp */ = {
 			isa = PBXGroup;
 			children = (
+				C432D78D2B7361260086F715 /* ihereapp.entitlements */,
+				C4A262022B73472100571C2A /* imhereV2-Bridging-Header.h */,
+				C4A261F12B73426A00571C2A /* Helper */,
+				C4A261F32B73426A00571C2A /* RNModule */,
 				C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -155,6 +176,25 @@
 				84D2EAE3391D504E16FF0060 /* Pods-ihereapp-ihereappTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C4A261F12B73426A00571C2A /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				C4A261F22B73426A00571C2A /* WiFiHelper.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		C4A261F32B73426A00571C2A /* RNModule */ = {
+			isa = PBXGroup;
+			children = (
+				C4A261F42B73426A00571C2A /* BeaconModule.swift */,
+				C4A261F52B73426A00571C2A /* BeaconModule.m */,
+				C4A261F62B73426A00571C2A /* LocationModule.m */,
+				C4A261F72B73426A00571C2A /* LocationModule.swift */,
+			);
+			path = RNModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -425,7 +465,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4A261FF2B73426A00571C2A /* LocationModule.m in Sources */,
+				C4A261FB2B73426A00571C2A /* BeaconModule.swift in Sources */,
+				C4A262012B73426A00571C2A /* LocationModule.swift in Sources */,
+				C4A261F92B73426A00571C2A /* WiFiHelper.swift in Sources */,
 				00E356F31AD99517003FC87E /* ihereappTests.m in Sources */,
+				C4A261FD2B73426A00571C2A /* BeaconModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,8 +478,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4A261FE2B73426A00571C2A /* LocationModule.m in Sources */,
+				C4A262002B73426A00571C2A /* LocationModule.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				C4A261FC2B73426A00571C2A /* BeaconModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				C4A261F82B73426A00571C2A /* WiFiHelper.swift in Sources */,
+				C4A261FA2B73426A00571C2A /* BeaconModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,6 +503,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4DA0FE378077A059274A7DB2 /* Pods-ihereapp-ihereappTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -480,6 +531,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 84D2EAE3391D504E16FF0060 /* Pods-ihereapp-ihereappTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = ihereappTests/Info.plist;
@@ -506,6 +558,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ihereapp/ihereapp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -523,7 +576,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.lpin.checkhere;
 				PRODUCT_NAME = ihereapp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -538,6 +591,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ihereapp/ihereapp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -554,7 +608,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.lpin.checkhere;
 				PRODUCT_NAME = ihereapp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -649,6 +703,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "imhereV2-Bridging-Header.h";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -732,6 +787,7 @@
 				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "imhereV2-Bridging-Header.h";
 				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};

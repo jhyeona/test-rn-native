@@ -1,12 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Modal,
-} from 'react-native';
+import {View, StyleSheet, Animated, Dimensions, Modal} from 'react-native';
 import {GestureResponderEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 import CText from '../CustomText/CText';
 import CButton from '../CommonButton/CButton.tsx';
@@ -23,6 +16,11 @@ interface CommonModalProps {
 const CommonConfirmModal = (props: CommonModalProps) => {
   const {isVisible, title, message, onPressConfirm, onPressCancel} = props;
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const confirmModal = () => {
+    onPressConfirm();
+    closeModal();
+  };
 
   const closeModal = () => {
     Animated.timing(fadeAnim, {
@@ -85,13 +83,13 @@ const CommonConfirmModal = (props: CommonModalProps) => {
             <CText text={message} style={{paddingVertical: 15}} />
             <View style={styles.buttonContainer}>
               <CButton
-                onPress={onPressConfirm}
+                onPress={confirmModal}
                 text="확인"
                 noMargin
                 buttonStyle={{flex: 1, marginRight: 5}}
               />
               <CButton
-                onPress={onPressCancel}
+                onPress={closeModal}
                 text="취소"
                 noMargin
                 whiteButton
