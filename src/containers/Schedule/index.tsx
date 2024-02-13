@@ -24,6 +24,7 @@ import {
   requestLocationPermissions,
   requestNotificationsPermission,
 } from '../../utils/permissionsHelper.ts';
+import Academy from '../Academy';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
@@ -117,39 +118,45 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   }, [setGlobalModalState]);
 
   return (
-    <CSafeAreaView>
-      <ScheduleHeader isWeekend={isWeekend} setIsWeekend={handleToggle} />
-      <CView>
-        <Dropdown
-          items={academyList}
-          onSelect={onChangeDropList}
-          selected={
-            academyList.filter(val => val.id === String(selectAcademy))[0]
-          }
-          disabled={userData ? userData.studentList.length <= 1 : false}
-        />
-        {isWeekend ? (
-          <View style={{flexGrow: 1, paddingTop: 4}}>
-            <TimeTable />
-          </View>
-        ) : (
-          selectStudentInfo && (
-            <>
-              <DayCalendar
-                studentInfo={selectStudentInfo}
-                navigation={navigation}
-              />
-              <CButton
-                text="내 출석 기록 보기"
-                onPress={onPressHistory}
-                buttonStyle={{marginBottom: 10}}
-                noMargin
-              />
-            </>
-          )
-        )}
-      </CView>
-    </CSafeAreaView>
+    <>
+      {userData && userData.studentList.length > 0 ? (
+        <CSafeAreaView>
+          <ScheduleHeader isWeekend={isWeekend} setIsWeekend={handleToggle} />
+          <CView>
+            <Dropdown
+              items={academyList}
+              onSelect={onChangeDropList}
+              selected={
+                academyList.filter(val => val.id === String(selectAcademy))[0]
+              }
+              disabled={userData ? userData.studentList.length <= 1 : false}
+            />
+            {isWeekend ? (
+              <View style={{flexGrow: 1, paddingTop: 4}}>
+                <TimeTable />
+              </View>
+            ) : (
+              selectStudentInfo && (
+                <>
+                  <DayCalendar
+                    studentInfo={selectStudentInfo}
+                    navigation={navigation}
+                  />
+                  <CButton
+                    text="내 출석 기록 보기"
+                    onPress={onPressHistory}
+                    buttonStyle={{marginBottom: 10}}
+                    noMargin
+                  />
+                </>
+              )
+            )}
+          </CView>
+        </CSafeAreaView>
+      ) : (
+        <Academy navigation={navigation} />
+      )}
+    </>
   );
 };
 

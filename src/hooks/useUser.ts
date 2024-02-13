@@ -25,7 +25,7 @@ export const getUserInfo = async () => {
 
 export const useGetUserInfo = () => {
   const setUserInfo = useSetRecoilState(userState.userInfoState);
-  const {data} = useQuery({
+  const {data, refetch} = useQuery({
     queryKey: ['userInfo'],
     queryFn: async () => {
       return getUserInfo();
@@ -35,6 +35,8 @@ export const useGetUserInfo = () => {
     if (!data) return;
     setUserInfo(data);
   }, [data, setUserInfo]);
+
+  return {data, refetch};
 };
 
 export const getInvitedAcademyList = async () => {
