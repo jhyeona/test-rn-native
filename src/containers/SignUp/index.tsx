@@ -24,6 +24,7 @@ import CText from '../../components/common/CustomText/CText.tsx';
 import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
+import CInputWithTimer from '../../components/User/CInputWithTimer.tsx';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setModalState = useSetRecoilState(globalState.globalModalState);
@@ -35,12 +36,15 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [birthday, setBirthday] = useState('');
   const [telecom, setTelecom] = useState('');
   const [smsCode, setSmsCode] = useState('');
+  const [isTimer, setIsTimer] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [isCertification, setIsCertification] = useState(false);
   const [samePassword, setSamePassword] = useState(false);
-  const [isAllCheck, setIsAllCheck] = useState(true);
   const [isFirstChecked, setIsFirstChecked] = useState(true);
   const [isSecondChecked, setIsSecondChecked] = useState(true);
+  const [isAllCheck, setIsAllCheck] = useState(
+    isFirstChecked && isSecondChecked,
+  );
 
   const genderList = [
     // 성별 선택 드롭다운
@@ -62,6 +66,18 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const onChangeTelecomValue = (value: {label: string; id: string}) => {
     // 통신사 선택
     setTelecom(value.id);
+  };
+
+  const validateAndSetModal = (isValid: boolean, message: string) => {
+    if (!isValid) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: `${message} 확인해주세요.`,
+      });
+      return false;
+    }
+    return true;
   };
 
   const doubleCheckPhone = async () => {
@@ -105,6 +121,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   const smsCertification = async () => {
     setSmsCode('');
+    setIsTimer(true);
 
     // SMS 인증 요청
     const data = {phone: phone};
@@ -145,20 +162,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   const onPressCertification = async () => {
     // 전체 인증 요청
-    if (
-      !checkName(name) ||
-      !checkDate(birthday) ||
-      !gender ||
-      !checkPhone(phone) ||
-      !telecom
-    ) {
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '입력을 확인해주세요.',
-      });
-      return;
-    }
+    if (!validateAndSetModal(checkName(name), '이름을')) return;
+    if (!validateAndSetModal(checkDate(birthday), '생년월일을')) return;
+    if (!validateAndSetModal(!!gender, '성별을')) return;
+    if (!validateAndSetModal(checkPhone(phone), '휴대폰번호를')) return;
+    if (!validateAndSetModal(!!telecom, '통신사를')) return;
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
@@ -196,12 +204,12 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       return;
     }
 
-    if (!checkPassword(password) || !samePassword) {
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '비밀번호를 확인해주세요.',
-      });
+    if (
+      !validateAndSetModal(
+        checkPassword(password) || samePassword,
+        '비밀번호를',
+      )
+    ) {
       return;
     }
 
@@ -237,10 +245,31 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   };
 
   const handleChangeSmsCode = async (value: string) => {
+    // 인증번호 입력
     setSmsCode(value);
     if (value.length === 6) {
       await handleConfirm(value);
     }
+  };
+
+  const handleTimeout = (timeout: boolean) => {
+    // 휴대폰 인증 시간 초과
+    setIsTimer(!timeout);
+  };
+
+  const handleAllChecked = (isChecked: boolean) => {
+    // 전체 동의
+    setIsAllCheck(isChecked);
+    setIsFirstChecked(isChecked);
+    setIsSecondChecked(isChecked);
+  };
+
+  const updateAllCheckState = (
+    firstChecked: boolean,
+    secondChecked: boolean,
+  ) => {
+    // 하나씩 동의
+    setIsAllCheck(firstChecked && secondChecked);
   };
 
   useEffect(() => {
@@ -259,7 +288,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             inputValue={name}
             setInputValue={setName}
             errorMessage="이름을 입력해 주세요."
-            isWarning={!checkName(name)}
+            isWarning={name.length > 0 && !checkName(name)}
             maxLength={4}
             inputMode="text"
             readOnly={isSend}
@@ -275,7 +304,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               dropDownOnSelect={onChangeGenderValue}
               dropDownDisabled={isSend}
               dropDownPlaceHolder="성별"
-              isWarning={!checkDate(birthday)}
+              isWarning={birthday.length > 0 && !checkDate(birthday)}
               maxLength={8}
               inputMode="numeric"
               readOnly={isSend}
@@ -289,7 +318,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               setInputValue={setPhone}
               placeholder="01012341234"
               errorMessage="휴대폰 번호를 바르게 입력해 주세요."
-              isWarning={!checkPhone(phone)}
+              isWarning={phone.length > 0 && !checkPhone(phone)}
               maxLength={11}
               inputMode="tel"
               readOnly={isSend}
@@ -301,7 +330,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             />
           </View>
           <View style={styles.inputRow}>
-            <CInput
+            <CInputWithTimer
               title="인증번호"
               inputValue={smsCode}
               setInputValue={handleChangeSmsCode}
@@ -313,13 +342,16 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               inputMode="numeric"
               fullWidth="58%"
               readOnly={!isSend || isCertification}
+              timer={isTimer}
+              setTime={2}
+              handleTimeout={handleTimeout}
             />
             <View style={{width: '40%'}}>
               {isSend ? (
                 <CButton
                   text={isCertification ? '인증 완료' : '재발송'}
                   onPress={onPressCertification}
-                  disabled={isCertification}
+                  disabled={isTimer || isCertification}
                 />
               ) : (
                 <CButton text="인증 문자 발송" onPress={onPressCertification} />
@@ -331,7 +363,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             inputValue={password}
             setInputValue={setPassword}
             errorMessage="영문+숫자 조합 8자리 이상 입력해 주세요."
-            isWarning={!checkPassword(password)}
+            isWarning={password.length > 0 && !checkPassword(password)}
             secureTextEntry
           />
           <CInput
@@ -339,25 +371,31 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             inputValue={rePassword}
             setInputValue={setRePassword}
             errorMessage="동일한 비밀번호를 입력해 주세요."
-            isWarning={!samePassword}
+            isWarning={rePassword.length > 0 && !samePassword}
             secureTextEntry
           />
           <Checkbox
-            isChecked={isFirstChecked && isSecondChecked}
-            onValueChangeHandler={setIsAllCheck}
+            isChecked={isAllCheck}
+            onValueChangeHandler={handleAllChecked}
             labelMessage="전체동의"
             fontSize={14}
             bold
           />
           <Checkbox
             isChecked={isFirstChecked}
-            onValueChangeHandler={setIsFirstChecked}
+            onValueChangeHandler={checked => {
+              setIsFirstChecked(checked);
+              updateAllCheckState(checked, isSecondChecked);
+            }}
             labelMessage="서비스 이용약관 동의">
             <CText text="[보기]" fontWeight="600" fontSize={12} />
           </Checkbox>
           <Checkbox
             isChecked={isSecondChecked}
-            onValueChangeHandler={setIsSecondChecked}
+            onValueChangeHandler={checked => {
+              setIsSecondChecked(checked);
+              updateAllCheckState(isFirstChecked, checked);
+            }}
             labelMessage="개인정보 수집 이용 동의">
             <CText text="[보기]" fontWeight="600" fontSize={12} />
           </Checkbox>
