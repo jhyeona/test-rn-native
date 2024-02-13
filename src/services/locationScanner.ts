@@ -1,16 +1,16 @@
 import {NativeModules} from 'react-native';
 
-const {LocationModule} = NativeModules;
+interface LocationModuleProps {
+  getGpsLocation(): Promise<any>;
+  getWifiList(): Promise<any>;
+  getConnectedWifi(): Promise<any>;
+}
+
+const LocationModule = NativeModules.LocationModule as LocationModuleProps;
 
 export const getLocationInfo = async () => {
   try {
-    // if (IS_IOS) ...
-    const location: {
-      accuracy: number;
-      altitude: number;
-      latitude: number;
-      longitude: number;
-    } = await LocationModule.getGpsLocation();
+    const location = await LocationModule.getGpsLocation(); // TODO: NewLocationModule 로 변경
     console.log(`location: ${JSON.stringify(location)}`);
   } catch (e) {
     console.log(e);

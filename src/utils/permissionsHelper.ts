@@ -39,9 +39,9 @@ export const requestLocationPermissions = async () => {
     ];
   }
 
-  /** why not checkMultiple?
-   * Android will never return blocked on checkMultiple, you have to call requestMultiple to get the info. */
+  // why not checkMultiple? Android will never return blocked on checkMultiple, you have to call requestMultiple to get the info.
   return requestMultiple(permissionsList).then(statuses => {
+    console.log(statuses);
     if (
       statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.BLOCKED ||
       statuses[PERMISSIONS.IOS.LOCATION_ALWAYS] === RESULTS.BLOCKED
