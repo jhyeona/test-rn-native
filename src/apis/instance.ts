@@ -2,13 +2,11 @@ import axios, {AxiosResponse} from 'axios';
 import {storage} from '../utils/storageHelper.ts';
 import {tokenRefresh} from './common.ts';
 import {Alert} from 'react-native';
-
-// TODO: 환경변수로?
-const baseURL = 'http://192.168.219.184:8081/api/v3';
+import Config from 'react-native-config';
 
 // 토큰 미사용 인스턴스
 export const instanceWithoutToken = axios.create({
-  baseURL: baseURL,
+  baseURL: Config.BASE_URL,
 });
 
 instanceWithoutToken.interceptors.response.use(
@@ -25,7 +23,7 @@ instanceWithoutToken.interceptors.response.use(
 
 // 토큰 사용 인스턴스
 const instance = axios.create({
-  baseURL: baseURL,
+  baseURL: Config.BASE_URL,
 });
 
 instance.interceptors.request.use(
@@ -61,7 +59,6 @@ instance.interceptors.response.use(
     }
     if (error.response.data.code === '4103') {
       // 유효하지 않은 토큰
-      Alert.alert('토큰 X');
       storage.delete('access_token');
       storage.delete('refresh_token');
     }
