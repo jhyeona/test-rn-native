@@ -37,9 +37,17 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   };
 
   const onPressLogout = () => {
-    setIsLogin(false);
-    storage.delete('access_token');
-    storage.delete('refresh_token');
+    setGlobalModalState({
+      isVisible: true,
+      title: '안내',
+      message: '로그아웃하시겠습니까?',
+      isConfirm: true,
+      onPressConfirm: () => {
+        setIsLogin(false);
+        storage.delete('access_token');
+        storage.delete('refresh_token');
+      },
+    });
   };
 
   const onPressWithdraw = () => {
