@@ -18,6 +18,13 @@ export interface WifiProps {
   timestamp?: number;
 }
 
+export interface LocationProps {
+  altitude: number;
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+}
+
 export interface LocationOptionsProps {
   interval?: number;
   fastestInterval?: number;

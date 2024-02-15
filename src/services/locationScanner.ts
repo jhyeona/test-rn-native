@@ -1,5 +1,5 @@
 import {NativeModules} from 'react-native';
-import {WifiProps} from '../types/location.ts';
+import {LocationProps, WifiProps} from '../types/location.ts';
 import {uniq} from 'react-native-permissions/dist/typescript/utils';
 
 interface LocationModuleProps {
@@ -12,8 +12,12 @@ const LocationModule = NativeModules.LocationModule as LocationModuleProps;
 
 export const requestGetLocationInfo = async () => {
   try {
-    const location = await LocationModule.getGpsLocation(); // TODO: NewLocationModule 로 변경
-    console.log(`location: ${JSON.stringify(location)}`);
+    // TODO: NewLocationModule 로 변경
+    return await LocationModule.getGpsLocation().then(
+      (location: LocationProps) => {
+        return location;
+      },
+    );
   } catch (e) {
     console.log(e);
   }
