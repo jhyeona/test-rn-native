@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {
   useGetDaySchedule,
@@ -19,11 +19,6 @@ import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import globalState from '../../recoil/Global';
 import {View} from 'react-native';
-import {
-  handleOpenSettings,
-  requestLocationPermissions,
-  requestNotificationsPermission,
-} from '../../utils/permissionsHelper.ts';
 import Academy from '../Academy';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
@@ -34,7 +29,6 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [selectAcademy, setSelectAcademy] = useRecoilState(
     globalState.selectedAcademy,
   );
-  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [isWeekend, setIsWeekend] = useState(false);
   const [selectStudentInfo, setSelectStudentInfo] = useState<
     StudentInfoProps | undefined
@@ -112,11 +106,6 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           } 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
           isConfirm: true,
           onPressConfirm: () => handleOpenSettings(),
-        });
-      }
-    })();
-  }, [setGlobalModalState]);
-
   return (
     <>
       {userData && userData.studentList.length > 0 ? (
