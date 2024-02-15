@@ -1,4 +1,4 @@
-import {NativeModules} from 'react-native';
+import {NativeEventEmitter, NativeModules} from 'react-native';
 import {BEACON_UUID} from '../constants/common.ts';
 import {BeaconProps} from '../types/location.ts';
 
@@ -10,6 +10,7 @@ interface BeaconModuleProps {
 }
 
 const BeaconModule = NativeModules.BeaconModule as BeaconModuleProps;
+const eventEmitter = new NativeEventEmitter(NativeModules.BeaconModule);
 
 export const requestBluetoothEnable = async () => {
   try {
@@ -20,30 +21,65 @@ export const requestBluetoothEnable = async () => {
   }
 };
 
-export const startBeaconScanning = async () => {
+export const requestStartBeaconScanning = async () => {
   try {
-    console.log(BEACON_UUID);
-    const result = await BeaconModule.startScanning(BEACON_UUID);
-    console.log(`Stop Beacon: ${result}`);
+    return await BeaconModule.startScanning(BEACON_UUID)
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
   } catch (e) {
-    console.log(e);
+    console.log('beacon start Error', e);
   }
 };
 
-export const stopBeaconScanning = async () => {
+export const requestStopBeaconScanning = async () => {
   try {
     const result = await BeaconModule.stopScanning();
     console.log(`Stop Beacon: ${result}`);
+    return result;
   } catch (e) {
-    console.log(e);
+    console.log('beacon stop error', e);
   }
 };
 
-export const getBeaconScanList = async () => {
+export const requestBeaconScanList = async () => {
   try {
-    const result = await BeaconModule.getScanResultsForDuration(1);
-    console.log(`duration: ${JSON.stringify(result)}`);
+    return await BeaconModule.getScanResultsForDuration(1).then(
+      (beacon: BeaconProps[]) => {
+        return beacon;
+      },
+    );
   } catch (e) {
-    console.log(e);
+    console.log('beacon scan list error', e);
+  }
+};
+
+export const requestAddBeaconListener = (
+  callback: (beacon: BeaconProps) => void,
+) => {
+  try {
+    if (eventEmitter.listenerCount('EVENT_BLUETOOTH_DETECTED') > 0) {
+      throw new Error('Already Listening.');
+    }
+    eventEmitter.addListener(
+      'EVENT_BLUETOOTH_DETECTED',
+      (beacon: BeaconProps) => {
+        callback(beacon);
+      },
+    );
+  } catch (e) {
+    console.log('add listener error:', e);
+  }
+};
+
+export const requestRemoveBeaconListener = () => {
+  try {
+    eventEmitter.removeAllListeners('EVENT_BLUETOOTH_DETECTED');
+    console.log('removeBeaconListener');
+  } catch (error) {
+    console.log('removeBeaconListener: ', error);
   }
 };

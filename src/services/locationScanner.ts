@@ -1,4 +1,6 @@
 import {NativeModules} from 'react-native';
+import {WifiProps} from '../types/location.ts';
+import {uniq} from 'react-native-permissions/dist/typescript/utils';
 
 interface LocationModuleProps {
   getGpsLocation(): Promise<any>;
@@ -8,7 +10,7 @@ interface LocationModuleProps {
 
 const LocationModule = NativeModules.LocationModule as LocationModuleProps;
 
-export const getLocationInfo = async () => {
+export const requestGetLocationInfo = async () => {
   try {
     const location = await LocationModule.getGpsLocation(); // TODO: NewLocationModule 로 변경
     console.log(`location: ${JSON.stringify(location)}`);
@@ -17,20 +19,54 @@ export const getLocationInfo = async () => {
   }
 };
 
-export const getWifiListInfo = async () => {
+export const requestGetWifiListInfo = async () => {
+  const validateWifi = (wifi: WifiProps) =>
+    wifi.bssid !== '' &&
+    wifi.bssid !== null &&
+    wifi.bssid !== 'null' &&
+    wifi.ssid !== '' &&
+    wifi.ssid !== 'unknown ssid' &&
+    wifi.ssid !== null &&
+    wifi.ssid !== 'null';
+
   try {
-    const wifiList = await LocationModule.getWifiList();
-    console.log(`wifiList: ${JSON.stringify(wifiList)}`);
+    return await LocationModule.getWifiList().then((wifi: WifiProps[]) => {
+      const filteredWifi = wifi.filter(validateWifi).map(item => ({
+        ...item,
+        timestamp: Date.now(),
+      }));
+      return filteredWifi.sort((a, b) => b.rssi - a.rssi);
+    });
   } catch (e) {
     console.log(e);
   }
 };
 
-export const getConnectedWifiInfo = async () => {
+export const requestGetConnectedWifiInfo = async () => {
   try {
-    const connectedWifi = await LocationModule.getConnectedWifi();
-    console.log(`connectedWifi: ${JSON.stringify(connectedWifi)}`);
+    return await LocationModule.getConnectedWifi().then((wifi: WifiProps) => {
+      return {...wifi, timestamp: Date.now()};
+    });
+    // console.log(`connectedWifi: ${JSON.stringify(connectedWifi)}`);
   } catch (e) {
     console.log(e);
   }
+};
+
+export const requestWifiList = async () => {
+  const wifiListResult: WifiProps[] = [];
+  const wifiList = await requestGetWifiListInfo();
+  const connectedWifi = await requestGetConnectedWifiInfo();
+
+  if (wifiList) {
+    wifiListResult.push(...wifiList);
+  }
+  if (connectedWifi) {
+    wifiListResult.push(connectedWifi);
+  }
+  // const uniqueList = Array.from(
+  //   new Set(wifiListResult.map(item => item.bssid)),
+  // ).map(bssid => wifiListResult.find(item => item.bssid === bssid));
+
+  return wifiListResult.sort((a, b) => b.rssi - a.rssi);
 };

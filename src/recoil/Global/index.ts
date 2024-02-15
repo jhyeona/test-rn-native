@@ -1,4 +1,5 @@
 import {
+  beaconState,
   globalLoadingState,
   globalModalState,
   globalToastState,
@@ -6,6 +7,7 @@ import {
   selectDayScheduleDate,
   selectedAcademy,
   selectWeekScheduleDate,
+  wifiState,
 } from './atom.ts';
 
 const globalState = {
@@ -13,6 +15,8 @@ const globalState = {
   globalLoadingState,
   globalModalState,
   isLoginState,
+  beaconState,
+  wifiState,
   selectDayScheduleDate,
   selectWeekScheduleDate,
   selectedAcademy,

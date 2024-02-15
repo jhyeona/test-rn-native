@@ -1,11 +1,21 @@
-export interface BeaconProps {
-  major: string;
-  proximity: number;
+export interface BeaconDataProps {
   uuid: string;
+  major: string;
   minor: string;
+}
+export interface BeaconProps extends BeaconDataProps {
+  proximity: number;
   accuracy: number;
   timestamp: number;
   rssi: number;
+  mac: string;
+}
+
+export interface WifiProps {
+  ssid: string;
+  bssid: string;
+  rssi: number;
+  timestamp?: number;
 }
 
 export interface LocationOptionsProps {
