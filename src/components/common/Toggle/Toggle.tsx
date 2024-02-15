@@ -4,11 +4,12 @@ import {COLORS} from '../../../constants/colors';
 
 interface Props {
   isActive: boolean;
+  disabled?: boolean;
   onToggle: (value: boolean) => void;
 }
 
 const Toggle = (props: Props) => {
-  const {isActive, onToggle} = props;
+  const {isActive, disabled, onToggle} = props;
   const toggleAnimation = useRef(new Animated.Value(0)).current;
 
   const handleToggle = () => {
@@ -34,6 +35,7 @@ const Toggle = (props: Props) => {
 
   return (
     <Pressable
+      disabled={disabled}
       onPress={handleToggle}
       style={[styles.container, backgroundStyle]}>
       <Animated.View style={[styles.circle, {left: circlePosition}]} />

@@ -2,72 +2,34 @@ import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {storage} from '../../utils/storageHelper.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {patchUserUpdate} from '../../hooks/useMypage.ts';
-import {checkPassword} from '../../utils/regExpHelper.ts';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import userState from '../../recoil/user';
+import {patchUpdatePush} from '../../hooks/useMypage.ts';
+import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
 import Header from '../../components/common/Header/Header.tsx';
 import CText from '../../components/common/CustomText/CText.tsx';
 import Toggle from '../../components/common/Toggle/Toggle.tsx';
 import {COLORS} from '../../constants/colors.ts';
-import CInput from '../../components/common/CustomInput/CInput.tsx';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
 import SvgIcon from '../../components/common/Icon/Icon.tsx';
 import {
   handleOpenSettings,
   requestNotificationsPermission,
 } from '../../utils/permissionsHelper.ts';
 import {RESULTS} from 'react-native-permissions';
+import {useGetUserInfo} from '../../hooks/useUser.ts';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
-  const userData = useRecoilValue(userState.userInfoState);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const {data: userData, refetch: refetchUserData} = useGetUserInfo();
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
 
   const [isPushApp, setIsPushApp] = useState(
     userData ? userData?.settingPushApp : true,
   );
-
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
-  const [isSamePassword, setIsSamePassword] = useState(true);
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
+  const [isPushToggleDisabled, setIsPushToggleDisabled] = useState(false);
 
-  const onPressUpdate = async () => {
-    if (
-      (password.length > 0 || rePassword.length > 0) &&
-      (!checkPassword(password) ||
-        !checkPassword(rePassword) ||
-        !isSamePassword)
-    ) {
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '비밀번호를 확인해주세요.',
-      });
-      return;
-    }
-    let data: {settingPushApp: boolean; password?: string} = {
-      settingPushApp: isPushApp,
-    };
-    if (password) {
-      data = {...data, password: password};
-    }
-    console.log(data);
-    try {
-      await patchUserUpdate(data);
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '정보가 변경되었습니다.',
-      });
-      setPassword('');
-      setRePassword('');
-    } catch (error) {
-      console.log('[ERROR]', error);
-    }
+  const onPressUpdatePassword = () => {
+    navigation.navigate('UpdatePassword');
   };
 
   const onPressChangeAcademy = () => {
@@ -80,14 +42,13 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     storage.delete('refresh_token');
   };
 
-  useEffect(() => {
-    // 비밀번호와 재입력 비밀번호 비교
-    const isSame = password === rePassword;
-    setIsSamePassword(isSame);
-  }, [password, rePassword]);
+  const onPressWithdraw = () => {
+    navigation.navigate('UserWithdraw');
+  };
 
   useEffect(() => {
     (async () => {
+      setIsPushToggleDisabled(true);
       if (isPushApp) {
         const notificationResult = await requestNotificationsPermission();
         if (notificationResult === RESULTS.BLOCKED) {
@@ -99,8 +60,16 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             isConfirm: true,
             onPressConfirm: () => handleOpenSettings(),
           });
+          return;
         }
       }
+      if (userData?.settingPushApp !== isPushApp) {
+        await patchUpdatePush({settingPushApp: isPushApp});
+        await refetchUserData();
+      }
+      setTimeout(() => {
+        setIsPushToggleDisabled(false);
+      }, 400);
     })();
   }, [isPushApp, setGlobalModalState]);
 
@@ -116,29 +85,16 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             },
           ]}>
           <CText text="PUSH 알림 설정" fontSize={20} fontWeight="500" />
-          <Toggle isActive={isPushApp} onToggle={setIsPushApp} />
+          <Toggle
+            isActive={isPushApp}
+            onToggle={setIsPushApp}
+            disabled={isPushToggleDisabled}
+          />
         </View>
-        <View style={styles.container}>
-          <CInput
-            title=""
-            inputValue={password}
-            setInputValue={setPassword}
-            placeholder="영문, 숫자 혼합 8자리 이상"
-            fontSize={16}
-            secureTextEntry>
-            <CText text="비밀번호 변경" fontSize={20} />
-          </CInput>
-          <CInput
-            title=""
-            inputValue={rePassword}
-            setInputValue={setRePassword}
-            placeholder="한 번 더 입력해주세요."
-            fontSize={16}
-            secureTextEntry>
-            <CText text="비밀번호 변경 확인" fontSize={20} />
-          </CInput>
-          <CButton text="변경 사항 저장" onPress={onPressUpdate} noMargin />
-        </View>
+        <Pressable style={styles.containerRow} onPress={onPressUpdatePassword}>
+          <CText text="비밀번호 변경" fontSize={20} />
+          <SvgIcon name="RightArrow" size={24} />
+        </Pressable>
         <Pressable style={styles.containerRow} onPress={onPressChangeAcademy}>
           <CText text="기관변경" fontSize={20} />
           <SvgIcon name="RightArrow" size={24} />
@@ -147,23 +103,16 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           <CText text="로그아웃" fontSize={20} />
           <SvgIcon name="RightArrow" size={24} />
         </Pressable>
-        {/*<Pressable style={styles.containerRow} onPress={}>*/}
-        {/*  <CText text="회원탈퇴" fontSize={20} />*/}
-        {/*  <SvgIcon name="RightArrow" size={24} />*/}
-        {/*</Pressable>*/}
+        <Pressable style={styles.containerRow} onPress={onPressWithdraw}>
+          <CText text="회원탈퇴" fontSize={20} />
+          <SvgIcon name="RightArrow" size={24} />
+        </Pressable>
       </ScrollView>
     </CSafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-    paddingHorizontal: 24,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.layout,
-  },
   containerRow: {
     flexDirection: 'row',
     alignItems: 'center',
