@@ -92,20 +92,6 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     setSelectStudentInfo(studentInfo && studentInfo[0]);
   }, [academyList]);
 
-  useEffect(() => {
-    (async () => {
-      await requestNotificationsPermission(); // 여기서 알림 권한 블락시 푸시 알림 설정 시에 재 안내
-      const grantedResult = await requestLocationPermissions();
-      if (grantedResult !== true) {
-        // 위치 또는 근처기기(블루투스) 권한은 한 번 더 안내
-        setGlobalModalState({
-          isVisible: true,
-          title: '권한 설정 안내',
-          message: `출결을 위해 ${
-            grantedResult === 'locationBlock' ? '위치' : '근처 기기'
-          } 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
-          isConfirm: true,
-          onPressConfirm: () => handleOpenSettings(),
   return (
     <>
       {userData && userData.studentList.length > 0 ? (
