@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {COLORS} from '../../constants/colors.ts';
 import CText from '../common/CustomText/CText.tsx';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 import TextToggle from '../common/Toggle/TextToggle.tsx';
 import SvgIcon from '../common/Icon/Icon.tsx';
 import {useRecoilValue} from 'recoil';
 import globalState from '../../recoil/Global';
+import {weekOfMonth} from '../../utils/scheduleHelper.ts';
 
 interface Props {
   isWeekend: boolean;
@@ -15,8 +16,6 @@ interface Props {
 
 const ScheduleHeader = (props: Props) => {
   const {isWeekend, setIsWeekend} = props;
-  const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
-  const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
 
   return (
     <View style={styles.container}>
@@ -29,9 +28,7 @@ const ScheduleHeader = (props: Props) => {
         <SvgIcon style={styles.icon} name="Calendar" size={24} />
         <CText
           text={
-            isWeekend
-              ? moment(selectWeekDate).format('YYYY.MM')
-              : moment(selectDayDate).format('YYYY.MM.DD')
+            isWeekend ? weekOfMonth(moment()) : moment().format('YYYY.MM.DD')
           }
           fontSize={16}
         />
@@ -49,8 +46,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 24,
     height: 54,
-    // borderBottomWidth: 1,
-    // borderBottomColor: COLORS.layout,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.layout,
   },
   rowContainer: {
     flexDirection: 'row',

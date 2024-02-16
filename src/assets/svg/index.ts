@@ -12,3 +12,4 @@ export {default as CheckboxOff} from './checkboxOff.svg';
 export {default as CheckboxCircleOn} from './checkboxCircleOn.svg';
 export {default as CheckboxCircleOff} from './checkboxCircleOff.svg';
 export {default as RightArrow} from './rightArrow.svg';
+export {default as ScheduleTimeLIne} from './scheduleTimeLine.svg';

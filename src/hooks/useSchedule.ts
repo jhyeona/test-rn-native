@@ -124,7 +124,7 @@ export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (status === 'success') {
+    if (status === 'success' || status === 'error') {
       setIsLoading(false);
     }
   }, [status, setIsLoading]);
