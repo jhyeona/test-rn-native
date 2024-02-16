@@ -21,6 +21,7 @@ import Initialize from '../../containers/Initialize';
 import Academy from '../../containers/Academy';
 import UpdatePassword from '../../containers/UpdatePassword';
 import UserWithdraw from '../../containers/UserWithdraw';
+import PrivacyPolicy from '../../containers/PrivacyPolicy';
 
 const RootStack = createNativeStackNavigator();
 
@@ -115,6 +116,11 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="UserWithdraw"
               component={UserWithdraw}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="PrivacyPolicy"
+              component={PrivacyPolicy}
               options={{headerShown: false}}
             />
           </>

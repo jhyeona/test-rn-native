@@ -36,6 +36,10 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     navigation.navigate('Academy');
   };
 
+  const onPressPrivacyPolicy = () => {
+    navigation.navigate('PrivacyPolicy');
+  };
+
   const onPressLogout = () => {
     setGlobalModalState({
       isVisible: true,
@@ -105,6 +109,10 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         </Pressable>
         <Pressable style={styles.containerRow} onPress={onPressChangeAcademy}>
           <CText text="기관변경" fontSize={20} />
+          <SvgIcon name="RightArrow" size={24} />
+        </Pressable>
+        <Pressable style={styles.containerRow} onPress={onPressPrivacyPolicy}>
+          <CText text="개인정보처리방침" fontSize={20} />
           <SvgIcon name="RightArrow" size={24} />
         </Pressable>
         <Pressable style={styles.containerRow} onPress={onPressLogout}>
