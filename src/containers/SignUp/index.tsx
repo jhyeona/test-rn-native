@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {
   checkDate,
   checkName,
@@ -30,14 +24,9 @@ import CText from '../../components/common/CustomText/CText.tsx';
 import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
-import CInputWithTimer from '../../components/User/CInputWithTimer.tsx';
-import WebView from 'react-native-webview';
-import DefaultModal from '../../components/common/Modal/DefaultModal.tsx';
-import {COLORS} from '../../constants/colors.ts';
-import absoluteFillObject = StyleSheet.absoluteFillObject;
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
-  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+  const setModalState = useSetRecoilState(globalState.globalModalState);
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -46,22 +35,12 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [birthday, setBirthday] = useState('');
   const [telecom, setTelecom] = useState('');
   const [smsCode, setSmsCode] = useState('');
-  const [isTimer, setIsTimer] = useState(false);
-  const [countDown, setCountDown] = useState(0);
-  const [restartTimer, setRestartTimer] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [isCertification, setIsCertification] = useState(false);
   const [samePassword, setSamePassword] = useState(false);
+  const [isAllCheck, setIsAllCheck] = useState(true);
   const [isFirstChecked, setIsFirstChecked] = useState(true);
   const [isSecondChecked, setIsSecondChecked] = useState(true);
-  const [isAllCheck, setIsAllCheck] = useState(
-    isFirstChecked && isSecondChecked,
-  );
-  const [defaultModalState, setDefaultModalState] = useState({
-    isVisible: false,
-    title: '',
-    uri: '',
-  });
 
   const genderList = [
     // 성별 선택 드롭다운
@@ -85,22 +64,10 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     setTelecom(value.id);
   };
 
-  const validateAndSetModal = (isValid: boolean, message: string) => {
-    if (!isValid) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: `${message} 확인해주세요.`,
-      });
-      return false;
-    }
-    return true;
-  };
-
   const doubleCheckPhone = async () => {
     // 휴대폰 번호 중복 확인
     if (!checkPhone(phone)) {
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '올바른 휴대폰 번호를 입력하세요.',
@@ -137,19 +104,18 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   };
 
   const smsCertification = async () => {
+    setSmsCode('');
+
     // SMS 인증 요청
     const data = {phone: phone};
     try {
       const response = await postSignUpSMS(data);
       if (response) {
-        setSmsCode('');
         setIsSend(true);
-        setIsTimer(true);
-        setRestartTimer(true);
       }
     } catch (e) {
       console.log(e);
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: 'SMS 인증 요청에 실패했습니다.',
@@ -169,7 +135,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       setIsCertification(true);
     } catch (error) {
       console.log(error);
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '인증에 실패했습니다. \n정보를 확인해주세요.',
@@ -179,15 +145,24 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   const onPressCertification = async () => {
     // 전체 인증 요청
-    if (!validateAndSetModal(checkName(name), '이름을')) return;
-    if (!validateAndSetModal(checkDate(birthday), '생년월일을')) return;
-    if (!validateAndSetModal(!!gender, '성별을')) return;
-    if (!validateAndSetModal(checkPhone(phone), '휴대폰번호를')) return;
-    if (!validateAndSetModal(!!telecom, '통신사를')) return;
+    if (
+      !checkName(name) ||
+      !checkDate(birthday) ||
+      !gender ||
+      !checkPhone(phone) ||
+      !telecom
+    ) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '입력을 확인해주세요.',
+      });
+      return;
+    }
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '이미 사용중인 휴대폰 번호입니다.',
@@ -198,7 +173,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
     const resultTasCertification = await tasCertification();
     if (!resultTasCertification) {
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '인증에 실패했습니다.\n정보를 확인해주세요.',
@@ -210,26 +185,10 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     await smsCertification();
   };
 
-  const onPressFirstCheckModal = () => {
-    setDefaultModalState({
-      isVisible: true,
-      title: '서비스 이용약관 동의',
-      uri: 'https://www.lfin.kr/33',
-    });
-  };
-
-  const onPressSecondCheckModal = () => {
-    setDefaultModalState({
-      isVisible: true,
-      title: '개인정보 수집 이용 동의',
-      uri: 'https://www.lfin.kr/31',
-    });
-  };
-
   const onPressSignUp = async () => {
     // 가입하기 버튼 클릭
     if (!isCertification) {
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '휴대폰 인증을 먼저 진행해주세요.',
@@ -237,17 +196,17 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       return;
     }
 
-    if (
-      !validateAndSetModal(
-        checkPassword(password) || samePassword,
-        '비밀번호를',
-      )
-    ) {
+    if (!checkPassword(password) || !samePassword) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호를 확인해주세요.',
+      });
       return;
     }
 
     if (!isFirstChecked || !isSecondChecked) {
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '약관에 모두 동의해주세요.',
@@ -266,7 +225,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
     try {
       await postSignUp(data);
-      setGlobalModalState({
+      setModalState({
         isVisible: true,
         title: '안내',
         message: '회원가입이 완료되었습니다. 로그인해 주세요.',
@@ -278,36 +237,10 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   };
 
   const handleChangeSmsCode = async (value: string) => {
-    // 인증번호 입력
     setSmsCode(value);
     if (value.length === 6) {
       await handleConfirm(value);
     }
-  };
-
-  const onChangeTimeHandler = (time: number) => {
-    if (time > 99) {
-      setRestartTimer(false);
-      setCountDown(time);
-    }
-    if (time === 0) {
-      setIsTimer(false);
-    }
-  };
-
-  const handleAllChecked = (isChecked: boolean) => {
-    // 전체 동의
-    setIsAllCheck(isChecked);
-    setIsFirstChecked(isChecked);
-    setIsSecondChecked(isChecked);
-  };
-
-  const updateAllCheckState = (
-    firstChecked: boolean,
-    secondChecked: boolean,
-  ) => {
-    // 하나씩 동의
-    setIsAllCheck(firstChecked && secondChecked);
   };
 
   useEffect(() => {
@@ -326,7 +259,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             inputValue={name}
             setInputValue={setName}
             errorMessage="이름을 입력해 주세요."
-            isWarning={name.length > 0 && !checkName(name)}
+            isWarning={!checkName(name)}
             maxLength={4}
             inputMode="text"
             readOnly={isSend}
@@ -342,7 +275,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               dropDownOnSelect={onChangeGenderValue}
               dropDownDisabled={isSend}
               dropDownPlaceHolder="성별"
-              isWarning={birthday.length > 0 && !checkDate(birthday)}
+              isWarning={!checkDate(birthday)}
               maxLength={8}
               inputMode="numeric"
               readOnly={isSend}
@@ -356,7 +289,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               setInputValue={setPhone}
               placeholder="01012341234"
               errorMessage="휴대폰 번호를 바르게 입력해 주세요."
-              isWarning={phone.length > 0 && !checkPhone(phone)}
+              isWarning={!checkPhone(phone)}
               maxLength={11}
               inputMode="tel"
               readOnly={isSend}
@@ -368,7 +301,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             />
           </View>
           <View style={styles.inputRow}>
-            <CInputWithTimer
+            <CInput
               title="인증번호"
               inputValue={smsCode}
               setInputValue={handleChangeSmsCode}
@@ -378,18 +311,15 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               }
               maxLength={6}
               inputMode="numeric"
+              fullWidth="58%"
               readOnly={!isSend || isCertification}
-              timer={isTimer}
-              onChangeTimeHandler={onChangeTimeHandler}
-              setTime={120}
-              restart={restartTimer}
             />
             <View style={{width: '40%'}}>
               {isSend ? (
                 <CButton
                   text={isCertification ? '인증 완료' : '재발송'}
                   onPress={onPressCertification}
-                  disabled={countDown > 100 || isCertification}
+                  disabled={isCertification}
                 />
               ) : (
                 <CButton text="인증 문자 발송" onPress={onPressCertification} />
@@ -401,70 +331,39 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             inputValue={password}
             setInputValue={setPassword}
             errorMessage="영문+숫자 조합 8자리 이상 입력해 주세요."
-            isWarning={password.length > 0 && !checkPassword(password)}
+            isWarning={!checkPassword(password)}
             secureTextEntry
-            placeholder="영문+숫자 조합 8자리 이상"
           />
           <CInput
             title="비밀번호 입력 확인"
             inputValue={rePassword}
             setInputValue={setRePassword}
             errorMessage="동일한 비밀번호를 입력해 주세요."
-            isWarning={rePassword.length > 0 && !samePassword}
+            isWarning={!samePassword}
             secureTextEntry
-            placeholder="영문+숫자 조합 8자리 이상"
           />
           <Checkbox
-            isChecked={isAllCheck}
-            onValueChangeHandler={handleAllChecked}
+            isChecked={isFirstChecked && isSecondChecked}
+            onValueChangeHandler={setIsAllCheck}
             labelMessage="전체동의"
             fontSize={14}
             bold
           />
           <Checkbox
             isChecked={isFirstChecked}
-            onValueChangeHandler={checked => {
-              setIsFirstChecked(checked);
-              updateAllCheckState(checked, isSecondChecked);
-            }}
+            onValueChangeHandler={setIsFirstChecked}
             labelMessage="서비스 이용약관 동의">
-            <Pressable onPress={onPressFirstCheckModal}>
-              <CText text="[보기]" fontWeight="600" fontSize={12} />
-            </Pressable>
+            <CText text="[보기]" fontWeight="600" fontSize={12} />
           </Checkbox>
           <Checkbox
             isChecked={isSecondChecked}
-            onValueChangeHandler={checked => {
-              setIsSecondChecked(checked);
-              updateAllCheckState(isFirstChecked, checked);
-            }}
+            onValueChangeHandler={setIsSecondChecked}
             labelMessage="개인정보 수집 이용 동의">
-            <Pressable onPress={onPressSecondCheckModal}>
-              <CText text="[보기]" fontWeight="600" fontSize={12} />
-            </Pressable>
+            <CText text="[보기]" fontWeight="600" fontSize={12} />
           </Checkbox>
           <CButton text="가입하기" onPress={onPressSignUp} />
         </ScrollView>
       </CView>
-      <DefaultModal
-        onPressCancel={isVisible => {
-          setDefaultModalState({isVisible: isVisible, title: '', uri: ''});
-        }}
-        isVisible={defaultModalState.isVisible}
-        title={defaultModalState.title}>
-        <WebView
-          source={{uri: defaultModalState.uri}}
-          startInLoadingState={true}
-          originWhitelist={['*']}
-          renderLoading={() => (
-            <ActivityIndicator
-              size="small"
-              color={COLORS.primary}
-              style={{...absoluteFillObject}}
-            />
-          )}
-        />
-      </DefaultModal>
     </CSafeAreaView>
   );
 };

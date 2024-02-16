@@ -40,7 +40,6 @@
     "react-native-screens": "^3.29.0",
     "react-native-svg": "^14.1.0",
     "react-native-swiper": "^1.6.0",
-    "react-native-webview": "^13.8.1",
     "recoil": "^0.7.7"
   },
   "devDependencies": {
