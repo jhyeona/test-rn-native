@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {
   checkDate,
   checkName,
@@ -25,9 +31,14 @@ import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
 import CInputWithTimer from '../../components/User/CInputWithTimer.tsx';
+import WebView from 'react-native-webview';
+import DefaultModal from '../../components/common/Modal/DefaultModal.tsx';
+import LoadingIndicator from '../../components/common/Loading/LoadingIndicator.tsx';
+import {COLORS} from '../../constants/colors.ts';
+import absoluteFillObject = StyleSheet.absoluteFillObject;
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -45,6 +56,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [isAllCheck, setIsAllCheck] = useState(
     isFirstChecked && isSecondChecked,
   );
+  const [defaultModalState, setDefaultModalState] = useState({
+    isVisible: false,
+    title: '',
+    uri: '',
+  });
 
   const genderList = [
     // 성별 선택 드롭다운
@@ -70,7 +86,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   const validateAndSetModal = (isValid: boolean, message: string) => {
     if (!isValid) {
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: `${message} 확인해주세요.`,
@@ -83,7 +99,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const doubleCheckPhone = async () => {
     // 휴대폰 번호 중복 확인
     if (!checkPhone(phone)) {
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '올바른 휴대폰 번호를 입력하세요.',
@@ -132,7 +148,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       }
     } catch (e) {
       console.log(e);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: 'SMS 인증 요청에 실패했습니다.',
@@ -152,7 +168,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       setIsCertification(true);
     } catch (error) {
       console.log(error);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '인증에 실패했습니다. \n정보를 확인해주세요.',
@@ -170,7 +186,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '이미 사용중인 휴대폰 번호입니다.',
@@ -181,7 +197,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
     const resultTasCertification = await tasCertification();
     if (!resultTasCertification) {
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '인증에 실패했습니다.\n정보를 확인해주세요.',
@@ -193,10 +209,26 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     await smsCertification();
   };
 
+  const onPressFirstCheckModal = () => {
+    setDefaultModalState({
+      isVisible: true,
+      title: '서비스 이용약관 동의',
+      uri: 'https://www.lfin.kr/33',
+    });
+  };
+
+  const onPressSecondCheckModal = () => {
+    setDefaultModalState({
+      isVisible: true,
+      title: '개인정보 수집 이용 동의',
+      uri: 'https://www.lfin.kr/31',
+    });
+  };
+
   const onPressSignUp = async () => {
     // 가입하기 버튼 클릭
     if (!isCertification) {
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '휴대폰 인증을 먼저 진행해주세요.',
@@ -214,7 +246,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     }
 
     if (!isFirstChecked || !isSecondChecked) {
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '약관에 모두 동의해주세요.',
@@ -233,7 +265,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
     try {
       await postSignUp(data);
-      setModalState({
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '회원가입이 완료되었습니다. 로그인해 주세요.',
@@ -388,7 +420,9 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               updateAllCheckState(checked, isSecondChecked);
             }}
             labelMessage="서비스 이용약관 동의">
-            <CText text="[보기]" fontWeight="600" fontSize={12} />
+            <Pressable onPress={onPressFirstCheckModal}>
+              <CText text="[보기]" fontWeight="600" fontSize={12} />
+            </Pressable>
           </Checkbox>
           <Checkbox
             isChecked={isSecondChecked}
@@ -397,11 +431,32 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               updateAllCheckState(isFirstChecked, checked);
             }}
             labelMessage="개인정보 수집 이용 동의">
-            <CText text="[보기]" fontWeight="600" fontSize={12} />
+            <Pressable onPress={onPressSecondCheckModal}>
+              <CText text="[보기]" fontWeight="600" fontSize={12} />
+            </Pressable>
           </Checkbox>
           <CButton text="가입하기" onPress={onPressSignUp} />
         </ScrollView>
       </CView>
+      <DefaultModal
+        onPressCancel={isVisible => {
+          setDefaultModalState({isVisible: isVisible, title: '', uri: ''});
+        }}
+        isVisible={defaultModalState.isVisible}
+        title={defaultModalState.title}>
+        <WebView
+          source={{uri: defaultModalState.uri}}
+          startInLoadingState={true}
+          originWhitelist={['*']}
+          renderLoading={() => (
+            <ActivityIndicator
+              size="small"
+              color={COLORS.primary}
+              style={{...absoluteFillObject}}
+            />
+          )}
+        />
+      </DefaultModal>
     </CSafeAreaView>
   );
 };
