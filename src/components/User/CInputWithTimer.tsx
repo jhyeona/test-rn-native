@@ -17,12 +17,13 @@ interface Props {
   readOnly?: boolean;
   maxLength?: number;
   inputMode?: InputModeOptions;
-  fullWidth?: DimensionValue;
   fontSize?: number;
   children?: ReactNode;
   timer?: boolean;
   setTime?: number;
+  onChangeTimeHandler?: (time: number) => void;
   handleTimeout?: (timeout: boolean) => void;
+  restart?: boolean;
 }
 const CInputWithTimer = (props: Props) => {
   const {
@@ -36,16 +37,17 @@ const CInputWithTimer = (props: Props) => {
     readOnly,
     maxLength,
     inputMode,
-    fullWidth,
     fontSize,
     children,
     timer,
     setTime,
+    onChangeTimeHandler,
     handleTimeout,
+    restart,
   } = props;
 
   return (
-    <View style={{width: fullWidth ?? '100%'}}>
+    <View style={{flex: 1, marginRight: 10}}>
       <View style={styles.titleContainer}>
         {children ?? (
           <CText text={title} fontWeight={'500'} fontSize={fontSize} />
@@ -70,7 +72,12 @@ const CInputWithTimer = (props: Props) => {
           inputMode={inputMode}
         />
         {timer ? (
-          <CountDownTimer secondTime={setTime} handleTimeout={handleTimeout} />
+          <CountDownTimer
+            secondTime={setTime}
+            handleTimeout={handleTimeout}
+            onChangeTimeHandler={onChangeTimeHandler}
+            restart={restart}
+          />
         ) : (
           <CText text="0:00" fontSize={12} color={COLORS.placeholder} />
         )}

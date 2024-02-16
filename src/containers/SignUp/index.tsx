@@ -33,7 +33,6 @@ import globalState from '../../recoil/Global';
 import CInputWithTimer from '../../components/User/CInputWithTimer.tsx';
 import WebView from 'react-native-webview';
 import DefaultModal from '../../components/common/Modal/DefaultModal.tsx';
-import LoadingIndicator from '../../components/common/Loading/LoadingIndicator.tsx';
 import {COLORS} from '../../constants/colors.ts';
 import absoluteFillObject = StyleSheet.absoluteFillObject;
 
@@ -48,6 +47,8 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [telecom, setTelecom] = useState('');
   const [smsCode, setSmsCode] = useState('');
   const [isTimer, setIsTimer] = useState(false);
+  const [countDown, setCountDown] = useState(0);
+  const [restartTimer, setRestartTimer] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [isCertification, setIsCertification] = useState(false);
   const [samePassword, setSamePassword] = useState(false);
@@ -136,15 +137,15 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   };
 
   const smsCertification = async () => {
-    setSmsCode('');
-    setIsTimer(true);
-
     // SMS 인증 요청
     const data = {phone: phone};
     try {
       const response = await postSignUpSMS(data);
       if (response) {
+        setSmsCode('');
         setIsSend(true);
+        setIsTimer(true);
+        setRestartTimer(true);
       }
     } catch (e) {
       console.log(e);
@@ -284,9 +285,14 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     }
   };
 
-  const handleTimeout = (timeout: boolean) => {
-    // 휴대폰 인증 시간 초과
-    setIsTimer(!timeout);
+  const onChangeTimeHandler = (time: number) => {
+    if (time > 99) {
+      setRestartTimer(false);
+      setCountDown(time);
+    }
+    if (time === 0) {
+      setIsTimer(false);
+    }
   };
 
   const handleAllChecked = (isChecked: boolean) => {
@@ -372,18 +378,18 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               }
               maxLength={6}
               inputMode="numeric"
-              fullWidth="58%"
               readOnly={!isSend || isCertification}
               timer={isTimer}
-              setTime={2}
-              handleTimeout={handleTimeout}
+              onChangeTimeHandler={onChangeTimeHandler}
+              setTime={120}
+              restart={restartTimer}
             />
             <View style={{width: '40%'}}>
               {isSend ? (
                 <CButton
                   text={isCertification ? '인증 완료' : '재발송'}
                   onPress={onPressCertification}
-                  disabled={isTimer || isCertification}
+                  disabled={countDown > 100 || isCertification}
                 />
               ) : (
                 <CButton text="인증 문자 발송" onPress={onPressCertification} />
@@ -397,6 +403,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             errorMessage="영문+숫자 조합 8자리 이상 입력해 주세요."
             isWarning={password.length > 0 && !checkPassword(password)}
             secureTextEntry
+            placeholder="영문+숫자 조합 8자리 이상"
           />
           <CInput
             title="비밀번호 입력 확인"
@@ -405,6 +412,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             errorMessage="동일한 비밀번호를 입력해 주세요."
             isWarning={rePassword.length > 0 && !samePassword}
             secureTextEntry
+            placeholder="영문+숫자 조합 8자리 이상"
           />
           <Checkbox
             isChecked={isAllCheck}

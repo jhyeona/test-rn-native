@@ -5,19 +5,18 @@ import {COLORS} from '../../../constants/colors.ts';
 interface CountDownTimerProps {
   secondTime?: number;
   handleTimeout?: (timeout: boolean) => void;
+  onChangeTimeHandler?: (time: number) => void;
+  restart?: boolean;
 }
 
 const CountDownTimer = (props: CountDownTimerProps) => {
-  const {secondTime = 0, handleTimeout} = props;
+  const {secondTime = 0, onChangeTimeHandler, handleTimeout, restart} = props;
   const [time, setTime] = useState(secondTime);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTime(prevTime => {
         if (prevTime === 0) {
-          if (handleTimeout) {
-            handleTimeout(true);
-          }
           clearInterval(intervalId);
           return prevTime;
         }
@@ -30,8 +29,24 @@ const CountDownTimer = (props: CountDownTimerProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (handleTimeout && time === 0) {
+      handleTimeout(true);
+    }
+    if (onChangeTimeHandler) {
+      onChangeTimeHandler(time);
+    }
+  }, [handleTimeout, onChangeTimeHandler, time]);
+
   const minutes = Math.floor(time / 60); // 분
   const seconds = time % 60; // 초
+
+  useEffect(() => {
+    if (restart) {
+      console.log('?');
+      setTime(secondTime);
+    }
+  }, [restart, secondTime]);
 
   return (
     <CText
