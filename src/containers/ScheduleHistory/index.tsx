@@ -66,11 +66,11 @@ const ScheduleHistory = ({
       entered.length > 0 ? eventStatusType(entered[0].status) : '미출석';
     const enteredTime = // 입실 상태가 있다면 입실 시간
       entered.length > 0
-        ? moment(entered[0].eventTime).format('MM-DD HH : mm')
+        ? moment(entered[0].eventTime).format('MM.DD HH : mm')
         : '-';
     const completedTime = // 퇴실 상태가 있다면 퇴실 시간
       completed.length > 0
-        ? moment(entered[0].eventTime).format('MM-DD HH : mm')
+        ? moment(entered[0].eventTime).format('MM.DD HH : mm')
         : '-';
 
     return {statusType, enteredTime, completedTime};
@@ -173,7 +173,7 @@ const ScheduleHistory = ({
             <View style={styles.cell}>
               <CText text="구분" fontWeight="600" />
             </View>
-            <View style={styles.cell}>
+            <View style={[styles.cell]}>
               <CText text="입실" fontWeight="600" />
             </View>
             <View style={styles.cell}>
@@ -202,10 +202,21 @@ const ScheduleHistory = ({
                   </View>
                   <View style={styles.cell}>{<CText text={statusType} />}</View>
                   <View style={styles.cell}>
-                    <CText style={{textAlign: 'center'}} text={enteredTime} />
+                    <CText
+                      style={{
+                        textAlign: 'center',
+                        paddingHorizontal: 5,
+                      }}
+                      text={enteredTime}
+                      lineBreak
+                    />
                   </View>
                   <View style={styles.cell}>
-                    <CText style={{textAlign: 'center'}} text={completedTime} />
+                    <CText
+                      style={{textAlign: 'center', paddingHorizontal: 5}}
+                      text={completedTime}
+                      lineBreak
+                    />
                   </View>
                 </View>
               );
@@ -248,7 +259,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   firstCell: {
-    flex: 1.5,
+    flex: 1.8,
   },
   borderTop: {
     borderTopWidth: 1,
