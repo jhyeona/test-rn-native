@@ -10,6 +10,8 @@ import CText from '../../components/common/CustomText/CText.tsx';
 import CheckboxCircle from '../../components/common/Checkbox/CheckboxCircle.tsx';
 import {COLORS} from '../../constants/colors.ts';
 import moment from 'moment';
+import SvgIcon from '../../components/common/Icon/Icon.tsx';
+
 import {
   postJoinAcademy,
   useGetInvitedList,
@@ -99,7 +101,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   }, [invitedList]);
 
   return (
-    <CSafeAreaView>
+    <CSafeAreaView edges={['top', 'bottom']}>
       <Header
         title="가입기관 선택"
         isBack={!!prevScreenName}
@@ -138,9 +140,21 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             </ScrollView>
           </>
         ) : (
-          <View style={{marginVertical: 20}}>
-            <CText text="초대 받은 기관이 없어요." fontWeight="600" />
-          </View>
+          <>
+            <CText
+              text="초대 받은 기관이 없어요."
+              fontWeight="600"
+              style={{marginVertical: 20}}
+            />
+            <View
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingVertical: 60,
+              }}>
+              <SvgIcon name="Invite" />
+            </View>
+          </>
         )}
         <CButton
           text="선택하기"
@@ -149,7 +163,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           buttonStyle={{
             alignSelf: 'center',
             position: 'absolute',
-            bottom: 30,
+            bottom: 0,
           }}
         />
       </CView>
