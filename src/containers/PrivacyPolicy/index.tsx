@@ -2,6 +2,9 @@ import React from 'react';
 import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
 import Header from '../../components/common/Header/Header.tsx';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import CView from '../../components/common/CommonView/CView.tsx';
+import CWebView from '../../components/common/WebView/CWebView.tsx';
+import {PrivacyPolicyUrl} from '../../constants/policy.ts';
 
 const PrivacyPolicy = ({
   navigation,
@@ -9,8 +12,11 @@ const PrivacyPolicy = ({
   navigation: NativeStackNavigationHelpers;
 }) => {
   return (
-    <CSafeAreaView>
+    <CSafeAreaView edges={['top', 'bottom']}>
       <Header title="개인정보처리방침" isBack navigation={navigation} />
+      <CView>
+        <CWebView uri={PrivacyPolicyUrl} />
+      </CView>
     </CSafeAreaView>
   );
 };

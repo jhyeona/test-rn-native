@@ -4,3 +4,7 @@ export const withdrawPolicyList = [
   '탈퇴 처리가 된 이후에는 새로 회원가입을 진행해야해요.',
   '새로 회원가입을 한 계정에서는 이전의 출석 내역을 확인할 수 없어요.',
 ];
+
+export const TermsOfServiceUrl = 'https://www.lfin.kr/33';
+export const PersonalInformationUrl = 'https://www.lfin.kr/31';
+export const PrivacyPolicyUrl = 'https://www.lfin.kr/32';
