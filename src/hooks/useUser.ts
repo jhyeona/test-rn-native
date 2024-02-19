@@ -1,4 +1,5 @@
 import {
+  requestDeleteUser,
   requestGetInvitedAcademyList,
   requestGetUserInfo,
   requestPostFindPassword,
@@ -58,5 +59,10 @@ export const postJoinAcademy = async (payload: {
   inviteIdList: Array<number>;
 }) => {
   const response = await requestPostJoinAcademy(payload);
+  return response.data?.data;
+};
+
+export const deleteUser = async (payload: {password: string}) => {
+  const response = await requestDeleteUser(payload);
   return response.data?.data;
 };

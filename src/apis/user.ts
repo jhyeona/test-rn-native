@@ -1,4 +1,4 @@
-import {requestGet, requestPatch, requestPost} from './index.ts';
+import {requestDelete, requestGet, requestPatch, requestPost} from './index.ts';
 import {instanceWithoutToken} from './instance.ts';
 import {ApiResponseProps} from '../types/common.ts';
 import {
@@ -53,4 +53,11 @@ export const requestPostJoinAcademy = async (payload: {
 }): Promise<ApiResponseProps<JoinAcademyProps>> => {
   const url = `/academy/invite/join`;
   return requestPost(url, payload);
+};
+
+export const requestDeleteUser = async (payload: {
+  password: string;
+}): Promise<ApiResponseProps<UserInfoProps>> => {
+  const url = `/user/delete`;
+  return requestDelete(url, {data: payload});
 };

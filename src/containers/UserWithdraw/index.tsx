@@ -11,18 +11,64 @@ import CInput from '../../components/common/CustomInput/CInput.tsx';
 import TextList from '../../components/common/TextList/TextList.tsx';
 import {withdrawPolicyList} from '../../constants/policy.ts';
 import {checkPassword} from '../../utils/regExpHelper.ts';
+import {deleteUser} from '../../hooks/useUser.ts';
+import {useSetRecoilState} from 'recoil';
+import globalState from '../../recoil/Global';
+import {storage} from '../../utils/storageHelper.ts';
 
 const UserWithdraw = ({
   navigation,
 }: {
   navigation: NativeStackNavigationHelpers;
 }) => {
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+  const setIsLogin = useSetRecoilState(globalState.isLoginState);
   const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState('');
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
 
   const onPressWithdraw = () => {
-    //
+    setGlobalModalState({
+      isVisible: true,
+      isConfirm: true,
+      title: '안내',
+      message: '정말 탈퇴하시겠습니까?',
+      onPressConfirm: withdrawConfirm,
+    });
+  };
+
+  const withdrawConfirm = async () => {
+    if (!password) {
+      setIsPasswordWarning(true);
+    }
+
+    try {
+      await deleteUser({password: password});
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: '탈퇴 처리 되었습니다.',
+      });
+      setIsLogin(false);
+      storage.delete('access_token');
+      storage.delete('refresh_token');
+    } catch (e: any) {
+      console.log(e);
+      if (e.code === '4000') {
+        setIsPasswordWarning(true);
+        setGlobalModalState({
+          isVisible: true,
+          title: '오류',
+          message: '비밀번호를 확인해주세요.',
+        });
+        return;
+      }
+      setGlobalModalState({
+        isVisible: true,
+        title: '오류',
+        message: '탈퇴에 실패했습니다.',
+      });
+    }
   };
 
   useEffect(() => {

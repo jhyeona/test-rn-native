@@ -32,6 +32,7 @@ export interface UserInfoProps {
   teacherList: Array<{}>;
   settingPushApp: boolean;
   dateDelete: string | null;
+  isDelete: boolean;
 }
 
 export interface AcademyProps {
