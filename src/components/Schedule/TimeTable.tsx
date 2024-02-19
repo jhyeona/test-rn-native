@@ -12,7 +12,6 @@ import scheduleState from '../../recoil/Schedule';
 import {Dimensions} from 'react-native';
 import {COLORS} from '../../constants/colors';
 import globalState from '../../recoil/Global';
-import {convertTimeFormat} from '../../utils/scheduleHelper.ts';
 
 const TimeTable = () => {
   const calendarWidth = Dimensions.get('window').width - 48; // 기본 padding 24X2 뺀 값
@@ -23,8 +22,6 @@ const TimeTable = () => {
   );
   const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
   const [isInitRendering, setIsInitRendering] = useState(false);
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(24.5);
   const calendarRef = useRef<TimelineCalendarHandle>(null);
 
   const formattedData = () => {
@@ -116,17 +113,6 @@ const TimeTable = () => {
     }, 200);
   }, []);
 
-  useEffect(() => {
-    if (weekData && weekData?.scheduleList.length > 0) {
-      const start = convertTimeFormat(
-        weekData.scheduleList[0].scheduleStartTime,
-      );
-      setStartTime(start < 1 ? 0 : Math.floor(start - 0.5));
-      return;
-    }
-    setStartTime(0);
-  }, [weekData]);
-
   return (
     <>
       {isInitRendering && (
@@ -139,8 +125,8 @@ const TimeTable = () => {
           highlightDates={highlightDates}
           onDateChanged={_onDateChanged}
           locale="ko"
-          start={startTime} // time 시작 시간
-          end={endTime} // time 종료 시간
+          start={0} // time 시작 시간
+          end={24.5} // time 종료 시간
           firstDay={1} // 1: 월요일
           theme={theme}
           showNowIndicator
