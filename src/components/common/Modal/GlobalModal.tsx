@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '80%',
-    minHeight: 200,
     backgroundColor: 'white',
     borderRadius: 7,
     shadowColor: '#333',
@@ -155,12 +154,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   modalContent: {
-    flex: 1,
     padding: 10,
     alignItems: 'center',
   },
   messageText: {
-    flex: 1,
+    flexGrow: 1,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
