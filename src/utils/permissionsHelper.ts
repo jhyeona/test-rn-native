@@ -30,6 +30,10 @@ export const requestLocationPermissions = async () => {
   let permissionsList: Array<Permission> = [];
   if (IS_IOS) {
     permissionsList = [PERMISSIONS.IOS.LOCATION_ALWAYS];
+
+    return requestMultiple(permissionsList).then(statuses => {
+      return statuses[PERMISSIONS.IOS.LOCATION_ALWAYS] === RESULTS.GRANTED;
+    });
   }
   if (IS_ANDROID) {
     permissionsList = [
@@ -37,25 +41,22 @@ export const requestLocationPermissions = async () => {
       PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
       PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
     ];
+    return requestMultiple(permissionsList).then(statuses => {
+      return (
+        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+          RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.GRANTED
+      );
+    });
   }
-
-  /** why not checkMultiple?
-   * Android will never return blocked on checkMultiple, you have to call requestMultiple to get the info. */
-  return requestMultiple(permissionsList).then(statuses => {
-    if (
-      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.BLOCKED ||
-      statuses[PERMISSIONS.IOS.LOCATION_ALWAYS] === RESULTS.BLOCKED
-    ) {
-      // ANDROID / IOS 위치 권한
-      return 'locationBlock';
-    }
-    if (
-      statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.BLOCKED ||
-      statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.BLOCKED
-    ) {
-      // ANDROID 근처 기기 권한
-      return 'bluetoothBlock';
-    }
-    return true;
-  });
 };
+
+//
+// if (
+//   statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.BLOCKED ||
+//   statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.BLOCKED
+// ) {
+//   // ANDROID 근처 기기 권한
+//   return 'bluetoothBlock';
+// }

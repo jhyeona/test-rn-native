@@ -1,3 +1,5 @@
+import {BeaconProps} from './location.ts';
+
 export interface GetScheduleProps {
   academyId?: number;
   date: string;
@@ -94,7 +96,7 @@ export interface PostEventProps {
   }>;
   bles: Array<{
     uuid: string;
-    major: number;
-    minor: number;
+    major: string;
+    minor: string;
   }>;
 }

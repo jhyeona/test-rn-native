@@ -1,5 +1,6 @@
 import {atom} from 'recoil';
 import moment from 'moment';
+import {BeaconDataProps, BeaconProps, WifiProps} from '../../types/location.ts';
 
 export const globalToastState = atom<{isVisible: boolean; message: string}>({
   key: 'globalToastState',
@@ -34,6 +35,16 @@ export const globalModalState = atom<{
 export const isLoginState = atom<boolean>({
   key: 'isLoginState',
   default: false,
+});
+
+export const beaconState = atom<BeaconProps[]>({
+  key: 'beaconState',
+  default: [],
+});
+
+export const wifiState = atom<WifiProps[]>({
+  key: 'wifiState',
+  default: [],
 });
 
 export const selectDayScheduleDate = atom<string>({
