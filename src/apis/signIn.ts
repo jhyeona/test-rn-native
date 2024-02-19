@@ -1,6 +1,6 @@
-import {requestPost} from './index.ts';
 import {ApiResponseProps} from '../types/common.ts';
 import {GetAccessTokenProps} from '../types/user.ts';
+import {instanceWithoutToken} from './instance.ts';
 
 export const requestPostGetToken = async (payload: {
   phone: string;
@@ -8,5 +8,5 @@ export const requestPostGetToken = async (payload: {
 }): Promise<ApiResponseProps<GetAccessTokenProps>> => {
   // 로그인
   const url = '/token/authenticate';
-  return requestPost(url, payload);
+  return instanceWithoutToken.post(url, payload);
 };
