@@ -31,11 +31,25 @@ interface Props {
   schedule: ScheduleDefaultProps;
 }
 
-const lightButton = (color: 'BLUE' | 'GRAY', text: string) => {
-  const textColor = color === 'BLUE' ? COLORS.primary : 'black';
-  const borderColor = color === 'BLUE' ? COLORS.primary : 'black';
-  const backgroundColor =
-    color === 'BLUE' ? COLORS.primaryLight : COLORS.light.gray;
+const lightButton = (color: string, text: string) => {
+  let textColor = 'black';
+  let borderColor = 'black';
+  let backgroundColor = COLORS.lightGray;
+
+  switch (color) {
+    case 'blue':
+      textColor = COLORS.primary;
+      borderColor = COLORS.primary;
+      backgroundColor = COLORS.primaryLight;
+      break;
+    case 'red':
+      textColor = COLORS.dark.red;
+      borderColor = COLORS.dark.red;
+      backgroundColor = COLORS.light.red;
+      break;
+    default:
+      break;
+  }
 
   return (
     <Pressable
@@ -49,7 +63,7 @@ const lightButton = (color: 'BLUE' | 'GRAY', text: string) => {
         borderColor: borderColor,
         borderRadius: 7,
       }}>
-      <CText text={text} fontSize={11} fontWeight="700" color={textColor} />
+      <CText text={text} fontSize={11} color={textColor} />
     </Pressable>
   );
 };
@@ -110,6 +124,7 @@ const DayScheduleHistory = (props: Props) => {
         message: '입실 처리 되었습니다.',
       });
     } catch (e: any) {
+      console.log(e);
       // TODO: e: any 의 에러처리
       if (e.code === '1004') {
         setGlobalModalState({
@@ -139,11 +154,20 @@ const DayScheduleHistory = (props: Props) => {
     }
   };
 
-  const onPressComplete = async () => {
+  const onPressComplete = () => {
+    setGlobalModalState({
+      isVisible: true,
+      title: '안내',
+      message: '퇴실하시겠습니까?',
+      isConfirm: true,
+      onPressConfirm: completeConfirm,
+    });
+  };
+
+  const completeConfirm = async () => {
     // 퇴실
     try {
       const response = await postEventComplete(eventPayload);
-      console.log('퇴실:', response);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
@@ -344,6 +368,7 @@ const DayScheduleHistory = (props: Props) => {
       setIntervalFormatted(result);
     }
   }, [historyData]);
+
   return (
     <View>
       <View
@@ -357,12 +382,9 @@ const DayScheduleHistory = (props: Props) => {
           <CText text={schedule.lecture.lecturePlaceName} />
         </View>
         {isBefore &&
-          lightButton(
-            'BLUE',
-            historyData?.completeEvent?.eventType === 'COMPLETE'
-              ? '출석완료'
-              : '강의종료',
-          )}
+          (historyData?.completeEvent?.eventType === 'COMPLETE'
+            ? lightButton('blue', '출석완료')
+            : lightButton('red', '강의종료'))}
         {isAfter && lightButton('GRAY', '출석 전')}
       </View>
       {isNow && !historyData?.enterEvent && (

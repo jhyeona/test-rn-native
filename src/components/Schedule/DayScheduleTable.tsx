@@ -6,7 +6,7 @@ import scheduleState from '../../recoil/Schedule';
 import CText from '../common/CustomText/CText.tsx';
 import {COLORS} from '../../constants/colors.ts';
 import SvgIcon from '../common/Icon/Icon.tsx';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 
 import {StudentInfoProps} from '../../types/user.ts';
 import DayScheduleHistory from './DayScheduleHistory.tsx';
@@ -25,6 +25,10 @@ const DayScheduleTable = (props: Props) => {
       attendeeId: studentInfo.attendeeId,
       scheduleId: scheduleId,
     });
+  };
+
+  const isBetween = (startTime: Moment, endTime: Moment) => {
+    return moment().isBetween(startTime, endTime, undefined, '[]');
   };
 
   return (
@@ -82,7 +86,9 @@ const DayScheduleTable = (props: Props) => {
                     styles.cell,
                     {
                       flex: 0.3,
-                      alignItems: 'flex-start',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
                       paddingVertical: 10,
                       borderRightWidth: 1,
                       borderColor: COLORS.lineBlue,
@@ -95,6 +101,20 @@ const DayScheduleTable = (props: Props) => {
                       'HH:mm',
                     )}\n~\n${moment(schedule.scheduleEndTime).format('HH:mm')}`}
                   />
+                  {isBetween(
+                    moment(schedule.scheduleStartTime).subtract(
+                      schedule.lecture.lectureAllowMinus,
+                      'minutes',
+                    ),
+                    moment(schedule.scheduleEndTime).add(
+                      schedule.lecture.lectureAllowEndPlus,
+                      'minutes',
+                    ),
+                  ) && (
+                    <View style={{marginTop: 15}}>
+                      <SvgIcon name="ScheduleTimeLIne" />
+                    </View>
+                  )}
                 </View>
                 <View style={styles.cell}>
                   <View style={styles.lectureBox}>
