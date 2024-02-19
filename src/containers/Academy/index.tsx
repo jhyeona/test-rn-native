@@ -10,11 +10,7 @@ import CText from '../../components/common/CustomText/CText.tsx';
 import CheckboxCircle from '../../components/common/Checkbox/CheckboxCircle.tsx';
 import {COLORS} from '../../constants/colors.ts';
 import moment from 'moment';
-import {
-  postJoinAcademy,
-  useGetInvitedList,
-  useGetUserInfo,
-} from '../../hooks/useUser.ts';
+import {postJoinAcademy, useGetInvitedList} from '../../hooks/useUser.ts';
 import {useQueryClient} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
@@ -35,7 +31,6 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const prevScreenName = usePreviousScreenName(navigation);
   const setModalState = useSetRecoilState(globalState.globalModalState);
   const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
-  const {refetch: refetchUserInfo} = useGetUserInfo();
 
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>();
   const queryClient = useQueryClient();
@@ -73,10 +68,11 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     }
 
     try {
-      await postJoinAcademy(payload);
-      await invitedRefetch();
-      await refetchUserInfo();
+      const response = await postJoinAcademy(payload);
+      const refetchResponse = await invitedRefetch();
       await queryClient.invalidateQueries({queryKey: ['userInfo']});
+      console.log('1', response);
+      console.log('2', refetchResponse);
       setModalState({
         isVisible: true,
         title: '안내',
