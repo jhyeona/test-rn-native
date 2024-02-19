@@ -16,36 +16,27 @@ const FindPassword = ({
 }: {
   navigation: BottomTabNavigationHelpers;
 }) => {
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
+  const [isWarningPhone, setIsWarningPhone] = useState(false);
+  const [isWarningName, setIsWarningName] = useState(false);
+  const [isWarningBirthday, setIsWarningBirthday] = useState(false);
 
   const onPressFind = async () => {
-    if (!phone || !checkPhone(phone)) {
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '휴대폰 번호를 확인하세요.',
-      });
+    const isInvalidPhone = !phone || !checkPhone(phone);
+    const isInvalidName = !name || !checkName(name);
+    const isInvalidBirthday = !birthday || !checkDate(birthday);
+
+    setIsWarningPhone(isInvalidPhone);
+    setIsWarningName(isInvalidName);
+    setIsWarningBirthday(isInvalidBirthday);
+
+    if (isInvalidPhone || isInvalidName || isInvalidBirthday) {
       return;
     }
-    if (!name || !checkName(name)) {
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '이름을 확인하세요.',
-      });
-      return;
-    }
-    if (!birthday || !checkDate(birthday)) {
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '생년월일을 확인하세요.',
-      });
-      return;
-    }
+
     const payload = {
       phone: phone,
       name: name,
@@ -53,18 +44,16 @@ const FindPassword = ({
     };
 
     try {
-      const response = await postFindPassword(payload);
-      setModalState({
+      await postFindPassword(payload);
+      setGlobalModalState({
         isVisible: true,
         title: '안내',
         message:
           '임시 비밀번호를 전송하였습니다.\n임시 비밀번호로 로그인해주세요.',
       });
-      console.log(response);
     } catch (e: any) {
-      console.log(e);
       if (e.code === '4003') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message: '일치하는 정보가 없습니다.',
@@ -72,7 +61,7 @@ const FindPassword = ({
         return;
       }
       if (e.code === '9100') {
-        setModalState({
+        setGlobalModalState({
           isVisible: true,
           title: '안내',
           message:
@@ -94,6 +83,8 @@ const FindPassword = ({
           inputValue={phone}
           setInputValue={setPhone}
           placeholder="01012341234"
+          isWarning={isWarningPhone}
+          errorMessage="휴대폰 번호를 확인해 주세요."
           maxLength={11}
           inputMode="numeric"
         />
@@ -102,6 +93,8 @@ const FindPassword = ({
           inputValue={name}
           setInputValue={setName}
           placeholder="홍길동"
+          isWarning={isWarningName}
+          errorMessage="이름을 확인해 주세요."
           inputMode="text"
         />
         <CInput
@@ -110,6 +103,8 @@ const FindPassword = ({
           setInputValue={setBirthday}
           inputMode="numeric"
           placeholder="YYYYMMDD"
+          isWarning={isWarningBirthday}
+          errorMessage="생년월일을 확인해 주세요."
           maxLength={8}
         />
         <CButton text="임시 비밀번호 발급" onPress={onPressFind} />
