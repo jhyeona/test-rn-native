@@ -35,6 +35,11 @@ import WebView from 'react-native-webview';
 import DefaultModal from '../../components/common/Modal/DefaultModal.tsx';
 import {COLORS} from '../../constants/colors.ts';
 import absoluteFillObject = StyleSheet.absoluteFillObject;
+import CWebView from '../../components/common/WebView/CWebView.tsx';
+import {
+  PersonalInformationUrl,
+  TermsOfServiceUrl,
+} from '../../constants/policy.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
@@ -214,7 +219,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     setDefaultModalState({
       isVisible: true,
       title: '서비스 이용약관 동의',
-      uri: 'https://www.lfin.kr/33',
+      uri: TermsOfServiceUrl,
     });
   };
 
@@ -222,7 +227,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     setDefaultModalState({
       isVisible: true,
       title: '개인정보 수집 이용 동의',
-      uri: 'https://www.lfin.kr/31',
+      uri: PersonalInformationUrl,
     });
   };
 
@@ -452,18 +457,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         }}
         isVisible={defaultModalState.isVisible}
         title={defaultModalState.title}>
-        <WebView
-          source={{uri: defaultModalState.uri}}
-          startInLoadingState={true}
-          originWhitelist={['*']}
-          renderLoading={() => (
-            <ActivityIndicator
-              size="small"
-              color={COLORS.primary}
-              style={{...absoluteFillObject}}
-            />
-          )}
-        />
+        <CWebView uri={defaultModalState.uri} />
       </DefaultModal>
     </CSafeAreaView>
   );
