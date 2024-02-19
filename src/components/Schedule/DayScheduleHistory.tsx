@@ -12,7 +12,8 @@ import CButton from '../common/CommonButton/CButton.tsx';
 import CText from '../common/CustomText/CText.tsx';
 import moment from 'moment';
 import {
-  postEventAttend, postEventComeback,
+  postEventAttend,
+  postEventComeback,
   postEventComplete,
   postEventEnter,
   postEventLeave,
@@ -20,18 +21,24 @@ import {
 } from '../../hooks/useSchedule.ts';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
-import {handleOpenSettings, requestLocationPermissions,} from '../../utils/permissionsHelper.ts';
+import {
+  handleOpenSettings,
+  requestLocationPermissions,
+} from '../../utils/permissionsHelper.ts';
 import {IS_ANDROID} from '../../constants/common.ts';
-import {validBeaconList, validWifiList} from "../../utils/locationHelper.ts";
+import {validBeaconList, validWifiList} from '../../utils/locationHelper.ts';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
-  requestStartBeaconScanning
-} from "../../services/beaconScanner.ts";
-import {requestGetLocationInfo, requestWifiList} from "../../services/locationScanner.ts";
+  requestStartBeaconScanning,
+} from '../../services/beaconScanner.ts';
+import {
+  requestGetLocationInfo,
+  requestWifiList,
+} from '../../services/locationScanner.ts';
 
 interface Props {
-  payload: GetScheduleHistoryProps;
+  scheduleHistoryPayload: GetScheduleHistoryProps;
   schedule: ScheduleDefaultProps;
 }
 
@@ -73,8 +80,8 @@ const lightButton = (color: string, text: string) => {
 };
 
 const DayScheduleHistory = (props: Props) => {
-  const {payload, schedule} = props;
-  const historyData = useGetScheduleHistory(payload);
+  const {scheduleHistoryPayload, schedule} = props;
+  const historyData = useGetScheduleHistory(scheduleHistoryPayload);
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [beaconState, setBeaconState] = useRecoilState(globalState.beaconState);
   const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
@@ -85,14 +92,15 @@ const DayScheduleHistory = (props: Props) => {
   const [isBefore, setIsBefore] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
 
-  const permissionGranted = async () =>{
+  const permissionGranted = async () => {
     const grantedResult = await requestLocationPermissions();
+    console.log(grantedResult);
     if (!grantedResult) {
       setGlobalModalState({
         isVisible: true,
         title: '권한 설정 안내',
         message: `출결을 위해 ${
-          IS_ANDROID ? '위치' : '위치와 근처 기기'
+          IS_ANDROID ? '위치와 근처기기' : '위치'
         } 권한이 필요합니다. \n확인을 누르시면 설정으로 이동합니다.`,
         isConfirm: true,
         onPressConfirm: () => handleOpenSettings(),
@@ -100,12 +108,13 @@ const DayScheduleHistory = (props: Props) => {
       return false;
     }
     return true;
-  }
-  const eventPayload = async ():Promise<PostEventProps> => {
+  };
+  const eventPayload = async (): Promise<PostEventProps> => {
     // BEACON
     let beaconList = validBeaconList(beaconState);
     if (beaconList.length === 0) {
       await requestStartBeaconScanning().then(result => {
+        console.log('result', result);
         if (!result) {
           return;
         }
@@ -116,7 +125,7 @@ const DayScheduleHistory = (props: Props) => {
         });
       });
     }
-    
+
     const beaconListData = beaconList.map(beaconItem => {
       return {
         uuid: beaconItem.uuid,
@@ -124,7 +133,7 @@ const DayScheduleHistory = (props: Props) => {
         minor: beaconItem.minor,
       };
     });
-    
+
     // WIFI
     let wifiList = wifiState;
     const isWifiValid = validWifiList(wifiState);
@@ -134,7 +143,7 @@ const DayScheduleHistory = (props: Props) => {
         setWifiState(wifi ?? []);
       });
     }
-    
+
     const wifiListData = wifiList.map(wifiItem => {
       return {
         ssid: wifiItem.ssid,
@@ -142,13 +151,13 @@ const DayScheduleHistory = (props: Props) => {
         rssi: wifiItem.rssi,
       };
     });
-    
+
     // Location
     const locationData = await requestGetLocationInfo();
-    
+
     // 출석 체크 payload
     return {
-      attendeeId: payload.attendeeId,
+      attendeeId: scheduleHistoryPayload.attendeeId,
       scheduleId: schedule.scheduleId,
       latitude: locationData?.latitude ?? 0.1,
       longitude: locationData?.longitude ?? 0.1,
@@ -156,12 +165,13 @@ const DayScheduleHistory = (props: Props) => {
       wifis: wifiListData,
       bles: beaconListData,
     };
-  }
+  };
 
   const onPressEnter = async () => {
-    if (!permissionGranted) return;
+    const permissionsCheck = await permissionGranted();
+    if (!permissionsCheck) return;
     const payload = await eventPayload();
-    
+
     try {
       const response = await postEventEnter(payload);
       console.log('RESPONSE:', response);
@@ -213,8 +223,9 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const completeConfirm = async () => {
-    if (!permissionGranted) return;
+    // if (!permissionGranted) return;
     const payload = await eventPayload();
+
     // 퇴실
     try {
       const response = await postEventComplete(payload);
@@ -305,7 +316,17 @@ const DayScheduleHistory = (props: Props) => {
     }
   };
 
-  const onPressLeave = async () => {
+  const onPressLeave = () => {
+    setGlobalModalState({
+      isVisible: true,
+      title: '안내',
+      message: '외출하시겠습니까?',
+      isConfirm: true,
+      onPressConfirm: leaveConfirm,
+    });
+  };
+
+  const leaveConfirm = async () => {
     if (!permissionGranted) return;
     const payload = await eventPayload();
     // 외출
@@ -338,7 +359,17 @@ const DayScheduleHistory = (props: Props) => {
     }
   };
 
-  const onPressComeback = async () => {
+  const onPressComeback = () => {
+    setGlobalModalState({
+      isVisible: true,
+      title: '안내',
+      message: '외출 종료하시겠습니까?',
+      isConfirm: true,
+      onPressConfirm: comebackConfirm,
+    });
+  };
+
+  const comebackConfirm = async () => {
     if (!permissionGranted) return;
     const payload = await eventPayload();
     // 복귀
@@ -390,7 +421,7 @@ const DayScheduleHistory = (props: Props) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       timeSet();
-    }, 1000); // 1초
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -488,14 +519,13 @@ const DayScheduleHistory = (props: Props) => {
       )}
       {schedule.scheduleTimeList &&
         intervalFormatted.map((val, index) => {
-          // const startTime = moment(val.timeStart)
-          //   .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
-          //   .format('YYYY-MM-DD HH:mm');
-          // const endTime = moment(val.timeEnd)
-          //   .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
-          //   .format('YYYY-MM-DD HH:mm');
-          //
-          // const intervalIsBetween = isBetween(startTime, endTime); // 사용 예정
+          const startTime = moment(val.timeStart)
+            .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
+            .format('YYYY-MM-DD HH:mm');
+          const endTime = moment(val.timeEnd)
+            .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
+            .format('YYYY-MM-DD HH:mm');
+          const intervalIsBetween = isBetween(startTime, endTime); // 시간별 출석
 
           return (
             <View
@@ -535,7 +565,13 @@ const DayScheduleHistory = (props: Props) => {
                     }>
                     <CText
                       text={
-                        isNow ? '미출석' : isBefore ? '출석종료' : '출석예정'
+                        isNow
+                          ? intervalIsBetween
+                            ? '출석하기'
+                            : '미출석'
+                          : isBefore
+                            ? '출석종료'
+                            : '출석예정'
                       }
                       fontSize={11}
                       color={COLORS.dark.red}

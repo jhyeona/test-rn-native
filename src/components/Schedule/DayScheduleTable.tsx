@@ -145,7 +145,10 @@ const DayScheduleTable = (props: Props) => {
                         'YYYY.MM.DD',
                       )}`}
                     />
-                    <DayScheduleHistory schedule={schedule} payload={payload} />
+                    <DayScheduleHistory
+                      schedule={schedule}
+                      scheduleHistoryPayload={payload}
+                    />
                   </View>
                 </View>
               </View>

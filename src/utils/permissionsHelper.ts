@@ -36,17 +36,20 @@ export const requestLocationPermissions = async () => {
     });
   }
   if (IS_ANDROID) {
-    permissionsList = [
-      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-      PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-    ];
+    permissionsList = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+    if (platformVersion > 30) {
+      permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
+    }
     return requestMultiple(permissionsList).then(statuses => {
+      if (platformVersion > 30) {
+        return (
+          statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+            RESULTS.GRANTED &&
+          statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.GRANTED
+        );
+      }
       return (
-        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-          RESULTS.GRANTED &&
-        statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED &&
-        statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.GRANTED
+        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED
       );
     });
   }

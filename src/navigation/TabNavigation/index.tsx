@@ -31,7 +31,6 @@ const TabNavigation = () => {
         // wifi, beacon 값
         await requestStartBeaconScanning().then(result => {
           if (!result) {
-            console.log('비콘 스캔 실패');
             return;
           }
           requestAddBeaconListener(beacon => {});
