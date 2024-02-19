@@ -1,6 +1,15 @@
-import {requestPatchUserUpdate} from '../apis/user.ts';
+import {
+  requestPatchUpdatePassword,
+  requestPatchUpdatePush,
+} from '../apis/user.ts';
 
-export const patchUserUpdate = async (payload: {}) => {
-  const response = await requestPatchUserUpdate(payload);
+export const patchUpdatePassword = async (payload: {password: string}) => {
+  const response = await requestPatchUpdatePassword(payload);
+  return response.data;
+};
+
+export const patchUpdatePush = async (payload: {settingPushApp: boolean}) => {
+  const response = await requestPatchUpdatePush(payload);
+  console.log('response', response.data);
   return response.data;
 };

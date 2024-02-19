@@ -29,10 +29,10 @@ export const requestLocationPermissions = async () => {
   // 위치 권한 확인
   let permissionsList: Array<Permission> = [];
   if (IS_IOS) {
-    permissionsList = [PERMISSIONS.IOS.LOCATION_ALWAYS];
+    permissionsList = [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE];
 
     return requestMultiple(permissionsList).then(statuses => {
-      return statuses[PERMISSIONS.IOS.LOCATION_ALWAYS] === RESULTS.GRANTED;
+      return statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED;
     });
   }
   if (IS_ANDROID) {

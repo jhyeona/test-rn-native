@@ -12,19 +12,23 @@ import CButton from '../common/CommonButton/CButton.tsx';
 import CText from '../common/CustomText/CText.tsx';
 import moment from 'moment';
 import {
-  postEventAttend,
-  postEventComeback,
+  postEventAttend, postEventComeback,
   postEventComplete,
   postEventEnter,
   postEventLeave,
   useGetScheduleHistory,
 } from '../../hooks/useSchedule.ts';
-import {useSetRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
+import {handleOpenSettings, requestLocationPermissions,} from '../../utils/permissionsHelper.ts';
+import {IS_ANDROID} from '../../constants/common.ts';
+import {validBeaconList, validWifiList} from "../../utils/locationHelper.ts";
 import {
-  handleOpenSettings,
-  requestLocationPermissions,
-} from '../../utils/permissionsHelper.ts';
+  requestAddBeaconListener,
+  requestBeaconScanList,
+  requestStartBeaconScanning
+} from "../../services/beaconScanner.ts";
+import {requestGetLocationInfo, requestWifiList} from "../../services/locationScanner.ts";
 
 interface Props {
   payload: GetScheduleHistoryProps;
@@ -72,50 +76,94 @@ const DayScheduleHistory = (props: Props) => {
   const {payload, schedule} = props;
   const historyData = useGetScheduleHistory(payload);
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+  const [beaconState, setBeaconState] = useRecoilState(globalState.beaconState);
+  const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
   const [intervalFormatted, setIntervalFormatted] = useState<
     Array<ScheduleTimeProps>
   >([]);
   const [isNow, setIsNow] = useState(false);
   const [isBefore, setIsBefore] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
-  const [eventPayload, setEventPayload] = useState<PostEventProps>({
-    attendeeId: payload.attendeeId,
-    scheduleId: schedule.scheduleId,
-    latitude: 0.1,
-    longitude: 0.1,
-    altitude: 0.1,
-    wifis: [],
-    bles: [],
-  });
 
-  const onPressEnter = async () => {
+  const permissionGranted = async () =>{
     const grantedResult = await requestLocationPermissions();
-    if (grantedResult !== true) {
+    if (!grantedResult) {
       setGlobalModalState({
         isVisible: true,
         title: '권한 설정 안내',
         message: `출결을 위해 ${
-          grantedResult === 'locationBlock' ? '위치' : '근처 기기'
-        } 권한이 필요합니다. \n확인을 누르면 설정으로 이동합니다.`,
+          IS_ANDROID ? '위치' : '위치와 근처 기기'
+        } 권한이 필요합니다. \n확인을 누르시면 설정으로 이동합니다.`,
         isConfirm: true,
         onPressConfirm: () => handleOpenSettings(),
       });
-      return;
+      return false;
     }
+    return true;
+  }
+  const eventPayload = async ():Promise<PostEventProps> => {
+    // BEACON
+    let beaconList = validBeaconList(beaconState);
+    if (beaconList.length === 0) {
+      await requestStartBeaconScanning().then(result => {
+        if (!result) {
+          return;
+        }
+        requestAddBeaconListener(beacon => {});
+        requestBeaconScanList().then(beacon => {
+          beaconList = beacon ? validBeaconList(beacon) : [];
+          setBeaconState(beaconList);
+        });
+      });
+    }
+    
+    const beaconListData = beaconList.map(beaconItem => {
+      return {
+        uuid: beaconItem.uuid,
+        major: beaconItem.major,
+        minor: beaconItem.minor,
+      };
+    });
+    
+    // WIFI
+    let wifiList = wifiState;
+    const isWifiValid = validWifiList(wifiState);
+    if (!isWifiValid) {
+      await requestWifiList().then(wifi => {
+        wifiList = wifi;
+        setWifiState(wifi ?? []);
+      });
+    }
+    
+    const wifiListData = wifiList.map(wifiItem => {
+      return {
+        ssid: wifiItem.ssid,
+        bssid: wifiItem.bssid,
+        rssi: wifiItem.rssi,
+      };
+    });
+    
+    // Location
+    const locationData = await requestGetLocationInfo();
+    
+    // 출석 체크 payload
+    return {
+      attendeeId: payload.attendeeId,
+      scheduleId: schedule.scheduleId,
+      latitude: locationData?.latitude ?? 0.1,
+      longitude: locationData?.longitude ?? 0.1,
+      altitude: locationData?.altitude ?? 0.1,
+      wifis: wifiListData,
+      bles: beaconListData,
+    };
+  }
 
-    // 출석 체크
-    // setEventPayload({
-    //   attendeeId: attendeeId,
-    //   scheduleId: scheduleId,
-    //   latitude: 0.1,
-    //   longitude: 0.1,
-    //   altitude: 0.1,
-    //   wifis: [],
-    //   bles: [],
-    // });
-
+  const onPressEnter = async () => {
+    if (!permissionGranted) return;
+    const payload = await eventPayload();
+    
     try {
-      const response = await postEventEnter(eventPayload);
+      const response = await postEventEnter(payload);
       console.log('RESPONSE:', response);
 
       setGlobalModalState({
@@ -165,9 +213,11 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const completeConfirm = async () => {
+    if (!permissionGranted) return;
+    const payload = await eventPayload();
     // 퇴실
     try {
-      const response = await postEventComplete(eventPayload);
+      const response = await postEventComplete(payload);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
@@ -195,9 +245,11 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const onPressAttend = async () => {
+    if (!permissionGranted) return;
+    const payload = await eventPayload();
     // 시간별 체크
     try {
-      const response = await postEventAttend(eventPayload);
+      const response = await postEventAttend(payload);
       console.log('시간별체크:', response);
       setGlobalModalState({
         isVisible: true,
@@ -254,9 +306,11 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const onPressLeave = async () => {
+    if (!permissionGranted) return;
+    const payload = await eventPayload();
     // 외출
     try {
-      const response = await postEventLeave(eventPayload);
+      const response = await postEventLeave(payload);
       console.log('외출:', response);
       setGlobalModalState({
         isVisible: true,
@@ -285,9 +339,11 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const onPressComeback = async () => {
+    if (!permissionGranted) return;
+    const payload = await eventPayload();
     // 복귀
     try {
-      const response = await postEventComeback(eventPayload);
+      const response = await postEventComeback(payload);
       console.log('컴백:', response);
       setGlobalModalState({
         isVisible: true,

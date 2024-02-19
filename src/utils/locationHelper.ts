@@ -22,12 +22,5 @@ export const validBeaconList = (beaconList: BeaconProps[]) => {
     }
   });
 
-  const result = Array.from(beaconMap.values());
-  return result.map(beaconItem => {
-    return {
-      uuid: beaconItem.uuid,
-      major: beaconItem.major,
-      minor: beaconItem.minor,
-    };
-  });
+  return Array.from(beaconMap.values());
 };

@@ -25,11 +25,19 @@ export const requestGetUserInfo = async (): Promise<
   return requestGet(url);
 };
 
-export const requestPatchUserUpdate = async (payload: {}): Promise<
-  ApiResponseProps<UserInfoProps>
-> => {
-  // 유저 정보 수정
-  const url = '/user/update';
+export const requestPatchUpdatePassword = async (payload: {
+  password: string;
+}): Promise<ApiResponseProps<UserInfoProps>> => {
+  // 유저 비밀번호 수정
+  const url = '/user/update/password';
+  return requestPatch(url, payload);
+};
+
+export const requestPatchUpdatePush = async (payload: {
+  settingPushApp: boolean;
+}): Promise<ApiResponseProps<UserInfoProps>> => {
+  // 푸시 알림 설정 수정
+  const url = '/user/update/push';
   return requestPatch(url, payload);
 };
 
