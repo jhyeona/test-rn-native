@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
 import userState from '../../recoil/user';
 import {
   useGetDaySchedule,
@@ -23,7 +23,6 @@ import Academy from '../Academy';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
-
   const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
   const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
   const [selectAcademy, setSelectAcademy] = useRecoilState(
@@ -94,43 +93,44 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   return (
     <>
-      {userData && userData.studentList.length > 0 ? (
-        <CSafeAreaView>
-          <ScheduleHeader isWeekend={isWeekend} setIsWeekend={handleToggle} />
-          <CView>
-            <Dropdown
-              items={academyList}
-              onSelect={onChangeDropList}
-              selected={
-                academyList.filter(val => val.id === String(selectAcademy))[0]
-              }
-              disabled={userData ? userData.studentList.length <= 1 : false}
-            />
-            {isWeekend ? (
-              <View style={{flexGrow: 1, paddingTop: 4}}>
-                <TimeTable />
-              </View>
-            ) : (
-              selectStudentInfo && (
-                <>
-                  <DayCalendar
-                    studentInfo={selectStudentInfo}
-                    navigation={navigation}
-                  />
-                  <CButton
-                    text="내 출석 기록 보기"
-                    onPress={onPressHistory}
-                    buttonStyle={{marginBottom: 10}}
-                    noMargin
-                  />
-                </>
-              )
-            )}
-          </CView>
-        </CSafeAreaView>
-      ) : (
-        <Academy navigation={navigation} />
-      )}
+      {userData &&
+        (userData.studentList.length > 0 ? (
+          <CSafeAreaView>
+            <ScheduleHeader isWeekend={isWeekend} setIsWeekend={handleToggle} />
+            <CView>
+              <Dropdown
+                items={academyList}
+                onSelect={onChangeDropList}
+                selected={
+                  academyList.filter(val => val.id === String(selectAcademy))[0]
+                }
+                disabled={userData ? userData.studentList.length <= 1 : false}
+              />
+              {isWeekend ? (
+                <View style={{flexGrow: 1, paddingTop: 4}}>
+                  <TimeTable />
+                </View>
+              ) : (
+                selectStudentInfo && (
+                  <>
+                    <DayCalendar
+                      studentInfo={selectStudentInfo}
+                      navigation={navigation}
+                    />
+                    <CButton
+                      text="내 출석 기록 보기"
+                      onPress={onPressHistory}
+                      buttonStyle={{marginBottom: 10}}
+                      noMargin
+                    />
+                  </>
+                )
+              )}
+            </CView>
+          </CSafeAreaView>
+        ) : (
+          <Academy navigation={navigation} />
+        ))}
     </>
   );
 };

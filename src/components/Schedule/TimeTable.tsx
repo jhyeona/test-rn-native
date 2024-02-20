@@ -127,6 +127,10 @@ const TimeTable = () => {
     setStartTime(0);
   }, [weekData]);
 
+  useEffect(() => {
+    setSelectWeekDate(moment().format('YYYY-MM-DD'));
+  }, []);
+
   return (
     <>
       {isInitRendering && (

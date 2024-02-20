@@ -20,12 +20,19 @@ const Header = (props: Props) => {
 
   return (
     <View style={styles.container}>
-      {isBack && (
+      {isBack ? (
         <Pressable style={styles.icon} onPress={onPressGoBack}>
           <SvgIcon name="LeftArrow" size={20} />
+          <CText
+            text={title}
+            fontWeight="700"
+            fontSize={22}
+            style={{marginLeft: 15}}
+          />
         </Pressable>
+      ) : (
+        <CText text={title} fontWeight="700" fontSize={22} />
       )}
-      <CText text={title} fontWeight="700" fontSize={22} />
     </View>
   );
 };
@@ -41,6 +48,8 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.layout,
   },
   icon: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 10,
   },
 });

@@ -26,16 +26,13 @@ import {
   requestLocationPermissions,
 } from '../../utils/permissionsHelper.ts';
 import {IS_ANDROID} from '../../constants/common.ts';
-import {validBeaconList, validWifiList} from '../../utils/locationHelper.ts';
+import {validBeaconList} from '../../utils/locationHelper.ts';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
   requestStartBeaconScanning,
 } from '../../services/beaconScanner.ts';
-import {
-  requestGetLocationInfo,
-  requestWifiList,
-} from '../../services/locationScanner.ts';
+import {requestGetLocationInfo} from '../../services/locationScanner.ts';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -84,7 +81,7 @@ const DayScheduleHistory = (props: Props) => {
   const historyData = useGetScheduleHistory(scheduleHistoryPayload);
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [beaconState, setBeaconState] = useRecoilState(globalState.beaconState);
-  const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
+  // const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
   const [intervalFormatted, setIntervalFormatted] = useState<
     Array<ScheduleTimeProps>
   >([]);
@@ -94,7 +91,6 @@ const DayScheduleHistory = (props: Props) => {
 
   const permissionGranted = async () => {
     const grantedResult = await requestLocationPermissions();
-    console.log(grantedResult);
     if (!grantedResult) {
       setGlobalModalState({
         isVisible: true,
@@ -114,7 +110,6 @@ const DayScheduleHistory = (props: Props) => {
     let beaconList = validBeaconList(beaconState);
     if (beaconList.length === 0) {
       await requestStartBeaconScanning().then(result => {
-        console.log('result', result);
         if (!result) {
           return;
         }
@@ -134,23 +129,23 @@ const DayScheduleHistory = (props: Props) => {
       };
     });
 
-    // WIFI
-    let wifiList = wifiState;
-    const isWifiValid = validWifiList(wifiState);
-    if (!isWifiValid) {
-      await requestWifiList().then(wifi => {
-        wifiList = wifi;
-        setWifiState(wifi ?? []);
-      });
-    }
-
-    const wifiListData = wifiList.map(wifiItem => {
-      return {
-        ssid: wifiItem.ssid,
-        bssid: wifiItem.bssid,
-        rssi: wifiItem.rssi,
-      };
-    });
+    // // WIFI
+    // let wifiList = wifiState;
+    // const isWifiValid = validWifiList(wifiState);
+    // if (!isWifiValid) {
+    //   await requestWifiList().then(wifi => {
+    //     wifiList = wifi;
+    //     setWifiState(wifi ?? []);
+    //   });
+    // }
+    //
+    // const wifiListData = wifiList.map(wifiItem => {
+    //   return {
+    //     ssid: wifiItem.ssid,
+    //     bssid: wifiItem.bssid,
+    //     rssi: wifiItem.rssi,
+    //   };
+    // });
 
     // Location
     const locationData = await requestGetLocationInfo();
@@ -162,7 +157,7 @@ const DayScheduleHistory = (props: Props) => {
       latitude: locationData?.latitude ?? 0.1,
       longitude: locationData?.longitude ?? 0.1,
       altitude: locationData?.altitude ?? 0.1,
-      wifis: wifiListData,
+      wifis: [], //wifiListData,
       bles: beaconListData,
     };
   };
@@ -173,16 +168,13 @@ const DayScheduleHistory = (props: Props) => {
     const payload = await eventPayload();
 
     try {
-      const response = await postEventEnter(payload);
-      console.log('RESPONSE:', response);
-
+      await postEventEnter(payload);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '입실 처리 되었습니다.',
       });
     } catch (e: any) {
-      console.log(e);
       // TODO: e: any 의 에러처리
       if (e.code === '1004') {
         setGlobalModalState({
@@ -208,7 +200,6 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      console.log(e);
     }
   };
 
@@ -223,12 +214,12 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const completeConfirm = async () => {
-    // if (!permissionGranted) return;
+    const permissionsCheck = await permissionGranted();
+    if (!permissionsCheck) return;
     const payload = await eventPayload();
-
     // 퇴실
     try {
-      const response = await postEventComplete(payload);
+      await postEventComplete(payload);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
@@ -251,17 +242,16 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      console.log(e);
     }
   };
 
   const onPressAttend = async () => {
-    if (!permissionGranted) return;
+    const permissionsCheck = await permissionGranted();
+    if (!permissionsCheck) return;
     const payload = await eventPayload();
     // 시간별 체크
     try {
-      const response = await postEventAttend(payload);
-      console.log('시간별체크:', response);
+      await postEventAttend(payload);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
@@ -327,19 +317,18 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const leaveConfirm = async () => {
-    if (!permissionGranted) return;
+    const permissionsCheck = await permissionGranted();
+    if (!permissionsCheck) return;
     const payload = await eventPayload();
     // 외출
     try {
-      const response = await postEventLeave(payload);
-      console.log('외출:', response);
+      await postEventLeave(payload);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '외출이 시작되었습니다.',
       });
     } catch (e: any) {
-      console.log(e);
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
@@ -370,19 +359,18 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const comebackConfirm = async () => {
-    if (!permissionGranted) return;
+    const permissionsCheck = await permissionGranted();
+    if (!permissionsCheck) return;
     const payload = await eventPayload();
     // 복귀
     try {
-      const response = await postEventComeback(payload);
-      console.log('컴백:', response);
+      await postEventComeback(payload);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '외출이 종료되었습니다.',
       });
     } catch (e: any) {
-      console.log(e);
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
@@ -522,8 +510,8 @@ const DayScheduleHistory = (props: Props) => {
           const startTime = moment(val.timeStart)
             .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
             .format('YYYY-MM-DD HH:mm');
-          const endTime = moment(val.timeEnd)
-            .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
+          const endTime = moment(val.timeStart)
+            .add(schedule.lecture.lectureAllowPlus, 'minutes')
             .format('YYYY-MM-DD HH:mm');
           const intervalIsBetween = isBetween(startTime, endTime); // 시간별 출석
 
@@ -557,24 +545,25 @@ const DayScheduleHistory = (props: Props) => {
                   </Pressable>
                 ) : (
                   <Pressable
-                    style={[styles.attendButton]}
+                    style={[
+                      styles.attendButton,
+                      !intervalIsBetween && styles.attendButtonDisabled,
+                    ]}
                     onPress={onPressAttend}
                     disabled={
                       historyData?.completeEvent?.eventType === 'COMPLETE' || // 퇴실 처리 했을 경우
-                      !isNow
+                      !intervalIsBetween
                     }>
                     <CText
                       text={
-                        isNow
-                          ? intervalIsBetween
-                            ? '출석하기'
-                            : '미출석'
+                        intervalIsBetween
+                          ? '출석하기'
                           : isBefore
-                            ? '출석종료'
+                            ? '미출석'
                             : '출석예정'
                       }
                       fontSize={11}
-                      color={COLORS.dark.red}
+                      color={intervalIsBetween ? COLORS.dark.red : 'black'}
                     />
                   </Pressable>
                 )

@@ -1,23 +1,19 @@
 import moment from 'moment';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  Alert,
-  PanResponder,
-  Platform,
 } from 'react-native';
 import {COLORS} from '../../constants/colors.ts';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global/index.ts';
 import {StudentInfoProps} from '../../types/user.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import DayScheduleTable from './DayScheduleTable.tsx';
-import {IS_ANDROID, IS_IOS} from '../../constants/common.ts';
+import {IS_IOS} from '../../constants/common.ts';
 import CText from '../common/CustomText/CText.tsx';
 
 const screenWidth = Dimensions.get('window').width;
@@ -37,8 +33,11 @@ const DayCalendar = (props: Props) => {
 
   const daysOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
 
-  const handleDayClick = (index: number) => {
-    const selectDate = currentDate.clone().weekday(index);
+  const handleDayClick = (index: number, isSunday: boolean) => {
+    const selectDate = currentDate
+      .clone()
+      .add(isSunday ? -1 : 0, 'day')
+      .weekday(index);
     setSelectedDate(selectDate.format('YYYY-MM-DD'));
   };
 
@@ -54,13 +53,14 @@ const DayCalendar = (props: Props) => {
           const date = isSunday
             ? startOfSunday.clone().add(index + 1, 'day')
             : startOfDefault.clone().add(index + 1, 'day');
+
           const selected = date.isSame(selectedDate, 'day');
           const isToday = date.isSame(moment(), 'day');
           return (
             <TouchableOpacity
               key={index}
               style={styles.headerCell}
-              onPress={() => handleDayClick(index + 1)}>
+              onPress={() => handleDayClick(index + 1, isSunday)}>
               <View
                 style={[
                   styles.headerCellInner,

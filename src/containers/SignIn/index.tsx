@@ -79,8 +79,6 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       if (isChecked) {
         storage.set('user_phone', id);
       }
-
-      handlePage('Root');
     } catch (error: any) {
       console.log('ERROR,', error);
       if (error.code === '4000') {
