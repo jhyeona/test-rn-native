@@ -63,7 +63,11 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       setIsPushToggleDisabled(true);
       if (isPushApp) {
         const notificationResult = await requestNotificationsPermission();
-        if (notificationResult === RESULTS.BLOCKED) {
+        if (
+          notificationResult === RESULTS.BLOCKED ||
+          notificationResult === RESULTS.DENIED
+        ) {
+          await patchUpdatePush({settingPushApp: false});
           setIsPushApp(false);
           setGlobalModalState({
             isVisible: true,
@@ -77,13 +81,16 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       }
       if (userData?.settingPushApp !== isPushApp) {
         await patchUpdatePush({settingPushApp: isPushApp});
-        await refetchUserData();
       }
       setTimeout(() => {
         setIsPushToggleDisabled(false);
       }, 400);
     })();
-  }, [isPushApp, setGlobalModalState]);
+  }, [isPushApp, setGlobalModalState, userData?.settingPushApp]);
+
+  useEffect(() => {
+    refetchUserData().then();
+  }, [refetchUserData]);
 
   return (
     <CSafeAreaView>

@@ -10,6 +10,5 @@ export const patchUpdatePassword = async (payload: {password: string}) => {
 
 export const patchUpdatePush = async (payload: {settingPushApp: boolean}) => {
   const response = await requestPatchUpdatePush(payload);
-  console.log('response', response.data);
   return response.data;
 };
