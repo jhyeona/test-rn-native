@@ -8,7 +8,8 @@ export const checkPhone = (phone: string) => {
 };
 
 export const checkPassword = (password: string) => {
-  const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,30}$/;
+  const regExp = /(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}/;
+  console.log(regExp.test(password));
   return regExp.test(password);
 };
 
