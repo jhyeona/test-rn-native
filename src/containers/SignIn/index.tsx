@@ -69,6 +69,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
 
     const payload = {phone: id, password: password};
+    console.log('asdf', payload);
     try {
       const response = await postGetToken(payload);
       if (response) {

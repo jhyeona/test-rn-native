@@ -172,6 +172,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     try {
       await postSignUpSMSConfirm(data);
       setIsCertification(true);
+      setIsTimer(false);
     } catch (error) {
       console.log(error);
       setGlobalModalState({
@@ -274,7 +275,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       setGlobalModalState({
         isVisible: true,
         title: '안내',
-        message: '회원가입이 완료되었습니다. 로그인해 주세요.',
+        message: `회원가입이 완료되었습니다. \n로그인해 주세요.`,
       });
       navigation.navigate('SignIn');
     } catch (error) {

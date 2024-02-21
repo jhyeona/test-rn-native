@@ -61,7 +61,7 @@ const UpdatePassword = ({
           setInputValue={setPassword}
           placeholder="영문, 숫자 혼합 8자리 이상"
           errorMessage="비밀번호를 확인하세요."
-          isWarning={!checkPassword(password) || !isSamePassword}
+          isWarning={password.length > 0 && !checkPassword(password)}
           fontSize={16}
           secureTextEntry>
           <CText text="비밀번호 변경" fontSize={20} />
@@ -72,7 +72,10 @@ const UpdatePassword = ({
           setInputValue={setRePassword}
           placeholder="한 번 더 입력해주세요."
           errorMessage="비밀번호를 확인하세요."
-          isWarning={!checkPassword(rePassword) || !isSamePassword}
+          isWarning={
+            rePassword.length > 0 &&
+            (!checkPassword(rePassword) || !isSamePassword)
+          }
           fontSize={16}
           secureTextEntry>
           <CText text="비밀번호 변경 확인" fontSize={20} />
