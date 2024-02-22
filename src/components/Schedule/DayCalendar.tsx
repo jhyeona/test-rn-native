@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   ScrollView,
@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {COLORS} from '../../constants/colors.ts';
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import {useRecoilState} from 'recoil';
 import globalState from '../../recoil/Global/index.ts';
 import {StudentInfoProps} from '../../types/user.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';

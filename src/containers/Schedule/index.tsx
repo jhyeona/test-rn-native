@@ -23,8 +23,15 @@ import Academy from '../Academy';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
-  const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
-  const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
+  // const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
+  // const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
+
+  const [selectDayDate, setSelectDayDate] = useRecoilState(
+    globalState.selectDayScheduleDate,
+  );
+  const [selectWeekDate, setSelectWeekDate] = useRecoilState(
+    globalState.selectWeekScheduleDate,
+  );
   const [selectAcademy, setSelectAcademy] = useRecoilState(
     globalState.selectedAcademy,
   );
@@ -90,6 +97,11 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     const studentInfo = selectedStudentInfo(academyList[0].id); // 처음 선택된 기관의 유저 정보
     setSelectStudentInfo(studentInfo && studentInfo[0]);
   }, [academyList]);
+
+  useEffect(() => {
+    setSelectDayDate(moment().format('YYYY-MM-DD'));
+    setSelectWeekDate(moment().format('YYYY-MM-DD'));
+  }, [isWeekend, setSelectDayDate, setSelectWeekDate]);
 
   return (
     <>
