@@ -28,6 +28,10 @@ const UserWithdraw = ({
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
 
   const onPressWithdraw = () => {
+    if (!password) {
+      setIsPasswordWarning(true);
+      return;
+    }
     setGlobalModalState({
       isVisible: true,
       isConfirm: true,
@@ -38,10 +42,6 @@ const UserWithdraw = ({
   };
 
   const withdrawConfirm = async () => {
-    if (!password) {
-      setIsPasswordWarning(true);
-    }
-
     try {
       await deleteUser({password: password});
       setGlobalModalState({
