@@ -66,11 +66,15 @@ const ScheduleHistory = ({
       entered.length > 0 ? eventStatusType(entered[0].status) : '미출석';
     const enteredTime = // 입실 상태가 있다면 입실 시간
       entered.length > 0
-        ? moment(entered[0].eventTime).format('MM.DD HH : mm')
+        ? `${moment(entered[0].eventTime).format('MM.DD')}\n${moment(
+            entered[0].eventTime,
+          ).format('HH : mm')}`
         : '-';
     const completedTime = // 퇴실 상태가 있다면 퇴실 시간
       completed.length > 0
-        ? moment(entered[0].eventTime).format('MM.DD HH : mm')
+        ? `${moment(completed[0].eventTime).format('MM.DD')}\n${moment(
+            entered[0].eventTime,
+          ).format('HH : mm')}`
         : '-';
 
     return {statusType, enteredTime, completedTime};
@@ -205,7 +209,6 @@ const ScheduleHistory = ({
                     <CText
                       style={{
                         textAlign: 'center',
-                        paddingHorizontal: 5,
                       }}
                       text={enteredTime}
                       lineBreak
@@ -259,7 +262,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   firstCell: {
-    flex: 1.8,
+    flex: 1.5,
   },
   borderTop: {
     borderTopWidth: 1,
