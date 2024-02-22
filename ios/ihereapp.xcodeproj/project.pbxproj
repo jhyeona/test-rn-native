@@ -14,6 +14,11 @@
 		24897C0A39CB7A24A14B59F5 /* Pods_ihereapp_ihereappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EE0F9CFEFD143B1FAC1D754 /* Pods_ihereapp_ihereappTests.framework */; };
 		3D2DD8671D65134CC5DE8D88 /* Pods_ihereapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3092656C223793A40D5F10F /* Pods_ihereapp.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		C407E4962B86CD7000BEC46F /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C407E4952B86CD7000BEC46F /* Config.xcconfig */; };
+		C407E4972B86CD7000BEC46F /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C407E4952B86CD7000BEC46F /* Config.xcconfig */; };
+		C407E49C2B86DC8A00BEC46F /* GoogleService-Info-Appcenter.plist in Resources */ = {isa = PBXBuildFile; fileRef = C407E4992B86DC8A00BEC46F /* GoogleService-Info-Appcenter.plist */; };
+		C407E49D2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = C407E49A2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist */; };
+		C407E49E2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */; };
 		C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */; };
 		C4A261F82B73426A00571C2A /* WiFiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F22B73426A00571C2A /* WiFiHelper.swift */; };
 		C4A261F92B73426A00571C2A /* WiFiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F22B73426A00571C2A /* WiFiHelper.swift */; };
@@ -58,6 +63,10 @@
 		87875EE5708D437760512BD2 /* Pods-ihereapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp.release.xcconfig"; path = "Target Support Files/Pods-ihereapp/Pods-ihereapp.release.xcconfig"; sourceTree = "<group>"; };
 		B3092656C223793A40D5F10F /* Pods_ihereapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ihereapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B32FFB9550DBAEF43DD283DD /* Pods-ihereapp-ihereappTests.test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp-ihereappTests.test.xcconfig"; path = "Target Support Files/Pods-ihereapp-ihereappTests/Pods-ihereapp-ihereappTests.test.xcconfig"; sourceTree = "<group>"; };
+		C407E4952B86CD7000BEC46F /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		C407E4992B86DC8A00BEC46F /* GoogleService-Info-Appcenter.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Appcenter.plist"; sourceTree = "<group>"; };
+		C407E49A2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Debug.plist"; sourceTree = "<group>"; };
+		C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Prod.plist"; sourceTree = "<group>"; };
 		C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C432D78D2B7361260086F715 /* ihereapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ihereapp.entitlements; path = ihereapp/ihereapp.entitlements; sourceTree = "<group>"; };
 		C4A261F22B73426A00571C2A /* WiFiHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiHelper.swift; sourceTree = "<group>"; };
@@ -149,6 +158,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C407E4982B86DC8A00BEC46F /* GoogleService */,
+				C407E4952B86CD7000BEC46F /* Config.xcconfig */,
 				C4CE30D42B6A185A001A01CC /* fonts */,
 				13B07FAE1A68108700A75B9A /* ihereapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -184,6 +195,16 @@
 				6EA510D32AAAE0154B666C53 /* Pods-ihereapp-ihereappTests.appcenter.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		C407E4982B86DC8A00BEC46F /* GoogleService */ = {
+			isa = PBXGroup;
+			children = (
+				C407E4992B86DC8A00BEC46F /* GoogleService-Info-Appcenter.plist */,
+				C407E49A2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist */,
+				C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */,
+			);
+			path = GoogleService;
 			sourceTree = "<group>";
 		};
 		C4A261F12B73426A00571C2A /* Helper */ = {
@@ -293,6 +314,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C407E4972B86CD7000BEC46F /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,10 +323,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				C407E49C2B86DC8A00BEC46F /* GoogleService-Info-Appcenter.plist in Resources */,
 				C4CE30D52B6A185A001A01CC /* fonts in Resources */,
+				C407E49D2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */,
+				C407E4962B86CD7000BEC46F /* Config.xcconfig in Resources */,
 				C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */,
+				C407E49E2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,6 +656,7 @@
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C407E4952B86CD7000BEC46F /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -722,6 +749,7 @@
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C407E4952B86CD7000BEC46F /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -807,6 +835,7 @@
 		};
 		C4E55B0C2B84BCBB00C45DFE /* Appcenter */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C407E4952B86CD7000BEC46F /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -899,9 +928,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ihereapp/ihereapp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LFY5WRL9S7;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LFY5WRL9S7;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = ihereapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -918,6 +949,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.lpin.checkhere.appcenter;
 				PRODUCT_NAME = ihereapp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = io.lpin.checkhere.appcenter;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

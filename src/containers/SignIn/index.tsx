@@ -3,10 +3,7 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
-  SafeAreaView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -27,24 +24,19 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [password, setPassword] = useState('');
   const [isIdWarning, setIsIdWarning] = useState(false);
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
-  const [isChecked, setIsChecked] = useState(true);
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
 
-  const onValueChangeHandler = (checked: boolean) => {
-    setIsChecked(checked);
-  };
-
-  const onChangeId = (id: string) => {
-    setId(id);
-    if (id) {
+  const onChangeId = (value: string) => {
+    setId(value);
+    if (value) {
       setIsIdWarning(false);
       setIsPasswordWarning(false);
       return;
     }
   };
-  const onChangePassword = (id: string) => {
-    setPassword(id);
-    if (id) {
+  const onChangePassword = (value: string) => {
+    setPassword(value);
+    if (value) {
       setIsIdWarning(false);
       setIsPasswordWarning(false);
       return;
@@ -69,7 +61,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
 
     const payload = {phone: id, password: password};
-    console.log('asdf', payload);
+
     try {
       const response = await postGetToken(payload);
       if (response) {
@@ -77,11 +69,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         storage.set('refresh_token', response.refresh_token);
       }
       setIsLogin(true);
-      if (isChecked) {
-        storage.set('user_phone', id);
-      }
     } catch (error: any) {
-      console.log('ERROR,', error);
+      Alert.alert('로그인에 실패하였습니다.');
       if (error.code === '4000') {
         setIsIdWarning(true);
         setIsPasswordWarning(true);

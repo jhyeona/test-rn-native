@@ -72,8 +72,6 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     navigation.navigate('ScheduleHistory');
   };
 
-  console.log('dd', userData);
-
   useEffect(() => {
     if (userData && userData.studentList.length > 0) {
       const newList: Array<{label: string; id: string}> = [];

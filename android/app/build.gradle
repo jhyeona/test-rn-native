@@ -1,18 +1,18 @@
 apply plugin: "com.android.application"
+project.ext.envConfigFiles = [
+    productionDebug: ".env.production",
+    productionRelease: ".env.production",
+    appcenterDebug: ".env.appcenter",
+    appcenterRelease: ".env.appcenter",
+    developmentDebug: ".env.development",
+    developmentRelease: ".env.development"
+]
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 apply plugin: "com.google.gms.google-services"
 apply plugin: "com.google.firebase.crashlytics"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
-project.ext.envConfigFiles = [
-   productionDebug: ".env.production",
-   productionRelease: ".env.production",
-   developmentRelease: ".env.development",
-   developmentDebug: ".env.development",
-   appcenterRelease: ".env.staging",
-   appcenterDebug: ".env.staging"
-]
-apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -32,7 +32,7 @@ react {
     //   The list of variants to that are debuggable. For those we're going to
     //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
-      debuggableVariants = ["productDebug", "appcenterDebug", "developDebug"]
+//      debuggableVariants = ["productDebug", "appcenterDebug", "developmentDebug"]
 
     /* Bundling */
     //   A list containing the node command and its flags. Default is just 'node'.
@@ -92,6 +92,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        resValue "string", "build_config_package", "com.ihereapp"
     }
     signingConfigs {
         debug {
@@ -104,6 +105,7 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+//            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -119,7 +121,7 @@ android {
             }
         }
     }
-
+    flavorDimensions "version"
     productFlavors {
         production {
             dimension "version"
@@ -129,13 +131,11 @@ android {
             dimension "version"
             applicationIdSuffix ".appcenter"
             manifestPlaceholders=[appLabel:"체크히어 A"]
-            versionNameSuffix "-appcenter"
         }
         development {
             dimension "version"
-            applicationIdSuffix ".dev"
+            applicationIdSuffix ".development"
             manifestPlaceholders=[appLabel:"체크히어 D"]
-            versionNameSuffix "-develop"
         }
     }
 }
