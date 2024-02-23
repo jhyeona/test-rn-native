@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import userState from '../../recoil/user';
 import {
   useGetDaySchedule,
@@ -18,14 +18,11 @@ import ScheduleHeader from '../../components/Schedule/ScheduleHeader.tsx';
 import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import globalState from '../../recoil/Global';
-import {View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import Academy from '../Academy';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);
-  // const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
-  // const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
-
   const [selectDayDate, setSelectDayDate] = useRecoilState(
     globalState.selectDayScheduleDate,
   );

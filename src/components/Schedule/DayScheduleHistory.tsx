@@ -91,6 +91,7 @@ const DayScheduleHistory = (props: Props) => {
 
   const permissionGranted = async () => {
     const grantedResult = await requestLocationPermissions();
+
     if (!grantedResult) {
       setGlobalModalState({
         isVisible: true,
@@ -452,7 +453,7 @@ const DayScheduleHistory = (props: Props) => {
           justifyContent: 'space-between',
           marginVertical: 10,
         }}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <SvgIcon name="MapPoint" size={15} />
           <CText text={schedule.lecture.lecturePlaceName} />
         </View>

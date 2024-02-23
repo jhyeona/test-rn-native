@@ -18,6 +18,7 @@ import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx'
 import CView from '../../components/common/CommonView/CView.tsx';
 import CButton from '../../components/common/CommonButton/CButton.tsx';
 import {COLORS} from '../../constants/colors.ts';
+import Config from 'react-native-config';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
@@ -61,7 +62,6 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
 
     const payload = {phone: id, password: password};
-
     try {
       const response = await postGetToken(payload);
       if (response) {
@@ -70,11 +70,12 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       }
       setIsLogin(true);
     } catch (error: any) {
-      Alert.alert('로그인에 실패하였습니다.');
       if (error.code === '4000') {
         setIsIdWarning(true);
         setIsPasswordWarning(true);
+        return;
       }
+      Alert.alert('로그인에 실패하였습니다.');
     }
   };
 
@@ -94,8 +95,15 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       <CView>
         <KeyboardAvoidingView style={styles.container}>
           <View style={styles.logo}>
-            <CText text="통합출결관리 서비스" fontSize={20} fontWeight="600" />
+            <CText
+              text="통합 출결 관리 서비스"
+              fontSize={20}
+              fontWeight="600"
+            />
             <CText text="체크히어" fontSize={40} fontWeight="800" />
+            {(Config.ENV === 'development' || Config.ENV === 'appcenter') && (
+              <CText text={`${Config.ENV}`} />
+            )}
           </View>
           <View style={styles.textInputWrap}>
             <CInput
@@ -141,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    height: 80,
+    height: 100,
     marginBottom: 43,
     alignItems: 'center',
     justifyContent: 'space-around',

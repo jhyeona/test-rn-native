@@ -279,6 +279,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       });
       navigation.navigate('SignIn');
     } catch (error) {
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: `회원가입에 실패하였습니다.`,
+      });
       console.log('error', error);
     }
   };

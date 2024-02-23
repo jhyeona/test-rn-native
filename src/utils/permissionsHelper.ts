@@ -45,7 +45,7 @@ export const requestLocationPermissions = async () => {
         return (
           statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
             RESULTS.GRANTED &&
-          statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.GRANTED
+          statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
         );
       }
       return (
@@ -54,12 +54,3 @@ export const requestLocationPermissions = async () => {
     });
   }
 };
-
-//
-// if (
-//   statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.BLOCKED ||
-//   statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.BLOCKED
-// ) {
-//   // ANDROID 근처 기기 권한
-//   return 'bluetoothBlock';
-// }

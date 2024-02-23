@@ -10,7 +10,7 @@ import {
   requestPostEventEnter,
   requestPostEventLeave,
 } from '../apis/schedule.ts';
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import {useSetRecoilState} from 'recoil';
 import {useEffect} from 'react';
 import scheduleState from '../recoil/Schedule';
 import {useQuery} from '@tanstack/react-query';
@@ -31,7 +31,7 @@ export const useGetDaySchedule = (payload: GetScheduleProps) => {
   const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
   const setDaySchedule = useSetRecoilState(scheduleState.dayScheduleState);
 
-  const {data, fetchStatus} = useQuery({
+  const {data, status} = useQuery({
     queryKey: ['daySchedule', payload],
     queryFn: async () => {
       return getDaySchedule(payload);
@@ -42,10 +42,10 @@ export const useGetDaySchedule = (payload: GetScheduleProps) => {
 
   useEffect(() => {
     setIsLoading(true);
-    if (fetchStatus === 'idle') {
+    if (status === 'success' || status === 'error') {
       setIsLoading(false);
     }
-  }, [fetchStatus, setIsLoading]);
+  }, [status, setIsLoading]);
 
   useEffect(() => {
     if (!data) return;
