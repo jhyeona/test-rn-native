@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useRecoilState} from 'recoil';
 import globalState from '../../../recoil/Global';
-import {Animated, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Animated} from 'react-native';
 import CText from '../CustomText/CText.tsx';
 
 const GlobalToast = () => {
@@ -9,70 +9,60 @@ const GlobalToast = () => {
     globalState.globalToastState,
   );
   const {isVisible, message} = toastState;
-  const slideAnimation = useRef(new Animated.Value(0)).current;
+  const [animation] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    setTimeout(() => {
-      Animated.timing(slideAnimation, {
+    if (isVisible) {
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+
+      // 모달이 나타난 후 3초 후에 자동으로 사라지도록 설정
+      const timer = setTimeout(() => {
+        Animated.timing(animation, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true,
+        }).start(() => setToastState({isVisible: false, message: ''}));
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    } else {
+      Animated.timing(animation, {
         toValue: 0,
-        duration: 400,
-        useNativeDriver: false,
-      }).start(() => setToastState({isVisible: false, message: ''}));
-    }, 3000);
-  }, [setToastState, slideAnimation]);
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [isVisible]);
 
-  useEffect(() => {
-    Animated.timing(slideAnimation, {
-      toValue: 1,
-      duration: 400,
-      useNativeDriver: false,
-    }).start();
-  }, []);
+  const modalTranslateY = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-300, 0],
+  });
 
   return (
     <>
       {isVisible && (
-        <SafeAreaView style={styles.toastContainer}>
-          <Animated.View
-            style={[
-              styles.innerBox,
-              {
-                transform: [
-                  {
-                    translateY: slideAnimation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-100, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}>
-            <CText text={message} color="white" />
-          </Animated.View>
-        </SafeAreaView>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: 20,
+            width: '80%',
+            alignSelf: 'center',
+            alignItems: 'center',
+            backgroundColor: '#000',
+            padding: 20,
+            borderRadius: 7,
+            transform: [{translateY: modalTranslateY}],
+          }}>
+          <CText text={message} color={'white'} />
+        </Animated.View>
       )}
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  toastContainer: {
-    ...StyleSheet.absoluteFillObject,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 150,
-  },
-  innerBox: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 24,
-    padding: 10,
-    minHeight: 60,
-    borderRadius: 7,
-    backgroundColor: 'black',
-  },
-});
 
 export default GlobalToast;

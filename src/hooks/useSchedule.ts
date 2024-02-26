@@ -37,7 +37,6 @@ export const useGetDaySchedule = (payload: GetScheduleProps) => {
       return getDaySchedule(payload);
     },
     enabled: !!payload.academyId,
-    // refetchInterval: 1000,
   });
 
   useEffect(() => {
@@ -114,13 +113,12 @@ export const getScheduleHistory = async (payload: GetScheduleHistoryProps) => {
 
 export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
   const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const {data, status} = useQuery({
+  const {data, status, refetch} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
       return getScheduleHistory(payload);
     },
     enabled: !!payload.scheduleId,
-    refetchInterval: 1000,
   });
 
   useEffect(() => {
@@ -130,7 +128,7 @@ export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
     }
   }, [status, setIsLoading]);
 
-  return data;
+  return {data, refetch};
 };
 
 export const getEventHistory = async (payload: {

@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Animated,
   TouchableWithoutFeedback,
-  Dimensions,
 } from 'react-native';
 import {useRecoilState} from 'recoil';
 import globalState from '../../../recoil/Global';
@@ -54,17 +53,17 @@ const GlobalModal = () => {
   };
 
   const handleContainerPress = (event: GestureResponderEvent) => {
-    const {locationX, locationY} = event.nativeEvent;
-    if (
-      // modal container 내
-      locationX < 0 ||
-      locationX > 0.8 * Dimensions.get('window').width ||
-      locationY < 0 ||
-      locationY > 200
-    ) {
-      // modal container 외부 클릭 시
-      closeModal();
-    }
+    // const {locationX, locationY} = event.nativeEvent;
+    // if (
+    //   // modal container 내
+    //   locationX < 0 ||
+    //   locationX > 0.8 * Dimensions.get('window').width ||
+    //   locationY < 0 ||
+    //   locationY > 200
+    // ) {
+    //   // modal container 외부 클릭 시
+    //   closeModal();
+    // }
   };
 
   useEffect(() => {

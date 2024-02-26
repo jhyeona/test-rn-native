@@ -113,7 +113,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
                 selected={
                   academyList.filter(val => val.id === String(selectAcademy))[0]
                 }
-                disabled={userData ? userData.studentList.length <= 1 : false}
+                disabled={userData ? userData.studentList.length <= 0 : false}
               />
               {isWeekend ? (
                 <View style={{flexGrow: 1, paddingTop: 4}}>

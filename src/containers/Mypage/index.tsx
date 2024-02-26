@@ -115,7 +115,7 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           <SvgIcon name="RightArrow" size={24} />
         </Pressable>
         <Pressable style={styles.containerRow} onPress={onPressChangeAcademy}>
-          <CText text="기관변경" fontSize={20} />
+          <CText text="기관추가" fontSize={20} />
           <SvgIcon name="RightArrow" size={24} />
         </Pressable>
         <Pressable style={styles.containerRow} onPress={onPressPrivacyPolicy}>

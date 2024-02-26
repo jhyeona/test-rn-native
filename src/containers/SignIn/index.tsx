@@ -3,6 +3,7 @@ import {
   Alert,
   Keyboard,
   KeyboardAvoidingView,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -75,7 +76,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         setIsPasswordWarning(true);
         return;
       }
-      Alert.alert('로그인에 실패하였습니다.');
+      Alert.alert(`로그인에 실패하였습니다.`);
     }
   };
 
@@ -102,7 +103,10 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             />
             <CText text="체크히어" fontSize={40} fontWeight="800" />
             {(Config.ENV === 'development' || Config.ENV === 'appcenter') && (
-              <CText text={`${Config.ENV}`} />
+              <Pressable
+                onPress={() => Alert.alert(`baseURL:${Config.BASE_URL}`)}>
+                <CText text={`${Config.ENV}`} />
+              </Pressable>
             )}
           </View>
           <View style={styles.textInputWrap}>

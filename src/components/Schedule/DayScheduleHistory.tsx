@@ -78,7 +78,8 @@ const lightButton = (color: string, text: string) => {
 
 const DayScheduleHistory = (props: Props) => {
   const {scheduleHistoryPayload, schedule} = props;
-  const historyData = useGetScheduleHistory(scheduleHistoryPayload);
+  const {data: historyData, refetch: historyDataRefetch} =
+    useGetScheduleHistory(scheduleHistoryPayload);
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [beaconState, setBeaconState] = useRecoilState(globalState.beaconState);
   // const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
@@ -86,6 +87,8 @@ const DayScheduleHistory = (props: Props) => {
     Array<ScheduleTimeProps>
   >([]);
   const [isNow, setIsNow] = useState(false);
+  const [isEnterAllow, setIsEnterAllow] = useState(false);
+  const [isCompleteAllow, setIsCompleteAllow] = useState(false);
   const [isBefore, setIsBefore] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
 
@@ -175,6 +178,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '입실 처리 되었습니다.',
       });
+      await historyDataRefetch();
     } catch (e: any) {
       // TODO: e: any 의 에러처리
       if (e.code === '1004') {
@@ -226,12 +230,13 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '퇴실 처리 되었습니다.',
       });
+      await historyDataRefetch();
     } catch (e: any) {
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
           title: '안내',
-          message: '이미 퇴실 처리 되었습니다.',
+          message: '입실하지 않았거나\n이미 퇴실 처리 되었습니다.',
         });
         return;
       }
@@ -258,12 +263,11 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '확인 되었습니다.',
       });
+      await historyDataRefetch();
     } catch (e: any) {
+      console.log(e);
       if (e.code === '1004') {
-        const enter = e.description.indexOf('입실');
-        const complete = e.description.indexOf('퇴실');
-
-        if (enter >= 0) {
+        if (e.description.indexOf('입실') >= 0) {
           setGlobalModalState({
             isVisible: true,
             title: '안내',
@@ -271,7 +275,7 @@ const DayScheduleHistory = (props: Props) => {
           });
           return;
         }
-        if (complete >= 0) {
+        if (e.description.indexOf('퇴실') >= 0) {
           setGlobalModalState({
             isVisible: true,
             title: '안내',
@@ -279,6 +283,20 @@ const DayScheduleHistory = (props: Props) => {
           });
           return;
         }
+        if (e.description.indexOf('외출') >= 0) {
+          setGlobalModalState({
+            isVisible: true,
+            title: '안내',
+            message: '외출 종료 후 다시 시도해주세요.',
+          });
+          return;
+        }
+
+        setGlobalModalState({
+          isVisible: true,
+          title: '안내',
+          message: '처리되지 않았습니다.',
+        });
       }
       if (e.code === '1005') {
         setGlobalModalState({
@@ -304,6 +322,12 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
+
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: '처리되지 않았습니다.',
+      });
     }
   };
 
@@ -329,6 +353,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '외출이 시작되었습니다.',
       });
+      await historyDataRefetch();
     } catch (e: any) {
       if (e.code === '1004') {
         setGlobalModalState({
@@ -371,6 +396,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '외출이 종료되었습니다.',
       });
+      await historyDataRefetch();
     } catch (e: any) {
       if (e.code === '1004') {
         setGlobalModalState({
@@ -396,15 +422,22 @@ const DayScheduleHistory = (props: Props) => {
   };
 
   const timeSet = () => {
-    const allowStartTime = moment(schedule.scheduleStartTime)
+    const allowStartMinusTime = moment(schedule.scheduleStartTime)
       .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
       .format('YYYY-MM-DD HH:mm');
-    const allowEndTime = moment(schedule.scheduleEndTime)
+    const allowEndPlusTime = moment(schedule.scheduleEndTime)
       .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
       .format('YYYY-MM-DD HH:mm');
-    setIsNow(isBetween(allowStartTime, allowEndTime)); // 현재 강의
-    setIsBefore(moment(allowEndTime).isBefore(moment()) && !isNow); // 지난 강의
-    setIsAfter(moment(allowStartTime).isAfter(moment()) && !isNow); // 예정 강의
+    setIsEnterAllow(
+      isBetween(
+        allowStartMinusTime,
+        moment(schedule.scheduleEndTime).format('YYYY-MM-DD HH:mm'),
+      ),
+    );
+    setIsCompleteAllow(isBetween(allowStartMinusTime, allowEndPlusTime));
+    setIsNow(isBetween(allowStartMinusTime, allowEndPlusTime)); // 현재 강의
+    setIsBefore(moment(allowEndPlusTime).isBefore(moment()) && !isNow); // 지난 강의
+    setIsAfter(moment(allowStartMinusTime).isAfter(moment()) && !isNow); // 예정 강의
   };
 
   useEffect(() => {
@@ -463,7 +496,7 @@ const DayScheduleHistory = (props: Props) => {
             : lightButton('red', '강의종료'))}
         {isAfter && lightButton('GRAY', '출석 전')}
       </View>
-      {isNow && !historyData?.enterEvent && (
+      {isEnterAllow && !historyData?.enterEvent && (
         <CButton
           text="출석체크"
           onPress={onPressEnter}
@@ -472,7 +505,7 @@ const DayScheduleHistory = (props: Props) => {
           noMargin
         />
       )}
-      {historyData?.enterEvent && historyData?.isAllowedComplete && (
+      {isCompleteAllow && historyData?.enterEvent && (
         <CButton
           text={
             historyData.completeEvent?.eventType === 'COMPLETE'

@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {
   checkDate,
   checkName,
@@ -31,10 +25,7 @@ import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
 import {useSetRecoilState} from 'recoil';
 import globalState from '../../recoil/Global';
 import CInputWithTimer from '../../components/User/CInputWithTimer.tsx';
-import WebView from 'react-native-webview';
 import DefaultModal from '../../components/common/Modal/DefaultModal.tsx';
-import {COLORS} from '../../constants/colors.ts';
-import absoluteFillObject = StyleSheet.absoluteFillObject;
 import CWebView from '../../components/common/WebView/CWebView.tsx';
 import {
   PersonalInformationUrl,
@@ -147,6 +138,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     try {
       const response = await postSignUpSMS(data);
       if (response) {
+        setGlobalModalState({
+          isVisible: true,
+          title: '안내',
+          message: '인증 문자가 발송되었습니다.',
+        });
         setSmsCode('');
         setIsSend(true);
         setIsTimer(true);

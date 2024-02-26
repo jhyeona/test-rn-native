@@ -1,7 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import {
   NavigationContainer,
-  useNavigation,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -17,7 +16,6 @@ import {storage} from '../../utils/storageHelper.ts';
 import {useMMKVListener} from 'react-native-mmkv';
 import LectureDetail from '../../containers/LectureDetail/index.tsx';
 import ScheduleHistory from '../../containers/ScheduleHistory';
-import Initialize from '../../containers/Initialize';
 import Academy from '../../containers/Academy';
 import UpdatePassword from '../../containers/UpdatePassword';
 import UserWithdraw from '../../containers/UserWithdraw';
@@ -68,7 +66,7 @@ const RootStackNavigation = () => {
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
       <RootStack.Navigator>
-        {!isLogin ? (
+        {!isLogin && !token ? (
           <>
             <RootStack.Screen
               name="SignIn"
