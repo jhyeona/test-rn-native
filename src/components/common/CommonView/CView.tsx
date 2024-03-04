@@ -14,13 +14,13 @@ const CView = (props: CViewProps) => {
   const {isInput = false, children} = props;
   return (
     <>
-      {/*{isInput ? (*/}
-      {/*  <TouchableWithoutFeedback onPress={Keyboard.dismiss}>*/}
-      {/*    <View style={styles.container}>{children}</View>*/}
-      {/*  </TouchableWithoutFeedback>*/}
-      {/*) : (*/}
-      <View style={styles.container}>{children}</View>
-      {/*)}*/}
+      {isInput ? (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>{children}</View>
+        </TouchableWithoutFeedback>
+      ) : (
+        <View style={styles.container}>{children}</View>
+      )}
     </>
   );
 };

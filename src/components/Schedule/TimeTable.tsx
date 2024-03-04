@@ -13,9 +13,9 @@ import {Dimensions} from 'react-native';
 import {COLORS} from '#constants/colors';
 import globalState from '#recoil/Global';
 import {convertTimeFormat} from '#utils/scheduleHelper.ts';
+import {useChangeWidth} from '#hooks/useGlobal.ts';
 
 const TimeTable = () => {
-  const calendarWidth = Dimensions.get('window').width - 48; // 기본 padding 24X2 뺀 값
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
   const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
   const setSelectWeekDate = useSetRecoilState(
@@ -26,6 +26,7 @@ const TimeTable = () => {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(24.5);
   const calendarRef = useRef<TimelineCalendarHandle>(null);
+  const changeWidth = useChangeWidth();
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
@@ -137,7 +138,7 @@ const TimeTable = () => {
         <TimelineCalendar
           ref={calendarRef}
           initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}
-          calendarWidth={calendarWidth}
+          calendarWidth={changeWidth}
           viewMode="week"
           events={formattedData()}
           highlightDates={highlightDates}

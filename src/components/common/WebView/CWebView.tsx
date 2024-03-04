@@ -1,9 +1,8 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
-import {COLORS} from '#constants/colors.ts';
-import absoluteFillObject = StyleSheet.absoluteFillObject;
+import {ViewStyle} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {WebView} from 'react-native-webview';
+import LoadingIndicator from '#components/common/Loading/LoadingIndicator.tsx';
 
 interface WebViewProps {
   uri: string;
@@ -14,13 +13,7 @@ interface WebViewProps {
 }
 
 const CWebView = (props: WebViewProps) => {
-  const {
-    uri,
-    startInLoadingState = true,
-    size = 'small',
-    color = COLORS.primary,
-    style,
-  } = props;
+  const {uri, startInLoadingState = true, style} = props;
 
   return (
     <WebView
@@ -28,13 +21,7 @@ const CWebView = (props: WebViewProps) => {
       source={{uri: uri}}
       startInLoadingState={startInLoadingState}
       originWhitelist={['*']}
-      renderLoading={() => (
-        <ActivityIndicator
-          size={size}
-          color={color}
-          style={{...absoluteFillObject}}
-        />
-      )}
+      renderLoading={() => <LoadingIndicator autoLoading />}
     />
   );
 };
