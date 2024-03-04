@@ -2,6 +2,7 @@ import axios from 'axios';
 import {instanceWithoutToken} from '#apis/instance.ts';
 import {storage} from '#utils/storageHelper.ts';
 import {ApiResponseProps} from '#types/common.ts';
+import {Alert} from 'react-native';
 
 export const tokenRefresh = async () => {
   // token refresh
@@ -24,7 +25,7 @@ export const tokenRefresh = async () => {
   } catch (error: any) {
     if (axios.isAxiosError<ApiResponseProps<null>, any>(error)) {
       if (error?.response?.data.code === '4102') {
-        // Alert.alert('토큰 만료');
+        Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
         storage.delete('access_token');
         storage.delete('refresh_token');
       }

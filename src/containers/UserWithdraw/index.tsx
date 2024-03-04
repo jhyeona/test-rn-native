@@ -15,6 +15,7 @@ import {deleteUser} from '#hooks/useUser.ts';
 import {useSetRecoilState} from 'recoil';
 import globalState from '#recoil/Global';
 import {storage} from '#utils/storageHelper.ts';
+import {logErrorToCrashlytics} from '#services/firebase.ts';
 
 const UserWithdraw = ({
   navigation,
@@ -68,6 +69,7 @@ const UserWithdraw = ({
         title: '오류',
         message: '탈퇴에 실패했습니다.',
       });
+      logErrorToCrashlytics(e, 'requestUserDelete');
     }
   };
 

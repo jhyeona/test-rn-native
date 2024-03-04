@@ -9,7 +9,6 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignIn from '#containers/SignIn';
 import TabNavigation from '#navigation/TabNavigation';
-import {logFBScreenView} from '#utils/firebaseLogHelper.ts';
 import SignUp from '#containers/SignUp';
 import FindPassword from '#containers/FindPassword';
 import globalState from '#recoil/Global';
@@ -20,6 +19,7 @@ import Academy from '#containers/Academy';
 import UpdatePassword from '#containers/UpdatePassword';
 import UserWithdraw from '#containers/UserWithdraw';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
+import {logScreenViewToAnalytics} from '#services/firebase.ts';
 
 const RootStack = createNativeStackNavigator();
 
@@ -31,6 +31,7 @@ const RootStackNavigation = () => {
   const handleOnReady = () => {
     routeNameRef.current =
       navigationRef?.current?.getCurrentRoute()?.name ?? '';
+    // eslint-disable-next-line import/no-named-as-default-member
     BootSplash.hide({fade: true}).then();
   };
 
@@ -41,7 +42,7 @@ const RootStackNavigation = () => {
       navigationRef?.current?.getCurrentRoute()?.name ?? '';
 
     if (previousRouteName !== currentRouteName) {
-      await logFBScreenView(currentRouteName, currentRouteName);
+      await logScreenViewToAnalytics(currentRouteName, currentRouteName);
     }
     routeNameRef.current = currentRouteName;
   };

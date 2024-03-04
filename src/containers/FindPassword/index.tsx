@@ -10,6 +10,7 @@ import Header from '#components/common/Header/Header.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import {postFindPassword} from '#hooks/useUser.ts';
+import {logErrorToCrashlytics} from '#services/firebase.ts';
 
 const FindPassword = ({
   navigation,
@@ -68,8 +69,7 @@ const FindPassword = ({
             '메세지 전송에 실패했습니다. \n번호 확인 후 다시 시도해 주세요.',
         });
       }
-      // 400: message: 해당하는 사용자가 없습니다.
-      // 500: message: 메세지 전송이 실패했습니다. 번호 확인 후 다시 시도해 주세요. / description: SENS 서비스에 발송을 요청하였으나, 올바른 응답이 오지 않았습니다!
+      logErrorToCrashlytics(e, 'SendSMSCodeForTempPassword');
     }
   };
 

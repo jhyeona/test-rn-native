@@ -18,21 +18,22 @@ import {
   postEventEnter,
   postEventLeave,
   useGetScheduleHistory,
-} from '../../hooks/useSchedule.ts';
+} from '#hooks/useSchedule.ts';
 import {useRecoilState, useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
+import globalState from '#recoil/Global';
 import {
   handleOpenSettings,
   requestLocationPermissions,
-} from '../../utils/permissionsHelper.ts';
-import {IS_ANDROID} from '../../constants/common.ts';
-import {validBeaconList} from '../../utils/locationHelper.ts';
+} from '#utils/permissionsHelper.ts';
+import {IS_ANDROID} from '#constants/common.ts';
+import {validBeaconList} from '#utils/locationHelper.ts';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
   requestStartBeaconScanning,
-} from '../../services/beaconScanner.ts';
-import {requestGetLocationInfo} from '../../services/locationScanner.ts';
+} from '#services/beaconScanner.ts';
+import {requestGetLocationInfo} from '#services/locationScanner.ts';
+import {logErrorToCrashlytics} from '#services/firebase.ts';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -180,7 +181,6 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
-      // TODO: e: any 의 에러처리
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
@@ -205,6 +205,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
+      logErrorToCrashlytics(e, 'requestEventEnter');
     }
   };
 
@@ -248,6 +249,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
+      logErrorToCrashlytics(e, 'requestEventComplete');
     }
   };
 
@@ -328,6 +330,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '처리되지 않았습니다.',
       });
+      logErrorToCrashlytics(e, 'requestEventAttend');
     }
   };
 
@@ -371,6 +374,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
+      logErrorToCrashlytics(e, 'requestEventLeave');
     }
   };
 
@@ -414,6 +418,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
+      logErrorToCrashlytics(e, 'requestEventComeback');
     }
   };
 
