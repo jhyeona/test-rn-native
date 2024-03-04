@@ -1,5 +1,4 @@
 import {requestPostGetToken} from '../apis/signIn.ts';
-import {Alert} from 'react-native';
 
 export const postGetToken = async (payload: {
   phone: string;

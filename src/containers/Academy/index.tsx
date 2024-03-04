@@ -60,7 +60,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     const payload = {
       inviteIdList: checkedList
         ? checkedList?.map(val => {
-            return val.academy.academyId;
+            return val.id;
           })
         : [],
     };
@@ -73,7 +73,6 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       });
       return;
     }
-
     try {
       await postJoinAcademy(payload);
       await invitedRefetch();

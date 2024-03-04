@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export const checkPhone = (phone: string) => {
   // '-' 입력 시
   // const regExp = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/
@@ -8,8 +6,9 @@ export const checkPhone = (phone: string) => {
 };
 
 export const checkPassword = (password: string) => {
-  const regExp = /(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}/;
-  console.log(regExp.test(password));
+  const regExp =
+    /^(?=.*\d)(?=.*[a-zA-Z]).{8,}(?=.*[!@#$%^&*()_+|~\-=`{}[\]:";'<>?,./])?$/;
+
   return regExp.test(password);
 };
 

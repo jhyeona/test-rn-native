@@ -43,7 +43,6 @@ const CountDownTimer = (props: CountDownTimerProps) => {
 
   useEffect(() => {
     if (restart) {
-      console.log('?');
       setTime(secondTime);
     }
   }, [restart, secondTime]);
