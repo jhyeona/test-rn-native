@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import CText from '../CustomText/CText.tsx';
-import {COLORS} from '../../../constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
 
 interface CountDownTimerProps {
   secondTime?: number;

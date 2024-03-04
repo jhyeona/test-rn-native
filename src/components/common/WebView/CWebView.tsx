@@ -1,9 +1,9 @@
 import React from 'react';
-import WebView from 'react-native-webview';
 import {ActivityIndicator, StyleSheet, ViewStyle} from 'react-native';
-import {COLORS} from '../../../constants/colors.ts';
+import {COLORS} from '#constants/colors.ts';
 import absoluteFillObject = StyleSheet.absoluteFillObject;
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {WebView} from 'react-native-webview';
 
 interface WebViewProps {
   uri: string;

@@ -5,9 +5,9 @@ import {
   requestNotifications,
   RESULTS,
 } from 'react-native-permissions';
-import {IS_ANDROID, IS_IOS} from '../constants/common.ts';
 import {Platform} from 'react-native';
 import {Permission} from 'react-native-permissions/src/types.ts';
+import {IS_ANDROID, IS_IOS} from '#constants/common.ts';
 
 export const platformVersion =
   // Only IOS 14 Methods - checkLocationAccuracy , requestLocationAccuracy, openPhotoPicker

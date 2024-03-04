@@ -1,8 +1,8 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
-import globalState from '../../../recoil/Global';
-import {COLORS} from '../../../constants/colors.ts';
+import globalState from '#recoil/Global';
+import {COLORS} from '#constants/colors.ts';
 
 const LoadingIndicator = () => {
   const isLoading = useRecoilValue(globalState.globalLoadingState);

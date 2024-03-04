@@ -1,4 +1,4 @@
-import {userInfoState} from './atom.ts';
+import {userInfoState} from '#recoil/User/atom.ts';
 
 const userState = {
   userInfoState,

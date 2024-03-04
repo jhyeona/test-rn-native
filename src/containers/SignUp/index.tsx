@@ -1,36 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
-import {
-  checkDate,
-  checkName,
-  checkPassword,
-  checkPhone,
-} from '../../utils/regExpHelper.ts';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {useSetRecoilState} from 'recoil';
+import globalState from '#recoil/Global';
 import {
   postSignUp,
   postSignUpPhone,
   postSignUpSMS,
   postSignUpSMSConfirm,
   postSignUpTAS,
-} from '../../hooks/useSignUp.ts';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
-import Header from '../../components/common/Header/Header.tsx';
-import CInput from '../../components/common/CustomInput/CInput.tsx';
-import Checkbox from '../../components/common/Checkbox/Checkbox.tsx';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import CText from '../../components/common/CustomText/CText.tsx';
-import CInputWithDropdown from '../../components/User/CInputWithDropdown.tsx';
-import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
-import CInputWithTimer from '../../components/User/CInputWithTimer.tsx';
-import DefaultModal from '../../components/common/Modal/DefaultModal.tsx';
-import CWebView from '../../components/common/WebView/CWebView.tsx';
+} from '#hooks/useSignUp.ts';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import CInput from '#components/common/CustomInput/CInput.tsx';
+import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
+import CInputWithDropdown from '#components/User/CInputWithDropdown.tsx';
+import CInputWithTimer from '#components/User/CInputWithTimer.tsx';
+import DefaultModal from '#components/common/Modal/DefaultModal.tsx';
+import CWebView from '#components/common/WebView/CWebView.tsx';
+import {PersonalInformationUrl, TermsOfServiceUrl} from '#constants/policy.ts';
 import {
-  PersonalInformationUrl,
-  TermsOfServiceUrl,
-} from '../../constants/policy.ts';
+  checkDate,
+  checkName,
+  checkPassword,
+  checkPhone,
+} from '#utils/regExpHelper.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);

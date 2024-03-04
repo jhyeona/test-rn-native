@@ -1,11 +1,11 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
-import {COLORS} from '../../constants/colors.ts';
-import CText from '../common/CustomText/CText.tsx';
+import {StyleSheet, View} from 'react-native';
 import moment from 'moment';
-import TextToggle from '../common/Toggle/TextToggle.tsx';
-import SvgIcon from '../common/Icon/Icon.tsx';
-import {weekOfMonth} from '../../utils/scheduleHelper.ts';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import TextToggle from '#components/common/Toggle/TextToggle.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {weekOfMonth} from '#utils/scheduleHelper.ts';
 
 interface Props {
   isWeekend: boolean;

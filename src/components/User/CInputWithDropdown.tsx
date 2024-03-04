@@ -1,7 +1,5 @@
 import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import CText from '../common/CustomText/CText.tsx';
-import {COLORS} from '../../constants/colors.ts';
 import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
 import {
   DimensionValue,
@@ -9,6 +7,8 @@ import {
 } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import Dropdown from '../common/Dropdown/Dropdown.tsx';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
 
 interface ItemProps {
   label: string;

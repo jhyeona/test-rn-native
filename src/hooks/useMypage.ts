@@ -1,7 +1,7 @@
 import {
   requestPatchUpdatePassword,
   requestPatchUpdatePush,
-} from '../apis/user.ts';
+} from '#apis/user.ts';
 
 export const patchUpdatePassword = async (payload: {password: string}) => {
   const response = await requestPatchUpdatePassword(payload);

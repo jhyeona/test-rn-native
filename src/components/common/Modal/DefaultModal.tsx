@@ -1,19 +1,11 @@
 import React, {ReactNode, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  Modal,
-  Pressable,
-} from 'react-native';
-import {GestureResponderEvent} from 'react-native/Libraries/Types/CoreEventTypes';
-import CButton from '../CommonButton/CButton.tsx';
-import {COLORS} from '../../../constants/colors.ts';
+import {View, StyleSheet, Animated, Modal, Pressable} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import CText from '../CustomText/CText.tsx';
-import SvgIcon from '../Icon/Icon.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 
 interface DefaultModalProps {
   isVisible: boolean;

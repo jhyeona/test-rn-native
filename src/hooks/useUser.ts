@@ -4,9 +4,9 @@ import {
   requestGetUserInfo,
   requestPostFindPassword,
   requestPostJoinAcademy,
-} from '../apis/user.ts';
+} from '#apis/user.ts';
 import {useSetRecoilState} from 'recoil';
-import userState from '../recoil/user';
+import userState from '#recoil/User';
 import {useQuery} from '@tanstack/react-query';
 import {useEffect} from 'react';
 

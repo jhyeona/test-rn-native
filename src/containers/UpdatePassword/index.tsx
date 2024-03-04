@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import CInput from '../../components/common/CustomInput/CInput.tsx';
-import CText from '../../components/common/CustomText/CText.tsx';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import {checkPassword} from '../../utils/regExpHelper.ts';
-import {patchUpdatePassword} from '../../hooks/useMypage.ts';
-import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import Header from '../../components/common/Header/Header.tsx';
+import {StyleSheet} from 'react-native';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import CView from '../../components/common/CommonView/CView.tsx';
+import CInput from '#components/common/CustomInput/CInput.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import {checkPassword} from '#utils/regExpHelper.ts';
+import {patchUpdatePassword} from '#hooks/useMypage.ts';
+import {useSetRecoilState} from 'recoil';
+import globalState from '#recoil/Global';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
 
 const UpdatePassword = ({
   navigation,

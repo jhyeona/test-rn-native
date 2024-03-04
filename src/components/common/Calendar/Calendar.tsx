@@ -1,7 +1,7 @@
 import React from 'react';
-import {COLORS} from '../../../constants/colors.ts';
-import CText from '../CustomText/CText.tsx';
-import SvgIcon from '../Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {Pressable} from 'react-native';
 import moment, {Moment} from 'moment';
 

@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRecoilState} from 'recoil';
-import globalState from '../../../recoil/Global';
+import globalState from '#recoil/Global';
 import {Animated} from 'react-native';
-import CText from '../CustomText/CText.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
 
 const GlobalToast = () => {
   const [toastState, setToastState] = useRecoilState(

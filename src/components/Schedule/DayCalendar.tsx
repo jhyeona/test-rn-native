@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {COLORS} from '../../constants/colors.ts';
 import {useRecoilState} from 'recoil';
-import globalState from '../../recoil/Global/index.ts';
-import {StudentInfoProps} from '../../types/user.ts';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import DayScheduleTable from './DayScheduleTable.tsx';
-import {IS_IOS} from '../../constants/common.ts';
-import CText from '../common/CustomText/CText.tsx';
+import globalState from '#recoil/Global/index.ts';
+import {StudentInfoProps} from '#types/user.ts';
+import {COLORS} from '#constants/colors.ts';
+import DayScheduleTable from '#components/Schedule/DayScheduleTable.tsx';
+import {IS_IOS} from '#constants/common.ts';
+import CText from '#components/common/CustomText/CText.tsx';
 
 const screenWidth = Dimensions.get('window').width;
 

@@ -1,6 +1,6 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {Pressable, StyleSheet, Animated} from 'react-native';
-import {COLORS} from '../../../constants/colors';
+import {COLORS} from '#constants/colors.ts';
 
 interface Props {
   isActive: boolean;

@@ -1,25 +1,24 @@
 import React, {useEffect, useState} from 'react';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import Header from '../../components/common/Header/Header.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {usePreviousScreenName} from '../../hooks/useNavigation.ts';
-import CText from '../../components/common/CustomText/CText.tsx';
-import CheckboxCircle from '../../components/common/Checkbox/CheckboxCircle.tsx';
-import {COLORS} from '../../constants/colors.ts';
 import moment from 'moment';
-import SvgIcon from '../../components/common/Icon/Icon.tsx';
-
+import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {useQueryClient} from '@tanstack/react-query';
+import {useSetRecoilState} from 'recoil';
+import globalState from '#recoil/Global';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import {usePreviousScreenName} from '#hooks/useNavigation.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import CheckboxCircle from '#components/common/Checkbox/CheckboxCircle.tsx';
+import {COLORS} from '#constants/colors.ts';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {
   postJoinAcademy,
   useGetInvitedList,
   useGetUserInfo,
-} from '../../hooks/useUser.ts';
-import {useQueryClient} from '@tanstack/react-query';
-import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
+} from '#hooks/useUser.ts';
 
 interface CheckboxStateProps {
   isChecked: boolean;

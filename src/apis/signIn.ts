@@ -1,7 +1,6 @@
-import {ApiResponseProps} from '../types/common.ts';
-import {GetAccessTokenProps} from '../types/user.ts';
-import {instanceWithoutToken} from './instance.ts';
-import {Alert} from 'react-native';
+import {ApiResponseProps} from '#types/common.ts';
+import {GetAccessTokenProps} from '#types/user.ts';
+import {instanceWithoutToken} from '#apis/instance.ts';
 
 export const requestPostGetToken = async (payload: {
   phone: string;

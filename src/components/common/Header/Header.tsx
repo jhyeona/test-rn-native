@@ -1,9 +1,9 @@
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
-import CText from '../CustomText/CText.tsx';
-import {COLORS} from '../../../constants/colors.ts';
-import SvgIcon from '../Icon/Icon.tsx';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 
 interface Props {
   title: string;

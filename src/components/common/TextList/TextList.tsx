@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {COLORS} from '../../../constants/colors.ts';
-import CText from '../CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 

@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
-import {EventProps, SchedulePeriodDataProps} from '../../types/schedule.ts';
-import {getEventHistory} from '../../hooks/useSchedule.ts';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
-import moment from 'moment';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
-import Header from '../../components/common/Header/Header.tsx';
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {COLORS} from '../../constants/colors.ts';
-import CText from '../../components/common/CustomText/CText.tsx';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import SvgIcon from '../../components/common/Icon/Icon.tsx';
-import Calendar from '../../components/common/Calendar/Calendar.tsx';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+import moment from 'moment';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {EventProps, SchedulePeriodDataProps} from '#types/schedule.ts';
+import {getEventHistory} from '#hooks/useSchedule.ts';
+import globalState from '#recoil/Global';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import Calendar from '#components/common/Calendar/Calendar.tsx';
 
 const ScheduleHistory = ({
   navigation,

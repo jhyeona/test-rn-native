@@ -1,25 +1,22 @@
 import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/ko';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import userState from '../../recoil/user';
-import {
-  useGetDaySchedule,
-  useGetWeekSchedule,
-} from '../../hooks/useSchedule.ts';
-import {useGetUserInfo} from '../../hooks/useUser.ts';
-import DayCalendar from '../../components/Schedule/DayCalendar.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {StudentInfoProps} from '../../types/user.ts';
-import TimeTable from '../../components/Schedule/TimeTable.tsx';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
-import ScheduleHeader from '../../components/Schedule/ScheduleHeader.tsx';
-import Dropdown from '../../components/common/Dropdown/Dropdown.tsx';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import globalState from '../../recoil/Global';
-import {Dimensions, View} from 'react-native';
-import Academy from '../Academy';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import userState from '#recoil/User';
+import {useGetDaySchedule, useGetWeekSchedule} from '#hooks/useSchedule.ts';
+import {useGetUserInfo} from '#hooks/useUser.ts';
+import DayCalendar from '#components/Schedule/DayCalendar.tsx';
+import {StudentInfoProps} from '#types/user.ts';
+import TimeTable from '#components/Schedule/TimeTable.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
+import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import globalState from '#recoil/Global';
+import Academy from '#containers/Academy';
 
 const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const userData = useRecoilValue(userState.userInfoState);

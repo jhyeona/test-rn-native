@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import CText from '../CustomText/CText.tsx';
-import {COLORS} from '../../../constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
 import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
 import {DimensionValue} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 

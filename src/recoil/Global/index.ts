@@ -8,7 +8,7 @@ import {
   selectedAcademy,
   selectWeekScheduleDate,
   wifiState,
-} from './atom.ts';
+} from '#recoil/Global/atom.ts';
 
 const globalState = {
   globalToastState,

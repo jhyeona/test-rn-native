@@ -8,18 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {postGetToken} from '../../hooks/useSignIn.ts';
-import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
-import {storage} from '../../utils/storageHelper.ts';
-import CText from '../../components/common/CustomText/CText.tsx';
-import CInput from '../../components/common/CustomInput/CInput.tsx';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import {COLORS} from '../../constants/colors.ts';
 import Config from 'react-native-config';
+import {useSetRecoilState} from 'recoil';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {postGetToken} from '#hooks/useSignIn.ts';
+import globalState from '#recoil/Global';
+import {storage} from '#utils/storageHelper.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import CInput from '#components/common/CustomInput/CInput.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import {COLORS} from '#constants/colors.ts';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');

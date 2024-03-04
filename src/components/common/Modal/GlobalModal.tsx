@@ -6,10 +6,10 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useRecoilState} from 'recoil';
-import globalState from '../../../recoil/Global';
+import globalState from '#recoil/Global';
 import {GestureResponderEvent} from 'react-native/Libraries/Types/CoreEventTypes';
-import CText from '../CustomText/CText';
-import CButton from '../CommonButton/CButton.tsx';
+import CText from '#components/common/CustomText/CText';
+import CButton from '#components/common/CommonButton/CButton.tsx';
 
 const GlobalModal = () => {
   const [modalState, setModalState] = useRecoilState(

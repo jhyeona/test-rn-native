@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {StyleSheet, View, Animated, Text, Pressable} from 'react-native';
-import {COLORS} from '../../../constants/colors';
-import CText from '../CustomText/CText.tsx';
+import {StyleSheet, View, Animated, Pressable} from 'react-native';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
 
 interface Props {
   onToggle: (value: boolean) => void;

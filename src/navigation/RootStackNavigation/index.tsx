@@ -1,25 +1,25 @@
 import React, {useEffect, useRef} from 'react';
+import {useMMKVListener} from 'react-native-mmkv';
+import BootSplash from 'react-native-bootsplash';
+import {useRecoilState} from 'recoil';
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SignIn from '../../containers/SignIn';
-import TabNavigation from '../TabNavigation';
-import {logFBScreenView} from '../../utils/firebaseLogHelper.ts';
-import SignUp from '../../containers/SignUp';
-import FindPassword from '../../containers/FindPassword';
-import BootSplash from 'react-native-bootsplash';
-import {useRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
-import {storage} from '../../utils/storageHelper.ts';
-import {useMMKVListener} from 'react-native-mmkv';
-import LectureDetail from '../../containers/LectureDetail/index.tsx';
-import ScheduleHistory from '../../containers/ScheduleHistory';
-import Academy from '../../containers/Academy';
-import UpdatePassword from '../../containers/UpdatePassword';
-import UserWithdraw from '../../containers/UserWithdraw';
-import PrivacyPolicy from '../../containers/PrivacyPolicy';
+import SignIn from '#containers/SignIn';
+import TabNavigation from '#navigation/TabNavigation';
+import {logFBScreenView} from '#utils/firebaseLogHelper.ts';
+import SignUp from '#containers/SignUp';
+import FindPassword from '#containers/FindPassword';
+import globalState from '#recoil/Global';
+import {storage} from '#utils/storageHelper.ts';
+import LectureDetail from '#containers/LectureDetail/index.tsx';
+import ScheduleHistory from '#containers/ScheduleHistory';
+import Academy from '#containers/Academy';
+import UpdatePassword from '#containers/UpdatePassword';
+import UserWithdraw from '#containers/UserWithdraw';
+import PrivacyPolicy from '#containers/PrivacyPolicy';
 
 const RootStack = createNativeStackNavigator();
 

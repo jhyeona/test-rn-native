@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
-import {storage} from '../utils/storageHelper.ts';
-import {tokenRefresh} from './common.ts';
-import {Alert} from 'react-native';
+import {storage} from '#utils/storageHelper.ts';
+import {tokenRefresh} from '#apis/common.ts';
 import Config from 'react-native-config';
 
 // 토큰 미사용 인스턴스

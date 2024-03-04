@@ -1,4 +1,4 @@
-import {requestPostGetToken} from '../apis/signIn.ts';
+import {requestPostGetToken} from '#apis/signIn.ts';
 
 export const postGetToken = async (payload: {
   phone: string;

@@ -1,8 +1,7 @@
-import {storage} from '../utils/storageHelper.ts';
 import axios from 'axios';
-import {ApiResponseProps} from '../types/common.ts';
-import {instanceWithoutToken} from './instance.ts';
-import {Alert} from 'react-native';
+import {instanceWithoutToken} from '#apis/instance.ts';
+import {storage} from '#utils/storageHelper.ts';
+import {ApiResponseProps} from '#types/common.ts';
 
 export const tokenRefresh = async () => {
   // token refresh

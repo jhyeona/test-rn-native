@@ -1,4 +1,4 @@
-import {requestGet, requestPost} from './index.ts';
+import {requestGet, requestPost} from '#apis/index.ts';
 import {
   GetScheduleHistoryProps,
   GetScheduleHistoryWeekProps,
@@ -8,8 +8,8 @@ import {
   ScheduleHistoryDataProps,
   ScheduleHistoryWeekDataProps,
   SchedulePeriodDataProps,
-} from '../types/schedule.ts';
-import {ApiResponseProps} from '../types/common.ts';
+} from '#types/schedule.ts';
+import {ApiResponseProps} from '#types/common.ts';
 
 export const requestGetDaySchedule = async (
   payload: GetScheduleProps,

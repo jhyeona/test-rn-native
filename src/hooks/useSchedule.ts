@@ -9,18 +9,17 @@ import {
   requestPostEventComplete,
   requestPostEventEnter,
   requestPostEventLeave,
-} from '../apis/schedule.ts';
+} from '#apis/schedule.ts';
 import {useSetRecoilState} from 'recoil';
 import {useEffect} from 'react';
-import scheduleState from '../recoil/Schedule';
+import scheduleState from '#recoil/Schedule';
 import {useQuery} from '@tanstack/react-query';
 import {
   GetScheduleHistoryProps,
   GetScheduleProps,
   PostEventProps,
-} from '../types/schedule.ts';
-import globalState from '../recoil/Global/index.ts';
-import {requestGetWifiListInfo} from '../services/locationScanner.ts';
+} from '#types/schedule.ts';
+import globalState from '#recoil/Global/index.ts';
 
 export const getDaySchedule = async (payload: GetScheduleProps) => {
   const response = await requestGetDaySchedule(payload);

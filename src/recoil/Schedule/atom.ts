@@ -1,8 +1,5 @@
 import {atom} from 'recoil';
-import {
-  ScheduleDataProps,
-  ScheduleHistoryDataProps,
-} from '../../types/schedule.ts';
+import {ScheduleDataProps, ScheduleHistoryDataProps} from '#types/schedule.ts';
 
 export const dayScheduleState = atom<ScheduleDataProps | null>({
   key: 'dayScheduleState',

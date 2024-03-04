@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, StyleSheet, Pressable} from 'react-native';
-import {COLORS} from '../../../constants/colors.ts';
-import CText from '../CustomText/CText.tsx';
 import {
   DimensionValue,
   ViewStyle,
 } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import SvgIcon from '../../../components/common/Icon/Icon.tsx';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 
 interface ItemProps {
   label: string;

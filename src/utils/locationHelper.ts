@@ -1,4 +1,4 @@
-import {BeaconProps, WifiProps} from '../types/location.ts';
+import {BeaconProps, WifiProps} from '#types/location.ts';
 
 export const validWifiList = (wifiList: WifiProps[]) => {
   const timestamp = Date.now();

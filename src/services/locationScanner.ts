@@ -1,6 +1,5 @@
 import {NativeModules} from 'react-native';
-import {LocationProps, WifiProps} from '../types/location.ts';
-import {uniq} from 'react-native-permissions/dist/typescript/utils';
+import {LocationProps, WifiProps} from '#types/location.ts';
 
 interface LocationModuleProps {
   getGpsLocation(): Promise<any>;

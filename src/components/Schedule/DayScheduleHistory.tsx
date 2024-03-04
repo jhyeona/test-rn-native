@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
+import {Pressable, StyleSheet, View} from 'react-native';
+import moment from 'moment';
 import {
   GetScheduleHistoryProps,
   PostEventProps,
   ScheduleDefaultProps,
   ScheduleTimeProps,
-} from '../../types/schedule.ts';
-import {Pressable, StyleSheet, View} from 'react-native';
-import {COLORS} from '../../constants/colors.ts';
-import SvgIcon from '../common/Icon/Icon.tsx';
-import CButton from '../common/CommonButton/CButton.tsx';
-import CText from '../common/CustomText/CText.tsx';
-import moment from 'moment';
+} from '#types/schedule.ts';
+import {COLORS} from '#constants/colors.ts';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
 import {
   postEventAttend,
   postEventComeback,
@@ -434,10 +434,11 @@ const DayScheduleHistory = (props: Props) => {
         moment(schedule.scheduleEndTime).format('YYYY-MM-DD HH:mm'),
       ),
     );
+    const isNowData = isBetween(allowStartMinusTime, allowEndPlusTime);
     setIsCompleteAllow(isBetween(allowStartMinusTime, allowEndPlusTime));
-    setIsNow(isBetween(allowStartMinusTime, allowEndPlusTime)); // 현재 강의
-    setIsBefore(moment(allowEndPlusTime).isBefore(moment()) && !isNow); // 지난 강의
-    setIsAfter(moment(allowStartMinusTime).isAfter(moment()) && !isNow); // 예정 강의
+    setIsNow(isNowData); // 현재 강의
+    setIsBefore(moment(allowEndPlusTime).isBefore(moment()) && !isNowData); // 지난 강의
+    setIsAfter(moment(allowStartMinusTime).isAfter(moment()) && !isNowData); // 예정 강의
   };
 
   useEffect(() => {
@@ -544,8 +545,8 @@ const DayScheduleHistory = (props: Props) => {
           const startTime = moment(val.timeStart)
             .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
             .format('YYYY-MM-DD HH:mm');
-          const endTime = moment(val.timeStart)
-            .add(schedule.lecture.lectureAllowPlus, 'minutes')
+          const endTime = moment(val.timeEnd)
+            .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
             .format('YYYY-MM-DD HH:mm');
           const intervalIsBetween = isBetween(startTime, endTime); // 시간별 출석
 

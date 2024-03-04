@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import Header from '../../components/common/Header/Header.tsx';
-import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import CText from '../../components/common/CustomText/CText.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
 import {ScrollView, View} from 'react-native';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import Checkbox from '../../components/common/Checkbox/Checkbox.tsx';
-import CInput from '../../components/common/CustomInput/CInput.tsx';
-import TextList from '../../components/common/TextList/TextList.tsx';
-import {withdrawPolicyList} from '../../constants/policy.ts';
-import {checkPassword} from '../../utils/regExpHelper.ts';
-import {deleteUser} from '../../hooks/useUser.ts';
+import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
+import CInput from '#components/common/CustomInput/CInput.tsx';
+import TextList from '#components/common/TextList/TextList.tsx';
+import {withdrawPolicyList} from '#constants/policy.ts';
+import {checkPassword} from '#utils/regExpHelper.ts';
+import {deleteUser} from '#hooks/useUser.ts';
 import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
-import {storage} from '../../utils/storageHelper.ts';
+import globalState from '#recoil/Global';
+import {storage} from '#utils/storageHelper.ts';
 
 const UserWithdraw = ({
   navigation,

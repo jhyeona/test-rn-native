@@ -1,22 +1,22 @@
 import React, {useEffect} from 'react';
-import Schedule from '../../containers/Schedule';
+import {useSetRecoilState} from 'recoil';
+import Schedule from '#containers/Schedule';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Mypage from '../../containers/Mypage';
-import SvgIcon from '../../components/common/Icon/Icon.tsx';
+import Mypage from '#containers/Mypage';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {
   requestLocationPermissions,
   requestNotificationsPermission,
-} from '../../utils/permissionsHelper.ts';
-import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
+} from '#utils/permissionsHelper.ts';
+import globalState from '#recoil/Global';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
   requestRemoveBeaconListener,
   requestStartBeaconScanning,
   requestStopBeaconScanning,
-} from '../../services/beaconScanner.ts';
-import {requestWifiList} from '../../services/locationScanner.ts';
+} from '#services/beaconScanner.ts';
+import {requestWifiList} from '#services/locationScanner.ts';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {

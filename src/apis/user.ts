@@ -1,11 +1,16 @@
-import {requestDelete, requestGet, requestPatch, requestPost} from './index.ts';
-import {instanceWithoutToken} from './instance.ts';
-import {ApiResponseProps} from '../types/common.ts';
+import {
+  requestDelete,
+  requestGet,
+  requestPatch,
+  requestPost,
+} from '#apis/index.ts';
+import {instanceWithoutToken} from '#apis/instance.ts';
+import {ApiResponseProps} from '#types/common.ts';
 import {
   InvitedAcademyListProps,
   JoinAcademyProps,
   UserInfoProps,
-} from '../types/user.ts';
+} from '#types/user.ts';
 
 export const requestPostFindPassword = async (payload: {
   phone: string;

@@ -1,4 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
+import moment from 'moment/moment';
 import {
   EventItem,
   HighlightDates,
@@ -6,13 +7,12 @@ import {
   TimelineCalendar,
   TimelineCalendarHandle,
 } from '@howljs/calendar-kit';
-import moment from 'moment/moment';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
-import scheduleState from '../../recoil/Schedule';
+import scheduleState from '#recoil/Schedule';
 import {Dimensions} from 'react-native';
-import {COLORS} from '../../constants/colors';
-import globalState from '../../recoil/Global';
-import {convertTimeFormat} from '../../utils/scheduleHelper.ts';
+import {COLORS} from '#constants/colors';
+import globalState from '#recoil/Global';
+import {convertTimeFormat} from '#utils/scheduleHelper.ts';
 
 const TimeTable = () => {
   const calendarWidth = Dimensions.get('window').width - 48; // 기본 padding 24X2 뺀 값

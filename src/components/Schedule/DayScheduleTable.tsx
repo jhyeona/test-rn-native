@@ -1,15 +1,14 @@
 import React from 'react';
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
-import {useRecoilValue} from 'recoil';
-import scheduleState from '../../recoil/Schedule';
-import CText from '../common/CustomText/CText.tsx';
-import {COLORS} from '../../constants/colors.ts';
-import SvgIcon from '../common/Icon/Icon.tsx';
 import moment, {Moment} from 'moment';
-
-import {StudentInfoProps} from '../../types/user.ts';
-import DayScheduleHistory from './DayScheduleHistory.tsx';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {useRecoilValue} from 'recoil';
+import scheduleState from '#recoil/Schedule';
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {StudentInfoProps} from '#types/user.ts';
+import DayScheduleHistory from '#components/Schedule/DayScheduleHistory.tsx';
 
 interface Props {
   navigation: BottomTabNavigationHelpers;
@@ -107,7 +106,7 @@ const DayScheduleTable = (props: Props) => {
                       'minutes',
                     ),
                     moment(schedule.scheduleEndTime).add(
-                      schedule.lecture.lectureAllowEndPlus,
+                      schedule.scheduleEndTime,
                       'minutes',
                     ),
                   ) && (

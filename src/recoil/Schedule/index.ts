@@ -2,7 +2,7 @@ import {
   dayScheduleState,
   nowScheduleHistoryState,
   weekScheduleState,
-} from './atom.ts';
+} from '#recoil/Schedule/atom.ts';
 
 const scheduleState = {
   dayScheduleState,

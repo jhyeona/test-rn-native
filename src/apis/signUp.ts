@@ -1,6 +1,6 @@
-import {instanceWithoutToken} from './instance.ts';
-import {ApiResponseProps} from '../types/common.ts';
-import {SmsConfirmProps} from '../types/user.ts';
+import {instanceWithoutToken} from '#apis/instance.ts';
+import {ApiResponseProps} from '#types/common.ts';
+import {SmsConfirmProps} from '#types/user.ts';
 
 export const requestPostSignUpPhone = async (
   phone: string,

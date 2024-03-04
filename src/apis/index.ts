@@ -1,6 +1,6 @@
-import {AxiosRequestConfig, AxiosResponse} from 'axios';
-import instance from './instance.ts';
-import {ApiResponseProps} from '../types/common.ts';
+import {AxiosRequestConfig} from 'axios';
+import instance from '#apis/instance.ts';
+import {ApiResponseProps} from '#types/common.ts';
 
 export const requestGet = async <T>(
   url: string,

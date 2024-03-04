@@ -1,4 +1,4 @@
-import {requestBluetoothEnable} from './beaconScanner.ts';
+import {requestBluetoothEnable} from '#services/beaconScanner.ts';
 
 export const checkDeviceFeature = async () => {
   const [beaconEnabler] = await Promise.all([await requestBluetoothEnable()]);

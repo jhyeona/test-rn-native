@@ -1,5 +1,3 @@
-import {BeaconProps} from './location.ts';
-
 export interface GetScheduleProps {
   academyId?: number;
   date: string;

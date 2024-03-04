@@ -1,5 +1,3 @@
-import {ViewStyle} from 'react-native';
-
 export interface CommonResponseProps<T> {
   txid: string;
   code: string;

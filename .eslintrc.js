@@ -12,9 +12,11 @@ module.exports = {
     'prettier',
   ],
   settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
     'import/resolver': {
-      typescript: true,
-      node: true,
+      typescript: './tsconfig.json',
     },
   },
 };

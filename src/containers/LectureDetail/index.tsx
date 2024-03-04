@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
-import {RouteProp} from '@react-navigation/core/src/types.tsx';
-import {NavigationState} from '@react-navigation/routers';
-import {NavigatorScreenParams, useRoute} from '@react-navigation/native';
-import {getLectureInfo} from '../../hooks/useSchedule.ts';
-import {ScheduleHistoryDataProps} from '../../types/schedule.ts';
-import {COLORS} from '../../constants/colors.ts';
-import CText from '../../components/common/CustomText/CText.tsx';
+import {StyleSheet, View} from 'react-native';
 import moment from 'moment';
-import Header from '../../components/common/Header/Header.tsx';
+import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {RouteProp} from '@react-navigation/core/src/types.tsx';
+import {useRoute} from '@react-navigation/native';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import {getLectureInfo} from '#hooks/useSchedule.ts';
+import {ScheduleHistoryDataProps} from '#types/schedule.ts';
+import {COLORS} from '#constants/colors.ts';
+import CText from '#components/common/CustomText/CText.tsx';
+import Header from '#components/common/Header/Header.tsx';
 
 interface Props {
   navigation: BottomTabNavigationHelpers;

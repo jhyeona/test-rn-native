@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
-import {checkDate, checkName, checkPhone} from '../../utils/regExpHelper.ts';
-import CSafeAreaView from '../../components/common/CommonView/CSafeAreaView.tsx';
-import CView from '../../components/common/CommonView/CView.tsx';
-import Header from '../../components/common/Header/Header.tsx';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import CInput from '../../components/common/CustomInput/CInput.tsx';
-import CButton from '../../components/common/CommonButton/CButton.tsx';
-import {postFindPassword} from '../../hooks/useUser.ts';
 import {useSetRecoilState} from 'recoil';
-import globalState from '../../recoil/Global';
+import globalState from '#recoil/Global';
+import {checkDate, checkName, checkPhone} from '#utils/regExpHelper.ts';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import CInput from '#components/common/CustomInput/CInput.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import {postFindPassword} from '#hooks/useUser.ts';
 
 const FindPassword = ({
   navigation,

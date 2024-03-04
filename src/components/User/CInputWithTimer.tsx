@@ -1,10 +1,9 @@
 import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
-import {DimensionValue} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import CText from '../common/CustomText/CText.tsx';
-import {COLORS} from '../../constants/colors.ts';
-import CountDownTimer from '../common/Timer/CountDownTimer.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
+import CountDownTimer from '#components/common/Timer/CountDownTimer.tsx';
 
 interface Props {
   title: string;

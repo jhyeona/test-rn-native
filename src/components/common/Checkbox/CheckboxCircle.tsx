@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import {StyleSheet, View, Pressable} from 'react-native';
-import SvgIcon from '../../../components/common/Icon/Icon.tsx';
-import CText from '../CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
 
 export interface Props {
   isChecked: boolean;

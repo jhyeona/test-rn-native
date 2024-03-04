@@ -1,6 +1,6 @@
 import {atom} from 'recoil';
 import moment from 'moment';
-import {BeaconDataProps, BeaconProps, WifiProps} from '../../types/location.ts';
+import {BeaconProps, WifiProps} from '#types/location.ts';
 
 export const globalToastState = atom<{isVisible: boolean; message: string}>({
   key: 'globalToastState',
