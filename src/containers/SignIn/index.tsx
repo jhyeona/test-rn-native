@@ -95,7 +95,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   return (
     <CSafeAreaView>
-      <CView>
+      <CView isInput>
         <KeyboardAvoidingView style={styles.container}>
           <View style={styles.logo}>
             <CText
@@ -118,6 +118,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               setInputValue={onChangeId}
               isWarning={isIdWarning}
               errorMessage="올바른 휴대폰 번호를 입력해 주세요."
+              inputMode="numeric"
             />
             <CInput
               title="비밀번호"

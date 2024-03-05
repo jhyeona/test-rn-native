@@ -54,7 +54,7 @@ const UpdatePassword = ({
   return (
     <CSafeAreaView>
       <Header title="비밀번호 변경" isBack navigation={navigation} />
-      <CView>
+      <CView isInput>
         <CInput
           title=""
           inputValue={password}

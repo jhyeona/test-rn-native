@@ -13,7 +13,7 @@
     "android:dev": "react-native run-android --mode=developmentdebug --appIdSuffix development",
     "android:prod": "react-native run-android --mode=productionRelease",
     "ios:ac": "react-native run-ios --scheme ihereapp_Appcenter",
-    "ios:dev": "react-native run-ios --scheme ihereapp_Debug",
+    "ios:dev": "react-native run-ios --scheme ihereapp_Debug --simulator iPhone5",
     "ios:prod": "react-native run-ios --scheme ihereapp"
   },
   "dependencies": {

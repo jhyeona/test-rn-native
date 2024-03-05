@@ -1,5 +1,11 @@
 import React from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import moment, {Moment} from 'moment';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {useRecoilValue} from 'recoil';
@@ -126,6 +132,7 @@ const DayScheduleTable = (props: Props) => {
                         text={schedule.lecture.lectureName}
                         fontSize={15}
                         fontWeight="600"
+                        style={{flexShrink: 1}}
                       />
                       <Pressable
                         onPress={() =>
@@ -165,7 +172,6 @@ const DayScheduleTable = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     flexGrow: 0,
     marginVertical: 16,
     backgroundColor: COLORS.primaryLight,

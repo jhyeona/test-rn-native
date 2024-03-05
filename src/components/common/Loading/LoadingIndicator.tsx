@@ -1,32 +1,22 @@
 import React from 'react';
-import {View, StyleSheet, Animated, Easing} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import globalState from '#recoil/Global';
-import {COLORS} from '#constants/colors.ts';
 
-const LoadingIndicator = () => {
+interface LoadingIndicatorProps {
+  autoLoading: boolean;
+}
+
+const LoadingIndicator = (props: LoadingIndicatorProps) => {
+  const {autoLoading} = props;
   const isLoading = useRecoilValue(globalState.globalLoadingState);
-  const spinValue = new Animated.Value(0);
-
-  Animated.loop(
-    Animated.timing(spinValue, {
-      toValue: 1,
-      duration: 1000,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }),
-  ).start();
-
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
   return (
     <>
-      {isLoading && (
+      {(isLoading || autoLoading) && (
         <View style={styles.container}>
-          <Animated.View
-            style={[styles.spinner, {transform: [{rotate: spin}]}]}
+          <Image
+            source={require('#assets/spinner.gif')}
+            style={{width: 50, height: 50}}
           />
         </View>
       )}
@@ -37,16 +27,11 @@ const LoadingIndicator = () => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
-  },
-  spinner: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 4,
-    borderColor: COLORS.primary,
-    borderTopColor: 'transparent',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.5)',
   },
 });
 

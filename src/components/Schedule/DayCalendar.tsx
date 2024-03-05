@@ -15,6 +15,7 @@ import {COLORS} from '#constants/colors.ts';
 import DayScheduleTable from '#components/Schedule/DayScheduleTable.tsx';
 import {IS_IOS} from '#constants/common.ts';
 import CText from '#components/common/CustomText/CText.tsx';
+import {useChangeWidth} from '#hooks/useGlobal.ts';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -96,7 +97,7 @@ const DayCalendar = (props: Props) => {
       </View>
     );
   };
-
+  const changeWidth = useChangeWidth();
   const renderBody = () => {
     return (
       <ScrollView
@@ -106,7 +107,7 @@ const DayCalendar = (props: Props) => {
         onScrollEndDrag={handleBodyScroll}
         pagingEnabled
         scrollEventThrottle={16}>
-        <View style={{width: '100%'}}>
+        <View style={{width: changeWidth}}>
           <DayScheduleTable navigation={navigation} studentInfo={studentInfo} />
         </View>
       </ScrollView>
