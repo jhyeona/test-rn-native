@@ -85,14 +85,14 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.ihereapp"
+    namespace "io.lpin.checkhere"
     defaultConfig {
-        applicationId "com.ihereapp"
+        applicationId "io.lpin.checkhere"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
         versionName "1.0"
-        resValue "string", "build_config_package", "com.ihereapp"
+        resValue "string", "build_config_package", "io.lpin.checkhere"
     }
     signingConfigs {
         debug {

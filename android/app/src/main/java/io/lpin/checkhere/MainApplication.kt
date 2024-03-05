@@ -1,4 +1,4 @@
-package com.ihereapp
+package io.lpin.checkhere
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -11,7 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.flipper.ReactNativeFlipper
 import com.facebook.soloader.SoLoader
-import com.ihereapp.RNModule.ModulePackage
+import io.lpin.checkhere.RNModule.ModulePackage
 
 class MainApplication : Application(), ReactApplication {
 

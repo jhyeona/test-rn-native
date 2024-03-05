@@ -1,6 +1,6 @@
-package com.ihereapp.RNModule;
+package io.lpin.checkhere.RNModule;
 
-import static com.ihereapp.RNModule.NewLocationHelper.checkFusedLocationAvailability;
+import static io.lpin.checkhere.RNModule.NewLocationHelper.checkFusedLocationAvailability;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

@@ -1,10 +1,10 @@
-package com.ihereapp.RNModule;
+package io.lpin.checkhere.RNModule;
 
-import static com.ihereapp.RNModule.NewLocationHelper.locationToMap;
-import static com.ihereapp.RNModule.NewLocationManager.removeObserveLocationListeners;
-import static com.ihereapp.RNModule.NewLocationManager.requestGPSLocation;
-import static com.ihereapp.RNModule.NewLocationManager.requestGetLocation;
-import static com.ihereapp.RNModule.NewLocationManager.requestPassiveLocation;
+import static io.lpin.checkhere.RNModule.NewLocationHelper.locationToMap;
+import static io.lpin.checkhere.RNModule.NewLocationManager.removeObserveLocationListeners;
+import static io.lpin.checkhere.RNModule.NewLocationManager.requestGPSLocation;
+import static io.lpin.checkhere.RNModule.NewLocationManager.requestGetLocation;
+import static io.lpin.checkhere.RNModule.NewLocationManager.requestPassiveLocation;
 
 import android.content.Context;
 import android.location.Location;
@@ -32,7 +32,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
-import com.ihereapp.RNModule.NewLocationManager.LocationOptions;
+import io.lpin.checkhere.RNModule.NewLocationManager.LocationOptions;
 
 import java.util.List;
 import java.util.Objects;

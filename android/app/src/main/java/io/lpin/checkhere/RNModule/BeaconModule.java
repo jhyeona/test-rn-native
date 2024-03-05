@@ -1,4 +1,4 @@
-package com.ihereapp.RNModule;
+package io.lpin.checkhere.RNModule;
 
 
 import android.annotation.SuppressLint;

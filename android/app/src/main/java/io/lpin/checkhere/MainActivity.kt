@@ -1,4 +1,4 @@
-package com.ihereapp
+package io.lpin.checkhere
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
