@@ -17,6 +17,7 @@ import {
   requestNotificationsPermission,
 } from '#utils/permissionsHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
+import userState from '#recoil/User';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {data: userData, refetch: refetchUserData} = useGetUserInfo();
@@ -26,6 +27,7 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     userData ? userData?.settingPushApp : true,
   );
   const setIsLogin = useSetRecoilState(globalState.isLoginState);
+  const setUserData = useSetRecoilState(userState.userInfoState);
   const [isPushToggleDisabled, setIsPushToggleDisabled] = useState(false);
 
   const onPressUpdatePassword = () => {
@@ -47,9 +49,11 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       message: '로그아웃하시겠습니까?',
       isConfirm: true,
       onPressConfirm: () => {
-        setIsLogin(false);
         storage.delete('access_token');
         storage.delete('refresh_token');
+        storage.clearAll();
+        setUserData(null);
+        setIsLogin(false);
       },
     });
   };

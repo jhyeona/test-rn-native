@@ -1,7 +1,6 @@
 import React, {useEffect, useRef} from 'react';
-import {useMMKVListener} from 'react-native-mmkv';
 import BootSplash from 'react-native-bootsplash';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -20,6 +19,8 @@ import UpdatePassword from '#containers/UpdatePassword';
 import UserWithdraw from '#containers/UserWithdraw';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
+import userState from '#recoil/User';
+import {onesignalLogin} from '#utils/onesignalHelper.ts';
 
 const RootStack = createNativeStackNavigator();
 
@@ -27,6 +28,7 @@ const RootStackNavigation = () => {
   const navigationRef = useNavigationContainerRef();
   const [isLogin, setIsLogin] = useRecoilState(globalState.isLoginState);
   const routeNameRef = useRef<string>();
+  const userData = useRecoilValue(userState.userInfoState);
 
   const handleOnReady = () => {
     routeNameRef.current =
@@ -46,16 +48,13 @@ const RootStackNavigation = () => {
     }
     routeNameRef.current = currentRouteName;
   };
-
   const token = storage.getString('access_token');
 
-  // MMKV 리스너로 저장소 변화 감지
-  useMMKVListener(key => {
-    if (key === 'access_token') {
-      const changedValue = storage.getString(key);
-      changedValue ? setIsLogin(true) : setIsLogin(false);
+  useEffect(() => {
+    if (userData) {
+      onesignalLogin(userData.userId);
     }
-  });
+  }, [userData]);
 
   useEffect(() => {
     token ? setIsLogin(true) : setIsLogin(false);

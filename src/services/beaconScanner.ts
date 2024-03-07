@@ -38,7 +38,7 @@ export const requestStartBeaconScanning = async () => {
 export const requestStopBeaconScanning = async () => {
   try {
     const result = await BeaconModule.stopScanning();
-    console.log(`Stop Beacon: ${result}`);
+    // console.log(`Stop Beacon: ${result}`);
     return result;
   } catch (e) {
     console.log('beacon stop error', e);
@@ -78,7 +78,7 @@ export const requestAddBeaconListener = (
 export const requestRemoveBeaconListener = () => {
   try {
     eventEmitter.removeAllListeners('EVENT_BLUETOOTH_DETECTED');
-    console.log('removeBeaconListener');
+    // console.log('removeBeaconListener');
   } catch (error) {
     console.log('removeBeaconListener: ', error);
   }

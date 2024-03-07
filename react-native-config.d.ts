@@ -3,6 +3,7 @@ declare module 'react-native-config' {
     ENV: string;
     BASE_URL: string;
     S3_URL: string;
+    ONESIGNAL_INIT_ID: string;
   }
 
   export const Config: NativeConfig;

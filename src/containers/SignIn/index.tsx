@@ -77,8 +77,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         setIsPasswordWarning(true);
         return;
       }
-      logErrorToCrashlytics(error, 'requestGetToken');
       Alert.alert(`로그인에 실패하였습니다.`);
+      logErrorToCrashlytics(error, 'requestGetToken');
     }
   };
 
