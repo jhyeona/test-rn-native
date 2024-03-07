@@ -4,11 +4,11 @@ import {useRecoilValue} from 'recoil';
 import globalState from '#recoil/Global';
 
 interface LoadingIndicatorProps {
-  autoLoading: boolean;
+  autoLoading?: boolean;
 }
 
 const LoadingIndicator = (props: LoadingIndicatorProps) => {
-  const {autoLoading} = props;
+  const {autoLoading = false} = props;
   const isLoading = useRecoilValue(globalState.globalLoadingState);
   return (
     <>

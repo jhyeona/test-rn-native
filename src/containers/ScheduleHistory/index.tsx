@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 import moment from 'moment';
@@ -8,7 +8,6 @@ import {EventProps, SchedulePeriodDataProps} from '#types/schedule.ts';
 import {getEventHistory} from '#hooks/useSchedule.ts';
 import globalState from '#recoil/Global';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import CView from '#components/common/CommonView/CView.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
 import CText from '#components/common/CustomText/CText.tsx';
@@ -126,7 +125,7 @@ const ScheduleHistory = ({
   return (
     <CSafeAreaView>
       <Header title="내 출석 기록" navigation={navigation} isBack />
-      <CView>
+      <ScrollView>
         <View style={{flexDirection: 'row', marginBottom: 30, height: 42}}>
           <Calendar
             onPressCalendar={() => showDatePicker(true)}
@@ -230,7 +229,7 @@ const ScheduleHistory = ({
             </View>
           )}
         </View>
-      </CView>
+      </ScrollView>
     </CSafeAreaView>
   );
 };
