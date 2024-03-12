@@ -913,11 +913,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ihereapp/ihereapp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LFY5WRL9S7;
+				DEVELOPMENT_TEAM = LFY5WRL9S7;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = ihereapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
@@ -934,7 +932,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.lpin.checkhere.appcenter;
 				PRODUCT_NAME = ihereapp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = io.lpin.checkhere.appcenter;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

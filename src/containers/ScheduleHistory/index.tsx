@@ -13,6 +13,7 @@ import {COLORS} from '#constants/colors.ts';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import Calendar from '#components/common/Calendar/Calendar.tsx';
+import CView from '#components/common/CommonView/CView';
 
 const ScheduleHistory = ({
   navigation,
@@ -123,9 +124,9 @@ const ScheduleHistory = ({
   }, [selectedDate]);
 
   return (
-    <CSafeAreaView>
+    <CSafeAreaView edges={['top', 'bottom']}>
       <Header title="내 출석 기록" navigation={navigation} isBack />
-      <ScrollView>
+      <CView>
         <View style={{flexDirection: 'row', marginBottom: 30, height: 42}}>
           <Calendar
             onPressCalendar={() => showDatePicker(true)}
@@ -166,70 +167,75 @@ const ScheduleHistory = ({
           onConfirm={handleConfirm}
           onCancel={hideDatePicker}
           confirmTextIOS="확인"
+          cancelTextIOS="취소"
           locale="ko-KR"
         />
-        <View style={styles.table}>
-          <View style={[styles.row, styles.tableHeader]}>
-            <View style={[styles.cell, styles.firstCell]}>
-              <CText text="강의명" fontWeight="600" />
+        <ScrollView>
+          <View style={styles.table}>
+            <View style={[styles.row, styles.tableHeader]}>
+              <View style={[styles.cell, styles.firstCell]}>
+                <CText text="강의명" fontWeight="600" />
+              </View>
+              <View style={styles.cell}>
+                <CText text="구분" fontWeight="600" />
+              </View>
+              <View style={[styles.cell]}>
+                <CText text="입실" fontWeight="600" />
+              </View>
+              <View style={styles.cell}>
+                <CText text="퇴실" fontWeight="600" />
+              </View>
             </View>
-            <View style={styles.cell}>
-              <CText text="구분" fontWeight="600" />
-            </View>
-            <View style={[styles.cell]}>
-              <CText text="입실" fontWeight="600" />
-            </View>
-            <View style={styles.cell}>
-              <CText text="퇴실" fontWeight="600" />
-            </View>
+            {historyData && historyData?.historyList.length > 0 ? (
+              historyData?.historyList.map((history, i) => {
+                const {statusType, enteredTime, completedTime} = eventStatus(
+                  history.eventList,
+                );
+                return (
+                  <View
+                    style={[
+                      styles.row,
+                      i !== history.eventList.length - 1 && styles.borderTop,
+                    ]}
+                    key={i}>
+                    <View style={[styles.cell, styles.firstCell]}>
+                      <CText
+                        text={history.schedule.lecture.lectureName}
+                        style={{textAlign: 'center'}}
+                        fontWeight="500"
+                        lineBreak
+                      />
+                    </View>
+                    <View style={styles.cell}>
+                      {<CText text={statusType} />}
+                    </View>
+                    <View style={styles.cell}>
+                      <CText
+                        style={{
+                          textAlign: 'center',
+                        }}
+                        text={enteredTime}
+                        lineBreak
+                      />
+                    </View>
+                    <View style={styles.cell}>
+                      <CText
+                        style={{textAlign: 'center', paddingHorizontal: 5}}
+                        text={completedTime}
+                        lineBreak
+                      />
+                    </View>
+                  </View>
+                );
+              })
+            ) : (
+              <View style={[styles.row, styles.noData]}>
+                <CText text="기록이 없습니다." />
+              </View>
+            )}
           </View>
-          {historyData && historyData?.historyList.length > 0 ? (
-            historyData?.historyList.map((history, i) => {
-              const {statusType, enteredTime, completedTime} = eventStatus(
-                history.eventList,
-              );
-              return (
-                <View
-                  style={[
-                    styles.row,
-                    i !== history.eventList.length - 1 && styles.borderTop,
-                  ]}
-                  key={i}>
-                  <View style={[styles.cell, styles.firstCell]}>
-                    <CText
-                      text={history.schedule.lecture.lectureName}
-                      style={{textAlign: 'center'}}
-                      fontWeight="500"
-                      lineBreak
-                    />
-                  </View>
-                  <View style={styles.cell}>{<CText text={statusType} />}</View>
-                  <View style={styles.cell}>
-                    <CText
-                      style={{
-                        textAlign: 'center',
-                      }}
-                      text={enteredTime}
-                      lineBreak
-                    />
-                  </View>
-                  <View style={styles.cell}>
-                    <CText
-                      style={{textAlign: 'center', paddingHorizontal: 5}}
-                      text={completedTime}
-                      lineBreak
-                    />
-                  </View>
-                </View>
-              );
-            })
-          ) : (
-            <View style={[styles.row, styles.noData]}>
-              <CText text="기록이 없습니다." />
-            </View>
-          )}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </CView>
     </CSafeAreaView>
   );
 };

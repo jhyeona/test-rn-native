@@ -18,6 +18,10 @@ import {
 } from '#utils/permissionsHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import userState from '#recoil/User';
+import {
+  onesignalChangeSubscription,
+  onesignalLogout,
+} from '#utils/onesignalHelper.ts';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {data: userData, refetch: refetchUserData} = useGetUserInfo();
@@ -52,6 +56,7 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         storage.delete('access_token');
         storage.delete('refresh_token');
         storage.clearAll();
+        onesignalLogout();
         setUserData(null);
         setIsLogin(false);
       },
@@ -88,13 +93,15 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       }
       setTimeout(() => {
         setIsPushToggleDisabled(false);
+        refetchUserData().then();
       }, 400);
     })();
-  }, [isPushApp, setGlobalModalState, userData?.settingPushApp]);
-
-  useEffect(() => {
-    refetchUserData().then();
-  }, [refetchUserData]);
+  }, [
+    isPushApp,
+    setGlobalModalState,
+    userData?.settingPushApp,
+    refetchUserData,
+  ]);
 
   return (
     <CSafeAreaView>

@@ -201,7 +201,7 @@ const DayScheduleHistory = (props: Props) => {
         setGlobalModalState({
           isVisible: true,
           title: '안내',
-          message: '강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.',
+          message: '위치 정보가 올바르지 않습니다.',
         });
         return;
       }
@@ -245,7 +245,7 @@ const DayScheduleHistory = (props: Props) => {
         setGlobalModalState({
           isVisible: true,
           title: '안내',
-          message: '강의에 입력된 위치 인증 장치 정보에 부합하지 않습니다.',
+          message: '위치 정보가 올바르지 않습니다..',
         });
         return;
       }

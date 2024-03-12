@@ -50,9 +50,9 @@ const UserWithdraw = ({
         title: '안내',
         message: '탈퇴 처리 되었습니다.',
       });
-      setIsLogin(false);
       storage.delete('access_token');
       storage.delete('refresh_token');
+      setIsLogin(false);
     } catch (e: any) {
       console.log(e);
       if (e.code === '4000') {

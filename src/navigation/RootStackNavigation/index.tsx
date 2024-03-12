@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 import BootSplash from 'react-native-bootsplash';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -19,16 +19,13 @@ import UpdatePassword from '#containers/UpdatePassword';
 import UserWithdraw from '#containers/UserWithdraw';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
-import userState from '#recoil/User';
-import {onesignalLogin} from '#utils/onesignalHelper.ts';
-
+import {onesignalInit} from '#utils/onesignalHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
   const navigationRef = useNavigationContainerRef();
   const [isLogin, setIsLogin] = useRecoilState(globalState.isLoginState);
   const routeNameRef = useRef<string>();
-  const userData = useRecoilValue(userState.userInfoState);
 
   const handleOnReady = () => {
     routeNameRef.current =
@@ -48,17 +45,16 @@ const RootStackNavigation = () => {
     }
     routeNameRef.current = currentRouteName;
   };
-  const token = storage.getString('access_token');
 
-  useEffect(() => {
-    if (userData) {
-      onesignalLogin(userData.userId);
-    }
-  }, [userData]);
+  const token = storage.getString('access_token');
 
   useEffect(() => {
     token ? setIsLogin(true) : setIsLogin(false);
   }, [setIsLogin, token]);
+
+  useEffect(() => {
+    onesignalInit();
+  }, []);
 
   return (
     <NavigationContainer

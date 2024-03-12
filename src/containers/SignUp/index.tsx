@@ -133,7 +133,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const smsCertification = async () => {
     // SMS 인증 요청
     const data = {phone: phone};
-    setIsSend(true);
     try {
       const response = await postSignUpSMS(data);
       if (response) {
@@ -148,6 +147,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       }
     } catch (e) {
       setIsSend(false);
+      setIsCertification(false);
       console.log(e);
       setGlobalModalState({
         isVisible: true,
@@ -186,18 +186,22 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     if (!validateAndSetModal(checkPhone(phone), '휴대폰번호를')) return;
     if (!validateAndSetModal(!!telecom, '통신사를')) return;
 
+    // START - FOR APP STORE TEST DATA
     if (phone === '01072337376') {
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '인증 문자가 발송되었습니다.',
       });
-      setSmsCode('');
       setIsSend(true);
+      setSmsCode('');
       setIsTimer(true);
       setRestartTimer(true);
       return;
-    }
+    } // END - FOR APP STORE TEST DATA
+
+    setIsSend(true);
+    setIsCertification(true);
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
@@ -207,6 +211,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         message: '이미 사용중인 휴대폰 번호입니다.',
       });
       setIsSend(false);
+      setIsCertification(false);
       return;
     }
 
@@ -215,9 +220,10 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       setGlobalModalState({
         isVisible: true,
         title: '안내',
-        message: '인증에 실패했습니다.\n정보를 확인해주세요.',
+        message: '휴대폰 인증에 실패했습니다.\n정보를 확인해주세요.',
       });
       setIsSend(false);
+      setIsCertification(false);
       return;
     }
 

@@ -8,6 +8,6 @@ export const withdrawPolicyList = [
 ];
 
 const s3Url = Config.S3_URL;
-export const TermsOfServiceUrl = `https://${s3Url}.s3.ap-northeast-2.amazonaws.com/static/TermsOfService.html`;
-export const PersonalInformationUrl = `https://${s3Url}.s3.ap-northeast-2.amazonaws.com/static/PersonalInformationAgreement.html`;
-export const PrivacyPolicyUrl = `https://${s3Url}.s3.ap-northeast-2.amazonaws.com/static/PrivacyPolicy.html`;
+export const TermsOfServiceUrl = `https://${s3Url}.ap-northeast-2.amazonaws.com/static/TermsOfService.html`;
+export const PersonalInformationUrl = `https://${s3Url}.ap-northeast-2.amazonaws.com/static/PersonalInformationAgreement.html`;
+export const PrivacyPolicyUrl = `https://${s3Url}.ap-northeast-2.amazonaws.com/static/PrivacyPolicy.html`;
