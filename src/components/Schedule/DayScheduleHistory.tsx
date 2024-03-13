@@ -26,13 +26,16 @@ import {
   requestLocationPermissions,
 } from '#utils/permissionsHelper.ts';
 import {IS_ANDROID} from '#constants/common.ts';
-import {validBeaconList} from '#utils/locationHelper.ts';
+import {validBeaconList, validWifiList} from '#utils/locationHelper.ts';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
   requestStartBeaconScanning,
 } from '#services/beaconScanner.ts';
-import {requestGetLocationInfo} from '#services/locationScanner.ts';
+import {
+  requestGetLocationInfo,
+  requestWifiList,
+} from '#services/locationScanner.ts';
 import {logErrorToCrashlytics} from '#services/firebase.ts';
 
 interface Props {
@@ -83,7 +86,7 @@ const DayScheduleHistory = (props: Props) => {
     useGetScheduleHistory(scheduleHistoryPayload);
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [beaconState, setBeaconState] = useRecoilState(globalState.beaconState);
-  // const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
+  const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
   const [intervalFormatted, setIntervalFormatted] = useState<
     Array<ScheduleTimeProps>
   >([]);
@@ -134,23 +137,23 @@ const DayScheduleHistory = (props: Props) => {
       };
     });
 
-    // // WIFI
-    // let wifiList = wifiState;
-    // const isWifiValid = validWifiList(wifiState);
-    // if (!isWifiValid) {
-    //   await requestWifiList().then(wifi => {
-    //     wifiList = wifi;
-    //     setWifiState(wifi ?? []);
-    //   });
-    // }
-    //
-    // const wifiListData = wifiList.map(wifiItem => {
-    //   return {
-    //     ssid: wifiItem.ssid,
-    //     bssid: wifiItem.bssid,
-    //     rssi: wifiItem.rssi,
-    //   };
-    // });
+    // WIFI
+    let wifiList = wifiState;
+    const isWifiValid = validWifiList(wifiState);
+    if (!isWifiValid) {
+      await requestWifiList().then(wifi => {
+        wifiList = wifi;
+        setWifiState(wifi ?? []);
+      });
+    }
+
+    const wifiListData = wifiList.map(wifiItem => {
+      return {
+        ssid: wifiItem.ssid,
+        bssid: wifiItem.bssid,
+        rssi: wifiItem.rssi,
+      };
+    });
 
     // Location
     const locationData = await requestGetLocationInfo();
@@ -162,7 +165,7 @@ const DayScheduleHistory = (props: Props) => {
       latitude: locationData?.latitude ?? 0.1,
       longitude: locationData?.longitude ?? 0.1,
       altitude: locationData?.altitude ?? 0.1,
-      wifis: [], //wifiListData,
+      wifis: wifiListData,
       bles: beaconListData,
     };
   };
