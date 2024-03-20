@@ -36,7 +36,7 @@ import {
   requestGetLocationInfo,
   requestWifiList,
 } from '#services/locationScanner.ts';
-import {errorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -208,6 +208,13 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
+
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: '처리되지 않았습니다.',
+      });
+      await setAttToCrashlytics(payload);
       errorToCrashlytics(e, 'requestEventEnter');
     }
   };
@@ -236,6 +243,8 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'requestEventComplete');
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
@@ -248,11 +257,15 @@ const DayScheduleHistory = (props: Props) => {
         setGlobalModalState({
           isVisible: true,
           title: '안내',
-          message: '위치 정보가 올바르지 않습니다..',
+          message: '위치 정보가 올바르지 않습니다.',
         });
         return;
       }
-      errorToCrashlytics(e, 'requestEventComplete');
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: '처리되지 않았습니다.',
+      });
     }
   };
 
@@ -271,6 +284,8 @@ const DayScheduleHistory = (props: Props) => {
       await historyDataRefetch();
     } catch (e: any) {
       console.log(e);
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'requestEventAttend');
       if (e.code === '1004') {
         if (e.description.indexOf('입실') >= 0) {
           setGlobalModalState({
@@ -296,7 +311,6 @@ const DayScheduleHistory = (props: Props) => {
           });
           return;
         }
-
         setGlobalModalState({
           isVisible: true,
           title: '안내',
@@ -327,13 +341,11 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '처리되지 않았습니다.',
       });
-      errorToCrashlytics(e, 'requestEventAttend');
     }
   };
 
@@ -361,6 +373,8 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'requestEventLeave');
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
@@ -377,7 +391,6 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      errorToCrashlytics(e, 'requestEventLeave');
     }
   };
 
@@ -405,6 +418,8 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'requestEventComeback');
       if (e.code === '1004') {
         setGlobalModalState({
           isVisible: true,
@@ -421,7 +436,11 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      errorToCrashlytics(e, 'requestEventComeback');
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: '처리되지 않았습니다.',
+      });
     }
   };
 

@@ -6,7 +6,6 @@ import {errorToCrashlytics} from '#services/firebase.ts';
 export const encryptData = (data: {}) => {
   try {
     const secretKey = Config.CRYPT_KEY;
-    console.log('encryptData:', data);
     return CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
   } catch (e: any) {
     errorToCrashlytics(e, 'encryptDataError');

@@ -22,7 +22,8 @@ export const logScreenViewToAnalytics = async (
 export const errorToCrashlytics = (e: any, errorName: string) => {
   // Crashlytics - 에러 전송
   try {
-    defaultAppCrashlytics.recordError(e, errorName);
+    const newError = JSON.stringify(e);
+    defaultAppCrashlytics.recordError(new Error(newError), errorName);
   } catch (error) {
     // ignore
   }
