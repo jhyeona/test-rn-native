@@ -20,7 +20,7 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {logErrorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics, logToCrashlytics} from '#services/firebase.ts';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
@@ -49,17 +49,15 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const onPressSignIn = async () => {
     // 로그인
     Keyboard.dismiss();
+    logToCrashlytics('user login');
 
     // warning 초기화
     setIsIdWarning(false);
     setIsPasswordWarning(false);
 
-    if (!id) {
-      setIsIdWarning(true);
-      return;
-    }
-    if (!password) {
-      setIsPasswordWarning(true);
+    if (!id || !password) {
+      !id && setIsIdWarning(true);
+      !password && setIsPasswordWarning(true);
       return;
     }
 
@@ -78,7 +76,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         return;
       }
       Alert.alert(`로그인에 실패하였습니다.`);
-      logErrorToCrashlytics(error, 'requestGetToken');
+      errorToCrashlytics(error, 'requestGetToken');
     }
   };
 

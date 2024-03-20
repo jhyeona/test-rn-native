@@ -36,7 +36,7 @@ import {
   requestGetLocationInfo,
   requestWifiList,
 } from '#services/locationScanner.ts';
-import {logErrorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics} from '#services/firebase.ts';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -208,7 +208,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      logErrorToCrashlytics(e, 'requestEventEnter');
+      errorToCrashlytics(e, 'requestEventEnter');
     }
   };
 
@@ -252,7 +252,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      logErrorToCrashlytics(e, 'requestEventComplete');
+      errorToCrashlytics(e, 'requestEventComplete');
     }
   };
 
@@ -333,7 +333,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: '처리되지 않았습니다.',
       });
-      logErrorToCrashlytics(e, 'requestEventAttend');
+      errorToCrashlytics(e, 'requestEventAttend');
     }
   };
 
@@ -377,7 +377,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      logErrorToCrashlytics(e, 'requestEventLeave');
+      errorToCrashlytics(e, 'requestEventLeave');
     }
   };
 
@@ -421,7 +421,7 @@ const DayScheduleHistory = (props: Props) => {
         });
         return;
       }
-      logErrorToCrashlytics(e, 'requestEventComeback');
+      errorToCrashlytics(e, 'requestEventComeback');
     }
   };
 

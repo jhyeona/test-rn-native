@@ -1,5 +1,6 @@
 import {firebase} from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import {encryptData} from '#services/common.ts';
 
 const defaultAppCrashlytics = firebase.crashlytics();
 
@@ -14,15 +15,26 @@ export const logScreenViewToAnalytics = async (
       screen_class: screenClass,
     });
   } catch (error) {
-    //
+    // ignore
   }
 };
 
-export const logErrorToCrashlytics = (e: Error, errorName: string) => {
-  // Crashlytics
+export const errorToCrashlytics = (e: any, errorName: string) => {
+  // Crashlytics - 에러 전송
   try {
     defaultAppCrashlytics.recordError(e, errorName);
   } catch (error) {
-    //
+    // ignore
   }
+};
+
+export const logToCrashlytics = (message: string) => {
+  // Crashlytics - 로그 전송
+  defaultAppCrashlytics.log(message);
+};
+
+export const setAttToCrashlytics = async (data: {}) => {
+  // Crashlytics - 데이터 전송
+  const encryptedData = encryptData(data);
+  await defaultAppCrashlytics.setAttribute('userReqData', encryptedData);
 };

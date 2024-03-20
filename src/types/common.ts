@@ -13,3 +13,10 @@ export interface ApiResponseProps<T> {
   message: string;
   statusCode: number;
 }
+
+export interface ApiResponseErrorProps {
+  code: string;
+  description: string;
+  message: string;
+  txid: string;
+}

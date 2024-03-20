@@ -28,7 +28,7 @@ import {
   checkPassword,
   checkPhone,
 } from '#utils/regExpHelper.ts';
-import {logErrorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics} from '#services/firebase.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
@@ -299,7 +299,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         message: `회원가입에 실패하였습니다.`,
       });
       console.log('error', error);
-      logErrorToCrashlytics(error, 'requestSignUp');
+      errorToCrashlytics(error, 'requestSignUp');
     }
   };
 

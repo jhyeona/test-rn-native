@@ -10,7 +10,7 @@ import Header from '#components/common/Header/Header.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import {postFindPassword} from '#hooks/useUser.ts';
-import {logErrorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics} from '#services/firebase.ts';
 
 const FindPassword = ({
   navigation,
@@ -69,7 +69,7 @@ const FindPassword = ({
             '메세지 전송에 실패했습니다. \n번호 확인 후 다시 시도해 주세요.',
         });
       }
-      logErrorToCrashlytics(e, 'SendSMSCodeForTempPassword');
+      errorToCrashlytics(e, 'SendSMSCodeForTempPassword');
     }
   };
 

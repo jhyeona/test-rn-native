@@ -11,6 +11,7 @@ import globalState from '#recoil/Global';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import {errorToCrashlytics} from '#services/firebase.ts';
 
 const UpdatePassword = ({
   navigation,
@@ -40,8 +41,13 @@ const UpdatePassword = ({
       setPassword('');
       setRePassword('');
       navigation.goBack();
-    } catch (error) {
-      console.log('[ERROR]', error);
+    } catch (error: any) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호 변경에 실패했습니다.',
+      });
+      errorToCrashlytics(error, 'patch update password');
     }
   };
 
