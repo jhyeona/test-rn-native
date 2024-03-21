@@ -37,6 +37,7 @@ import {
   requestWifiList,
 } from '#services/locationScanner.ts';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
+import {handleErrorResponse} from '#utils/scheduleHelper.ts';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -184,35 +185,11 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
-      if (e.code === '1004') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '이미 입실 처리 되었습니다.',
-        });
-        return;
-      }
-      if (e.code === '1005') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '현재 진행중인 강의가 아닙니다.',
-        });
-        return;
-      }
-      if (e.code === '4061') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '위치 정보가 올바르지 않습니다.',
-        });
-        return;
-      }
-
+      const errorMessage = handleErrorResponse(e.code);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
-        message: '처리되지 않았습니다.',
+        message: errorMessage,
       });
       await setAttToCrashlytics(payload);
       errorToCrashlytics(e, 'requestEventEnter');
@@ -243,29 +220,14 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
-      await setAttToCrashlytics(payload);
-      errorToCrashlytics(e, 'requestEventComplete');
-      if (e.code === '1004') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '입실하지 않았거나\n이미 퇴실 처리 되었습니다.',
-        });
-        return;
-      }
-      if (e.code === '4061') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '위치 정보가 올바르지 않습니다.',
-        });
-        return;
-      }
+      const errorMessage = handleErrorResponse(e.code);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
-        message: '처리되지 않았습니다.',
+        message: errorMessage,
       });
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'requestEventComplete');
     }
   };
 
@@ -316,35 +278,14 @@ const DayScheduleHistory = (props: Props) => {
           title: '안내',
           message: '처리되지 않았습니다.',
         });
-      }
-      if (e.code === '1005') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '출석 인정 시간이 아닙니다.',
-        });
         return;
       }
-      if (e.code === '1006') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '해당 강의는 주기적으로 확인하는 강의가 아닙니다.',
-        });
-        return;
-      }
-      if (e.code === '4061') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '위치 정보가 올바르지 않습니다.',
-        });
-        return;
-      }
+
+      const errorMessage = handleErrorResponse(e.code);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
-        message: '처리되지 않았습니다.',
+        message: errorMessage,
       });
     }
   };
@@ -373,24 +314,14 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
+      const errorMessage = handleErrorResponse(e.code);
+      setGlobalModalState({
+        isVisible: true,
+        title: '안내',
+        message: errorMessage,
+      });
       await setAttToCrashlytics(payload);
       errorToCrashlytics(e, 'requestEventLeave');
-      if (e.code === '1004') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '이미 외출중입니다.',
-        });
-        return;
-      }
-      if (e.code === '1005') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '현재 진행중인 강의가 아닙니다.',
-        });
-        return;
-      }
     }
   };
 
@@ -418,29 +349,14 @@ const DayScheduleHistory = (props: Props) => {
       });
       await historyDataRefetch();
     } catch (e: any) {
-      await setAttToCrashlytics(payload);
-      errorToCrashlytics(e, 'requestEventComeback');
-      if (e.code === '1004') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '외출중이 아닙니다.',
-        });
-        return;
-      }
-      if (e.code === '1005') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '현재 진행중인 강의가 아닙니다.',
-        });
-        return;
-      }
+      const errorMessage = handleErrorResponse(e.code);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
-        message: '처리되지 않았습니다.',
+        message: errorMessage,
       });
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'requestEventComeback');
     }
   };
 
