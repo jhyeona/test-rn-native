@@ -1,8 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, View} from 'react-native';
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {onesignalInit} from '#utils/onesignalHelper.ts';
+// import {storage} from '#utils/storageHelper.ts';
 
-const Initialize = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
+const Initialize = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationHelpers;
+}) => {
+  useEffect(() => {
+    onesignalInit();
+    // const isVisitor = storage.getBoolean('isVisitor');
+    // if (!isVisitor) {
+    //   navigation.navigate('Onboarding');
+    //   return;
+    // }
+    navigation.navigate('SignIn');
+  }, [navigation]);
+
   return (
     <View
       style={{

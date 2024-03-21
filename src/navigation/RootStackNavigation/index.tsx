@@ -19,7 +19,8 @@ import UpdatePassword from '#containers/UpdatePassword';
 import UserWithdraw from '#containers/UserWithdraw';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
-import {onesignalInit} from '#utils/onesignalHelper.ts';
+import Initialize from '#containers/Initialize';
+import Onboarding from '#containers/Onboarding';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -52,10 +53,6 @@ const RootStackNavigation = () => {
     token ? setIsLogin(true) : setIsLogin(false);
   }, [setIsLogin, token]);
 
-  useEffect(() => {
-    onesignalInit();
-  }, []);
-
   return (
     <NavigationContainer
       ref={navigationRef}
@@ -64,6 +61,11 @@ const RootStackNavigation = () => {
       <RootStack.Navigator>
         {!isLogin && !token ? (
           <>
+            <RootStack.Screen
+              name="Init"
+              component={Initialize}
+              options={{headerShown: false}}
+            />
             <RootStack.Screen
               name="SignIn"
               component={SignIn}
@@ -77,6 +79,11 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="FindPassword"
               component={FindPassword}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="Onboarding"
+              component={Onboarding}
               options={{headerShown: false}}
             />
           </>
