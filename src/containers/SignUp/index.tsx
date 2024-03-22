@@ -118,7 +118,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       birth: birthday.substring(2),
       telecom: telecom,
     };
-
     try {
       const response = await postSignUpTAS(data);
       if (response?.code === '0000') {
@@ -422,7 +421,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             <View style={{width: '40%'}}>
               {isSend ? (
                 <CButton
-                  text={isCertification ? '인증 완료' : '재발송'}
+                  text={isCertification ? '발송 완료' : '재발송'}
                   onPress={onPressCertification}
                   disabled={countDown > 100 || isCertification}
                 />

@@ -32,25 +32,27 @@ export const requestLocationPermissions = async () => {
     permissionsList = [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE];
 
     return requestMultiple(permissionsList).then(statuses => {
+      console.log(
+        statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED,
+      );
       return statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED;
     });
   }
-  if (IS_ANDROID) {
-    permissionsList = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
-    if (platformVersion > 30) {
-      permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
-    }
-    return requestMultiple(permissionsList).then(statuses => {
-      if (platformVersion > 30) {
-        return (
-          statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-            RESULTS.GRANTED &&
-          statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
-        );
-      }
-      return (
-        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED
-      );
-    });
+  // IS ANDROID
+  permissionsList = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+  if (platformVersion > 30) {
+    permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
   }
+  return requestMultiple(permissionsList).then(statuses => {
+    if (platformVersion > 30) {
+      return (
+        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+          RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
+      );
+    }
+    return (
+      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED
+    );
+  });
 };

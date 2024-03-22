@@ -96,10 +96,11 @@ const DayScheduleHistory = (props: Props) => {
   const [isCompleteAllow, setIsCompleteAllow] = useState(false);
   const [isBefore, setIsBefore] = useState(false);
   const [isAfter, setIsAfter] = useState(false);
+  const [isPermissions, setIsPermissions] = useState(false);
 
   const permissionGranted = async () => {
     const grantedResult = await requestLocationPermissions();
-
+    setIsPermissions(grantedResult);
     if (!grantedResult) {
       setGlobalModalState({
         isVisible: true,
@@ -191,7 +192,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: errorMessage,
       });
-      await setAttToCrashlytics(payload);
+      await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventEnter');
     }
   };
@@ -226,7 +227,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: errorMessage,
       });
-      await setAttToCrashlytics(payload);
+      await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventComplete');
     }
   };
@@ -246,7 +247,7 @@ const DayScheduleHistory = (props: Props) => {
       await historyDataRefetch();
     } catch (e: any) {
       console.log(e);
-      await setAttToCrashlytics(payload);
+      await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventAttend');
       if (e.code === '1004') {
         if (e.description.indexOf('입실') >= 0) {
@@ -320,7 +321,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: errorMessage,
       });
-      await setAttToCrashlytics(payload);
+      await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventLeave');
     }
   };
@@ -355,7 +356,7 @@ const DayScheduleHistory = (props: Props) => {
         title: '안내',
         message: errorMessage,
       });
-      await setAttToCrashlytics(payload);
+      await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventComeback');
     }
   };
