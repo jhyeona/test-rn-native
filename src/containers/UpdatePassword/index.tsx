@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
@@ -92,11 +91,4 @@ const UpdatePassword = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-    paddingHorizontal: 24,
-    paddingBottom: 16,
-  },
-});
 export default UpdatePassword;

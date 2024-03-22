@@ -8,12 +8,7 @@ import {
 import {Platform} from 'react-native';
 import {Permission} from 'react-native-permissions/src/types.ts';
 import {IS_ANDROID, IS_IOS} from '#constants/common.ts';
-
-export const platformVersion =
-  // Only IOS 14 Methods - checkLocationAccuracy , requestLocationAccuracy, openPhotoPicker
-  typeof Platform.Version === 'string'
-    ? parseInt(Platform.Version, 10)
-    : Platform.Version;
+import {platformVersion} from '#services/device.ts';
 
 export const handleOpenSettings = () => {
   openSettings().catch(() => console.log('설정으로 이동 실패.'));

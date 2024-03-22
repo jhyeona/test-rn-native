@@ -16,6 +16,10 @@ export const convertTimeFormat = (timeString: string) => {
   return Number(convertedTime.toFixed(1));
 };
 
+export const isBetween = (startTime: Moment, endTime: Moment) => {
+  return moment().isBetween(startTime, endTime, undefined, '[]');
+};
+
 export const handleErrorResponse = (code: string) => {
   switch (code) {
     case '1004':

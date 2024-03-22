@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Alert,
   Keyboard,
@@ -84,12 +84,6 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     // 네비게이션 이동
     navigation.navigate(pageName);
   };
-
-  useEffect(() => {
-    // 스토리지에 아이디 있으면 불러오기
-    const storagePhone = storage.getString('user_phone');
-    if (storagePhone) setId(storagePhone);
-  }, []);
 
   return (
     <CSafeAreaView>

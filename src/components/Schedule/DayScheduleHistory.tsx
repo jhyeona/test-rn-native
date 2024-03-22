@@ -37,7 +37,7 @@ import {
   requestWifiList,
 } from '#services/locationScanner.ts';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
-import {handleErrorResponse} from '#utils/scheduleHelper.ts';
+import {handleErrorResponse, isBetween} from '#utils/scheduleHelper.ts';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -361,22 +361,17 @@ const DayScheduleHistory = (props: Props) => {
     }
   };
 
-  const isBetween = (startTime: string, endTime: string) => {
-    return moment().isBetween(startTime, endTime, undefined, '[]');
-  };
-
   const timeSet = () => {
-    const allowStartMinusTime = moment(schedule.scheduleStartTime)
-      .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
-      .format('YYYY-MM-DD HH:mm');
-    const allowEndPlusTime = moment(schedule.scheduleEndTime)
-      .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
-      .format('YYYY-MM-DD HH:mm');
+    const allowStartMinusTime = moment(schedule.scheduleStartTime).subtract(
+      schedule.lecture.lectureAllowMinus,
+      'minutes',
+    );
+    const allowEndPlusTime = moment(schedule.scheduleEndTime).add(
+      schedule.lecture.lectureAllowEndPlus,
+      'minutes',
+    );
     setIsEnterAllow(
-      isBetween(
-        allowStartMinusTime,
-        moment(schedule.scheduleEndTime).format('YYYY-MM-DD HH:mm'),
-      ),
+      isBetween(allowStartMinusTime, moment(schedule.scheduleEndTime)),
     );
     const isNowData = isBetween(allowStartMinusTime, allowEndPlusTime);
     setIsCompleteAllow(isBetween(allowStartMinusTime, allowEndPlusTime));
@@ -486,12 +481,14 @@ const DayScheduleHistory = (props: Props) => {
       )}
       {schedule.scheduleTimeList &&
         intervalFormatted.map((val, index) => {
-          const startTime = moment(val.timeStart)
-            .subtract(schedule.lecture.lectureAllowMinus, 'minutes')
-            .format('YYYY-MM-DD HH:mm');
-          const endTime = moment(val.timeEnd)
-            .add(schedule.lecture.lectureAllowEndPlus, 'minutes')
-            .format('YYYY-MM-DD HH:mm');
+          const startTime = moment(val.timeStart).subtract(
+            schedule.lecture.lectureAllowMinus,
+            'minutes',
+          );
+          const endTime = moment(val.timeEnd).add(
+            schedule.lecture.lectureAllowEndPlus,
+            'minutes',
+          );
           const intervalIsBetween = isBetween(startTime, endTime); // 시간별 출석
 
           return (

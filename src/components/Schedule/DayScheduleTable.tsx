@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import moment, {Moment} from 'moment';
+import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import moment from 'moment';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {useRecoilValue} from 'recoil';
 import scheduleState from '#recoil/Schedule';
@@ -15,6 +9,7 @@ import {COLORS} from '#constants/colors.ts';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {StudentInfoProps} from '#types/user.ts';
 import DayScheduleHistory from '#components/Schedule/DayScheduleHistory.tsx';
+import {isBetween} from '#utils/scheduleHelper.ts';
 
 interface Props {
   navigation: BottomTabNavigationHelpers;
@@ -30,10 +25,6 @@ const DayScheduleTable = (props: Props) => {
       attendeeId: studentInfo.attendeeId,
       scheduleId: scheduleId,
     });
-  };
-
-  const isBetween = (startTime: Moment, endTime: Moment) => {
-    return moment().isBetween(startTime, endTime, undefined, '[]');
   };
 
   return (
