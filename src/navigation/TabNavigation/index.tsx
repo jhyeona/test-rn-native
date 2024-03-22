@@ -3,7 +3,6 @@ import {useRecoilValue, useSetRecoilState} from 'recoil';
 import Schedule from '#containers/Schedule';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Mypage from '#containers/Mypage';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {
   requestLocationPermissions,
   requestNotificationsPermission,
@@ -19,6 +18,9 @@ import {
 import {requestWifiList} from '#services/locationScanner.ts';
 import {onesignalLogin} from '#utils/onesignalHelper.ts';
 import userState from '#recoil/User';
+import ScheduleHistory from '#containers/ScheduleHistory';
+import Lecture from '#containers/Lecture';
+import TabBar from '#components/Navigation/TabBar.tsx';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
@@ -60,21 +62,27 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
+      // tabBar={(props) => <TabBar {...props} />}
       screenOptions={({route}) => ({
-        tabBarIcon: ({color}) => {
-          //props: focused, size
-          if (route.name === 'Schedule') {
-            return <SvgIcon name="Home" size={23} color={color} />;
-          }
-          if (route.name === 'Mypage') {
-            return <SvgIcon name="Setting" size={29} color={color} />;
-          }
+        tabBarIcon: ({focused}) => {
+          return <TabBar routeName={route.name} focused={focused} />;
         },
+        tabBarStyle: {paddingHorizontal: 20, paddingVertical: 10},
         tabBarShowLabel: false,
       })}>
       <Tab.Screen
         name="Schedule"
         component={Schedule}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="ScheduleHistory"
+        component={ScheduleHistory}
+        options={{headerShown: false}}
+      />
+      <Tab.Screen
+        name="Lecture"
+        component={Lecture}
         options={{headerShown: false}}
       />
       <Tab.Screen
