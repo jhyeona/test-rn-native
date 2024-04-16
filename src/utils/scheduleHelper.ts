@@ -1,4 +1,5 @@
 import moment, {Moment} from 'moment/moment';
+import {ScheduleHistoryDataProps} from '#types/schedule.ts';
 
 export const weekOfMonth = (nowDate: Moment) => {
   const weekOfMonthNumber = (date: Moment) =>
@@ -33,4 +34,31 @@ export const handleErrorResponse = (code: string) => {
     default:
       return '처리되지 않았습니다.';
   }
+};
+
+export const attendList = (historyData: ScheduleHistoryDataProps) => {
+  const timeList = historyData.scheduleTimeList;
+  const attendTrueList = historyData.scheduleTimeList
+    .filter(val => {
+      return val.check;
+    })
+    .map(item => ({...item}));
+
+  const intervalEventList = historyData.intervalEventList?.map(item => ({
+    ...item,
+  })); // map 을 사용하여 깊은 복사
+
+  return timeList.map(item => {
+    if (item.check) {
+      const matchedTime = attendTrueList.shift(); // 시간별 체크 리스트
+      const matchedEvent = intervalEventList?.shift(); // 시간별 체크의 이벤트 리스트
+      return {
+        ...item,
+        ...(matchedTime && {check: matchedTime.check}),
+        ...(matchedEvent?.eventType && {eventType: matchedEvent.eventType}),
+      };
+    } else {
+      return item;
+    }
+  });
 };

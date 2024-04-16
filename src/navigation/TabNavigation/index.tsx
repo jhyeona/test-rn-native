@@ -75,16 +75,16 @@ const TabNavigation = () => {
         component={Schedule}
         options={{headerShown: false}}
       />
-      <Tab.Screen
-        name="ScheduleHistory"
-        component={ScheduleHistory}
-        options={{headerShown: false}}
-      />
-      <Tab.Screen
-        name="Lecture"
-        component={Lecture}
-        options={{headerShown: false}}
-      />
+      {/*<Tab.Screen*/}
+      {/*  name="ScheduleHistory"*/}
+      {/*  component={ScheduleHistory}*/}
+      {/*  options={{headerShown: false}}*/}
+      {/*/>*/}
+      {/*<Tab.Screen*/}
+      {/*  name="Lecture"*/}
+      {/*  component={Lecture}*/}
+      {/*  options={{headerShown: false}}*/}
+      {/*/>*/}
       <Tab.Screen
         name="Mypage"
         component={Mypage}
