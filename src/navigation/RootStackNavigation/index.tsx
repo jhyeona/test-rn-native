@@ -21,6 +21,7 @@ import PrivacyPolicy from '#containers/PrivacyPolicy';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import Initialize from '#containers/Initialize';
 import Onboarding from '#containers/Onboarding';
+import {onesignalInit} from '#utils/onesignalHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -52,6 +53,10 @@ const RootStackNavigation = () => {
   useEffect(() => {
     token ? setIsLogin(true) : setIsLogin(false);
   }, [setIsLogin, token]);
+
+  useEffect(() => {
+    onesignalInit();
+  }, []);
 
   return (
     <NavigationContainer

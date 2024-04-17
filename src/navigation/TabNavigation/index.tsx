@@ -16,7 +16,7 @@ import {
   requestStopBeaconScanning,
 } from '#services/beaconScanner.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
-import {onesignalLogin} from '#utils/onesignalHelper.ts';
+import {onesignalInit, onesignalLogin} from '#utils/onesignalHelper.ts';
 import userState from '#recoil/User';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import Lecture from '#containers/Lecture';

@@ -10,7 +10,6 @@ const Initialize = ({
   navigation: NativeStackNavigationHelpers;
 }) => {
   useEffect(() => {
-    onesignalInit();
     // const isVisitor = storage.getBoolean('isVisitor');
     // if (!isVisitor) {
     //   navigation.navigate('Onboarding');

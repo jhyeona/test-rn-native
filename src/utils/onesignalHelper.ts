@@ -5,6 +5,14 @@ export const onesignalInit = () => {
   const initId = Config.ONESIGNAL_INIT_ID;
   if (initId) {
     OneSignal.initialize(initId);
+    // OneSignal.Notifications.addEventListener('foregroundWillDisplay', event => {
+    //   event.preventDefault();
+    //   // some async work
+    //   console.log('OneSignal: notification will be shown:', event);
+    //
+    //   // Use display() to display the notification after some async work
+    //   event.getNotification().display();
+    // });
   }
 };
 
