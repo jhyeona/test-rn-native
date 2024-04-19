@@ -3,28 +3,28 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBJmFiXFhM656v-U_DKVwfrVa0dNHLT4a0</string>
+	<string>AIzaSyDADaTMzX0BMPOmtGB9RlUX8Eh7rpS0_xg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>402935223675</string>
+	<string>202298689071</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>io.lpin.checkhere</string>
 	<key>PROJECT_ID</key>
-	<string>app-ihereapp-dev</string>
+	<string>checkhere-prod</string>
 	<key>STORAGE_BUCKET</key>
-	<string>app-ihereapp-dev.appspot.com</string>
+	<string>checkhere-prod.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:402935223675:ios:ae912f2e4f846458bf59de</string>
+	<string>1:202298689071:ios:c87947e22b10c4fc7ba8da</string>
 </dict>
 </plist>

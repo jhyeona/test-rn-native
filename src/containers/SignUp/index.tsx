@@ -28,7 +28,7 @@ import {
   checkPassword,
   checkPhone,
 } from '#utils/regExpHelper.ts';
-import {logErrorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
@@ -118,14 +118,14 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       birth: birthday.substring(2),
       telecom: telecom,
     };
-
     try {
       const response = await postSignUpTAS(data);
       if (response?.code === '0000') {
         return true;
       }
     } catch (error) {
-      console.log(error);
+      await setAttToCrashlytics(data);
+      errorToCrashlytics(error, 'requestSignupTAS');
       return false;
     }
   };
@@ -145,15 +145,17 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         setIsTimer(true);
         setRestartTimer(true);
       }
-    } catch (e) {
+    } catch (error) {
       setIsSend(false);
       setIsCertification(false);
-      console.log(e);
+      console.log(error);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: 'SMS 인증 요청에 실패했습니다.',
       });
+
+      errorToCrashlytics(error, 'requestSignupSendSMS');
     }
   };
 
@@ -169,12 +171,14 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       setIsCertification(true);
       setIsTimer(false);
     } catch (error) {
-      console.log(error);
       setGlobalModalState({
         isVisible: true,
         title: '안내',
         message: '코드가 일치하지 않거나\n유효 시간이 경과되었습니다.',
       });
+
+      await setAttToCrashlytics(data);
+      errorToCrashlytics(error, 'requestSignupConfirmSMS');
     }
   };
 
@@ -298,8 +302,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         title: '안내',
         message: `회원가입에 실패하였습니다.`,
       });
-      console.log('error', error);
-      logErrorToCrashlytics(error, 'requestSignUp');
+      errorToCrashlytics(error, 'requestSignUp');
     }
   };
 
@@ -418,7 +421,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             <View style={{width: '40%'}}>
               {isSend ? (
                 <CButton
-                  text={isCertification ? '인증 완료' : '재발송'}
+                  text={isCertification ? '발송 완료' : '재발송'}
                   onPress={onPressCertification}
                   disabled={countDown > 100 || isCertification}
                 />

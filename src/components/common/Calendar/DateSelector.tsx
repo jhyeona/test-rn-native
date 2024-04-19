@@ -10,7 +10,7 @@ interface Props {
   selectedDate: Date | string | Moment;
 }
 
-const Calendar = (props: Props) => {
+const DateSelector = (props: Props) => {
   const {onPressCalendar, selectedDate} = props;
   return (
     <>
@@ -33,4 +33,4 @@ const Calendar = (props: Props) => {
   );
 };
 
-export default Calendar;
+export default DateSelector;

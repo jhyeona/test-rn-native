@@ -12,7 +12,7 @@ import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
-import Calendar from '#components/common/Calendar/Calendar.tsx';
+import DateSelector from '#components/common/Calendar/DateSelector.tsx';
 import CView from '#components/common/CommonView/CView';
 
 const ScheduleHistory = ({
@@ -128,7 +128,7 @@ const ScheduleHistory = ({
       <Header title="내 출석 기록" navigation={navigation} isBack />
       <CView>
         <View style={{flexDirection: 'row', marginBottom: 30, height: 42}}>
-          <Calendar
+          <DateSelector
             onPressCalendar={() => showDatePicker(true)}
             selectedDate={startDate.format('YYYY-MM-DD')}
           />
@@ -142,7 +142,7 @@ const ScheduleHistory = ({
               fontWeight="500"
             />
           </View>
-          <Calendar
+          <DateSelector
             onPressCalendar={() => showDatePicker(false)}
             selectedDate={endDate.format('YYYY-MM-DD')}
           />

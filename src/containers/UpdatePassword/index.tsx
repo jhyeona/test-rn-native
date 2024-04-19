@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
@@ -11,6 +10,7 @@ import globalState from '#recoil/Global';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import {errorToCrashlytics} from '#services/firebase.ts';
 
 const UpdatePassword = ({
   navigation,
@@ -40,8 +40,13 @@ const UpdatePassword = ({
       setPassword('');
       setRePassword('');
       navigation.goBack();
-    } catch (error) {
-      console.log('[ERROR]', error);
+    } catch (error: any) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호 변경에 실패했습니다.',
+      });
+      errorToCrashlytics(error, 'patch update password');
     }
   };
 
@@ -86,11 +91,4 @@ const UpdatePassword = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 16,
-    paddingHorizontal: 24,
-    paddingBottom: 16,
-  },
-});
 export default UpdatePassword;

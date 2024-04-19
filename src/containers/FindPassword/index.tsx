@@ -10,7 +10,7 @@ import Header from '#components/common/Header/Header.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import {postFindPassword} from '#hooks/useUser.ts';
-import {logErrorToCrashlytics} from '#services/firebase.ts';
+import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 
 const FindPassword = ({
   navigation,
@@ -53,6 +53,8 @@ const FindPassword = ({
           '임시 비밀번호를 전송하였습니다.\n임시 비밀번호로 로그인해주세요.',
       });
     } catch (e: any) {
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(e, 'SendSMSCodeForTempPassword');
       if (e.code === '4003') {
         setGlobalModalState({
           isVisible: true,
@@ -69,7 +71,6 @@ const FindPassword = ({
             '메세지 전송에 실패했습니다. \n번호 확인 후 다시 시도해 주세요.',
         });
       }
-      logErrorToCrashlytics(e, 'SendSMSCodeForTempPassword');
     }
   };
 

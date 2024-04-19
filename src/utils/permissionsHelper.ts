@@ -8,12 +8,7 @@ import {
 import {Platform} from 'react-native';
 import {Permission} from 'react-native-permissions/src/types.ts';
 import {IS_ANDROID, IS_IOS} from '#constants/common.ts';
-
-export const platformVersion =
-  // Only IOS 14 Methods - checkLocationAccuracy , requestLocationAccuracy, openPhotoPicker
-  typeof Platform.Version === 'string'
-    ? parseInt(Platform.Version, 10)
-    : Platform.Version;
+import {platformVersion} from '#services/device.ts';
 
 export const handleOpenSettings = () => {
   openSettings().catch(() => console.log('설정으로 이동 실패.'));
@@ -32,25 +27,27 @@ export const requestLocationPermissions = async () => {
     permissionsList = [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE];
 
     return requestMultiple(permissionsList).then(statuses => {
+      console.log(
+        statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED,
+      );
       return statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED;
     });
   }
-  if (IS_ANDROID) {
-    permissionsList = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
-    if (platformVersion > 30) {
-      permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
-    }
-    return requestMultiple(permissionsList).then(statuses => {
-      if (platformVersion > 30) {
-        return (
-          statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
-            RESULTS.GRANTED &&
-          statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
-        );
-      }
-      return (
-        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED
-      );
-    });
+  // IS ANDROID
+  permissionsList = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
+  if (platformVersion > 30) {
+    permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
   }
+  return requestMultiple(permissionsList).then(statuses => {
+    if (platformVersion > 30) {
+      return (
+        statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
+          RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
+      );
+    }
+    return (
+      statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED
+    );
+  });
 };

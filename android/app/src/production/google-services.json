@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "402935223675",
-    "project_id": "app-ihereapp-dev",
-    "storage_bucket": "app-ihereapp-dev.appspot.com"
+    "project_number": "202298689071",
+    "project_id": "checkhere-prod",
+    "storage_bucket": "checkhere-prod.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:402935223675:android:5d094a0e2fadda67bf59de",
+        "mobilesdk_app_id": "1:202298689071:android:c004273d023d2de47ba8da",
         "android_client_info": {
           "package_name": "io.lpin.checkhere"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDrEiU4NXf9XU2okTsVNj73nen4DG16tYI"
+          "current_key": "AIzaSyCNplZkiTGrh1AXBiq3hs2w8eWiOTOcAO0"
         }
       ],
       "services": {

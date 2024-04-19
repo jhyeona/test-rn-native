@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
@@ -36,13 +36,21 @@ const CInput = (props: Props) => {
     fontSize,
     children,
   } = props;
+
   return (
     <View style={{width: fullWidth ?? '100%'}}>
       <View style={styles.titleContainer}>
         {children ?? (
           <CText text={title} fontWeight={'500'} fontSize={fontSize} />
         )}
-        {isWarning && <Text style={styles.errorMessage}>{errorMessage}</Text>}
+        {isWarning && (
+          <CText
+            text={errorMessage ?? ''}
+            style={styles.errorMessage}
+            fontSize={12}
+            color={COLORS.warning}
+          />
+        )}
       </View>
       <View
         style={[
@@ -86,6 +94,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-  errorMessage: {marginLeft: 8, color: COLORS.warning, fontSize: 12},
+  errorMessage: {marginLeft: 8},
 });
 export default CInput;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {RESULTS} from 'react-native-permissions';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {storage} from '#utils/storageHelper.ts';
@@ -11,17 +11,14 @@ import Header from '#components/common/Header/Header.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Toggle from '#components/common/Toggle/Toggle.tsx';
 import {COLORS} from '#constants/colors.ts';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {
   handleOpenSettings,
   requestNotificationsPermission,
 } from '#utils/permissionsHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import userState from '#recoil/User';
-import {
-  onesignalChangeSubscription,
-  onesignalLogout,
-} from '#utils/onesignalHelper.ts';
+import {onesignalLogout} from '#utils/onesignalHelper.ts';
+import MenuButton from '#components/Mypage/MenuButton.tsx';
 
 const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {data: userData, refetch: refetchUserData} = useGetUserInfo();
@@ -121,26 +118,31 @@ const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             disabled={isPushToggleDisabled}
           />
         </View>
-        <Pressable style={styles.containerRow} onPress={onPressUpdatePassword}>
-          <CText text="비밀번호 변경" fontSize={20} />
-          <SvgIcon name="RightArrow" size={24} />
-        </Pressable>
-        <Pressable style={styles.containerRow} onPress={onPressChangeAcademy}>
-          <CText text="기관추가" fontSize={20} />
-          <SvgIcon name="RightArrow" size={24} />
-        </Pressable>
-        <Pressable style={styles.containerRow} onPress={onPressPrivacyPolicy}>
-          <CText text="개인정보처리방침" fontSize={20} />
-          <SvgIcon name="RightArrow" size={24} />
-        </Pressable>
-        <Pressable style={styles.containerRow} onPress={onPressLogout}>
-          <CText text="로그아웃" fontSize={20} />
-          <SvgIcon name="RightArrow" size={24} />
-        </Pressable>
-        <Pressable style={styles.containerRow} onPress={onPressWithdraw}>
-          <CText text="회원탈퇴" fontSize={20} />
-          <SvgIcon name="RightArrow" size={24} />
-        </Pressable>
+        <MenuButton
+          buttonStyle={styles.containerRow}
+          buttonName="비밀번호 변경"
+          onPressHandler={onPressUpdatePassword}
+        />
+        <MenuButton
+          buttonStyle={styles.containerRow}
+          buttonName="기관추가"
+          onPressHandler={onPressChangeAcademy}
+        />
+        <MenuButton
+          buttonStyle={styles.containerRow}
+          buttonName="개인정보처리방침"
+          onPressHandler={onPressPrivacyPolicy}
+        />
+        <MenuButton
+          buttonStyle={styles.containerRow}
+          buttonName="로그아웃"
+          onPressHandler={onPressLogout}
+        />
+        <MenuButton
+          buttonStyle={styles.containerRow}
+          buttonName="회원탈퇴"
+          onPressHandler={onPressWithdraw}
+        />
       </ScrollView>
     </CSafeAreaView>
   );

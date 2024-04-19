@@ -1,6 +1,6 @@
 {
   "name": "ihereapp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -13,8 +13,8 @@
     "android:dev": "react-native run-android --mode=developmentdebug --appIdSuffix development",
     "android:prod": "react-native run-android --mode=productionRelease",
     "ios:ac": "react-native run-ios --scheme ihereapp_Appcenter",
-    "ios:dev": "react-native run-ios --scheme ihereapp_Debug --simulator iPhone5",
-    "ios:prod": "react-native run-ios --scheme ihereapp"
+    "ios:dev": "react-native run-ios --scheme ihereapp_Debug --simulator 'iPhone 13 mini'",
+    "ios:prod": "react-native run-ios --scheme ihereapp --simulator 'iPhone 13 mini'"
   },
   "dependencies": {
     "@howljs/calendar-kit": "^1.13.2",
@@ -27,7 +27,9 @@
     "@react-navigation/native-stack": "^6.9.17",
     "@shopify/flash-list": "^1.6.3",
     "@tanstack/react-query": "^5.17.9",
+    "@types/crypto-js": "^4.2.2",
     "axios": "^1.6.5",
+    "crypto-js": "^4.2.0",
     "moment": "^2.30.1",
     "react": "18.2.0",
     "react-native": "0.73.5",
@@ -35,7 +37,8 @@
     "react-native-calendar-timetable": "^1.0.6",
     "react-native-config": "^1.5.1",
     "react-native-gesture-handler": "^2.14.0",
-    "react-native-mmkv": "^2.11.0",
+    "react-native-get-random-values": "^1.11.0",
+    "react-native-mmkv": "^2.12.2",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-onesignal": "^5.0.6",
     "react-native-permissions": "^4.1.1",
