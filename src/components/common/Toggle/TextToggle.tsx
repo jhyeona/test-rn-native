@@ -9,9 +9,14 @@ interface Props {
 const TextToggle = (props: Props) => {
   const {onToggle} = props;
   const [isActive, setIsActive] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const toggleAnimation = useRef(new Animated.Value(0)).current;
 
   const handleToggle = () => {
+    setDisabled(true);
+    setTimeout(() => {
+      setDisabled(false);
+    }, 500);
     setIsActive(!isActive);
     onToggle(!isActive);
   };
@@ -35,7 +40,8 @@ const TextToggle = (props: Props) => {
       style={[
         styles.container,
         isActive ? styles.activeBackground : styles.background,
-      ]}>
+      ]}
+      disabled={disabled}>
       <Animated.View style={[styles.circle, {left: circlePosition}]} />
       <View
         style={isActive ? styles.activeTextContainer : styles.textContainer}>
