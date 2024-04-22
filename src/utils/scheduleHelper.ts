@@ -37,6 +37,7 @@ export const handleErrorResponse = (code: string) => {
 };
 
 export const attendList = (historyData: ScheduleHistoryDataProps) => {
+  // 시간별 출결 리스트를 만들기 위한 데이터 포맷
   const timeList = historyData.scheduleTimeList;
   const attendTrueList = historyData.scheduleTimeList
     .filter(val => {

@@ -152,6 +152,9 @@ const DayScheduleHistory = (props: Props) => {
   const onPressEnter = async () => {
     setButtonDisabled(true);
 
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 500);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
     const payload = await eventPayload();
@@ -166,10 +169,6 @@ const DayScheduleHistory = (props: Props) => {
       await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventEnter');
     }
-
-    setTimeout(() => {
-      setButtonDisabled(false);
-    }, 500);
   };
 
   const onPressComplete = () => {
@@ -185,6 +184,9 @@ const DayScheduleHistory = (props: Props) => {
   const completeConfirm = async () => {
     setButtonDisabled(true);
 
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 500);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
     const payload = await eventPayload();
@@ -200,14 +202,14 @@ const DayScheduleHistory = (props: Props) => {
       await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventComplete');
     }
-    setTimeout(() => {
-      setButtonDisabled(false);
-    }, 500);
   };
 
   const onPressAttend = async () => {
     setButtonDisabled(true);
 
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 500);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
     const payload = await eventPayload();
@@ -218,7 +220,6 @@ const DayScheduleHistory = (props: Props) => {
 
       openModal('확인 되었습니다.');
     } catch (e: any) {
-      console.log(e);
       await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventAttend');
       if (e.code === '1004') {
@@ -241,9 +242,6 @@ const DayScheduleHistory = (props: Props) => {
       const errorMessage = handleErrorResponse(e.code);
       openModal(errorMessage);
     }
-    setTimeout(() => {
-      setButtonDisabled(false);
-    }, 500);
   };
 
   const onPressLeave = () => {
@@ -259,6 +257,9 @@ const DayScheduleHistory = (props: Props) => {
   const leaveConfirm = async () => {
     setButtonDisabled(true);
 
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 500);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
     const payload = await eventPayload();
@@ -274,9 +275,6 @@ const DayScheduleHistory = (props: Props) => {
       await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventLeave');
     }
-    setTimeout(() => {
-      setButtonDisabled(false);
-    }, 500);
   };
 
   const onPressComeback = () => {
@@ -292,6 +290,9 @@ const DayScheduleHistory = (props: Props) => {
   const comebackConfirm = async () => {
     setButtonDisabled(true);
 
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 500);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
     const payload = await eventPayload();
@@ -307,9 +308,6 @@ const DayScheduleHistory = (props: Props) => {
       await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, 'requestEventComeback');
     }
-    setTimeout(() => {
-      setButtonDisabled(false);
-    }, 500);
   };
 
   const timeSet = () => {
@@ -414,15 +412,20 @@ const DayScheduleHistory = (props: Props) => {
       )}
       {schedule.scheduleTimeList &&
         intervalFormatted.map((val, index) => {
-          const startTime = moment(val.timeStart).subtract(
+          const startAllow = moment(val.timeStart).subtract(
             schedule.lecture.lectureAllowMinus,
+            'minutes',
+          );
+          const startAllowEnd = moment(val.timeStart).add(
+            schedule.lecture.lectureAllowPlus,
             'minutes',
           );
           const endTime = moment(val.timeEnd).add(
             schedule.lecture.lectureAllowEndPlus,
             'minutes',
           );
-          const intervalIsBetween = isBetween(startTime, endTime); // 시간별 출석
+          const isButtonAvailable = isBetween(startAllow, startAllowEnd); // 입실 유효시간
+          const intervalIsBetween = isBetween(startAllow, endTime); // 시간별 출석
 
           return (
             <View
@@ -458,18 +461,18 @@ const DayScheduleHistory = (props: Props) => {
                   <Pressable
                     style={[
                       styles.attendButton,
-                      !intervalIsBetween && styles.attendButtonDisabled,
+                      !intervalIsBetween && styles.attendButtonDisabled, // 현재 진행중인 강의가 아닐 때
                     ]}
                     onPress={onPressAttend}
                     disabled={
                       buttonDisabled ||
                       historyData?.completeEvent?.eventType === 'COMPLETE' || // 퇴실 처리 했을 경우
-                      !intervalIsBetween
+                      !intervalIsBetween // 현재 진행중인 강의가 아닐 때
                     }>
                     <CText
-                      text={intervalIsBetween ? '출석하기' : '미출석'}
+                      text={isButtonAvailable ? '출석하기' : '미출석'} // 출석 인정 시간에만 출석하기 버튼 표시
                       fontSize={11}
-                      color={intervalIsBetween ? COLORS.dark.red : 'black'}
+                      color={intervalIsBetween ? COLORS.dark.red : 'black'} // 현재 진행중인 강의 + 미출석 빨간색으로 표시
                     />
                   </Pressable>
                 )

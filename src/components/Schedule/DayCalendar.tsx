@@ -32,6 +32,7 @@ const DayCalendar = (props: Props) => {
   const [currentDate, setCurrentDate] = useState(moment(selectedDate)); // selected 했을 때 또는 이전/다음 주로 바꿨을 때 바뀐 주의 날짜 (해당 날짜의 한주 날짜를 렌더링함)
   const [headerUpdateCounter, setHeaderUpdateCounter] = useState(0); // header를 리렌더링 하기 위함
 
+  const changeWidth = useChangeWidth();
   const daysOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
 
   const handleDayClick = (index: number, isSunday: boolean) => {
@@ -97,22 +98,6 @@ const DayCalendar = (props: Props) => {
       </View>
     );
   };
-  const changeWidth = useChangeWidth();
-  const renderBody = () => {
-    return (
-      <ScrollView
-        contentContainerStyle={{width: screenWidth - 48}}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        onScrollEndDrag={handleBodyScroll}
-        pagingEnabled
-        scrollEventThrottle={16}>
-        <View style={{width: changeWidth}}>
-          <DayScheduleTable navigation={navigation} studentInfo={studentInfo} />
-        </View>
-      </ScrollView>
-    );
-  };
 
   const handleBodyScroll = (event: any) => {
     const velocity = event.nativeEvent.velocity.x; // velocity 값이 양수이면 IOS 는 좌 -> 우 / ANDROID 는 우 -> 좌
@@ -133,7 +118,17 @@ const DayCalendar = (props: Props) => {
   return (
     <View style={styles.container}>
       {renderHeader(currentDate)}
-      {renderBody()}
+      <ScrollView
+        contentContainerStyle={{width: screenWidth - 48}}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        onScrollEndDrag={handleBodyScroll}
+        pagingEnabled
+        scrollEventThrottle={16}>
+        <View style={{width: changeWidth}}>
+          <DayScheduleTable navigation={navigation} studentInfo={studentInfo} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
