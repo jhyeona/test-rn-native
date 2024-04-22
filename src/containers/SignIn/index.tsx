@@ -67,8 +67,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       if (response) {
         storage.set('access_token', response.access_token);
         storage.set('refresh_token', response.refresh_token);
+        setIsLogin(true);
       }
-      setIsLogin(true);
     } catch (error: any) {
       if (error.code === '4000') {
         setIsIdWarning(true);
@@ -111,6 +111,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               isWarning={isIdWarning}
               errorMessage="올바른 휴대폰 번호를 입력해 주세요."
               inputMode="numeric"
+              maxLength={11}
             />
             <CInput
               title="비밀번호"

@@ -96,6 +96,7 @@ const FindPassword = ({
           placeholder="홍길동"
           isWarning={isWarningName}
           errorMessage="이름을 확인해 주세요."
+          maxLength={5}
           inputMode="text"
         />
         <CInput

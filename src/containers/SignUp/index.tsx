@@ -32,6 +32,7 @@ import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+  // TODO: useForm 사용 예정
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
@@ -110,6 +111,14 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   };
 
   const tasCertification = async () => {
+    // TAS 인증 시간 지연 (약 4~7초 딜레이 되는 것으로 파악)으로 인해 메세지 먼저 띄운 후 요청 완료 시 다시 메세지 출력
+    setIsCertification(true); // TAS 가 딜레이 되는 동안 입력 및 버튼 disabled 처리
+    setGlobalModalState({
+      isVisible: true,
+      title: '안내',
+      message:
+        '인증 요청되었습니다.\n환경에 따라 다소 시간이 지연될 수 있습니다. \n조금만 기다려 주세요.',
+    });
     // TAS 인증
     const data = {
       phone: phone,
@@ -121,9 +130,11 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     try {
       const response = await postSignUpTAS(data);
       if (response?.code === '0000') {
+        setIsCertification(false);
         return true;
       }
     } catch (error) {
+      setIsCertification(false);
       await setAttToCrashlytics(data);
       errorToCrashlytics(error, 'requestSignupTAS');
       return false;
@@ -147,7 +158,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       }
     } catch (error) {
       setIsSend(false);
-      setIsCertification(false);
       console.log(error);
       setGlobalModalState({
         isVisible: true,
@@ -205,7 +215,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     } // END - FOR APP STORE TEST DATA
 
     setIsSend(true);
-    setIsCertification(true);
+    setIsCertification(false);
 
     const isDoubleCheckPhone = await doubleCheckPhone();
     if (!isDoubleCheckPhone) {
@@ -215,7 +225,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         message: '이미 사용중인 휴대폰 번호입니다.',
       });
       setIsSend(false);
-      setIsCertification(false);
       return;
     }
 
@@ -227,7 +236,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         message: '휴대폰 인증에 실패했습니다.\n정보를 확인해주세요.',
       });
       setIsSend(false);
-      setIsCertification(false);
       return;
     }
 
