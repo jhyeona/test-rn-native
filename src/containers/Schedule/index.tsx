@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/ko';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
@@ -113,9 +112,7 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
                 disabled={userData ? userData.studentList.length <= 0 : false}
               />
               {isWeekend ? (
-                <View style={{flexGrow: 1, paddingTop: 4}}>
-                  <TimeTable />
-                </View>
+                <TimeTable />
               ) : (
                 selectStudentInfo && (
                   <>

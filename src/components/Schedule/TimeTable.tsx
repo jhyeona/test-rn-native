@@ -2,31 +2,32 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import moment from 'moment/moment';
 import {
   EventItem,
-  HighlightDates,
-  MomentConfig,
   TimelineCalendar,
   TimelineCalendarHandle,
 } from '@howljs/calendar-kit';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 import scheduleState from '#recoil/Schedule';
-import {Dimensions} from 'react-native';
-import {COLORS} from '#constants/colors';
+import {View} from 'react-native';
 import globalState from '#recoil/Global';
 import {convertTimeFormat} from '#utils/scheduleHelper.ts';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
+import {timeTableTheme} from '#constants/calendar.ts';
 
 const TimeTable = () => {
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
   const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
+  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
   const setSelectWeekDate = useSetRecoilState(
     globalState.selectWeekScheduleDate,
   );
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
+
   const [isInitRendering, setIsInitRendering] = useState(false);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(24.5);
+
   const calendarRef = useRef<TimelineCalendarHandle>(null);
   const changeWidth = useChangeWidth();
+  const theme = useMemo(() => timeTableTheme, []);
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
@@ -46,67 +47,13 @@ const TimeTable = () => {
     return formatted;
   };
 
-  MomentConfig.updateLocale('ko', {
-    weekdaysShort: '일_월_화_수_목_금_토'.split('_'),
-  });
-
-  const onChangeWeek = async (date: string) => {
-    // 주간 날짜
-    setSelectWeekDate(date);
-  };
-
-  const _onDateChanged = async (date: string) => {
+  const onChangeDate = (date: string) => {
     const numOfDays = 7;
     const fromDate = new Date(date);
     const toDate = new Date(date);
     toDate.setDate(toDate.getDate() + numOfDays);
-    await onChangeWeek(moment(fromDate).format('YYYYMMDD'));
+    setSelectWeekDate(moment(fromDate).format('YYYYMMDD'));
   };
-
-  const highlightDates: HighlightDates = useMemo(
-    // 공휴일 색 표시할 때 사용
-    () => ({
-      // '2024-02-09': {
-      //   dayNameColor: 'red',
-      //   dayNumberColor: 'red',
-      //   dayNumberBackgroundColor: '#FFF',
-      // },
-    }),
-    [],
-  );
-
-  const theme = useMemo(
-    () => ({
-      cellBorderColor: COLORS.layout,
-
-      //event title
-      eventTitle: {color: COLORS.dark.blue, fontSize: 11},
-
-      //Saturday style
-      saturdayName: {color: 'black'},
-      saturdayNumber: {color: 'black'},
-      // saturdayNumberContainer: {backgroundColor: 'white'},
-
-      //Sunday style
-      sundayName: {color: 'black'},
-      sundayNumber: {color: 'black'},
-      // sundayNumberContainer: {backgroundColor: 'white'},
-
-      //Today style
-      todayName: {color: 'white'},
-      todayNumber: {color: 'white'},
-      todayNumberContainer: {backgroundColor: COLORS.primary},
-
-      //Normal style
-      dayName: {color: 'black'},
-      dayNumber: {color: 'black'},
-      dayNumberContainer: {backgroundColor: 'white'},
-
-      //Loading style
-      loadingBarColor: COLORS.primary,
-    }),
-    [],
-  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -133,7 +80,7 @@ const TimeTable = () => {
   }, []);
 
   return (
-    <>
+    <View style={{flexGrow: 1, paddingTop: 4}}>
       {isInitRendering && (
         <TimelineCalendar
           ref={calendarRef}
@@ -141,8 +88,7 @@ const TimeTable = () => {
           calendarWidth={changeWidth}
           viewMode="week"
           events={formattedData()}
-          highlightDates={highlightDates}
-          onDateChanged={_onDateChanged}
+          onDateChanged={onChangeDate}
           locale="ko"
           start={startTime} // time 시작 시간
           end={endTime} // time 종료 시간
@@ -159,7 +105,7 @@ const TimeTable = () => {
           // maxTimeIntervalHeight={110}
         />
       )}
-    </>
+    </View>
   );
 };
 
