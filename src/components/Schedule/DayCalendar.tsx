@@ -1,12 +1,6 @@
 import moment from 'moment';
 import React, {useState} from 'react';
-import {
-  View,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import {useRecoilState} from 'recoil';
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import globalState from '#recoil/Global/index.ts';
@@ -16,8 +10,6 @@ import DayScheduleTable from '#components/Schedule/DayScheduleTable.tsx';
 import {IS_IOS} from '#constants/common.ts';
 import CText from '#components/common/CustomText/CText.tsx';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
-
-const screenWidth = Dimensions.get('window').width;
 
 interface Props {
   studentInfo: StudentInfoProps;
@@ -119,7 +111,7 @@ const DayCalendar = (props: Props) => {
     <View style={styles.container}>
       {renderHeader(currentDate)}
       <ScrollView
-        contentContainerStyle={{width: screenWidth - 48}}
+        contentContainerStyle={{width: changeWidth}}
         horizontal
         showsHorizontalScrollIndicator={false}
         onScrollEndDrag={handleBodyScroll}

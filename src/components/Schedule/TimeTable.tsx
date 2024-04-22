@@ -16,7 +16,6 @@ import {timeTableTheme} from '#constants/calendar.ts';
 const TimeTable = () => {
   const weekData = useRecoilValue(scheduleState.weekScheduleState);
   const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
   const setSelectWeekDate = useSetRecoilState(
     globalState.selectWeekScheduleDate,
   );
@@ -31,6 +30,7 @@ const TimeTable = () => {
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
+    console.log(weekData?.scheduleList.length);
     weekData?.scheduleList &&
       weekData.scheduleList.map((info, i) => {
         formatted.push({
@@ -56,15 +56,6 @@ const TimeTable = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsInitRendering(true);
-      setIsLoading(false);
-      calendarRef.current?.goToHour(moment().hour());
-    }, 200);
-  }, []);
-
-  useEffect(() => {
     if (weekData && weekData?.scheduleList.length > 0) {
       const start = convertTimeFormat(
         weekData.scheduleList[0].scheduleStartTime,
@@ -77,7 +68,16 @@ const TimeTable = () => {
 
   useEffect(() => {
     setSelectWeekDate(moment().format('YYYY-MM-DD'));
-  }, []);
+  }, [setSelectWeekDate]);
+
+  useEffect(() => {
+    // 가로 사이즈가 변하면 (ex. galaxy fold) 화면 재렌더링 // 추후 변경 예정
+    setIsInitRendering(false);
+    setTimeout(() => {
+      setIsInitRendering(true);
+      // calendarRef.current?.goToHour(moment().hour());
+    }, 200);
+  }, [changeWidth]);
 
   return (
     <View style={{flexGrow: 1, paddingTop: 4}}>
