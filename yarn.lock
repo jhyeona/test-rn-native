@@ -6615,10 +6615,10 @@ react-native-modal-datetime-picker@^17.1.0:
   dependencies:
     prop-types "^15.7.2"
 
-react-native-onesignal@^5.0.6:
-  version "5.0.6"
-  resolved "https://registry.npmjs.org/react-native-onesignal/-/react-native-onesignal-5.0.6.tgz"
-  integrity sha512-P6HVBY3Hu2p2wzKYSCOwUH1ESxEDKpx7wFvTnWCAyMqOc9y1JstASVvoFqDwwuvLBNFmuFkSVXQ7VdsqzTRcQg==
+react-native-onesignal@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-5.1.2.tgz#d81691f5c072f604e7b0f000d970f587baa5ea54"
+  integrity sha512-xpeh/w3IuNN4iplI8qxhoc+fAiuZN1TD5izS0D2t6JXjk+BmLJfwKOeMOwtBg3A6wKFrgbhBH6LRZLZb+nIAeQ==
   dependencies:
     invariant "^2.2.2"
 
