@@ -31,6 +31,7 @@
 		C4A262012B73426A00571C2A /* LocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F72B73426A00571C2A /* LocationModule.swift */; };
 		C4CE30D52B6A185A001A01CC /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = C4CE30D42B6A185A001A01CC /* fonts */; };
 		C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4D783C52B54DE840086145F /* BootSplash.storyboard */; };
+		C4F7B2BB2BD7AF5600658E86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C4F7B2BA2BD7AF5600658E86 /* PrivacyInfo.xcprivacy */; };
 		E33663FB65AB608430400239 /* Pods_ihereapp_ihereappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84559B5A893E8BCC23C9D1FB /* Pods_ihereapp_ihereappTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,7 @@
 		C4A262022B73472100571C2A /* imhereV2-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "imhereV2-Bridging-Header.h"; sourceTree = "<group>"; };
 		C4CE30D42B6A185A001A01CC /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		C4D783C52B54DE840086145F /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = ihereapp/BootSplash.storyboard; sourceTree = "<group>"; };
+		C4F7B2BA2BD7AF5600658E86 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F048BCCFA9A09ABF62FF380C /* Pods-ihereapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp.release.xcconfig"; path = "Target Support Files/Pods-ihereapp/Pods-ihereapp.release.xcconfig"; sourceTree = "<group>"; };
 		F9E744770023770300833694 /* Pods_ihereapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ihereapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +158,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C4F7B2BA2BD7AF5600658E86 /* PrivacyInfo.xcprivacy */,
 				C407E4982B86DC8A00BEC46F /* GoogleService */,
 				C407E4952B86CD7000BEC46F /* Config.xcconfig */,
 				C4CE30D42B6A185A001A01CC /* fonts */,
@@ -327,6 +330,7 @@
 				C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */,
 				C407E4962B86CD7000BEC46F /* Config.xcconfig in Resources */,
 				C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */,
+				C4F7B2BB2BD7AF5600658E86 /* PrivacyInfo.xcprivacy in Resources */,
 				C407E49E2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -603,7 +607,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -641,7 +645,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -931,7 +935,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
