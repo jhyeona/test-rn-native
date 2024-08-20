@@ -1,5 +1,5 @@
-import {OneSignal} from 'react-native-onesignal';
 import Config from 'react-native-config';
+import {OneSignal} from 'react-native-onesignal';
 
 export const onesignalInit = () => {
   const initId = Config.ONESIGNAL_INIT_ID;
@@ -16,13 +16,13 @@ export const onesignalInit = () => {
   }
 };
 
-export const onesignalLogin = (userId: number, isPushApp: boolean) => {
+export const onesignalLogin = async (userId: number, isPushApp: boolean) => {
   OneSignal.login(String(userId));
-  onesignalChangeSubscription(isPushApp);
+  await onesignalChangeSubscription(isPushApp);
 };
 
-export const onesignalChangeSubscription = (isPushApp: boolean) => {
-  let permission = OneSignal.Notifications.hasPermission();
+export const onesignalChangeSubscription = async (isPushApp: boolean) => {
+  let permission = await OneSignal.Notifications.getPermissionAsync();
   // const id = OneSignal.User.pushSubscription.getPushSubscriptionId();
   if (permission && isPushApp) {
     OneSignal.User.pushSubscription.optIn();

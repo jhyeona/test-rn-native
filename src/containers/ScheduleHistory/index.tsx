@@ -1,19 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import moment from 'moment';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {EventProps, SchedulePeriodDataProps} from '#types/schedule.ts';
+import moment from 'moment';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+
+import DateSelector from '#components/common/Calendar/DateSelector.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView';
+import CText from '#components/common/CustomText/CText.tsx';
+import Header from '#components/common/Header/Header.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
 import {getEventHistory} from '#hooks/useSchedule.ts';
 import globalState from '#recoil/Global';
-import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import Header from '#components/common/Header/Header.tsx';
-import {COLORS} from '#constants/colors.ts';
-import CText from '#components/common/CustomText/CText.tsx';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
-import DateSelector from '#components/common/Calendar/DateSelector.tsx';
-import CView from '#components/common/CommonView/CView';
+import {EventProps, SchedulePeriodDataProps} from '#types/schedule.ts';
 
 const ScheduleHistory = ({
   navigation,
@@ -63,17 +65,17 @@ const ScheduleHistory = ({
       return val.eventType === 'COMPLETE';
     });
     const statusType = // 입실 시 상태 (출석 / 지각 / 미출석)
-      entered.length > 0 ? eventStatusType(entered[0].status) : '미출석';
+      entered.length > 0 ? eventStatusType(entered[0]?.status) : '미출석';
     const enteredTime = // 입실 상태가 있다면 입실 시간
       entered.length > 0
-        ? `${moment(entered[0].eventTime).format('MM.DD')}\n${moment(
-            entered[0].eventTime,
+        ? `${moment(entered[0]?.eventTime).format('MM.DD')}\n${moment(
+            entered[0]?.eventTime,
           ).format('HH : mm')}`
         : '-';
     const completedTime = // 퇴실 상태가 있다면 퇴실 시간
       completed.length > 0
-        ? `${moment(completed[0].eventTime).format('MM.DD')}\n${moment(
-            entered[0].eventTime,
+        ? `${moment(completed[0]?.eventTime).format('MM.DD')}\n${moment(
+            entered[0]?.eventTime,
           ).format('HH : mm')}`
         : '-';
 

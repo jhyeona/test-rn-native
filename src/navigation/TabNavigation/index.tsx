@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import Schedule from '#containers/Schedule';
+
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
+
+import TabBar from '#components/Navigation/TabBar.tsx';
+import Lecture from '#containers/Lecture';
 import Mypage from '#containers/Mypage';
-import {
-  requestLocationPermissions,
-  requestNotificationsPermission,
-} from '#utils/permissionsHelper.ts';
+import Schedule from '#containers/Schedule';
+import ScheduleHistory from '#containers/ScheduleHistory';
 import globalState from '#recoil/Global';
+import userState from '#recoil/User';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
@@ -17,10 +19,10 @@ import {
 } from '#services/beaconScanner.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
 import {onesignalInit, onesignalLogin} from '#utils/onesignalHelper.ts';
-import userState from '#recoil/User';
-import ScheduleHistory from '#containers/ScheduleHistory';
-import Lecture from '#containers/Lecture';
-import TabBar from '#components/Navigation/TabBar.tsx';
+import {
+  requestLocationPermissions,
+  requestNotificationsPermission,
+} from '#utils/permissionsHelper.ts';
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
@@ -56,7 +58,7 @@ const TabNavigation = () => {
 
   useEffect(() => {
     if (userData) {
-      onesignalLogin(userData.userId, userData.settingPushApp);
+      onesignalLogin(userData.userId, userData.settingPushApp).then();
     }
   }, [userData]);
 
