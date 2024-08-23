@@ -1,6 +1,6 @@
+import {instanceWithoutToken} from '#apis/instance.ts';
 import {ApiResponseProps} from '#types/common.ts';
 import {GetAccessTokenProps} from '#types/user.ts';
-import {instanceWithoutToken} from '#apis/instance.ts';
 
 export const requestPostGetToken = async (payload: {
   phone: string;

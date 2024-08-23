@@ -68,10 +68,10 @@ yarn-error.log
 # other
 
 # env
-.env
-.env.production
-.env.appcenter
-.env.development
+#.env
+#.env.production
+#.env.appcenter
+#.env.development
 
 # react-native-config codegen
 ios/tmp.xcconfig
