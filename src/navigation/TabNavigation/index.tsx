@@ -67,6 +67,7 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
+      initialRouteName="dailySchedules"
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => {
           return <TabBar routeName={route.name} focused={focused} />;
