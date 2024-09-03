@@ -20,8 +20,8 @@ module.exports = {
     },
   },
   rules: {
+    'react-native/no-inline-styles': 'off',
     'react-refresh/only-export-components': 0,
-    '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-unused-vars': 1,
     'react-hooks/exhaustive-deps': 0,
     'import/order': [

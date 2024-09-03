@@ -4,10 +4,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
 import TabBar from '#components/Navigation/TabBar.tsx';
-import Lecture from '#containers/Lecture';
-import Mypage from '#containers/Mypage';
-import Schedule from '#containers/Schedule';
-import ScheduleHistory from '#containers/ScheduleHistory';
+import DailySchedule from '#containers/DailySchedules';
+import Finds from '#containers/Finds';
+import Settings from '#containers/Settings';
+import WeeklySchedules from '#containers/WeeklySchedules';
 import globalState from '#recoil/Global';
 import userState from '#recoil/User';
 import {
@@ -18,17 +18,20 @@ import {
   requestStopBeaconScanning,
 } from '#services/beaconScanner.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
-import {onesignalInit, onesignalLogin} from '#utils/onesignalHelper.ts';
+import {onesignalLogin} from '#utils/onesignalHelper.ts';
 import {
   requestLocationPermissions,
   requestNotificationsPermission,
 } from '#utils/permissionsHelper.ts';
+
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
   const setWifiState = useSetRecoilState(globalState.wifiState);
   const setBeaconState = useSetRecoilState(globalState.beaconState);
   const userData = useRecoilValue(userState.userInfoState);
+
+  const tabOptions = {headerShown: false};
 
   useEffect(() => {
     (async () => {
@@ -69,29 +72,21 @@ const TabNavigation = () => {
         tabBarIcon: ({focused}) => {
           return <TabBar routeName={route.name} focused={focused} />;
         },
-        tabBarStyle: {paddingHorizontal: 20, paddingVertical: 10},
+        tabBarStyle: {height: 80, paddingHorizontal: 20, paddingVertical: 15},
         tabBarShowLabel: false,
       })}>
+      <Tab.Screen name="finds" component={Finds} options={tabOptions} />
       <Tab.Screen
-        name="Schedule"
-        component={Schedule}
+        name="dailySchedules"
+        component={DailySchedule}
+        options={tabOptions}
+      />
+      <Tab.Screen
+        name="weeklySchedules"
+        component={WeeklySchedules}
         options={{headerShown: false}}
       />
-      {/*<Tab.Screen*/}
-      {/*  name="ScheduleHistory"*/}
-      {/*  component={ScheduleHistory}*/}
-      {/*  options={{headerShown: false}}*/}
-      {/*/>*/}
-      {/*<Tab.Screen*/}
-      {/*  name="Lecture"*/}
-      {/*  component={Lecture}*/}
-      {/*  options={{headerShown: false}}*/}
-      {/*/>*/}
-      <Tab.Screen
-        name="Mypage"
-        component={Mypage}
-        options={{headerShown: false}}
-      />
+      <Tab.Screen name="settings" component={Settings} options={tabOptions} />
     </Tab.Navigator>
   );
 };
