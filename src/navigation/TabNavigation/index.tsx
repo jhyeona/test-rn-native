@@ -5,7 +5,7 @@ import {useRecoilValue, useSetRecoilState} from 'recoil';
 
 import TabBar from '#components/Navigation/TabBar.tsx';
 import DailySchedule from '#containers/DailySchedules';
-import Finds from '#containers/Finds';
+import ScheduleHistory from '#containers/ScheduleHistory';
 import Settings from '#containers/Settings';
 import WeeklySchedules from '#containers/WeeklySchedules';
 import globalState from '#recoil/Global';
@@ -38,7 +38,7 @@ const TabNavigation = () => {
       await requestNotificationsPermission();
       const isAllGranted = await requestLocationPermissions();
       if (isAllGranted) {
-        // wifi, beacon 값
+        // wi-fi, beacon 값
         await requestStartBeaconScanning().then(result => {
           if (!result) {
             return;
@@ -67,7 +67,6 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
-      // tabBar={(props) => <TabBar {...props} />}
       screenOptions={({route}) => ({
         tabBarIcon: ({focused}) => {
           return <TabBar routeName={route.name} focused={focused} />;
@@ -75,7 +74,11 @@ const TabNavigation = () => {
         tabBarStyle: {height: 80, paddingHorizontal: 20, paddingVertical: 15},
         tabBarShowLabel: false,
       })}>
-      <Tab.Screen name="finds" component={Finds} options={tabOptions} />
+      <Tab.Screen
+        name="scheduleHistory"
+        component={ScheduleHistory}
+        options={tabOptions}
+      />
       <Tab.Screen
         name="dailySchedules"
         component={DailySchedule}
