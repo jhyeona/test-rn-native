@@ -127,7 +127,7 @@ const ScheduleHistory = ({
 
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
-      <Header title="내 출석 기록" navigation={navigation} isBack />
+      <Header title="내 출석 기록" navigation={navigation} />
       <CView>
         <View style={{flexDirection: 'row', marginBottom: 30, height: 42}}>
           <DateSelector

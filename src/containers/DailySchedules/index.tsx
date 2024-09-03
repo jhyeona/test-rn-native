@@ -1,34 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import moment from 'moment';
-import 'moment/locale/ko';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import moment from 'moment';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import userState from '#recoil/User';
-import {useGetDaySchedule, useGetWeekSchedule} from '#hooks/useSchedule.ts';
-import {useGetUserInfo} from '#hooks/useUser.ts';
-import DayCalendar from '#components/Schedule/DayCalendar.tsx';
-import {StudentInfoProps} from '#types/user.ts';
-import TimeTable from '#components/Schedule/TimeTable.tsx';
+
+import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
-import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
-import CButton from '#components/common/CommonButton/CButton.tsx';
-import globalState from '#recoil/Global';
+import Header from '#components/common/Header/Header.tsx';
+import DayCalendar from '#components/Schedule/DayCalendar.tsx';
 import Academy from '#containers/Academy';
+import {useGetDaySchedule} from '#hooks/useSchedule.ts';
+import {useGetUserInfo} from '#hooks/useUser.ts';
+import globalState from '#recoil/Global';
+import userState from '#recoil/User';
+import {StudentInfoProps} from '#types/user.ts';
 
-const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
+const DailySchedule = ({
+  navigation,
+}: {
+  navigation: BottomTabNavigationHelpers;
+}) => {
   const userData = useRecoilValue(userState.userInfoState);
   const [selectDayDate, setSelectDayDate] = useRecoilState(
     globalState.selectDayScheduleDate,
   );
-  const [selectWeekDate, setSelectWeekDate] = useRecoilState(
-    globalState.selectWeekScheduleDate,
-  );
   const [selectAcademy, setSelectAcademy] = useRecoilState(
     globalState.selectedAcademy,
   );
-  const [isWeekend, setIsWeekend] = useState(false);
   const [selectStudentInfo, setSelectStudentInfo] = useState<
     StudentInfoProps | undefined
   >(undefined);
@@ -40,16 +40,6 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     academyId: selectAcademy,
     date: moment(selectDayDate).format('YYYYMMDD'),
   });
-  useGetWeekSchedule({
-    // 주간 데이터
-    academyId: selectAcademy,
-    date: moment(selectWeekDate).format('YYYYMMDD'),
-  });
-
-  const handleToggle = (value: boolean) => {
-    // 오늘 / 주간 토글 변경
-    setIsWeekend(value);
-  };
 
   const onChangeDropList = (item: {label: string; id: string}) => {
     const studentInfo = selectedStudentInfo(item.id);
@@ -93,15 +83,14 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
   useEffect(() => {
     setSelectDayDate(moment().format('YYYY-MM-DD'));
-    setSelectWeekDate(moment().format('YYYY-MM-DD'));
-  }, [isWeekend, setSelectDayDate, setSelectWeekDate]);
+  }, [setSelectDayDate]);
 
   return (
     <>
       {userData &&
         (userData.studentList.length > 0 ? (
           <CSafeAreaView>
-            <ScheduleHeader isWeekend={isWeekend} setIsWeekend={handleToggle} />
+            <Header title="일간 일정" navigation={navigation} />
             <CView>
               <Dropdown
                 items={academyList}
@@ -111,23 +100,19 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
                 }
                 disabled={userData ? userData.studentList.length <= 0 : false}
               />
-              {isWeekend ? (
-                <TimeTable />
-              ) : (
-                selectStudentInfo && (
-                  <>
-                    <DayCalendar
-                      studentInfo={selectStudentInfo}
-                      navigation={navigation}
-                    />
-                    <CButton
-                      text="내 출석 기록 보기"
-                      onPress={onPressHistory}
-                      buttonStyle={{marginBottom: 10}}
-                      noMargin
-                    />
-                  </>
-                )
+              {selectStudentInfo && (
+                <>
+                  <DayCalendar
+                    studentInfo={selectStudentInfo}
+                    navigation={navigation}
+                  />
+                  <CButton
+                    text="내 출석 기록 보기"
+                    onPress={onPressHistory}
+                    buttonStyle={{marginBottom: 10}}
+                    noMargin
+                  />
+                </>
               )}
             </CView>
           </CSafeAreaView>
@@ -138,4 +123,4 @@ const Schedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   );
 };
 
-export default Schedule;
+export default DailySchedule;

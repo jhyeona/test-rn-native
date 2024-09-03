@@ -1,26 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {RESULTS} from 'react-native-permissions';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {storage} from '#utils/storageHelper.ts';
-import {patchUpdatePush} from '#hooks/useMypage.ts';
 import {useSetRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
+
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import Header from '#components/common/Header/Header.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
+import Header from '#components/common/Header/Header.tsx';
 import Toggle from '#components/common/Toggle/Toggle.tsx';
+import MenuButton from '#components/Mypage/MenuButton.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {patchUpdatePush} from '#hooks/useMypage.ts';
+import {useGetUserInfo} from '#hooks/useUser.ts';
+import globalState from '#recoil/Global';
+import userState from '#recoil/User';
+import {onesignalLogout} from '#utils/onesignalHelper.ts';
 import {
   handleOpenSettings,
   requestNotificationsPermission,
 } from '#utils/permissionsHelper.ts';
-import {useGetUserInfo} from '#hooks/useUser.ts';
-import userState from '#recoil/User';
-import {onesignalLogout} from '#utils/onesignalHelper.ts';
-import MenuButton from '#components/Mypage/MenuButton.tsx';
+import {storage} from '#utils/storageHelper.ts';
 
-const Mypage = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
+const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {data: userData, refetch: refetchUserData} = useGetUserInfo();
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
 
@@ -161,4 +163,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Mypage;
+export default Settings;

@@ -1,9 +1,9 @@
 import React from 'react';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
-import CText from '#components/common/CustomText/CText.tsx';
-import * as Icons from '#assets/svg';
 import {View} from 'react-native';
-import {Close} from '#assets/svg';
+
+import * as Icons from '#assets/svg';
+import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 
 type IconKeys = keyof typeof Icons;
@@ -22,23 +22,25 @@ interface TabBarProps {
 const TabBar = (props: TabBarProps) => {
   const {routeName, focused} = props;
 
-  // TODO: 출석기록, 과정의 아이콘 추가
   const routeData: RouteDataProps = {
-    Schedule: {icon: 'Home', label: '일정'},
-    ScheduleHistory: {icon: 'Pencil', label: '출석기록'},
-    Lecture: {icon: 'Pencil', label: '과정'},
-    Mypage: {icon: 'Setting', label: '설정'},
+    scheduleHistory: {icon: 'm_Finder', label: '조회'},
+    dailySchedules: {icon: 'm_Daily', label: '일간 일정'},
+    weeklySchedules: {icon: 'm_Weekly', label: '주간 일정'},
+    settings: {icon: 'm_Setting', label: '설정'},
   };
   const {icon, label} = routeData[routeName];
-
   return (
     <View style={{alignItems: 'center'}}>
-      <SvgIcon name={icon} size={icon === 'Home' ? 16 : 20} />
+      <SvgIcon
+        name={icon}
+        size={20}
+        color={focused ? 'black' : COLORS.placeholder}
+      />
       <CText
         text={label}
-        fontSize={11}
+        fontSize={13}
         color={focused ? 'black' : COLORS.placeholder}
-        style={{paddingTop: 4}}
+        style={{paddingTop: 7}}
       />
     </View>
   );
