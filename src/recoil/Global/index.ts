@@ -4,9 +4,7 @@ import {
   globalModalState,
   globalToastState,
   isLoginState,
-  selectDayScheduleDate,
   selectedAcademy,
-  selectWeekScheduleDate,
   wifiState,
 } from '#recoil/Global/atom.ts';
 
@@ -17,8 +15,6 @@ const globalState = {
   isLoginState,
   beaconState,
   wifiState,
-  selectDayScheduleDate,
-  selectWeekScheduleDate,
   selectedAcademy,
 };
 

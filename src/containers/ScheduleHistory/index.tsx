@@ -23,11 +23,10 @@ const ScheduleHistory = ({
   navigation: BottomTabNavigationHelpers;
 }) => {
   const selectedAcademy = useRecoilValue(globalState.selectedAcademy);
-  const selectDayDate = useRecoilValue(globalState.selectDayScheduleDate);
   const setModalState = useSetRecoilState(globalState.globalModalState);
   const [historyData, setHistoryData] = useState<SchedulePeriodDataProps>();
-  const [startDate, setStartDate] = useState(moment(selectDayDate));
-  const [endDate, setEndDate] = useState(moment(selectDayDate));
+  const [startDate, setStartDate] = useState(moment());
+  const [endDate, setEndDate] = useState(moment());
   const [selectedIsStart, setSelectedIsStart] = useState(true);
   const [selectedDate, setSelectedDate] = useState(endDate);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);

@@ -1,12 +1,6 @@
-import {
-  dayScheduleState,
-  nowScheduleHistoryState,
-  weekScheduleState,
-} from '#recoil/Schedule/atom.ts';
+import {nowScheduleHistoryState} from '#recoil/Schedule/atom.ts';
 
 const scheduleState = {
-  dayScheduleState,
-  weekScheduleState,
   nowScheduleHistoryState,
 };
 

@@ -1,39 +1,42 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import moment from 'moment';
-import {COLORS} from '#constants/colors.ts';
-import CText from '#components/common/CustomText/CText.tsx';
-import TextToggle from '#components/common/Toggle/TextToggle.tsx';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
-import {weekOfMonth} from '#utils/scheduleHelper.ts';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
-interface Props {
+import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
+
+interface ScheduleHeaderProps {
   isWeekend: boolean;
-  setIsWeekend: (value: boolean) => void;
 }
 
-const ScheduleHeader = (props: Props) => {
-  const {isWeekend, setIsWeekend} = props;
+const ScheduleHeader = ({isWeekend}: ScheduleHeaderProps) => {
+  const onPressRefreshCalendar = () => {
+    console.log('onPressRefreshCalendar');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>
         <CText
-          text={isWeekend ? '주간 일정' : '오늘 일정'}
+          text={isWeekend ? '주간 일정' : '일간 일정'}
           fontWeight="700"
           fontSize={22}
         />
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <SvgIcon style={styles.icon} name="Calendar" size={24} />
-          <CText
-            text={
-              isWeekend ? weekOfMonth(moment()) : moment().format('YYYY.MM.DD')
-            }
-            fontSize={16}
-          />
-        </View>
+        <TouchableWithoutFeedback onPress={onPressRefreshCalendar}>
+          <View>
+            <SvgIcon style={styles.icon} name="Refresh" size={24} />
+          </View>
+        </TouchableWithoutFeedback>
+        {/*<TouchableOpacity onPress={onPressRefreshCalendar}>*/}
+        {/*  <SvgIcon style={styles.icon} name="Refresh" size={24} />*/}
+        {/*</TouchableOpacity>*/}
       </View>
-      <TextToggle onToggle={value => setIsWeekend(value)} />
     </View>
   );
 };
@@ -50,7 +53,9 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.layout,
   },
   rowContainer: {
+    width: '100%',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   icon: {

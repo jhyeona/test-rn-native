@@ -1,3 +1,8 @@
+import {useEffect} from 'react';
+
+import {useQuery} from '@tanstack/react-query';
+import {useSetRecoilState} from 'recoil';
+
 import {
   requestGetDaySchedule,
   requestGetEventHistory,
@@ -10,16 +15,12 @@ import {
   requestPostEventEnter,
   requestPostEventLeave,
 } from '#apis/schedule.ts';
-import {useSetRecoilState} from 'recoil';
-import {useEffect} from 'react';
-import scheduleState from '#recoil/Schedule';
-import {useQuery} from '@tanstack/react-query';
+import globalState from '#recoil/Global/index.ts';
 import {
   GetScheduleHistoryProps,
   GetScheduleProps,
   PostEventProps,
 } from '#types/schedule.ts';
-import globalState from '#recoil/Global/index.ts';
 
 export const getDaySchedule = async (payload: GetScheduleProps) => {
   const response = await requestGetDaySchedule(payload);
@@ -28,9 +29,8 @@ export const getDaySchedule = async (payload: GetScheduleProps) => {
 
 export const useGetDaySchedule = (payload: GetScheduleProps) => {
   const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const setDaySchedule = useSetRecoilState(scheduleState.dayScheduleState);
 
-  const {data, status} = useQuery({
+  const {data, refetch, status} = useQuery({
     queryKey: ['daySchedule', payload],
     queryFn: async () => {
       return getDaySchedule(payload);
@@ -45,10 +45,7 @@ export const useGetDaySchedule = (payload: GetScheduleProps) => {
     }
   }, [status, setIsLoading]);
 
-  useEffect(() => {
-    if (!data) return;
-    setDaySchedule(data);
-  }, [data, setDaySchedule]);
+  return {dayScheduleData: data, refetchDaySchedule: refetch};
 };
 
 export const getWeekSchedule = async (payload: GetScheduleProps) => {
@@ -58,8 +55,8 @@ export const getWeekSchedule = async (payload: GetScheduleProps) => {
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const setWeekSchedule = useSetRecoilState(scheduleState.weekScheduleState);
-  const {data, fetchStatus} = useQuery({
+
+  const {data, refetch, fetchStatus} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
       return getWeekSchedule(payload);
@@ -74,10 +71,7 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
     }
   }, [fetchStatus, setIsLoading]);
 
-  useEffect(() => {
-    if (!data) return;
-    setWeekSchedule(data);
-  }, [data, setWeekSchedule]);
+  return {weekScheduleData: data, refetchWeekSchedule: refetch};
 };
 
 export const postEventEnter = async (payload: PostEventProps) => {

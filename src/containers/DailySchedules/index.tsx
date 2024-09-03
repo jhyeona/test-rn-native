@@ -1,20 +1,16 @@
 import React, {useEffect, useState} from 'react';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import moment from 'moment';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilState} from 'recoil';
 
-import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
-import Header from '#components/common/Header/Header.tsx';
 import DayCalendar from '#components/Schedule/DayCalendar.tsx';
+import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import Academy from '#containers/Academy';
-import {useGetDaySchedule} from '#hooks/useSchedule.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import globalState from '#recoil/Global';
-import userState from '#recoil/User';
 import {StudentInfoProps} from '#types/user.ts';
 
 const DailySchedule = ({
@@ -22,24 +18,15 @@ const DailySchedule = ({
 }: {
   navigation: BottomTabNavigationHelpers;
 }) => {
-  const userData = useRecoilValue(userState.userInfoState);
-  const [selectDayDate, setSelectDayDate] = useRecoilState(
-    globalState.selectDayScheduleDate,
-  );
   const [selectAcademy, setSelectAcademy] = useRecoilState(
     globalState.selectedAcademy,
   );
+  const [academyList, setAcademyList] = useState([{label: '', id: ''}]);
   const [selectStudentInfo, setSelectStudentInfo] = useState<
     StudentInfoProps | undefined
-  >(undefined);
-  const [academyList, setAcademyList] = useState([{label: '', id: ''}]);
+  >();
 
-  useGetUserInfo(); //유저 정보
-  useGetDaySchedule({
-    // 일일 데이터
-    academyId: selectAcademy,
-    date: moment(selectDayDate).format('YYYYMMDD'),
-  });
+  const {userData} = useGetUserInfo(); //유저 정보
 
   const onChangeDropList = (item: {label: string; id: string}) => {
     const studentInfo = selectedStudentInfo(item.id);
@@ -55,11 +42,6 @@ const DailySchedule = ({
       }
       return userData.studentList[0];
     });
-  };
-
-  const onPressHistory = () => {
-    // 내 출석 기록 보기 페이지로 이동
-    navigation.navigate('ScheduleHistory');
   };
 
   useEffect(() => {
@@ -81,16 +63,12 @@ const DailySchedule = ({
     setSelectStudentInfo(studentInfo && studentInfo[0]);
   }, [academyList]);
 
-  useEffect(() => {
-    setSelectDayDate(moment().format('YYYY-MM-DD'));
-  }, [setSelectDayDate]);
-
   return (
     <>
       {userData &&
         (userData.studentList.length > 0 ? (
           <CSafeAreaView>
-            <Header title="일간 일정" navigation={navigation} />
+            <ScheduleHeader isWeekend={false} />
             <CView>
               <Dropdown
                 items={academyList}
@@ -101,18 +79,10 @@ const DailySchedule = ({
                 disabled={userData ? userData.studentList.length <= 0 : false}
               />
               {selectStudentInfo && (
-                <>
-                  <DayCalendar
-                    studentInfo={selectStudentInfo}
-                    navigation={navigation}
-                  />
-                  <CButton
-                    text="내 출석 기록 보기"
-                    onPress={onPressHistory}
-                    buttonStyle={{marginBottom: 10}}
-                    noMargin
-                  />
-                </>
+                <DayCalendar
+                  studentInfo={selectStudentInfo}
+                  navigation={navigation}
+                />
               )}
             </CView>
           </CSafeAreaView>

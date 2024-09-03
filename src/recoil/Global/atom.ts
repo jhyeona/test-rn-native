@@ -1,5 +1,6 @@
-import {atom} from 'recoil';
 import moment from 'moment';
+import {atom} from 'recoil';
+
 import {BeaconProps, WifiProps} from '#types/location.ts';
 
 export const globalToastState = atom<{isVisible: boolean; message: string}>({
@@ -45,16 +46,6 @@ export const beaconState = atom<BeaconProps[]>({
 export const wifiState = atom<WifiProps[]>({
   key: 'wifiState',
   default: [],
-});
-
-export const selectDayScheduleDate = atom<string>({
-  key: 'selectDayScheduleDate',
-  default: moment().format('YYYY-MM-DD'),
-});
-
-export const selectWeekScheduleDate = atom<string>({
-  key: 'selectWeekScheduleDate',
-  default: moment().format('YYYYMMDD'),
 });
 
 export const selectedAcademy = atom<number>({

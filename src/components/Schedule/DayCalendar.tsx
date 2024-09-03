@@ -1,15 +1,15 @@
-import moment from 'moment';
 import React, {useState} from 'react';
 import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
-import {useRecoilState} from 'recoil';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import globalState from '#recoil/Global/index.ts';
-import {StudentInfoProps} from '#types/user.ts';
-import {COLORS} from '#constants/colors.ts';
-import DayScheduleTable from '#components/Schedule/DayScheduleTable.tsx';
-import {IS_IOS} from '#constants/common.ts';
+import moment from 'moment';
+
 import CText from '#components/common/CustomText/CText.tsx';
+import DayScheduleTable from '#components/Schedule/DayScheduleTable.tsx';
+import {COLORS} from '#constants/colors.ts';
+import {IS_IOS} from '#constants/common.ts';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
+import {StudentInfoProps} from '#types/user.ts';
 
 interface Props {
   studentInfo: StudentInfoProps;
@@ -18,8 +18,8 @@ interface Props {
 
 const DayCalendar = (props: Props) => {
   const {studentInfo, navigation} = props;
-  const [selectedDate, setSelectedDate] = useRecoilState(
-    globalState.selectDayScheduleDate,
+  const [selectedDate, setSelectedDate] = useState(
+    moment().format('YYYY-MM-DD'),
   );
   const [currentDate, setCurrentDate] = useState(moment(selectedDate)); // selected 했을 때 또는 이전/다음 주로 바꿨을 때 바뀐 주의 날짜 (해당 날짜의 한주 날짜를 렌더링함)
   const [headerUpdateCounter, setHeaderUpdateCounter] = useState(0); // header를 리렌더링 하기 위함
