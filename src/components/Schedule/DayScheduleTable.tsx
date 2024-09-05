@@ -170,6 +170,7 @@ const DayScheduleTable = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     flexGrow: 0,
     marginVertical: 16,
     backgroundColor: COLORS.primaryLight,

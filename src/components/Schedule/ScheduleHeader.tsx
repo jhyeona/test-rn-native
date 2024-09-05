@@ -1,18 +1,17 @@
 import React from 'react';
 import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
 
-import moment from 'moment/moment';
+import {useRecoilValue} from 'recoil';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import BtnToday from '#components/Schedule/BtnToday.tsx';
 import {COLORS} from '#constants/colors.ts';
+import scheduleState from '#recoil/Schedule';
 import {weekOfMonth} from '#utils/scheduleHelper.ts';
 
-interface ScheduleHeaderProps {
-  isWeekend: boolean;
-}
-
-const ScheduleHeader = ({isWeekend}: ScheduleHeaderProps) => {
+const ScheduleHeader = () => {
+  const {isWeekly, date} = useRecoilValue(scheduleState.selectedCalendarDate);
   const onPressRefreshCalendar = () => {
     console.log('onPressRefreshCalendar');
   };
@@ -22,17 +21,19 @@ const ScheduleHeader = ({isWeekend}: ScheduleHeaderProps) => {
       <View style={styles.rowContainer}>
         <View style={styles.title}>
           <CText
-            text={isWeekend ? '주간 일정' : '오늘 일정'}
+            text={isWeekly ? '주간 일정' : '일간 일정'}
             fontWeight="700"
             fontSize={22}
           />
           <SvgIcon name="Calendar" size={24} />
           <CText
             text={
-              isWeekend ? weekOfMonth(moment()) : moment().format('YYYY.MM.DD')
+              isWeekly ? weekOfMonth(date) : date.format('YYYY.MM.DD') // 선택된 날짜를 기준으로 표시할 때
+              // isWeekend ? weekOfMonth(moment()) : moment().format('YYYY.MM.DD') // 오늘을 기준으로 표시할 때
             }
             fontSize={16}
           />
+          <BtnToday />
         </View>
         <TouchableWithoutFeedback onPress={onPressRefreshCalendar}>
           <View>
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
   },
 });
 

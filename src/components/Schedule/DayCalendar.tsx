@@ -1,127 +1,44 @@
 import React, {useState} from 'react';
-import {View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, ScrollView, RefreshControl} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import moment from 'moment';
 
-import CText from '#components/common/CustomText/CText.tsx';
-import DayScheduleTable from '#components/Schedule/DayScheduleTable.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import WeeklyCalendar from '#components/Schedule/WeeklyCalendar.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {IS_IOS} from '#constants/common.ts';
-import {useChangeWidth} from '#hooks/useGlobal.ts';
-import {StudentInfoProps} from '#types/user.ts';
 
-interface Props {
-  studentInfo: StudentInfoProps;
+interface DayCalendarProps {
   navigation: BottomTabNavigationHelpers;
 }
 
-const DayCalendar = (props: Props) => {
-  const {studentInfo, navigation} = props;
-  const [selectedDate, setSelectedDate] = useState(
-    moment().format('YYYY-MM-DD'),
-  );
-  const [currentDate, setCurrentDate] = useState(moment(selectedDate)); // selected 했을 때 또는 이전/다음 주로 바꿨을 때 바뀐 주의 날짜 (해당 날짜의 한주 날짜를 렌더링함)
-  const [headerUpdateCounter, setHeaderUpdateCounter] = useState(0); // header를 리렌더링 하기 위함
+const DayCalendar = ({navigation}: DayCalendarProps) => {
+  const [refreshing, setRefreshing] = useState(false);
 
-  const changeWidth = useChangeWidth();
-  const daysOfWeek = ['월', '화', '수', '목', '금', '토', '일'];
-
-  const handleDayClick = (index: number, isSunday: boolean) => {
-    const selectDate = currentDate
-      .clone()
-      .add(isSunday ? -1 : 0, 'day')
-      .weekday(index);
-    setSelectedDate(selectDate.format('YYYY-MM-DD'));
-  };
-
-  const renderHeader = (setDate: moment.Moment) => {
-    const isSunday = setDate.day() === 0;
-
-    const startOfSunday = setDate.clone().add(-1, 'day').startOf('week');
-    const startOfDefault = setDate.clone().startOf('week');
-
-    return (
-      <View style={styles.headerContainer}>
-        {daysOfWeek.map((day, index) => {
-          const date = isSunday
-            ? startOfSunday.clone().add(index + 1, 'day')
-            : startOfDefault.clone().add(index + 1, 'day');
-
-          const selected = date.isSame(selectedDate, 'day');
-          const isToday = date.isSame(moment(), 'day');
-          return (
-            <TouchableOpacity
-              key={index}
-              style={styles.headerCell}
-              onPress={() => handleDayClick(index + 1, isSunday)}>
-              <View
-                style={[
-                  styles.headerCellInner,
-                  selected && styles.selectedHeaderCell,
-                ]}>
-                <CText
-                  style={{
-                    color: selected
-                      ? 'white'
-                      : isToday
-                        ? COLORS.primary
-                        : 'black',
-                  }}
-                  color={
-                    selected ? 'white' : isToday ? COLORS.primary : 'black'
-                  }
-                  text={day}
-                  fontWeight="500"
-                />
-                <CText
-                  style={{marginTop: 4}}
-                  color={
-                    selected ? 'white' : isToday ? COLORS.primary : 'black'
-                  }
-                  fontSize={18}
-                  fontWeight="600"
-                  text={date.format('DD')}
-                />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
-
-  const handleBodyScroll = (event: any) => {
-    const velocity = event.nativeEvent.velocity.x; // velocity 값이 양수이면 IOS 는 좌 -> 우 / ANDROID 는 우 -> 좌
-
-    let isNext = 0;
-    if (velocity > 0) {
-      IS_IOS ? (isNext = 1) : (isNext = -1);
-    } else if (velocity < 0) {
-      IS_IOS ? (isNext = -1) : (isNext = 1);
-    }
-    const nextWeekFirstDay = moment(selectedDate).add(isNext, 'week');
-
-    setHeaderUpdateCounter(prev => prev + isNext);
-    setCurrentDate(nextWeekFirstDay);
-    setSelectedDate(moment(nextWeekFirstDay).format('YYYY-MM-DD'));
+  const onRefresh = () => {
+    //TODO: 일정 Pull to Refresh 기능 추가 (함수로 뽑아서 일간/주간에서 동일하게 사용할 수 있을지)
+    setRefreshing(true);
+    // 데이터를 새로 고침하는 로직을 여기에 추가
+    setTimeout(() => {
+      setRefreshing(false); // 새로 고침 완료 후 로딩 상태 해제
+    }, 2000);
   };
 
   return (
-    <View style={styles.container}>
-      {renderHeader(currentDate)}
-      <ScrollView
-        contentContainerStyle={{width: changeWidth}}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        onScrollEndDrag={handleBodyScroll}
-        pagingEnabled
-        scrollEventThrottle={16}>
-        <View style={{width: changeWidth}}>
-          <DayScheduleTable navigation={navigation} studentInfo={studentInfo} />
-        </View>
-      </ScrollView>
-    </View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <View style={styles.container}>
+        <WeeklyCalendar />
+        <CButton
+          text="사유서"
+          noMargin
+          onPress={() => {
+            navigation.navigate('ReasonStatement');
+          }}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
