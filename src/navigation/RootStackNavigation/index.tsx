@@ -1,27 +1,30 @@
 import React, {useEffect, useRef} from 'react';
 import BootSplash from 'react-native-bootsplash';
-import {useRecoilState} from 'recoil';
+
 import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import SignIn from '#containers/SignIn';
-import TabNavigation from '#navigation/TabNavigation';
-import SignUp from '#containers/SignUp';
-import FindPassword from '#containers/FindPassword';
-import globalState from '#recoil/Global';
-import {storage} from '#utils/storageHelper.ts';
-import LectureDetail from '#containers/LectureDetail/index.tsx';
-import ScheduleHistory from '#containers/ScheduleHistory';
+import {useRecoilState} from 'recoil';
+
 import Academy from '#containers/Academy';
-import UpdatePassword from '#containers/UpdatePassword';
-import UserWithdraw from '#containers/UserWithdraw';
-import PrivacyPolicy from '#containers/PrivacyPolicy';
+import FindPassword from '#containers/FindPassword';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import Initialize from '#containers/Initialize';
+import LectureDetail from '#containers/LectureDetail/index.tsx';
 import Onboarding from '#containers/Onboarding';
+import PrivacyPolicy from '#containers/PrivacyPolicy';
+import ReasonStatement from '#containers/ReasonStatement';
+import ScheduleHistory from '#containers/ScheduleHistory';
+import SignIn from '#containers/SignIn';
+import SignUp from '#containers/SignUp';
+import UpdatePassword from '#containers/UpdatePassword';
+import UserWithdraw from '#containers/UserWithdraw';
+import TabNavigation from '#navigation/TabNavigation';
+import globalState from '#recoil/Global';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
+import {storage} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -107,6 +110,11 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="ScheduleHistory"
               component={ScheduleHistory}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="ReasonStatement"
+              component={ReasonStatement}
               options={{headerShown: false}}
             />
             <RootStack.Screen
