@@ -6,6 +6,7 @@ import {useRecoilState} from 'recoil';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
+import BtnToday from '#components/Schedule/BtnToday.tsx';
 import DayCalendar from '#components/Schedule/DayCalendar.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import Academy from '#containers/Academy';
@@ -26,7 +27,7 @@ const DailySchedule = ({
     StudentInfoProps | undefined
   >();
 
-  const {userData} = useGetUserInfo(); //유저 정보
+  const {userData} = useGetUserInfo();
 
   const onChangeDropList = (item: {label: string; id: string}) => {
     const studentInfo = selectedStudentInfo(item.id);
@@ -68,22 +69,17 @@ const DailySchedule = ({
       {userData &&
         (userData.studentList.length > 0 ? (
           <CSafeAreaView>
-            <ScheduleHeader isWeekend={false} />
+            <ScheduleHeader />
             <CView>
-              <Dropdown
-                items={academyList}
-                onSelect={onChangeDropList}
-                selected={
-                  academyList.filter(val => val.id === String(selectAcademy))[0]
-                }
-                disabled={userData ? userData.studentList.length <= 0 : false}
-              />
-              {selectStudentInfo && (
-                <DayCalendar
-                  studentInfo={selectStudentInfo}
-                  navigation={navigation}
-                />
-              )}
+              {/*<Dropdown*/}
+              {/*  items={academyList}*/}
+              {/*  onSelect={onChangeDropList}*/}
+              {/*  selected={*/}
+              {/*    academyList.filter(val => val.id === String(selectAcademy))[0]*/}
+              {/*  }*/}
+              {/*  disabled={userData ? userData.studentList.length <= 0 : false}*/}
+              {/*/>*/}
+              <DayCalendar navigation={navigation} />
             </CView>
           </CSafeAreaView>
         ) : (

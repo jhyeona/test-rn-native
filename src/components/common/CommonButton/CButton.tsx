@@ -1,12 +1,13 @@
 import React from 'react';
 import {Pressable, StyleSheet} from 'react-native';
-import {COLORS} from '#constants/colors.ts';
-import CText from '#components/common/CustomText/CText.tsx';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {
   TextStyle,
   ViewStyle,
 } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
 
 interface Props {
   text: string;
