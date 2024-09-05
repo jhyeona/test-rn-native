@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 
-import CText from '#components/common/CustomText/CText.tsx';
 import NoData from '#components/common/NoData';
+import {FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
-import DayLecture from '#containers/DailySchedules/components/DayLecture.tsx';
-import DayScheduleTime from '#containers/DailySchedules/components/DayScheduleTime.tsx';
+import DaySchedulesHeader from '#containers/DailySchedules/components/DaySchedulesHeader.tsx';
+import DaySchedulesLecture from '#containers/DailySchedules/components/DaySchedulesLecture.tsx';
+import DaySchedulesTime from '#containers/DailySchedules/components/DaySchedulesTime.tsx';
 
 interface Test {
   time: string;
@@ -14,41 +15,7 @@ interface Test {
 const testData = [
   {time: '1', name: 'name1'},
   {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
-  // {time: '2', name: 'name2'},
 ];
-const firstCellWidth = 100;
-const listHeader = () => {
-  return (
-    <View style={styles.header}>
-      <View style={[styles.headerCell, styles.headerCellFirst]}>
-        <CText
-          style={styles.headerText}
-          fontSize={16}
-          color={COLORS.primary}
-          text="시간"
-        />
-      </View>
-      <View style={styles.headerCell}>
-        <CText
-          style={styles.headerText}
-          fontSize={16}
-          color={COLORS.primary}
-          text="강의"
-        />
-      </View>
-    </View>
-  );
-};
 
 const DaySchedules = () => {
   const [data, _] = useState<Test[]>(testData);
@@ -60,19 +27,15 @@ const DaySchedules = () => {
     // 데이터를 새로 고침하는 로직을 여기에 추가
     setTimeout(() => {
       setRefreshing(false); // 새로 고침 완료 후 로딩 상태 해제
-    }, 2000);
+    }, 1000);
   };
 
   const renderItem: ListRenderItem<Test> = ({item, index}) => {
     return (
-      <View
-        style={[
-          styles.row,
-          index === data.length - 1 ? {} : {borderBottomWidth: 1},
-        ]}>
-        <DayScheduleTime style={[styles.cell, styles.cellFirst]} />
+      <View style={styles.row}>
+        <DaySchedulesTime style={[styles.cell, styles.cellFirst]} />
         <View style={[styles.cell]}>
-          <DayLecture />
+          <DaySchedulesLecture />
         </View>
       </View>
     );
@@ -84,7 +47,7 @@ const DaySchedules = () => {
       refreshing={refreshing}
       onRefresh={onRefresh}
       contentContainerStyle={styles.scheduleContent}
-      ListHeaderComponent={listHeader}
+      ListHeaderComponent={<DaySchedulesHeader />}
       renderItem={renderItem}
       data={data}
       ListEmptyComponent={<NoData />}
@@ -99,41 +62,19 @@ const styles = StyleSheet.create({
   },
   scheduleContent: {
     borderRadius: 7,
-    backgroundColor: COLORS.light.blue,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 50,
-    borderBottomWidth: 1,
-    borderColor: COLORS.lineBlue,
+    backgroundColor: COLORS.primaryLight,
   },
   row: {
     flexDirection: 'row',
-    borderBottomColor: COLORS.lineBlue,
-  },
-  headerCell: {
-    flex: 1,
-    justifyContent: 'center',
-    height: '100%',
-  },
-  headerCellFirst: {
-    flex: 0,
-    width: firstCellWidth,
-    borderRightWidth: 1,
-    borderColor: COLORS.lineBlue,
-  },
-  headerText: {
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
   cell: {
     flex: 1,
-    padding: 10,
+    padding: 14,
   },
   cellFirst: {
+    paddingHorizontal: 0,
     flex: 0,
-    width: firstCellWidth,
+    width: FIRST_CELL_WIDTH,
     alignItems: 'center',
     borderRightWidth: 1,
     borderColor: COLORS.lineBlue,

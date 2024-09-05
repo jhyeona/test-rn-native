@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {useRecoilState} from 'recoil';
 
+import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
-import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
-import BtnToday from '#components/Schedule/BtnToday.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
+import WeeklyCalendar from '#components/Schedule/WeeklyCalendar.tsx';
 import Academy from '#containers/Academy';
-import DayCalendar from '#containers/DailySchedules/components/DayCalendar.tsx';
+import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import globalState from '#recoil/Global';
 import {StudentInfoProps} from '#types/user.ts';
@@ -79,7 +80,17 @@ const DailySchedule = ({
               {/*  }*/}
               {/*  disabled={userData ? userData.studentList.length <= 0 : false}*/}
               {/*/>*/}
-              <DayCalendar navigation={navigation} />
+              <View style={styles.container}>
+                <WeeklyCalendar />
+                <DaySchedules />
+                <CButton
+                  text="사유서"
+                  noMargin
+                  onPress={() => {
+                    navigation.navigate('ReasonStatement');
+                  }}
+                />
+              </View>
             </CView>
           </CSafeAreaView>
         ) : (
@@ -89,4 +100,10 @@ const DailySchedule = ({
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 14,
+  },
+});
 export default DailySchedule;

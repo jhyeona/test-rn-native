@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
+
 import moment from 'moment';
-import {
-  GetScheduleHistoryProps,
-  PostEventProps,
-  ScheduleDefaultProps,
-  ScheduleTimeProps,
-} from '#types/schedule.ts';
-import {COLORS} from '#constants/colors.ts';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
+import {IS_ANDROID} from '#constants/common.ts';
+import DaySchedulesStatus from '#containers/DailySchedules/components/DaySchedulesStatus.tsx';
 import {
   postEventAttend,
   postEventComeback,
@@ -19,19 +18,23 @@ import {
   postEventLeave,
   useGetScheduleHistory,
 } from '#hooks/useSchedule.ts';
-import {useRecoilState, useSetRecoilState} from 'recoil';
 import globalState from '#recoil/Global';
-import {
-  handleOpenSettings,
-  requestLocationPermissions,
-} from '#utils/permissionsHelper.ts';
-import {IS_ANDROID} from '#constants/common.ts';
-import {validBeaconList, validWifiList} from '#utils/locationHelper.ts';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
   requestStartBeaconScanning,
 } from '#services/beaconScanner.ts';
+import {
+  GetScheduleHistoryProps,
+  PostEventProps,
+  ScheduleDefaultProps,
+  ScheduleTimeProps,
+} from '#types/schedule.ts';
+import {validBeaconList, validWifiList} from '#utils/locationHelper.ts';
+import {
+  handleOpenSettings,
+  requestLocationPermissions,
+} from '#utils/permissionsHelper.ts';
 import {
   requestGetLocationInfo,
   requestWifiList,
@@ -42,7 +45,6 @@ import {
   handleErrorResponse,
   isBetween,
 } from '#utils/scheduleHelper.ts';
-import LightButton from '#components/Schedule/LightButton.tsx';
 
 interface Props {
   scheduleHistoryPayload: GetScheduleHistoryProps;
@@ -358,11 +360,11 @@ const DayScheduleHistory = (props: Props) => {
         </View>
         {isBefore &&
           (historyData?.completeEvent?.eventType === 'COMPLETE' ? (
-            <LightButton color="blue" text="출석완료" />
+            <DaySchedulesStatus color="blue" text="출석완료" />
           ) : (
-            <LightButton color="red" text="강의종료" />
+            <DaySchedulesStatus color="red" text="강의종료" />
           ))}
-        {isAfter && <LightButton color="gray" text="출석전" />}
+        {isAfter && <DaySchedulesStatus color="gray" text="출석전" />}
       </View>
       {isEnterAllow && !historyData?.enterEvent && (
         <CButton

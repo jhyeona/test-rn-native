@@ -47,7 +47,7 @@ const CButton = (props: Props) => {
       <CText
         style={fontStyle}
         text={text}
-        fontWeight="600"
+        fontWeight="700"
         fontSize={fontSize ?? 16}
         color={disabled ? COLORS.gray : whiteButton ? COLORS.primary : 'white'}
       />

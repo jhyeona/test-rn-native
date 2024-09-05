@@ -1,22 +1,21 @@
-import {COLORS} from '#constants/colors.ts';
-import {Pressable} from 'react-native';
-import CText from '#components/common/CustomText/CText.tsx';
 import React from 'react';
+import {Pressable} from 'react-native';
 
-const LightButton = ({color, text}: {color: string; text: string}) => {
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
+
+const DaySchedulesStatus = ({color, text}: {color: string; text: string}) => {
+  //TODO: color, text 를 설정할 때 status 값만 받아서 설정하기
   let textColor = 'black';
-  let borderColor = 'black';
   let backgroundColor = COLORS.lightGray;
 
   switch (color) {
     case 'blue':
       textColor = COLORS.primary;
-      borderColor = COLORS.primary;
       backgroundColor = COLORS.primaryLight;
       break;
     case 'red':
       textColor = COLORS.dark.red;
-      borderColor = COLORS.dark.red;
       backgroundColor = COLORS.light.red;
       break;
     default:
@@ -28,16 +27,14 @@ const LightButton = ({color, text}: {color: string; text: string}) => {
       style={{
         justifyContent: 'center',
         alignItems: 'center',
-        width: 58,
-        height: 24,
+        paddingVertical: 7,
+        paddingHorizontal: 11,
         backgroundColor: backgroundColor,
-        borderWidth: 1,
-        borderColor: borderColor,
         borderRadius: 7,
       }}>
-      <CText text={text} fontSize={11} color={textColor} />
+      <CText text={text} color={textColor} fontSize={11} fontWeight="700" />
     </Pressable>
   );
 };
 
-export default LightButton;
+export default DaySchedulesStatus;
