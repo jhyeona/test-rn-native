@@ -1,54 +1,72 @@
 import React, {useEffect, useState} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {useSetRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
-import {
-  postSignUp,
-  postSignUpPhone,
-  postSignUpSMS,
-  postSignUpSMSConfirm,
-  postSignUpTAS,
-} from '#hooks/useSignUp.ts';
-import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import CView from '#components/common/CommonView/CView.tsx';
-import Header from '#components/common/Header/Header.tsx';
-import CInput from '#components/common/CustomInput/CInput.tsx';
+
 import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
-import CInputWithDropdown from '#components/User/CInputWithDropdown.tsx';
-import CInputWithTimer from '#components/User/CInputWithTimer.tsx';
+import Header from '#components/common/Header/Header.tsx';
 import DefaultModal from '#components/common/Modal/DefaultModal.tsx';
 import CWebView from '#components/common/WebView/CWebView.tsx';
+import CInputWithDropdown from '#components/User/CInputWithDropdown.tsx';
+import CInputWithTimer from '#components/User/CInputWithTimer.tsx';
 import {PersonalInformationUrl, TermsOfServiceUrl} from '#constants/policy.ts';
+import {GENDER_LIST, TELECOM_LIST} from '#constants/user.ts';
+import {
+  useReqSignUp,
+  useReqSignUpPhone,
+  useReqSignUpTAS,
+  useReqSMSCode,
+  useReqSMSConfirm,
+} from '#containers/SignUp/hooks/useApi.ts';
+import globalState from '#recoil/Global';
+import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
+import {GenderType} from '#types/user.ts';
 import {
   checkDate,
   checkName,
   checkPassword,
   checkPhone,
 } from '#utils/regExpHelper.ts';
-import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
+
+interface SignUpDataProps {
+  name: string;
+  birthday: string;
+  gender: string;
+  phone: string;
+  telecom: string;
+  smsCode: string;
+  password: string;
+  rePassword: string;
+}
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   // TODO: useForm 사용 예정
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [rePassword, setRePassword] = useState('');
-  const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [telecom, setTelecom] = useState('');
-  const [smsCode, setSmsCode] = useState('');
+  const [signUpData, setSignUpData] = useState<SignUpDataProps>({
+    name: '',
+    birthday: '',
+    phone: '',
+    gender: '',
+    telecom: '',
+    smsCode: '',
+    password: '',
+    rePassword: '',
+  });
+
   const [isTimer, setIsTimer] = useState(false);
-  const [countDown, setCountDown] = useState(0);
-  const [restartTimer, setRestartTimer] = useState(false);
-  const [isSend, setIsSend] = useState(false);
-  const [isCertification, setIsCertification] = useState(false);
+  const [countDown, setCountDown] = useState(0); // 휴대폰 인증 유효 시간 카운트다운
+  const [restartTimer, setRestartTimer] = useState(false); // 휴대폰 인증 코드 다시 보내기 가능 여부
+  const [isSend, setIsSend] = useState(false); // 휴대폰 인증 문자 발송 여부
+  const [isCertification, setIsCertification] = useState(false); // 휴대폰 인증 완료 여부
   const [samePassword, setSamePassword] = useState(false);
-  const [isFirstChecked, setIsFirstChecked] = useState(true);
-  const [isSecondChecked, setIsSecondChecked] = useState(true);
+  const [isFirstChecked, setIsFirstChecked] = useState(false);
+  const [isSecondChecked, setIsSecondChecked] = useState(false);
   const [isAllCheck, setIsAllCheck] = useState(
     isFirstChecked && isSecondChecked,
   );
@@ -58,275 +76,157 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     uri: '',
   });
 
-  const genderList = [
-    // 성별 선택 드롭다운
-    {label: '남', id: 'M'},
-    {label: '여', id: 'F'},
-  ];
-  const onChangeGenderValue = (value: {label: string; id: string}) => {
-    // 성별 선택
-    setGender(value.id);
+  const {signUpCheckPhone} = useReqSignUpPhone();
+  const {signUpTAS} = useReqSignUpTAS();
+  const {signUpReqSmsCode} = useReqSMSCode();
+  const {smsConfirm} = useReqSMSConfirm();
+  const {signUp} = useReqSignUp();
+
+  // modal 사용 시 message 만 입력
+  const commonModal = (message: string) => {
+    setGlobalModalState({
+      isVisible: true,
+      title: '안내',
+      message: message,
+    });
   };
 
-  const telecomList = [
-    // 통신사 선택 드롭다운
-    {label: 'SKT', id: 'SKT'},
-    {label: 'KT', id: 'KT'},
-    {label: 'LG U+', id: 'LGT'},
-  ];
-
-  const onChangeTelecomValue = (value: {label: string; id: string}) => {
-    // 통신사 선택
-    setTelecom(value.id);
-  };
-
+  // 휴대폰 인증 시 입력 확인 메세지
   const validateAndSetModal = (isValid: boolean, message: string) => {
     if (!isValid) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: `휴대폰 인증을 위해\n${message} 확인해주세요.`,
-      });
+      commonModal(`휴대폰 인증을 위해\n${message} 확인해주세요.`);
       return false;
     }
     return true;
   };
 
-  const doubleCheckPhone = async () => {
-    // 휴대폰 번호 중복 확인
-    if (!checkPhone(phone)) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '올바른 휴대폰 번호를 입력하세요.',
-      });
-      return;
-    }
-    try {
-      await postSignUpPhone(phone);
-      return true;
-    } catch (error) {
-      return false;
-    }
-  };
+  // 입력 확인 조건 체크
+  const validations = [
+    {isValid: checkName(signUpData.name), message: '이름을'},
+    {isValid: checkDate(signUpData.birthday), message: '생년월일을'},
+    {isValid: !!signUpData.gender, message: '성별을'},
+    {isValid: checkPhone(signUpData.phone), message: '휴대폰번호를'},
+    {isValid: !!signUpData.telecom, message: '통신사를'},
+  ];
 
-  const tasCertification = async () => {
-    // TAS 인증 시간 지연 (약 4~7초 딜레이 되는 것으로 파악)으로 인해 메세지 먼저 띄운 후 요청 완료 시 다시 메세지 출력
-    setIsCertification(true); // TAS 가 딜레이 되는 동안 입력 및 버튼 disabled 처리
-    setGlobalModalState({
-      isVisible: true,
-      title: '안내',
-      message:
-        '인증 요청되었습니다.\n환경에 따라 다소 시간이 지연될 수 있습니다. \n조금만 기다려 주세요.',
-    });
-    // TAS 인증
-    const data = {
-      phone: phone,
-      name: name,
-      gender: gender,
-      birth: birthday.substring(2),
-      telecom: telecom,
-    };
+  // SMS 인증 문자 요청
+  const requestSmsCode = async () => {
+    const payload = {phone: signUpData.phone};
     try {
-      const response = await postSignUpTAS(data);
-      if (response?.code === '0000') {
-        setIsCertification(false);
-        return true;
-      }
-    } catch (error) {
-      setIsCertification(false);
-      await setAttToCrashlytics(data);
-      errorToCrashlytics(error, 'requestSignupTAS');
-      return false;
-    }
-  };
-
-  const smsCertification = async () => {
-    // SMS 인증 요청
-    const data = {phone: phone};
-    try {
-      const response = await postSignUpSMS(data);
-      if (response) {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '인증 문자가 발송되었습니다.',
-        });
-        setSmsCode('');
-        setIsTimer(true);
-        setRestartTimer(true);
-      }
+      await signUpReqSmsCode(payload);
+      setSignUpData(prev => ({...prev, smsCode: ''}));
+      setIsTimer(true);
+      setRestartTimer(true);
     } catch (error) {
       setIsSend(false);
-      console.log(error);
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: 'SMS 인증 요청에 실패했습니다.',
-      });
-
       errorToCrashlytics(error, 'requestSignupSendSMS');
     }
   };
 
-  const handleConfirm = async (code: string) => {
-    // SMS 인증 완료 요청
-    const data = {
-      phone: phone,
-      verifyCode: code,
-    };
-
-    try {
-      await postSignUpSMSConfirm(data);
-      setIsCertification(true);
-      setIsTimer(false);
-    } catch (error) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '코드가 일치하지 않거나\n유효 시간이 경과되었습니다.',
-      });
-
-      await setAttToCrashlytics(data);
-      errorToCrashlytics(error, 'requestSignupConfirmSMS');
-    }
-  };
-
+  // 인증 문자 발송 클릭
   const onPressCertification = async () => {
-    // 전체 인증 요청
-    if (!validateAndSetModal(checkName(name), '이름을')) return;
-    if (!validateAndSetModal(checkDate(birthday), '생년월일을')) return;
-    if (!validateAndSetModal(!!gender, '성별을')) return;
-    if (!validateAndSetModal(checkPhone(phone), '휴대폰번호를')) return;
-    if (!validateAndSetModal(!!telecom, '통신사를')) return;
-
-    // START - FOR APP STORE TEST DATA
-    if (phone === '01072337376') {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '인증 문자가 발송되었습니다.',
-      });
+    for (const {isValid, message} of validations) {
+      if (!validateAndSetModal(isValid, message)) return;
+    }
+    // === FOR APP STORE TEST DATA ===
+    if (signUpData.phone === '01072337376') {
+      commonModal('인증 문자가 발송되었습니다.');
+      setSignUpData(prev => ({...prev, smsCode: ''}));
       setIsSend(true);
-      setSmsCode('');
       setIsTimer(true);
       setRestartTimer(true);
       return;
-    } // END - FOR APP STORE TEST DATA
+    } // ===  FOR APP STORE TEST DATA ===
 
+    setIsCertification(true); // TAS 가 딜레이 되는 동안 입력 및 버튼 disabled 처리
     setIsSend(true);
-    setIsCertification(false);
 
-    const isDoubleCheckPhone = await doubleCheckPhone();
-    if (!isDoubleCheckPhone) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '이미 사용중인 휴대폰 번호입니다.',
-      });
+    const payload = {
+      phone: signUpData.phone,
+      name: signUpData.name,
+      gender: signUpData.gender as GenderType,
+      birth: signUpData.birthday.substring(2),
+      telecom: signUpData.telecom,
+    };
+
+    try {
+      await signUpCheckPhone(signUpData.phone);
+      const response = await signUpTAS(payload);
+
+      if (response?.code === '0000') {
+        setIsCertification(false);
+      }
+    } catch (error) {
+      setIsCertification(false);
       setIsSend(false);
-      return;
+      await setAttToCrashlytics(payload);
+      errorToCrashlytics(error, 'requestSignupTAS');
     }
 
-    const resultTasCertification = await tasCertification();
-    if (!resultTasCertification) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '휴대폰 인증에 실패했습니다.\n정보를 확인해주세요.',
-      });
-      setIsSend(false);
-      return;
+    // SMS 인증 요청
+    await requestSmsCode();
+  };
+
+  // 인증번호 입력 + 자동 확인
+  const handleChangeSmsCode = async (value: string) => {
+    setSignUpData(prev => ({...prev, smsCode: value}));
+    if (value.length === 6) {
+      // === FOR APP STORE TEST DATA ===
+      if (signUpData.phone === '01072337376') {
+        setIsCertification(true);
+        setIsTimer(false);
+        return;
+      } // === FOR APP STORE TEST DATA ===
+
+      const payload = {
+        phone: signUpData.phone,
+        verifyCode: signUpData.smsCode,
+      };
+      try {
+        await smsConfirm(payload);
+        setIsCertification(true);
+        setIsTimer(false);
+      } catch (error) {
+        await setAttToCrashlytics(payload);
+        errorToCrashlytics(error, 'requestSignupConfirmSMS');
+      }
     }
-
-    await smsCertification();
   };
 
-  const onPressFirstCheckModal = () => {
-    setDefaultModalState({
-      isVisible: true,
-      title: '서비스 이용약관 동의',
-      uri: TermsOfServiceUrl,
-    });
-  };
-
-  const onPressSecondCheckModal = () => {
-    setDefaultModalState({
-      isVisible: true,
-      title: '개인정보 수집 이용 동의',
-      uri: PersonalInformationUrl,
-    });
-  };
-
+  // 가입하기 클릭
   const onPressSignUp = async () => {
     // 가입하기 버튼 클릭
     if (!isCertification) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '휴대폰 인증을 먼저 진행해주세요.',
-      });
+      commonModal('휴대폰 인증을 먼저 진행해주세요.');
       return;
     }
-
-    if (!checkPassword(password) || !samePassword) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '비밀번호를 확인해주세요.',
-      });
+    if (!checkPassword(signUpData.password) || !samePassword) {
+      commonModal('비밀번호를 확인해주세요.');
       return;
     }
-
     if (!isFirstChecked || !isSecondChecked) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '약관에 모두 동의해주세요.',
-      });
+      commonModal('약관에 모두 동의해주세요.');
       return;
     }
 
     // 회원가입 진행
-    const data = {
-      phone: phone,
-      name: name,
-      birth: birthday.substring(2),
-      password: password,
-      gender: gender,
+    const payload = {
+      phone: signUpData.phone,
+      name: signUpData.name,
+      birth: signUpData.birthday?.substring(2),
+      password: signUpData.password,
+      gender: signUpData.gender as GenderType,
     };
 
     try {
-      await postSignUp(data);
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: `회원가입이 완료되었습니다. \n로그인해 주세요.`,
-      });
+      await signUp(payload);
       navigation.navigate('SignIn');
     } catch (error: any) {
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: `회원가입에 실패하였습니다.`,
-      });
       errorToCrashlytics(error, 'requestSignUp');
     }
   };
 
-  const handleChangeSmsCode = async (value: string) => {
-    // 인증번호 입력
-    setSmsCode(value);
-    if (value.length === 6) {
-      if (phone === '01072337376') {
-        setIsCertification(true);
-        setIsTimer(false);
-        return;
-      }
-      await handleConfirm(value);
-    }
-  };
-
+  // 인증 문자 시간
   const onChangeTimeHandler = (time: number) => {
     if (time > 99) {
       setRestartTimer(false);
@@ -337,13 +237,32 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     }
   };
 
+  // 서비스 이용약관 동의
+  const onPressFirstCheckModal = () => {
+    setDefaultModalState({
+      isVisible: true,
+      title: '서비스 이용약관 동의',
+      uri: TermsOfServiceUrl,
+    });
+  };
+
+  // 개인정보 수집 이용 동의
+  const onPressSecondCheckModal = () => {
+    setDefaultModalState({
+      isVisible: true,
+      title: '개인정보 수집 이용 동의',
+      uri: PersonalInformationUrl,
+    });
+  };
+
+  // 전체 동의
   const handleAllChecked = (isChecked: boolean) => {
-    // 전체 동의
     setIsAllCheck(isChecked);
     setIsFirstChecked(isChecked);
     setIsSecondChecked(isChecked);
   };
 
+  // 약관 개별 동의 시 전체 동의 처리
   const updateAllCheckState = (
     firstChecked: boolean,
     secondChecked: boolean,
@@ -354,9 +273,13 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   useEffect(() => {
     // 비밀번호와 재입력 비밀번호 비교
-    const isSame = password === rePassword && checkPassword(rePassword);
-    setSamePassword(isSame);
-  }, [password, rePassword]);
+    if (signUpData.password && signUpData.rePassword) {
+      const isSame =
+        signUpData.password === signUpData.rePassword &&
+        checkPassword(signUpData.rePassword);
+      setSamePassword(isSame);
+    }
+  }, [signUpData.password, signUpData.rePassword]);
 
   return (
     <CSafeAreaView>
@@ -365,10 +288,12 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         <ScrollView>
           <CInput
             title="성명"
-            inputValue={name}
-            setInputValue={setName}
+            inputValue={signUpData.name}
+            setInputValue={value =>
+              setSignUpData(prev => ({...prev, name: value}))
+            }
             errorMessage="이름을 입력해 주세요."
-            isWarning={name.length > 0 && !checkName(name)}
+            isWarning={!!signUpData.name && !checkName(signUpData.name)}
             maxLength={4}
             inputMode="text"
             readOnly={isSend}
@@ -376,34 +301,47 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           <View style={[styles.inputRow, {zIndex: 3}]}>
             <CInputWithDropdown
               title="생년월일"
-              inputValue={birthday}
-              setInputValue={setBirthday}
+              inputValue={signUpData.birthday}
+              setInputValue={value =>
+                setSignUpData(prev => ({...prev, birthday: value}))
+              }
               placeholder="YYYYMMDD"
               errorMessage="생년월일을 입력해 주세요."
-              dropDownItems={genderList}
-              dropDownOnSelect={onChangeGenderValue}
-              dropDownDisabled={isSend}
-              dropDownPlaceHolder="성별"
-              isWarning={birthday.length > 0 && !checkDate(birthday)}
               maxLength={8}
               inputMode="numeric"
               readOnly={isSend}
+              dropDownItems={GENDER_LIST}
+              dropDownOnSelect={value =>
+                setSignUpData(prev => ({
+                  ...prev,
+                  gender: value.id,
+                }))
+              }
+              dropDownDisabled={isSend}
+              dropDownPlaceHolder="성별"
+              isWarning={
+                !!signUpData.birthday && !checkDate(signUpData.birthday)
+              }
               dropDownStyle={{flex: 1}}
             />
           </View>
           <View style={[styles.inputRow, {zIndex: 2}]}>
             <CInputWithDropdown
               title="휴대폰 번호"
-              inputValue={phone}
-              setInputValue={setPhone}
+              inputValue={signUpData.phone}
+              setInputValue={value =>
+                setSignUpData(prev => ({...prev, phone: value}))
+              }
               placeholder="01012341234"
               errorMessage="휴대폰 번호를 바르게 입력해 주세요."
-              isWarning={phone.length > 0 && !checkPhone(phone)}
+              isWarning={!!signUpData.phone && !checkPhone(signUpData.phone)}
               maxLength={11}
               inputMode="tel"
               readOnly={isSend}
-              dropDownItems={telecomList}
-              dropDownOnSelect={onChangeTelecomValue}
+              dropDownItems={TELECOM_LIST}
+              dropDownOnSelect={value =>
+                setSignUpData(prev => ({...prev, telecom: value.id}))
+              }
               dropDownDisabled={isSend}
               dropDownPlaceHolder="통신사"
               dropDownStyle={{flex: 1}}
@@ -412,11 +350,13 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           <View style={styles.inputRow}>
             <CInputWithTimer
               title="인증번호"
-              inputValue={smsCode}
+              inputValue={signUpData.smsCode}
               setInputValue={handleChangeSmsCode}
               errorMessage="올바른 인증번호를 입력해 주세요."
               isWarning={
-                isSend ? smsCode.length > 0 && smsCode.length < 6 : false
+                isSend
+                  ? !!signUpData.smsCode && signUpData.smsCode.length < 6
+                  : false
               }
               maxLength={6}
               inputMode="numeric"
@@ -440,19 +380,25 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           </View>
           <CInput
             title="비밀번호 입력"
-            inputValue={password}
-            setInputValue={setPassword}
+            inputValue={signUpData.password}
+            setInputValue={value =>
+              setSignUpData(prev => ({...prev, password: value}))
+            }
             errorMessage="영문+숫자 조합 8자리 이상 입력해 주세요."
-            isWarning={password.length > 0 && !checkPassword(password)}
+            isWarning={
+              !!signUpData.password && !checkPassword(signUpData.password)
+            }
             secureTextEntry
             placeholder="영문+숫자 조합 8자리 이상"
           />
           <CInput
             title="비밀번호 입력 확인"
-            inputValue={rePassword}
-            setInputValue={setRePassword}
+            inputValue={signUpData.rePassword}
+            setInputValue={value =>
+              setSignUpData(prev => ({...prev, rePassword: value}))
+            }
             errorMessage="동일한 비밀번호를 입력해 주세요."
-            isWarning={rePassword.length > 0 && !samePassword}
+            isWarning={!!signUpData.rePassword && !samePassword}
             secureTextEntry
             placeholder="영문+숫자 조합 8자리 이상"
           />

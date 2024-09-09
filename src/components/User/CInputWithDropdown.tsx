@@ -1,14 +1,16 @@
 import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
+import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {
   DimensionValue,
   ViewStyle,
 } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import Dropdown from '../common/Dropdown/Dropdown.tsx';
-import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
+
 import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
+
+import Dropdown from '../common/Dropdown/Dropdown.tsx';
 
 interface ItemProps {
   label: string;
@@ -26,6 +28,7 @@ interface Props {
   dropDownDisabled?: boolean;
   dropDownPlaceHolder?: string;
   dropDownStyle?: StyleProp<ViewStyle>;
+  dropdownSelected?: ItemProps;
   isWarning?: boolean;
   secureTextEntry?: boolean;
   readOnly?: boolean;
@@ -40,13 +43,14 @@ const CInputWithDropdown = (props: Props) => {
     title,
     errorMessage,
     placeholder,
-    inputValue,
+    inputValue = '',
     setInputValue,
     dropDownItems,
     dropDownOnSelect,
     dropDownDisabled,
     dropDownPlaceHolder,
     dropDownStyle,
+    dropdownSelected,
     isWarning,
     secureTextEntry,
     readOnly,
@@ -88,6 +92,7 @@ const CInputWithDropdown = (props: Props) => {
         <Dropdown
           items={dropDownItems}
           onSelect={dropDownOnSelect}
+          selected={dropdownSelected}
           fullHeight={52}
           fontSize={16}
           placeholder={dropDownPlaceHolder}

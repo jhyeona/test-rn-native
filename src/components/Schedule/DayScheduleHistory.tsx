@@ -10,7 +10,7 @@ import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {IS_ANDROID} from '#constants/common.ts';
 import DaySchedulesStatus from '#containers/DailySchedules/components/DaySchedulesStatus.tsx';
-import {useGetScheduleHistory} from '#containers/DailySchedules/hooks';
+import {useGetScheduleHistory} from '#containers/DailySchedules/hooks/useApi.ts';
 import {
   postEventAttend,
   postEventComeback,

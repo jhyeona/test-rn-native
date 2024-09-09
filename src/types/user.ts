@@ -6,10 +6,40 @@ export interface GetAccessTokenProps {
   expires_in: number;
 }
 
-export interface SmsConfirmProps {
+export interface ResSmsConfirmProps {
   smsConfirmedId: string;
   phone: string;
   ttl: number;
+}
+
+export interface ReqPhone {
+  phone: string;
+}
+
+export interface ReqSmsConfirm extends ReqPhone {
+  verifyCode: string;
+}
+
+export interface ReqSignIn {
+  phone: string;
+  password: string;
+}
+
+export type GenderType = 'M' | 'F';
+export interface ReqSignUpTAS {
+  phone: string;
+  name: string;
+  birth: string;
+  gender: GenderType;
+  telecom: string;
+}
+
+export interface ReqSignUp {
+  phone: string;
+  name: string;
+  birth: string;
+  password: string;
+  gender: GenderType;
 }
 
 export interface StudentInfoProps {

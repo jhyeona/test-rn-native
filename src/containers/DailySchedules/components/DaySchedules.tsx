@@ -9,7 +9,7 @@ import {COLORS} from '#constants/colors.ts';
 import DaySchedulesHeader from '#containers/DailySchedules/components/DaySchedulesHeader.tsx';
 import DaySchedulesLecture from '#containers/DailySchedules/components/DaySchedulesLecture.tsx';
 import DaySchedulesTime from '#containers/DailySchedules/components/DaySchedulesTime.tsx';
-import {useGetDaySchedule} from '#containers/DailySchedules/hooks';
+import {useGetDaySchedule} from '#containers/DailySchedules/hooks/useApi.ts';
 
 interface Test {
   time: string;

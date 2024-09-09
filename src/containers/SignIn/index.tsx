@@ -11,7 +11,6 @@ import {
 import Config from 'react-native-config';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {useSetRecoilState} from 'recoil';
 
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
@@ -19,17 +18,16 @@ import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {postGetToken} from '#hooks/useSignIn.ts';
-import globalState from '#recoil/Global';
+import {useSignIn} from '#containers/SignIn/hooks/useApi.ts';
 import {errorToCrashlytics, logToCrashlytics} from '#services/firebase.ts';
-import {storage} from '#utils/storageHelper.ts';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [isIdWarning, setIsIdWarning] = useState(false);
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
-  const setIsLogin = useSetRecoilState(globalState.isLoginState);
+
+  const {signIn} = useSignIn();
 
   const onChangeId = (value: string) => {
     setId(value);
@@ -51,7 +49,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const onPressSignIn = async () => {
     // 로그인
     Keyboard.dismiss();
-    logToCrashlytics('user login');
+
     // warning 초기화
     setIsIdWarning(false);
     setIsPasswordWarning(false);
@@ -62,24 +60,11 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       return;
     }
 
-    const payload = {phone: id, password: password};
     try {
-      const response = await postGetToken(payload);
-      console.log('??', response);
-      if (response) {
-        storage.set('access_token', response.access_token);
-        storage.set('refresh_token', response.refresh_token);
-        setIsLogin(true);
-      }
-    } catch (error: any) {
-      console.log('???', error);
-      if (error?.code === '4000') {
-        setIsIdWarning(true);
-        setIsPasswordWarning(true);
-        return;
-      }
-      Alert.alert(`로그인에 실패하였습니다.`);
-      errorToCrashlytics(error, 'requestGetToken');
+      await signIn({phone: id, password});
+    } catch (error) {
+      logToCrashlytics('user login');
+      errorToCrashlytics(error, 'requestGetTokenError');
     }
   };
 
