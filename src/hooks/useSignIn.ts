@@ -5,5 +5,5 @@ export const postGetToken = async (payload: {
   password: string;
 }) => {
   const response = await requestPostGetToken(payload);
-  return response.data?.data;
+  return response;
 };

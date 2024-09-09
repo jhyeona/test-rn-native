@@ -4,12 +4,13 @@ import CText from '#components/common/CustomText/CText.tsx';
 
 interface NoDataProps {
   fullHeight?: boolean;
+  message?: string;
 }
 
-const NoData = ({fullHeight = false}: NoDataProps) => {
+const NoData = ({fullHeight = false, message}: NoDataProps) => {
   return (
-    <View style={[styles.container, {height: fullHeight ? '100%' : 'auto'}]}>
-      <CText text="🐣 데이터가 없습니다." fontSize={17} />
+    <View style={[styles.container, {height: fullHeight ? '80%' : 'auto'}]}>
+      <CText text={message ?? '🐣 데이터가 없습니다.'} fontSize={17} />
     </View>
   );
 };

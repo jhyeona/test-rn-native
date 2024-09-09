@@ -22,9 +22,7 @@ export const requestPostFindPassword = async (payload: {
   return instanceWithoutToken.post(url, payload);
 };
 
-export const requestGetUserInfo = async (): Promise<
-  ApiResponseProps<UserInfoProps>
-> => {
+export const requestGetUserInfo = async (): Promise<UserInfoProps> => {
   // 유저 정보
   const url = '/user/info';
   return requestGet(url);

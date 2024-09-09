@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 
+import moment from 'moment/moment';
+
 import NoData from '#components/common/NoData';
 import {FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
 import DaySchedulesHeader from '#containers/DailySchedules/components/DaySchedulesHeader.tsx';
 import DaySchedulesLecture from '#containers/DailySchedules/components/DaySchedulesLecture.tsx';
 import DaySchedulesTime from '#containers/DailySchedules/components/DaySchedulesTime.tsx';
+import {useGetDaySchedule} from '#containers/DailySchedules/hooks';
 
 interface Test {
   time: string;
@@ -18,8 +21,21 @@ const testData = [
 ];
 
 const DaySchedules = () => {
+  // const [{date: daily}, setSelectedDate] = useRecoilState(
+  //   scheduleState.selectedCalendarDate,
+  // );
   const [data, _] = useState<Test[]>(testData);
   const [refreshing, setRefreshing] = useState(false);
+
+  // const selectedAcademy = useRecoilValue(globalState.selectedAcademy);
+  const {dayScheduleData} = useGetDaySchedule({
+    academyId: 1,
+    date: moment('20240304').format('YYYYMMDD'),
+  });
+  //
+  // useEffect(() => {
+  //   console.log(dayScheduleData);
+  // }, [dayScheduleData]);
 
   const onRefresh = () => {
     //TODO: 일정 Pull to Refresh 기능 추가 (함수로 뽑아서 일간/주간에서 동일하게 사용할 수 있을지)
@@ -46,11 +62,14 @@ const DaySchedules = () => {
       style={styles.container}
       refreshing={refreshing}
       onRefresh={onRefresh}
-      contentContainerStyle={styles.scheduleContent}
+      contentContainerStyle={[
+        styles.scheduleContent,
+        data.length === 0 && {flexGrow: 1},
+      ]}
       ListHeaderComponent={<DaySchedulesHeader />}
       renderItem={renderItem}
       data={data}
-      ListEmptyComponent={<NoData />}
+      ListEmptyComponent={<NoData fullHeight message="✏️ 강의가 없습니다." />}
     />
   );
 };

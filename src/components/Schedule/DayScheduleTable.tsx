@@ -9,9 +9,8 @@ import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import DayScheduleHistory from '#components/Schedule/DayScheduleHistory.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {useGetDaySchedule} from '#hooks/useSchedule.ts';
+import {useGetDaySchedule} from '#containers/DailySchedules/hooks';
 import globalState from '#recoil/Global';
-import scheduleState from '#recoil/Schedule';
 import {StudentInfoProps} from '#types/user.ts';
 import {isBetween} from '#utils/scheduleHelper.ts';
 

@@ -37,7 +37,7 @@ const WeeklySchedules = () => {
 
   return (
     <CSafeAreaView>
-      <ScheduleHeader isWeekend={true} />
+      <ScheduleHeader />
       <CView>
         <Dropdown
           items={academyList}

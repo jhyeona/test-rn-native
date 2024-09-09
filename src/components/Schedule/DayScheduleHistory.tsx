@@ -10,13 +10,13 @@ import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {IS_ANDROID} from '#constants/common.ts';
 import DaySchedulesStatus from '#containers/DailySchedules/components/DaySchedulesStatus.tsx';
+import {useGetScheduleHistory} from '#containers/DailySchedules/hooks';
 import {
   postEventAttend,
   postEventComeback,
   postEventComplete,
   postEventEnter,
   postEventLeave,
-  useGetScheduleHistory,
 } from '#hooks/useSchedule.ts';
 import globalState from '#recoil/Global';
 import {
@@ -24,6 +24,11 @@ import {
   requestBeaconScanList,
   requestStartBeaconScanning,
 } from '#services/beaconScanner.ts';
+import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
+import {
+  requestGetLocationInfo,
+  requestWifiList,
+} from '#services/locationScanner.ts';
 import {
   GetScheduleHistoryProps,
   PostEventProps,
@@ -35,11 +40,6 @@ import {
   handleOpenSettings,
   requestLocationPermissions,
 } from '#utils/permissionsHelper.ts';
-import {
-  requestGetLocationInfo,
-  requestWifiList,
-} from '#services/locationScanner.ts';
-import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 import {
   attendList,
   handleErrorResponse,
@@ -53,8 +53,9 @@ interface Props {
 
 const DayScheduleHistory = (props: Props) => {
   const {scheduleHistoryPayload, schedule} = props;
-  const {data: historyData, refetch: historyDataRefetch} =
-    useGetScheduleHistory(scheduleHistoryPayload);
+  const {historyData, refetchHistoryData} = useGetScheduleHistory(
+    scheduleHistoryPayload,
+  );
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [beaconState, setBeaconState] = useRecoilState(globalState.beaconState);
   const [wifiState, setWifiState] = useRecoilState(globalState.wifiState);
@@ -163,7 +164,7 @@ const DayScheduleHistory = (props: Props) => {
 
     try {
       await postEventEnter(payload);
-      await historyDataRefetch();
+      await refetchHistoryData();
       openModal('입실 처리 되었습니다.');
     } catch (e: any) {
       const errorMessage = handleErrorResponse(e.code);
@@ -195,7 +196,7 @@ const DayScheduleHistory = (props: Props) => {
     // 퇴실
     try {
       await postEventComplete(payload);
-      await historyDataRefetch();
+      await refetchHistoryData();
 
       openModal('퇴실 처리 되었습니다.');
     } catch (e: any) {
@@ -218,7 +219,7 @@ const DayScheduleHistory = (props: Props) => {
     // 시간별 체크
     try {
       await postEventAttend(payload);
-      await historyDataRefetch();
+      await refetchHistoryData();
 
       openModal('확인 되었습니다.');
     } catch (e: any) {
@@ -268,7 +269,7 @@ const DayScheduleHistory = (props: Props) => {
     // 외출
     try {
       await postEventLeave(payload);
-      await historyDataRefetch();
+      await refetchHistoryData();
 
       openModal('외출이 시작되었습니다.');
     } catch (e: any) {
@@ -301,7 +302,7 @@ const DayScheduleHistory = (props: Props) => {
     // 복귀
     try {
       await postEventComeback(payload);
-      await historyDataRefetch();
+      await refetchHistoryData();
 
       openModal('외출이 종료되었습니다.');
     } catch (e: any) {

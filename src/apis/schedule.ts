@@ -1,4 +1,5 @@
 import {requestGet, requestPost} from '#apis/index.ts';
+import {ApiResponseProps} from '#types/common.ts';
 import {
   GetScheduleHistoryProps,
   GetScheduleHistoryWeekProps,
@@ -9,16 +10,6 @@ import {
   ScheduleHistoryWeekDataProps,
   SchedulePeriodDataProps,
 } from '#types/schedule.ts';
-import {ApiResponseProps} from '#types/common.ts';
-
-export const requestGetDaySchedule = async (
-  payload: GetScheduleProps,
-): Promise<ApiResponseProps<ScheduleDataProps>> => {
-  // 하루 일정 리스트
-  const {academyId, date} = payload;
-  const url = `/schedule/day/academy/${academyId}/date/${date}`;
-  return requestGet(url);
-};
 
 export const requestGetWeekSchedule = async (
   payload: GetScheduleProps,
@@ -26,14 +17,6 @@ export const requestGetWeekSchedule = async (
   // 주간 일정 리스트
   const {academyId, date} = payload;
   const url = `/schedule/week/academy/${academyId}/date/${date}`;
-  return requestGet(url);
-};
-
-export const requestGetScheduleHistory = async (
-  payload: GetScheduleHistoryProps,
-): Promise<ApiResponseProps<ScheduleHistoryDataProps>> => {
-  // 스케쥴에 대한 이벤트 히스토리 = 출석 기록
-  const url = `/event/history/attendee/${payload.attendeeId}/schedule/${payload.scheduleId}`;
   return requestGet(url);
 };
 

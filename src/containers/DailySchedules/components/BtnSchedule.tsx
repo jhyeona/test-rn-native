@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 
 const BUTTON_HEIGHT = 28;
-const BtnSchedule: React.FC = () => {
+const BtnSchedule = () => {
   const onPressEnter = () => {
     console.log('출석체크');
   };
