@@ -1,39 +1,46 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import moment from 'moment';
-import {COLORS} from '#constants/colors.ts';
+import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+
+import {useRecoilValue} from 'recoil';
+
 import CText from '#components/common/CustomText/CText.tsx';
-import TextToggle from '#components/common/Toggle/TextToggle.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import BtnToday from '#components/Schedule/BtnToday.tsx';
+import {COLORS} from '#constants/colors.ts';
+import scheduleState from '#recoil/Schedule';
 import {weekOfMonth} from '#utils/scheduleHelper.ts';
 
-interface Props {
-  isWeekend: boolean;
-  setIsWeekend: (value: boolean) => void;
-}
-
-const ScheduleHeader = (props: Props) => {
-  const {isWeekend, setIsWeekend} = props;
+const ScheduleHeader = () => {
+  const {isWeekly, date} = useRecoilValue(scheduleState.selectedCalendarDate);
+  const onPressRefreshCalendar = () => {
+    console.log('onPressRefreshCalendar');
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>
-        <CText
-          text={isWeekend ? '주간 일정' : '오늘 일정'}
-          fontWeight="700"
-          fontSize={22}
-        />
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <SvgIcon style={styles.icon} name="Calendar" size={24} />
+        <View style={styles.title}>
+          <CText
+            text={isWeekly ? '주간 일정' : '일간 일정'}
+            fontWeight="700"
+            fontSize={22}
+          />
+          <SvgIcon name="Calendar" size={24} />
           <CText
             text={
-              isWeekend ? weekOfMonth(moment()) : moment().format('YYYY.MM.DD')
+              isWeekly ? weekOfMonth(date) : date.format('YYYY.MM.DD') // 선택된 날짜를 기준으로 표시할 때
+              // isWeekend ? weekOfMonth(moment()) : moment().format('YYYY.MM.DD') // 오늘을 기준으로 표시할 때
             }
             fontSize={16}
           />
+          <BtnToday />
         </View>
+        <TouchableWithoutFeedback onPress={onPressRefreshCalendar}>
+          <View>
+            <SvgIcon name="Refresh" size={24} />
+          </View>
+        </TouchableWithoutFeedback>
       </View>
-      <TextToggle onToggle={value => setIsWeekend(value)} />
     </View>
   );
 };
@@ -50,11 +57,16 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.layout,
   },
   rowContainer: {
+    width: '100%',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  icon: {
-    marginHorizontal: 10,
+  title: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 });
 

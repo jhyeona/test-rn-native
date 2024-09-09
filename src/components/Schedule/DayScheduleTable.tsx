@@ -1,14 +1,17 @@
 import React from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
-import moment from 'moment';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
+import moment from 'moment';
 import {useRecoilValue} from 'recoil';
-import scheduleState from '#recoil/Schedule';
+
 import CText from '#components/common/CustomText/CText.tsx';
-import {COLORS} from '#constants/colors.ts';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
-import {StudentInfoProps} from '#types/user.ts';
 import DayScheduleHistory from '#components/Schedule/DayScheduleHistory.tsx';
+import {COLORS} from '#constants/colors.ts';
+import {useGetDaySchedule} from '#containers/DailySchedules/hooks';
+import globalState from '#recoil/Global';
+import {StudentInfoProps} from '#types/user.ts';
 import {isBetween} from '#utils/scheduleHelper.ts';
 
 interface Props {
@@ -18,8 +21,11 @@ interface Props {
 
 const DayScheduleTable = (props: Props) => {
   const {navigation, studentInfo} = props;
-  const dayScheduleData = useRecoilValue(scheduleState.dayScheduleState);
-
+  const selectedAcademy = useRecoilValue(globalState.selectedAcademy);
+  const {dayScheduleData} = useGetDaySchedule({
+    academyId: selectedAcademy,
+    date: moment().format('YYYY-MM-DD'),
+  });
   const onPressHandlePage = (page: string, scheduleId: number) => {
     navigation.navigate(page, {
       attendeeId: studentInfo.attendeeId,
@@ -163,6 +169,7 @@ const DayScheduleTable = (props: Props) => {
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     flexGrow: 0,
     marginVertical: 16,
     backgroundColor: COLORS.primaryLight,

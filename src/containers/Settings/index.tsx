@@ -23,7 +23,7 @@ import {
 import {storage} from '#utils/storageHelper.ts';
 
 const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
-  const {data: userData, refetch: refetchUserData} = useGetUserInfo();
+  const {userData, refetchUserData} = useGetUserInfo();
   const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
 
   const [isPushApp, setIsPushApp] = useState(

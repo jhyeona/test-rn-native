@@ -1,37 +1,22 @@
 import React, {useEffect, useState} from 'react';
 
-import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import moment from 'moment/moment';
 import {useRecoilState, useRecoilValue} from 'recoil';
 
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
-import Header from '#components/common/Header/Header.tsx';
+import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import TimeTable from '#components/Schedule/TimeTable.tsx';
-import {useGetWeekSchedule} from '#hooks/useSchedule.ts';
 import globalState from '#recoil/Global';
 import userState from '#recoil/User';
 
-const WeeklySchedules = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const WeeklySchedules = () => {
   const userData = useRecoilValue(userState.userInfoState);
   const [academyList, setAcademyList] = useState([{label: '', id: ''}]);
   const [selectAcademy, setSelectAcademy] = useRecoilState(
     globalState.selectedAcademy,
   );
 
-  const [selectWeekDate, setSelectWeekDate] = useRecoilState(
-    globalState.selectWeekScheduleDate,
-  );
-  useGetWeekSchedule({
-    // 주간 데이터
-    academyId: selectAcademy,
-    date: moment(selectWeekDate).format('YYYYMMDD'),
-  });
   const onChangeDropList = (item: {label: string; id: string}) => {
     setSelectAcademy(Number(item.id));
   };
@@ -50,13 +35,9 @@ const WeeklySchedules = ({
     }
   }, [userData]);
 
-  useEffect(() => {
-    setSelectWeekDate(moment().format('YYYY-MM-DD'));
-  }, [setSelectWeekDate]);
-
   return (
     <CSafeAreaView>
-      <Header title="주간 일정" navigation={navigation} />
+      <ScheduleHeader />
       <CView>
         <Dropdown
           items={academyList}

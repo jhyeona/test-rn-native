@@ -1,3 +1,5 @@
+import {useQuery} from '@tanstack/react-query';
+
 import {
   requestDeleteUser,
   requestGetInvitedAcademyList,
@@ -5,10 +7,6 @@ import {
   requestPostFindPassword,
   requestPostJoinAcademy,
 } from '#apis/user.ts';
-import {useSetRecoilState} from 'recoil';
-import userState from '#recoil/User';
-import {useQuery} from '@tanstack/react-query';
-import {useEffect} from 'react';
 
 export const postFindPassword = async (payload: {
   phone: string;
@@ -16,33 +14,23 @@ export const postFindPassword = async (payload: {
   birth: string;
 }) => {
   const response = await requestPostFindPassword(payload);
-  return response.data?.data;
-};
-
-export const getUserInfo = async () => {
-  const response = await requestGetUserInfo();
-  return response.data?.data;
+  return response;
 };
 
 export const useGetUserInfo = () => {
-  const setUserInfo = useSetRecoilState(userState.userInfoState);
   const {data, refetch} = useQuery({
     queryKey: ['userInfo'],
     queryFn: async () => {
-      return getUserInfo();
+      return requestGetUserInfo();
     },
   });
-  useEffect(() => {
-    if (!data) return;
-    setUserInfo(data);
-  }, [data, setUserInfo]);
 
-  return {data, refetch};
+  return {userData: data, refetchUserData: refetch};
 };
 
 export const getInvitedAcademyList = async () => {
   const response = await requestGetInvitedAcademyList();
-  return response.data?.data;
+  return response;
 };
 
 export const useGetInvitedList = () => {
@@ -59,10 +47,10 @@ export const postJoinAcademy = async (payload: {
   inviteIdList: Array<number>;
 }) => {
   const response = await requestPostJoinAcademy(payload);
-  return response.data?.data;
+  return response;
 };
 
 export const deleteUser = async (payload: {password: string}) => {
   const response = await requestDeleteUser(payload);
-  return response.data?.data;
+  return response;
 };

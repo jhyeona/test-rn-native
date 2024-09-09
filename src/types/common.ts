@@ -18,5 +18,6 @@ export interface ApiResponseErrorProps {
   code: string;
   description: string;
   message: string;
+  timestamp: number;
   txid: string;
 }

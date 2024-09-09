@@ -1,24 +1,26 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import moment from 'moment';
+
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {useQueryClient} from '@tanstack/react-query';
+import moment from 'moment';
 import {useSetRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
-import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import Header from '#components/common/Header/Header.tsx';
-import CView from '#components/common/CommonView/CView.tsx';
-import CButton from '#components/common/CommonButton/CButton.tsx';
-import {usePreviousScreenName} from '#hooks/useNavigation.ts';
-import CText from '#components/common/CustomText/CText.tsx';
+
 import CheckboxCircle from '#components/common/Checkbox/CheckboxCircle.tsx';
-import {COLORS} from '#constants/colors.ts';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
+import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
+import {usePreviousScreenName} from '#hooks/useNavigation.ts';
 import {
   postJoinAcademy,
   useGetInvitedList,
   useGetUserInfo,
 } from '#hooks/useUser.ts';
+import globalState from '#recoil/Global';
 
 interface CheckboxStateProps {
   isChecked: boolean;
@@ -36,7 +38,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const prevScreenName = usePreviousScreenName(navigation);
   const setModalState = useSetRecoilState(globalState.globalModalState);
   const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
-  const {refetch: refetchUserInfo} = useGetUserInfo();
+  const {refetchUserData} = useGetUserInfo();
 
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>();
   const queryClient = useQueryClient();
@@ -75,7 +77,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     try {
       await postJoinAcademy(payload);
       await invitedRefetch();
-      await refetchUserInfo();
+      await refetchUserData();
       await queryClient.invalidateQueries({queryKey: ['userInfo']});
       setModalState({
         isVisible: true,

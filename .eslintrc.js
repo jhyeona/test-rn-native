@@ -20,9 +20,10 @@ module.exports = {
     },
   },
   rules: {
+    'react/react-in-jsx-scope': 'off',
     'react-native/no-inline-styles': 'off',
-    'react-refresh/only-export-components': 0,
     '@typescript-eslint/no-unused-vars': 1,
+    'react-refresh/only-export-components': 0,
     'react-hooks/exhaustive-deps': 0,
     'import/order': [
       'warn',

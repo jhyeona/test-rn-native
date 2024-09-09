@@ -1,12 +1,13 @@
 import React from 'react';
 import {Pressable, StyleSheet} from 'react-native';
-import {COLORS} from '#constants/colors.ts';
-import CText from '#components/common/CustomText/CText.tsx';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {
   TextStyle,
   ViewStyle,
 } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+
+import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
 
 interface Props {
   text: string;
@@ -46,7 +47,7 @@ const CButton = (props: Props) => {
       <CText
         style={fontStyle}
         text={text}
-        fontWeight="600"
+        fontWeight="700"
         fontSize={fontSize ?? 16}
         color={disabled ? COLORS.gray : whiteButton ? COLORS.primary : 'white'}
       />

@@ -1,12 +1,25 @@
 import {AxiosRequestConfig} from 'axios';
+
 import instance from '#apis/instance.ts';
-import {ApiResponseProps} from '#types/common.ts';
+import {ApiResponseErrorProps, ApiResponseProps} from '#types/common.ts';
 
 export const requestGet = async <T>(
   url: string,
   config?: AxiosRequestConfig,
-): Promise<ApiResponseProps<T>> => {
-  return instance.get(url, config);
+): Promise<T> => {
+  return instance
+    .get(url, config)
+    .then(async axiosResponse => {
+      // const response: AxiosResponse<CommonResponseProps<T>> = axiosResponse;
+      const responseCode = axiosResponse.data.code;
+      if (responseCode === '0000') {
+        return axiosResponse.data?.data ?? axiosResponse.data;
+      }
+      throw axiosResponse.data;
+    })
+    .catch((error: ApiResponseErrorProps) => {
+      throw error;
+    });
 };
 
 export const requestPut = async <T>(

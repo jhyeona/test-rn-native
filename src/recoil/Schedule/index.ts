@@ -1,13 +1,11 @@
 import {
-  dayScheduleState,
   nowScheduleHistoryState,
-  weekScheduleState,
+  selectedCalendarDate,
 } from '#recoil/Schedule/atom.ts';
 
 const scheduleState = {
-  dayScheduleState,
-  weekScheduleState,
   nowScheduleHistoryState,
+  selectedCalendarDate,
 };
 
 export default scheduleState;

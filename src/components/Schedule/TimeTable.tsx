@@ -1,24 +1,32 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import moment from 'moment/moment';
+import {View} from 'react-native';
+
 import {
   EventItem,
   TimelineCalendar,
   TimelineCalendarHandle,
 } from '@howljs/calendar-kit';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import scheduleState from '#recoil/Schedule';
-import {View} from 'react-native';
+import moment from 'moment/moment';
+import {useRecoilValue} from 'recoil';
+
+import {timeTableTheme} from '#constants/calendar.ts';
+import {useChangeWidth} from '#hooks/useGlobal.ts';
+import {useGetWeekSchedule} from '#hooks/useSchedule.ts';
 import globalState from '#recoil/Global';
 import {convertTimeFormat} from '#utils/scheduleHelper.ts';
-import {useChangeWidth} from '#hooks/useGlobal.ts';
-import {timeTableTheme} from '#constants/calendar.ts';
 
 const TimeTable = () => {
-  const weekData = useRecoilValue(scheduleState.weekScheduleState);
-  const selectWeekDate = useRecoilValue(globalState.selectWeekScheduleDate);
-  const setSelectWeekDate = useSetRecoilState(
-    globalState.selectWeekScheduleDate,
+  const selectAcademy = useRecoilValue(globalState.selectedAcademy);
+
+  const [selectWeekDate, setSelectWeekDate] = useState(
+    moment().format('YYYY-MM-DD'),
   );
+
+  const {weekScheduleData} = useGetWeekSchedule({
+    // 주간 데이터
+    academyId: selectAcademy,
+    date: moment(selectWeekDate).format('YYYYMMDD'),
+  });
 
   const [isInitRendering, setIsInitRendering] = useState(false);
   const [startTime, setStartTime] = useState(0);
@@ -30,9 +38,9 @@ const TimeTable = () => {
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
-    console.log(weekData?.scheduleList.length);
-    weekData?.scheduleList &&
-      weekData.scheduleList.map((info, i) => {
+    console.log(weekScheduleData?.scheduleList.length);
+    weekScheduleData?.scheduleList &&
+      weekScheduleData.scheduleList.map((info, i) => {
         formatted.push({
           id: i.toString(),
           title: info.lecture.lectureName,
@@ -56,15 +64,15 @@ const TimeTable = () => {
   };
 
   useEffect(() => {
-    if (weekData && weekData?.scheduleList.length > 0) {
+    if (weekScheduleData && weekScheduleData?.scheduleList.length > 0) {
       const start = convertTimeFormat(
-        weekData.scheduleList[0].scheduleStartTime,
+        weekScheduleData.scheduleList[0].scheduleStartTime,
       );
       setStartTime(start < 1 ? 0 : Math.floor(start - 0.5));
       return;
     }
     setStartTime(0);
-  }, [weekData]);
+  }, [weekScheduleData]);
 
   useEffect(() => {
     setSelectWeekDate(moment().format('YYYY-MM-DD'));
