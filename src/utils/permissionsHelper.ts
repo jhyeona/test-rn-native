@@ -1,3 +1,4 @@
+import {Platform} from 'react-native';
 import {
   openSettings,
   PERMISSIONS,
@@ -5,8 +6,8 @@ import {
   requestNotifications,
   RESULTS,
 } from 'react-native-permissions';
-import {Platform} from 'react-native';
 import {Permission} from 'react-native-permissions/src/types.ts';
+
 import {IS_ANDROID, IS_IOS} from '#constants/common.ts';
 import {platformVersion} from '#services/device.ts';
 
@@ -27,9 +28,6 @@ export const requestLocationPermissions = async () => {
     permissionsList = [PERMISSIONS.IOS.LOCATION_WHEN_IN_USE];
 
     return requestMultiple(permissionsList).then(statuses => {
-      console.log(
-        statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED,
-      );
       return statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] === RESULTS.GRANTED;
     });
   }
