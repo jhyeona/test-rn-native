@@ -7,14 +7,19 @@ import moment from 'moment/moment';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import StatusInfoContainer, {
+  ColorType,
+} from '#components/common/StatusInfoContainer';
 import BtnSchedule from '#containers/DailySchedules/components/BtnSchedule.tsx';
-import DaySchedulesStatus, {
-  ScheduleStatusType,
-} from '#containers/DailySchedules/components/DaySchedulesStatus.tsx';
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import {ScheduleDefaultProps} from '#types/schedule.ts';
 import {isBetween} from '#utils/scheduleHelper.ts';
+
+interface ScheduleStatusProps {
+  colorType: ColorType;
+  text: string;
+}
 
 const DaySchedulesLecture = ({
   scheduleData,
@@ -25,8 +30,10 @@ const DaySchedulesLecture = ({
 }) => {
   const [isBtnAvailable, setBtnAvailable] = useState(false);
   const [isAllowedAfterEnd, setIsAllowedAfterEnd] = useState(false);
-  const [scheduleStatus, setScheduleStatus] =
-    useState<ScheduleStatusType>('isBefore');
+  const [scheduleStatus, setScheduleStatus] = useState<ScheduleStatusProps>({
+    colorType: 'gray',
+    text: '강의 종료',
+  }); // 강의 예정 : red / 강의중 : blue / 강의 종료 : gray
 
   const formattedDate = (date?: string) => {
     return date ? moment(date).format('YYYY.MM.DD') : '-';
@@ -35,13 +42,19 @@ const DaySchedulesLecture = ({
   // 현재시간을 기준으로 강의 진행 상태 표시
   const setStatusValue = () => {
     const now = moment();
-
-    if (now.isBefore(moment(scheduleData?.scheduleStartTime))) {
-      setScheduleStatus('isBefore');
-    } else if (now.isAfter(moment(scheduleData?.scheduleEndTime))) {
-      setScheduleStatus('isAfter');
-    } else {
-      setScheduleStatus('isNow');
+    const newStatus: ScheduleStatusProps = now.isBefore(
+      moment(scheduleData?.scheduleStartTime),
+    )
+      ? {colorType: 'red', text: '강의 예정'}
+      : now.isAfter(moment(scheduleData?.scheduleEndTime))
+        ? {colorType: 'gray', text: '강의 종료'}
+        : {colorType: 'blue', text: '강의중'};
+    // 값이 변경된 경우에만 업데이트
+    if (
+      scheduleStatus.colorType !== newStatus.colorType ||
+      scheduleStatus.text !== newStatus.text
+    ) {
+      setScheduleStatus(newStatus);
     }
   };
 
@@ -101,7 +114,10 @@ const DaySchedulesLecture = ({
             text={scheduleData?.lecture.lecturePlaceName ?? '-'}
           />
         </View>
-        <DaySchedulesStatus status={scheduleStatus} />
+        <StatusInfoContainer
+          colorType={scheduleStatus.colorType}
+          text={scheduleStatus.text}
+        />
       </View>
       <BtnSchedule
         scheduleData={scheduleData}

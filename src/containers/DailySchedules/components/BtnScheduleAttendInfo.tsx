@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {SetterOrUpdater} from 'recoil';
@@ -12,7 +12,6 @@ import {useGetAttendeeId} from '#containers/DailySchedules/hooks/useSchedules.ts
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import {ScheduleDefaultProps} from '#types/schedule.ts';
-import {attendList} from '#utils/scheduleHelper.ts';
 
 type StatusIconType = 'IntervalComplete' | 'IntervalMiss' | 'IntervalEmpty';
 
@@ -76,7 +75,6 @@ const BtnScheduleAttendInfo = ({
           );
         }
       });
-
       // 상태가 변경된 경우에만 업데이트
       if (hasChanged) {
         if (setIsEnter) {
