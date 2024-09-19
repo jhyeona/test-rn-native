@@ -8,7 +8,7 @@ import DailySchedule from '#containers/DailySchedules';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import Settings from '#containers/Settings';
 import WeeklySchedules from '#containers/WeeklySchedules';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import userState from '#recoil/User';
 import {
   requestAddBeaconListener,
@@ -27,8 +27,8 @@ import {
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
-  const setWifiState = useSetRecoilState(globalState.wifiState);
-  const setBeaconState = useSetRecoilState(globalState.beaconState);
+  const setWifiState = useSetRecoilState(GlobalState.wifiState);
+  const setBeaconState = useSetRecoilState(GlobalState.beaconState);
   const userData = useRecoilValue(userState.userInfoState);
 
   const tabOptions = {headerShown: false};

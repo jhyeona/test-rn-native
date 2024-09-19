@@ -10,7 +10,6 @@ import {useRecoilState} from 'recoil';
 
 import Academy from '#containers/Academy';
 import FindPassword from '#containers/FindPassword';
-import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import Initialize from '#containers/Initialize';
 import LectureDetail from '#containers/LectureDetail/index.tsx';
 import Onboarding from '#containers/Onboarding';
@@ -22,14 +21,15 @@ import SignUp from '#containers/SignUp';
 import UpdatePassword from '#containers/UpdatePassword';
 import UserWithdraw from '#containers/UserWithdraw';
 import TabNavigation from '#navigation/TabNavigation';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
+import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
 import {storage} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
   const navigationRef = useNavigationContainerRef();
-  const [isLogin, setIsLogin] = useRecoilState(globalState.isLoginState);
+  const [isLogin, setIsLogin] = useRecoilState(GlobalState.isLoginState);
   const routeNameRef = useRef<string>();
 
   const handleOnReady = () => {
