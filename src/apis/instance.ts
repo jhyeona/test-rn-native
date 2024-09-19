@@ -12,6 +12,10 @@ export const instanceWithoutToken = axios.create({
 
 instanceWithoutToken.interceptors.response.use(
   function (response: AxiosResponse) {
+    const responseCode = response.data.code;
+    if (responseCode === '0000') {
+      return response.data?.data ?? response.data;
+    }
     return response;
   },
   async function (error): Promise<AxiosResponse> {
