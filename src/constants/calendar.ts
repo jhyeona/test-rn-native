@@ -6,7 +6,7 @@ export const timeTableTheme = {
   cellBorderColor: COLORS.layout,
 
   //event title
-  eventTitle: {color: COLORS.dark.blue, fontSize: 11},
+  eventTitle: {fontSize: 11},
 
   //Saturday style
   saturdayName: {color: 'black'},
