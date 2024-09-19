@@ -1,29 +1,30 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {useSetRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
-import {checkDate, checkName, checkPhone} from '#utils/regExpHelper.ts';
+
+import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
-import Header from '#components/common/Header/Header.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
-import CButton from '#components/common/CommonButton/CButton.tsx';
-import {postFindPassword} from '#hooks/useUser.ts';
+import Header from '#components/common/Header/Header.tsx';
+import {useReqFindPassword} from '#containers/FindPassword/hooks/useApi.ts';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
+import {checkDate, checkName, checkPhone} from '#utils/regExpHelper.ts';
 
 const FindPassword = ({
   navigation,
 }: {
   navigation: BottomTabNavigationHelpers;
 }) => {
-  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
   const [isWarningPhone, setIsWarningPhone] = useState(false);
   const [isWarningName, setIsWarningName] = useState(false);
   const [isWarningBirthday, setIsWarningBirthday] = useState(false);
+
+  const {findPassword} = useReqFindPassword();
 
   const onPressFind = async () => {
     const isInvalidPhone = !phone || !checkPhone(phone);
@@ -45,32 +46,10 @@ const FindPassword = ({
     };
 
     try {
-      await postFindPassword(payload);
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message:
-          '임시 비밀번호를 전송하였습니다.\n임시 비밀번호로 로그인해주세요.',
-      });
+      await findPassword(payload);
     } catch (e: any) {
       await setAttToCrashlytics(payload);
       errorToCrashlytics(e, 'SendSMSCodeForTempPassword');
-      if (e.code === '4003') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message: '일치하는 정보가 없습니다.',
-        });
-        return;
-      }
-      if (e.code === '9100') {
-        setGlobalModalState({
-          isVisible: true,
-          title: '안내',
-          message:
-            '메세지 전송에 실패했습니다. \n번호 확인 후 다시 시도해 주세요.',
-        });
-      }
     }
   };
 

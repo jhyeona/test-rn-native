@@ -4,23 +4,23 @@ import {Pressable} from 'react-native';
 import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
 
-const DaySchedulesStatus = ({color, text}: {color: string; text: string}) => {
-  //TODO: color, text 를 설정할 때 status 값만 받아서 설정하기
-  let textColor = 'black';
-  let backgroundColor = COLORS.lightGray;
+export type ScheduleStatusType = 'isBefore' | 'isNow' | 'isAfter';
 
-  switch (color) {
-    case 'blue':
-      textColor = COLORS.primary;
-      backgroundColor = COLORS.primaryLight;
-      break;
-    case 'red':
-      textColor = COLORS.dark.red;
-      backgroundColor = COLORS.light.red;
-      break;
-    default:
-      break;
-  }
+const DaySchedulesStatus = ({status}: {status: ScheduleStatusType}) => {
+  // 강의 예정 : red / 강의중 : blue / 강의 종료 : gray
+  const styleMap = {
+    isAfter: {textColor: COLORS.gray, bgc: COLORS.lightGray, text: '강의 종료'},
+    isNow: {
+      textColor: COLORS.primary,
+      bgc: COLORS.primaryLight,
+      text: '강의중',
+    },
+    isBefore: {
+      textColor: COLORS.dark.red,
+      bgc: COLORS.light.red,
+      text: '강의 예정',
+    },
+  };
 
   return (
     <Pressable
@@ -29,10 +29,15 @@ const DaySchedulesStatus = ({color, text}: {color: string; text: string}) => {
         alignItems: 'center',
         paddingVertical: 7,
         paddingHorizontal: 11,
-        backgroundColor: backgroundColor,
+        backgroundColor: styleMap[status].bgc,
         borderRadius: 7,
       }}>
-      <CText text={text} color={textColor} fontSize={11} fontWeight="700" />
+      <CText
+        text={styleMap[status].text}
+        color={styleMap[status].textColor}
+        fontSize={11}
+        fontWeight="700"
+      />
     </Pressable>
   );
 };

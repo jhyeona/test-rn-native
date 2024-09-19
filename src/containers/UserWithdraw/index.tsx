@@ -1,29 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
+
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import Header from '#components/common/Header/Header.tsx';
-import CText from '#components/common/CustomText/CText.tsx';
-import CView from '#components/common/CommonView/CView.tsx';
-import CButton from '#components/common/CommonButton/CButton.tsx';
+import {useSetRecoilState} from 'recoil';
+
 import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
+import Header from '#components/common/Header/Header.tsx';
 import TextList from '#components/common/TextList/TextList.tsx';
 import {withdrawPolicyList} from '#constants/policy.ts';
-import {checkPassword} from '#utils/regExpHelper.ts';
 import {deleteUser} from '#hooks/useUser.ts';
-import {useSetRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
-import {storage} from '#utils/storageHelper.ts';
+import GlobalState from '#recoil/Global';
 import {errorToCrashlytics} from '#services/firebase.ts';
+import {checkPassword} from '#utils/regExpHelper.ts';
+import {storage} from '#utils/storageHelper.ts';
 
 const UserWithdraw = ({
   navigation,
 }: {
   navigation: NativeStackNavigationHelpers;
 }) => {
-  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
-  const setIsLogin = useSetRecoilState(globalState.isLoginState);
+  const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState('');
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);

@@ -14,7 +14,7 @@ import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {getEventHistory} from '#hooks/useSchedule.ts';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import {EventProps, SchedulePeriodDataProps} from '#types/schedule.ts';
 
 const ScheduleHistory = ({
@@ -22,8 +22,8 @@ const ScheduleHistory = ({
 }: {
   navigation: BottomTabNavigationHelpers;
 }) => {
-  const selectedAcademy = useRecoilValue(globalState.selectedAcademy);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const selectedAcademy = useRecoilValue(GlobalState.selectedAcademy);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const [historyData, setHistoryData] = useState<SchedulePeriodDataProps>();
   const [startDate, setStartDate] = useState(moment());
   const [endDate, setEndDate] = useState(moment());

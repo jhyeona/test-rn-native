@@ -1,22 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import moment from 'moment';
+
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {RouteProp} from '@react-navigation/core/src/types.tsx';
 import {useRoute} from '@react-navigation/native';
+import moment from 'moment';
+
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
-import {getLectureInfo} from '#hooks/useSchedule.ts';
-import {ScheduleHistoryDataProps} from '#types/schedule.ts';
-import {COLORS} from '#constants/colors.ts';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
+import {COLORS} from '#constants/colors.ts';
+import {getLectureInfo} from '#hooks/useSchedule.ts';
+import {ScheduleHistoryDataProps} from '#types/schedule.ts';
 
 interface Props {
   navigation: BottomTabNavigationHelpers;
 }
 type RootTabParamList = {
-  LectureDetail: {attendeeId: number; scheduleId: number};
+  LectureDetail: {attendeeId: string; scheduleId: string};
 };
 
 const LectureDetail = (props: Props) => {

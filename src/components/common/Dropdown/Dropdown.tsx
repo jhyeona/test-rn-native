@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, View, StyleSheet, Pressable} from 'react-native';
+import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {
   DimensionValue,
   ViewStyle,
 } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
-import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {COLORS} from '#constants/colors.ts';
+
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
 
-interface ItemProps {
+export interface ItemProps {
   label: string;
   id: string;
 }

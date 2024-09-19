@@ -24,7 +24,7 @@ import {
   useReqSMSCode,
   useReqSMSConfirm,
 } from '#containers/SignUp/hooks/useApi.ts';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 import {GenderType} from '#types/user.ts';
 import {
@@ -46,7 +46,7 @@ interface SignUpDataProps {
 }
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
-  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
   // TODO: useForm 사용 예정
   const [signUpData, setSignUpData] = useState<SignUpDataProps>({
     name: '',

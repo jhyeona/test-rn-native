@@ -11,7 +11,7 @@ export const ScheduleQueryOptions = {
     enabled: !!payload.academyId,
   }),
   getDayScheduleHistory: (payload: GetScheduleHistoryProps) => ({
-    queryKey: ['weekSchedule', payload],
+    queryKey: ['scheduleHistory', payload],
     queryFn: () => {
       return requestGetScheduleHistory(payload);
     },

@@ -2,15 +2,15 @@ import {useMutation} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
 import {requestPostGetToken} from '#containers/SignIn/services';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqSignIn} from '#types/user.ts';
 import {storage} from '#utils/storageHelper.ts';
 
 export const useSignIn = () => {
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const setIsLogin = useSetRecoilState(globalState.isLoginState);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const {mutateAsync: signIn} = useMutation({
     mutationFn: (requestData: ReqSignIn) => {

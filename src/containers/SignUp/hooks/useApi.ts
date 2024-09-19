@@ -8,12 +8,12 @@ import {
   requestPostSignUpSMSConfirm,
   requestPostSignUpTAS,
 } from '#containers/SignUp/services';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqSignUpTAS, ReqPhone, ReqSmsConfirm, ReqSignUp} from '#types/user.ts';
 
 export const useReqSignUpPhone = () => {
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const {mutateAsync: signUpCheckPhone} = useMutation({
     mutationFn: (phone: string) => {
@@ -32,7 +32,7 @@ export const useReqSignUpPhone = () => {
 };
 
 export const useReqSignUpTAS = () => {
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const {mutateAsync: signUpTAS} = useMutation({
     mutationFn: (payload: ReqSignUpTAS) => {
@@ -60,8 +60,8 @@ export const useReqSignUpTAS = () => {
 };
 
 export const useReqSMSCode = () => {
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const {mutateAsync: signUpReqSmsCode} = useMutation({
     mutationFn: (payload: ReqPhone) => {
@@ -92,8 +92,8 @@ export const useReqSMSCode = () => {
 };
 
 export const useReqSMSConfirm = () => {
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const {mutateAsync: smsConfirm} = useMutation({
     mutationFn: (payload: ReqSmsConfirm) => {
@@ -118,8 +118,8 @@ export const useReqSMSConfirm = () => {
 };
 
 export const useReqSignUp = () => {
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const {mutateAsync: signUp} = useMutation({
     mutationFn: (payload: ReqSignUp) => {

@@ -20,15 +20,15 @@ import {
   useGetInvitedList,
   useGetUserInfo,
 } from '#hooks/useUser.ts';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 
 interface CheckboxStateProps {
   isChecked: boolean;
-  id: number;
+  id: string;
   type: string;
   time: string;
   academy: {
-    academyId: number;
+    academyId: string;
     name: string;
     picture?: string | null;
   };
@@ -36,14 +36,14 @@ interface CheckboxStateProps {
 
 const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const prevScreenName = usePreviousScreenName(navigation);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
   const {refetchUserData} = useGetUserInfo();
 
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>();
   const queryClient = useQueryClient();
 
-  const handleCheckboxChange = (id: number) => {
+  const handleCheckboxChange = (id: string) => {
     setCheckboxState(
       prevState =>
         prevState?.map(item =>

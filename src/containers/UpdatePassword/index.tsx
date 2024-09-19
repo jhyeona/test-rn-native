@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
+
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {useSetRecoilState} from 'recoil';
+
+import CButton from '#components/common/CommonButton/CButton.tsx';
+import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
+import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
-import CButton from '#components/common/CommonButton/CButton.tsx';
-import {checkPassword} from '#utils/regExpHelper.ts';
-import {patchUpdatePassword} from '#hooks/useMypage.ts';
-import {useSetRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
-import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import Header from '#components/common/Header/Header.tsx';
-import CView from '#components/common/CommonView/CView.tsx';
+import {patchUpdatePassword} from '#hooks/useMypage.ts';
+import GlobalState from '#recoil/Global';
 import {errorToCrashlytics} from '#services/firebase.ts';
+import {checkPassword} from '#utils/regExpHelper.ts';
 
 const UpdatePassword = ({
   navigation,
@@ -20,7 +22,7 @@ const UpdatePassword = ({
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
-  const setModalState = useSetRecoilState(globalState.globalModalState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const onPressUpdatePassword = async () => {
     if (

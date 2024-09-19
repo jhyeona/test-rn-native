@@ -27,7 +27,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [isIdWarning, setIsIdWarning] = useState(false);
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
 
-  const {signIn} = useSignIn();
+  const {signIn} = useSignIn(); //TODO: deviceInfo 데이터 추가
 
   const onChangeId = (value: string) => {
     setId(value);

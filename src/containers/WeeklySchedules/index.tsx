@@ -2,19 +2,19 @@ import React, {useEffect, useState} from 'react';
 
 import {useRecoilState, useRecoilValue} from 'recoil';
 
+import TimeTable from '#components/Calendar/TimeTable.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import Dropdown from '#components/common/Dropdown/Dropdown.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
-import TimeTable from '#components/Schedule/TimeTable.tsx';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import userState from '#recoil/User';
 
 const WeeklySchedules = () => {
   const userData = useRecoilValue(userState.userInfoState);
   const [academyList, setAcademyList] = useState([{label: '', id: ''}]);
   const [selectAcademy, setSelectAcademy] = useRecoilState(
-    globalState.selectedAcademy,
+    GlobalState.selectedAcademy,
   );
 
   const onChangeDropList = (item: {label: string; id: string}) => {
