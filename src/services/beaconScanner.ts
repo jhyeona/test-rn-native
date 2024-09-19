@@ -1,4 +1,5 @@
 import {NativeEventEmitter, NativeModules} from 'react-native';
+
 import {BEACON_UUID} from '../constants/common.ts';
 import {BeaconProps} from '../types/location.ts';
 
@@ -58,7 +59,7 @@ export const requestBeaconScanList = async () => {
 };
 
 export const requestAddBeaconListener = (
-  callback: (beacon: BeaconProps) => void,
+  callback?: (beacon: BeaconProps) => void,
 ) => {
   try {
     if (eventEmitter.listenerCount('EVENT_BLUETOOTH_DETECTED') > 0) {
@@ -67,7 +68,7 @@ export const requestAddBeaconListener = (
     eventEmitter.addListener(
       'EVENT_BLUETOOTH_DETECTED',
       (beacon: BeaconProps) => {
-        callback(beacon);
+        callback && callback(beacon);
       },
     );
   } catch (e) {

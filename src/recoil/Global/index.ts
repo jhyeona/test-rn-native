@@ -8,14 +8,14 @@ import {
   wifiState,
 } from '#recoil/Global/atom.ts';
 
-const globalState = {
+const GlobalState = {
   globalToastState,
   globalLoadingState,
   globalModalState,
   isLoginState,
-  beaconState,
   wifiState,
   selectedAcademy,
+  beaconState,
 };
 
-export default globalState;
+export default GlobalState;

@@ -1,15 +1,15 @@
 export interface GetScheduleProps {
-  academyId?: number;
+  academyId?: string;
   date: string;
 }
 
 export interface GetScheduleHistoryProps {
-  attendeeId: number;
-  scheduleId?: number;
+  attendeeId: string;
+  scheduleId?: string;
 }
 
 export interface GetScheduleHistoryWeekProps {
-  academyId: number;
+  academyId: string;
   startDate: string;
   endDate: string;
 }
@@ -22,7 +22,8 @@ export interface ScheduleTimeProps {
 }
 
 export interface LectureProps {
-  lectureId: number;
+  sequence?: number;
+  lectureId: string;
   lectureName: string;
   lecturePlaceName: string;
   lectureStartDate: string;
@@ -35,7 +36,8 @@ export interface LectureProps {
 }
 
 export interface ScheduleDefaultProps {
-  scheduleId: number;
+  sequence: number;
+  scheduleId: string;
   scheduleStartTime: string;
   scheduleEndTime: string;
   scheduleTimeList: Array<ScheduleTimeProps>;
@@ -43,7 +45,7 @@ export interface ScheduleDefaultProps {
 }
 
 export interface EventProps {
-  eventId: number;
+  eventId: string;
   eventType: 'ENTER' | 'LEAVE' | 'COMEBACK' | 'ATTEND' | 'COMPLETE';
   eventTime: string;
   status: 'NORMAL' | 'LATE' | 'EARLY';
@@ -54,7 +56,7 @@ export interface ScheduleDataProps {
 }
 
 export interface ScheduleHistoryDataProps extends ScheduleDefaultProps {
-  attendeeId: number;
+  attendeeId: string;
   eventList: Array<EventProps>;
   enterEvent: EventProps;
   completeEvent: EventProps | null;
@@ -65,7 +67,7 @@ export interface ScheduleHistoryDataProps extends ScheduleDefaultProps {
 }
 
 export interface SchedulePeriodDataProps {
-  academyId: number;
+  academyId: string;
   historyList: Array<{
     schedule: ScheduleDefaultProps;
     eventList: Array<EventProps>;
@@ -77,13 +79,17 @@ export interface ScheduleHistoryWeekDataProps
     ScheduleDefaultProps,
     Exclude<keyof ScheduleDefaultProps, 'eventList'>
   > {
-  academyId: number;
+  academyId: string;
   historyList: Array<ScheduleDefaultProps & {eventList: Array<EventProps>}>;
 }
 
 export interface PostEventProps {
-  attendeeId: number;
-  scheduleId: number;
+  attendeeId: string;
+  scheduleId: string;
+  deviceInfo?: string;
+  os?: string;
+  appVersion?: string;
+  locationPermit?: boolean;
   latitude: number;
   longitude: number;
   altitude: number;
@@ -96,5 +102,6 @@ export interface PostEventProps {
     uuid: string;
     major: string;
     minor: string;
+    rssi: number;
   }>;
 }
