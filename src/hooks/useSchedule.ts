@@ -13,7 +13,7 @@ import {
   requestPostEventEnter,
   requestPostEventLeave,
 } from '#apis/schedule.ts';
-import globalState from '#recoil/Global/index.ts';
+import GlobalState from '#recoil/Global/index.ts';
 import {
   GetScheduleHistoryProps,
   GetScheduleProps,
@@ -26,7 +26,7 @@ export const getWeekSchedule = async (payload: GetScheduleProps) => {
 };
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
-  const setIsLoading = useSetRecoilState(globalState.globalLoadingState);
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
 
   const {data, refetch, fetchStatus} = useQuery({
     queryKey: ['weekSchedule', payload],
@@ -72,7 +72,7 @@ export const postEventComeback = async (payload: PostEventProps) => {
 };
 
 export const getEventHistory = async (payload: {
-  academyId: number;
+  academyId: string;
   startDate: string;
   endDate: string;
 }) => {

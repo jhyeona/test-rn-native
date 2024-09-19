@@ -12,11 +12,11 @@ import {useRecoilValue} from 'recoil';
 import {timeTableTheme} from '#constants/calendar.ts';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
 import {useGetWeekSchedule} from '#hooks/useSchedule.ts';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import {convertTimeFormat} from '#utils/scheduleHelper.ts';
 
 const TimeTable = () => {
-  const selectAcademy = useRecoilValue(globalState.selectedAcademy);
+  const selectAcademy = useRecoilValue(GlobalState.selectedAcademy);
 
   const [selectWeekDate, setSelectWeekDate] = useState(
     moment().format('YYYY-MM-DD'),

@@ -6,24 +6,55 @@ export interface GetAccessTokenProps {
   expires_in: number;
 }
 
-export interface SmsConfirmProps {
+export interface ResSmsConfirmProps {
   smsConfirmedId: string;
   phone: string;
   ttl: number;
 }
 
+export interface ReqPhone {
+  phone: string;
+}
+
+export interface ReqSmsConfirm extends ReqPhone {
+  verifyCode: string;
+}
+
+export interface ReqSignIn {
+  phone: string;
+  password: string;
+  deviceInfo?: string;
+}
+
+export interface UserDefaultProps {
+  phone: string;
+  name: string;
+  birth: string;
+}
+
+export type GenderType = 'M' | 'F';
+export interface ReqSignUpTAS extends UserDefaultProps {
+  gender: GenderType;
+  telecom: string;
+}
+
+export interface ReqSignUp extends UserDefaultProps {
+  password: string;
+  gender: GenderType;
+}
+
 export interface StudentInfoProps {
-  attendeeId: number;
+  attendeeId: string;
   typeAttendee: string;
   academy: {
-    academyId: number;
+    academyId: string;
     name: string;
     picture?: string;
   };
 }
 
 export interface UserInfoProps {
-  userId: number;
+  userId: string;
   name: string;
   phone: string;
   email: string;
@@ -36,14 +67,14 @@ export interface UserInfoProps {
 }
 
 export interface AcademyProps {
-  academyId: number;
+  academyId: string;
   name: string;
   picture?: string | null;
 }
 
 export interface InvitedAcademyListProps {
   invitedList: Array<{
-    id: number;
+    id: string;
     type: string;
     time: string;
     academy: AcademyProps;
@@ -52,7 +83,7 @@ export interface InvitedAcademyListProps {
 
 export interface JoinAcademyProps {
   attendeeList: Array<{
-    attendeeId: number;
+    attendeeId: string;
     typeAttendee: string;
     academy: AcademyProps;
   }>;

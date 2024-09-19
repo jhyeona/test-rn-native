@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 
-import moment from 'moment/moment';
+import {useRecoilValue} from 'recoil';
 
 import NoData from '#components/common/NoData';
 import {FIRST_CELL_WIDTH} from '#constants/calendar.ts';
@@ -9,49 +9,41 @@ import {COLORS} from '#constants/colors.ts';
 import DaySchedulesHeader from '#containers/DailySchedules/components/DaySchedulesHeader.tsx';
 import DaySchedulesLecture from '#containers/DailySchedules/components/DaySchedulesLecture.tsx';
 import DaySchedulesTime from '#containers/DailySchedules/components/DaySchedulesTime.tsx';
-import {useGetDaySchedule} from '#containers/DailySchedules/hooks';
-
-interface Test {
-  time: string;
-  name: string;
-}
-const testData = [
-  {time: '1', name: 'name1'},
-  {time: '2', name: 'name2'},
-];
+import {useGetDaySchedule} from '#containers/DailySchedules/hooks/useApi.ts';
+import GlobalState from '#recoil/Global';
+import scheduleState from '#recoil/Schedule';
+import {ScheduleDefaultProps} from '#types/schedule.ts';
 
 const DaySchedules = () => {
-  // const [{date: daily}, setSelectedDate] = useRecoilState(
-  //   scheduleState.selectedCalendarDate,
-  // );
-  const [data, _] = useState<Test[]>(testData);
-  const [refreshing, setRefreshing] = useState(false);
-
-  // const selectedAcademy = useRecoilValue(globalState.selectedAcademy);
-  const {dayScheduleData} = useGetDaySchedule({
-    academyId: 1,
-    date: moment('20240304').format('YYYYMMDD'),
+  const [isLoading, setIsLoading] = useState(false);
+  const selectAcademy = useRecoilValue(GlobalState.selectedAcademy); // 선택된 기관
+  const {date} = useRecoilValue(scheduleState.selectedCalendarDate); // 선택된 날짜
+  // 스케쥴 데이터
+  const {dayScheduleData, refetchDaySchedule} = useGetDaySchedule({
+    academyId: selectAcademy,
+    date: date.format('YYYYMMDD'),
   });
-  //
-  // useEffect(() => {
-  //   console.log(dayScheduleData);
-  // }, [dayScheduleData]);
 
+  // 당겨서 새로고침
   const onRefresh = () => {
-    //TODO: 일정 Pull to Refresh 기능 추가 (함수로 뽑아서 일간/주간에서 동일하게 사용할 수 있을지)
-    setRefreshing(true);
-    // 데이터를 새로 고침하는 로직을 여기에 추가
+    setIsLoading(true);
     setTimeout(() => {
-      setRefreshing(false); // 새로 고침 완료 후 로딩 상태 해제
-    }, 1000);
+      refetchDaySchedule().then(() => {
+        setIsLoading(false);
+      });
+    }, 50);
   };
 
-  const renderItem: ListRenderItem<Test> = ({item, index}) => {
+  // 시간/강의 컬럼 데이터
+  const renderItem: ListRenderItem<ScheduleDefaultProps> = ({item, index}) => {
     return (
-      <View style={styles.row}>
-        <DaySchedulesTime style={[styles.cell, styles.cellFirst]} />
+      <View key={`day-schedule-time-item-${index}`} style={styles.row}>
+        <DaySchedulesTime
+          scheduleData={item}
+          style={[styles.cell, styles.cellFirst]}
+        />
         <View style={[styles.cell]}>
-          <DaySchedulesLecture />
+          <DaySchedulesLecture scheduleData={item} />
         </View>
       </View>
     );
@@ -60,15 +52,15 @@ const DaySchedules = () => {
   return (
     <FlatList
       style={styles.container}
-      refreshing={refreshing}
+      refreshing={isLoading}
       onRefresh={onRefresh}
       contentContainerStyle={[
         styles.scheduleContent,
-        data.length === 0 && {flexGrow: 1},
+        dayScheduleData?.scheduleList?.length === 0 && {flexGrow: 1},
       ]}
       ListHeaderComponent={<DaySchedulesHeader />}
       renderItem={renderItem}
-      data={data}
+      data={dayScheduleData?.scheduleList ?? []}
       ListEmptyComponent={<NoData fullHeight message="✏️ 강의가 없습니다." />}
     />
   );

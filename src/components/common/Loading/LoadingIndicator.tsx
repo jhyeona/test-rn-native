@@ -1,7 +1,9 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
+
 import {useRecoilValue} from 'recoil';
-import globalState from '#recoil/Global';
+
+import GlobalState from '#recoil/Global';
 
 interface LoadingIndicatorProps {
   autoLoading?: boolean;
@@ -9,7 +11,7 @@ interface LoadingIndicatorProps {
 
 const LoadingIndicator = (props: LoadingIndicatorProps) => {
   const {autoLoading = false} = props;
-  const isLoading = useRecoilValue(globalState.globalLoadingState);
+  const isLoading = useRecoilValue(GlobalState.globalLoadingState);
   return (
     <>
       {(isLoading || autoLoading) && (

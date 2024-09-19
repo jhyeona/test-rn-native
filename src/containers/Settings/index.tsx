@@ -13,7 +13,7 @@ import MenuButton from '#components/Mypage/MenuButton.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {patchUpdatePush} from '#hooks/useMypage.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
-import globalState from '#recoil/Global';
+import GlobalState from '#recoil/Global';
 import userState from '#recoil/User';
 import {onesignalLogout} from '#utils/onesignalHelper.ts';
 import {
@@ -24,12 +24,12 @@ import {storage} from '#utils/storageHelper.ts';
 
 const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {userData, refetchUserData} = useGetUserInfo();
-  const setGlobalModalState = useSetRecoilState(globalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const [isPushApp, setIsPushApp] = useState(
     userData ? userData?.settingPushApp : true,
   );
-  const setIsLogin = useSetRecoilState(globalState.isLoginState);
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const setUserData = useSetRecoilState(userState.userInfoState);
   const [isPushToggleDisabled, setIsPushToggleDisabled] = useState(false);
 

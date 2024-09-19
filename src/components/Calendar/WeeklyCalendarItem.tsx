@@ -20,7 +20,7 @@ const WeeklyCalendarItem: React.FC<RenderItemProps> = ({
   itemWidth,
   onPressDate,
 }) => {
-  const {date} = useRecoilValue(scheduleState.selectedCalendarDate);
+  const {date, isWeekly} = useRecoilValue(scheduleState.selectedCalendarDate);
 
   const isToday = useMemo(() => moment().isSame(item.date, 'day'), [item.date]);
   const isSelected = item.date.isSame(date, 'day');
@@ -30,10 +30,20 @@ const WeeklyCalendarItem: React.FC<RenderItemProps> = ({
 
   return (
     <TouchableOpacity
-      style={{width: itemWidth}}
-      onPress={() => onPressDate({item})}>
+      style={{width: itemWidth, borderRadius: 7}}
+      onPress={() => onPressDate({item})}
+      disabled={isWeekly}>
       <View
         style={[styles.dateContainer, isSelected && styles.selectedContainer]}>
+        <View
+          style={[
+            styles.todayDot,
+            {
+              display: isToday ? 'flex' : 'none',
+              backgroundColor: isSelected ? 'white' : COLORS.primary,
+            },
+          ]}
+        />
         <CText
           text={item.date.format('ddd')}
           color={textColor}
@@ -55,18 +65,29 @@ const WeeklyCalendarItem: React.FC<RenderItemProps> = ({
 
 const styles = StyleSheet.create({
   dateContainer: {
+    position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 5,
-    paddingVertical: 7,
+    paddingBottom: 7,
+    paddingTop: 14,
     borderRadius: 7,
     gap: 5,
   },
   selectedContainer: {
+    borderRadius: 7,
     backgroundColor: COLORS.primary,
   },
   date: {
     textAlign: 'center',
+  },
+  todayDot: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    width: 6,
+    height: 6,
+    borderRadius: 10,
   },
 });
 

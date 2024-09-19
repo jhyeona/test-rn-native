@@ -1,9 +1,14 @@
-import moment from 'moment';
+import {ReactNode} from 'react';
+
 import {atom} from 'recoil';
 
 import {BeaconProps, WifiProps} from '#types/location.ts';
 
-export const globalToastState = atom<{isVisible: boolean; message: string}>({
+export const globalToastState = atom<{
+  isVisible: boolean;
+  message?: string;
+  content?: ReactNode;
+}>({
   key: 'globalToastState',
   default: {
     isVisible: false,
@@ -48,7 +53,7 @@ export const wifiState = atom<WifiProps[]>({
   default: [],
 });
 
-export const selectedAcademy = atom<number>({
+export const selectedAcademy = atom<string>({
   key: 'selectedAcademy',
-  default: 0,
+  default: '',
 });

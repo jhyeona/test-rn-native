@@ -1,7 +1,8 @@
-import {requestGet} from '#apis/index.ts';
+import {requestGet, requestPost} from '#apis/index.ts';
 import {
   GetScheduleHistoryProps,
   GetScheduleProps,
+  PostEventProps,
   ScheduleDataProps,
   ScheduleHistoryDataProps,
 } from '#types/schedule.ts';
@@ -21,4 +22,44 @@ export const requestGetScheduleHistory = async (
   // 스케쥴에 대한 이벤트 히스토리 = 출석 기록
   const url = `/event/history/attendee/${payload.attendeeId}/schedule/${payload.scheduleId}`;
   return requestGet(url);
+};
+
+export const requestPostEventEnter = async (
+  payload: PostEventProps,
+): Promise<ScheduleHistoryDataProps> => {
+  // 입실 요청
+  const url = `/event/enter`;
+  return requestPost(url, payload);
+};
+
+export const requestPostEventComplete = async (
+  payload: PostEventProps,
+): Promise<ScheduleHistoryDataProps> => {
+  // 퇴실 요청
+  const url = `/event/complete`;
+  return requestPost(url, payload);
+};
+
+export const requestPostEventLeave = async (
+  payload: PostEventProps,
+): Promise<ScheduleHistoryDataProps> => {
+  // 외출 요청
+  const url = `/event/leave`;
+  return requestPost(url, payload);
+};
+
+export const requestPostEventComeback = async (
+  payload: PostEventProps,
+): Promise<ScheduleHistoryDataProps> => {
+  // 복귀 요청
+  const url = `/event/comeback`;
+  return requestPost(url, payload);
+};
+
+export const requestPostEventAttend = async (
+  payload: PostEventProps,
+): Promise<ScheduleHistoryDataProps> => {
+  // 주기별 체크 요청
+  const url = `/event/attend`;
+  return requestPost(url, payload);
 };

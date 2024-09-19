@@ -10,8 +10,8 @@ import {
 import moment from 'moment';
 import {useRecoilState} from 'recoil';
 
+import WeeklyCalendarItem from '#components/Calendar/WeeklyCalendarItem.tsx';
 import NoData from '#components/common/NoData';
-import WeeklyCalendarItem from '#components/Schedule/WeeklyCalendarItem.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {
   CalendarItem,

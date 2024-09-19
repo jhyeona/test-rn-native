@@ -1,22 +1,25 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
   Animated,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
 import {GestureResponderEvent} from 'react-native/Libraries/Types/CoreEventTypes';
-import CText from '#components/common/CustomText/CText';
+
+import {useRecoilState} from 'recoil';
+
 import CButton from '#components/common/CommonButton/CButton.tsx';
+import CText from '#components/common/CustomText/CText';
+import GlobalState from '#recoil/Global';
 
 const GlobalModal = () => {
   const [modalState, setModalState] = useRecoilState(
-    globalState.globalModalState,
+    GlobalState.globalModalState,
   );
   const {isVisible, title, message, isConfirm, onPressConfirm, onPressCancel} =
     modalState;
+  const [messageList, setMessageList] = useState<string[]>([]);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const initModal = {
@@ -66,8 +69,23 @@ const GlobalModal = () => {
     // }
   };
 
+  const splitMessage = () => {
+    const splitList = message.split('. ');
+    return splitList.map((item, index) => {
+      return index === splitList.length - 1 ? item : `${item}.`;
+    });
+  };
+
   useEffect(() => {
     if (isVisible) {
+      // 메세지가 있을 경우 '.' 을 기준으로 잘라서 엔터 처리
+      const messageSplit = message.split('. ');
+      const splitList = messageSplit.map((item, index) =>
+        index === messageSplit.length - 1 ? item : `${item}.`,
+      );
+      setMessageList(splitList);
+
+      // 모달 애니메이션
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
@@ -90,12 +108,19 @@ const GlobalModal = () => {
                   style={styles.titleText}
                 />
                 <View style={styles.messageText}>
-                  <CText
-                    text={message}
-                    lineHeight={24}
-                    fontSize={16}
-                    style={{textAlign: 'center'}}
-                  />
+                  {messageList.map((item, i) => (
+                    // <p key={item} className="text-left text-gray-800">
+                    //   {item}
+                    // </p>
+                    <CText
+                      key={`modal-messages-${i}`}
+                      text={item}
+                      lineHeight={24}
+                      fontSize={16}
+                      lineBreak
+                      style={{textAlign: 'center'}}
+                    />
+                  ))}
                 </View>
               </View>
               <View style={styles.buttonContainer}>

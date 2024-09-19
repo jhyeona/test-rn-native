@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {useRecoilState} from 'recoil';
-import globalState from '#recoil/Global';
 import {Animated} from 'react-native';
+
+import {useRecoilState} from 'recoil';
+
 import CText from '#components/common/CustomText/CText.tsx';
+import {COLORS} from '#constants/colors.ts';
+import GlobalState from '#recoil/Global';
 
 const GlobalToast = () => {
   const [toastState, setToastState] = useRecoilState(
-    globalState.globalToastState,
+    GlobalState.globalToastState,
   );
-  const {isVisible, message} = toastState;
+  const {isVisible, message, content} = toastState;
   const [animation] = useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -49,16 +52,19 @@ const GlobalToast = () => {
         <Animated.View
           style={{
             position: 'absolute',
-            top: 20,
+            top: 70,
             width: '80%',
             alignSelf: 'center',
             alignItems: 'center',
-            backgroundColor: '#000',
-            padding: 20,
-            borderRadius: 7,
+            backgroundColor: COLORS.dark.gray,
+            opacity: isVisible ? 1 : 0,
+            paddingVertical: 15,
+            paddingHorizontal: 20,
+            borderRadius: 20,
             transform: [{translateY: modalTranslateY}],
           }}>
-          <CText text={message} color={'white'} />
+          <CText text={message ?? ''} fontWeight="700" color="white" />
+          {content}
         </Animated.View>
       )}
     </>

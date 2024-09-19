@@ -18,3 +18,7 @@ export {default as m_Finder} from './menu_finder.svg';
 export {default as m_Daily} from './menu_daily.svg';
 export {default as m_Weekly} from './menu_weekly.svg';
 export {default as m_Setting} from './menu_setting.svg';
+export {default as IntervalEmpty} from './intervalEmpty.svg';
+export {default as IntervalMiss} from './intervalMiss.svg';
+export {default as IntervalComplete} from './intervalComplete.svg';
+export {default as TodayArrow} from './todayArrow.svg';
