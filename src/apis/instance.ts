@@ -66,6 +66,7 @@ instance.interceptors.response.use(
       // 유효하지 않은 토큰
       storage.delete('access_token');
       storage.delete('refresh_token');
+      storage.clearAll();
     }
 
     if (axios.isAxiosError<any>(error)) {
