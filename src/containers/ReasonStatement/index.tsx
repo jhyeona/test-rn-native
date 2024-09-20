@@ -29,7 +29,7 @@ const ReasonStatement = ({
         <CButton
           text="사유서 작성하기"
           onPress={() => {
-            // navigation.navigate('CreateReason');
+            navigation.navigate('ReasonCreator');
           }}
         />
       </CView>

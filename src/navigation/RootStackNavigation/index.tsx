@@ -14,6 +14,7 @@ import Initialize from '#containers/Initialize';
 import LectureDetail from '#containers/LectureDetail/index.tsx';
 import Onboarding from '#containers/Onboarding';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
+import ReasonCreator from '#containers/ReasonCreator';
 import ReasonStatement from '#containers/ReasonStatement';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import SignIn from '#containers/SignIn';
@@ -115,6 +116,11 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="ReasonStatement"
               component={ReasonStatement}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="ReasonCreator"
+              component={ReasonCreator}
               options={{headerShown: false}}
             />
             <RootStack.Screen
