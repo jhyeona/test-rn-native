@@ -89,16 +89,13 @@ const BtnSchedule = ({
     // BEACON
     let beaconList = validBeaconList(beaconState);
     if (beaconList.length === 0) {
-      await requestStartBeaconScanning().then(result => {
-        if (!result) {
-          return;
-        }
+      const result = await requestStartBeaconScanning();
+      if (result) {
         requestAddBeaconListener();
-        requestBeaconScanList().then(beacon => {
-          beaconList = beacon ? validBeaconList(beacon) : [];
-          setBeaconState(beaconList);
-        });
-      });
+      }
+      const beacon = await requestBeaconScanList();
+      beaconList = beacon ? validBeaconList(beacon) : [];
+      setBeaconState(beaconList);
     }
 
     const beaconListData = beaconList.map(beaconItem => {
@@ -135,7 +132,7 @@ const BtnSchedule = ({
       attendeeId: attendeeId,
       scheduleId: scheduleData?.scheduleId ?? '',
       deviceInfo: '',
-      os: `${Platform.OS}${Platform.Version}`,
+      os: `${Platform.OS} ${Platform.Version}`,
       latitude: locationData?.latitude ?? 0.1,
       longitude: locationData?.longitude ?? 0.1,
       altitude: locationData?.altitude ?? 0.1,
@@ -158,7 +155,6 @@ const BtnSchedule = ({
     if (!permissionsCheck) return;
 
     const payload = await eventPayload();
-
     try {
       await requestEvent(payload);
       await refetchHistoryData();

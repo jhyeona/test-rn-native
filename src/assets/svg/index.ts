@@ -22,3 +22,4 @@ export {default as IntervalEmpty} from './intervalEmpty.svg';
 export {default as IntervalMiss} from './intervalMiss.svg';
 export {default as IntervalComplete} from './intervalComplete.svg';
 export {default as TodayArrow} from './todayArrow.svg';
+export {default as Camera} from './camera.svg';

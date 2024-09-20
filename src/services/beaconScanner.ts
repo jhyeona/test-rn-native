@@ -28,7 +28,8 @@ export const requestStartBeaconScanning = async () => {
       .then(() => {
         return true;
       })
-      .catch(() => {
+      .catch(e => {
+        console.log('error', e);
         return false;
       });
   } catch (e) {
@@ -79,7 +80,7 @@ export const requestAddBeaconListener = (
 export const requestRemoveBeaconListener = () => {
   try {
     eventEmitter.removeAllListeners('EVENT_BLUETOOTH_DETECTED');
-    // console.log('removeBeaconListener');
+    console.log('removeBeaconListener');
   } catch (error) {
     console.log('removeBeaconListener: ', error);
   }
