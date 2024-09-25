@@ -25,7 +25,11 @@ import TabNavigation from '#navigation/TabNavigation';
 import GlobalState from '#recoil/Global';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
-import {storage} from '#utils/storageHelper.ts';
+import {
+  addStorageListener,
+  getItem,
+  removeStorageListener,
+} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -52,14 +56,23 @@ const RootStackNavigation = () => {
     routeNameRef.current = currentRouteName;
   };
 
-  const token = storage.getString('access_token');
-
-  useEffect(() => {
-    token ? setIsLogin(true) : setIsLogin(false);
-  }, [setIsLogin, token]);
-
   useEffect(() => {
     onesignalInit();
+
+    const token = getItem('access_token');
+    setIsLogin(!!token);
+
+    // storage 리스너
+    const onStorageChange = ({key, value}: {key: string; value: string}) => {
+      console.log('storageChange:', key, value);
+      if (key === 'access_token') {
+        setIsLogin(!!value);
+      }
+    };
+    addStorageListener(onStorageChange);
+    return () => {
+      removeStorageListener(onStorageChange);
+    };
   }, []);
 
   return (
@@ -68,7 +81,7 @@ const RootStackNavigation = () => {
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
       <RootStack.Navigator>
-        {!isLogin && !token ? (
+        {!isLogin ? (
           <>
             <RootStack.Screen
               name="Init"

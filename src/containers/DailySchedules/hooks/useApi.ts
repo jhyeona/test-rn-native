@@ -1,8 +1,9 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {useSetRecoilState} from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 
+import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import {
   requestPostEventAttend,
   requestPostEventComeback,
@@ -19,6 +20,31 @@ import {
   PostEventProps,
 } from '#types/schedule.ts';
 import {handleErrorResponse} from '#utils/scheduleHelper.ts';
+
+// 선택된 기관의 강의 리스트
+export const useGetLectureList = (academyId?: string) => {
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+  const selectedAcademy = useRecoilValue(GlobalState.selectedAcademy);
+  const [lectureItems, setLectureItems] = useState<ItemProps[]>([]);
+
+  const {data, refetch, status, fetchStatus} = useQuery(
+    ScheduleQueryOptions.getLectureList(academyId ?? selectedAcademy),
+  );
+
+  useEffect(() => {
+    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
+  }, [status, fetchStatus]);
+
+  useEffect(() => {
+    const formattedData =
+      data?.map(lecture => {
+        return {label: lecture.lectureName, id: lecture.lectureId};
+      }) ?? [];
+    setLectureItems(formattedData);
+  }, [data]);
+
+  return {lectureList: data, lectureItems, refetchLectureList: refetch};
+};
 
 // 하루 일정
 export const useGetDaySchedule = (payload: GetScheduleProps) => {

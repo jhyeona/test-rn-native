@@ -46,11 +46,7 @@ export interface ReqSignUp extends UserDefaultProps {
 export interface StudentInfoProps {
   attendeeId: string;
   typeAttendee: string;
-  academy: {
-    academyId: string;
-    name: string;
-    picture?: string;
-  };
+  academy: AcademyProps;
 }
 
 export interface UserInfoProps {

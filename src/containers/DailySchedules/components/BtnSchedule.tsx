@@ -126,7 +126,6 @@ const BtnSchedule = ({
 
     // Location
     const locationData = await requestGetLocationInfo();
-
     // 출석 체크 payload
     return {
       attendeeId: attendeeId,
@@ -155,6 +154,8 @@ const BtnSchedule = ({
     if (!permissionsCheck) return;
 
     const payload = await eventPayload();
+    payload.locationPermit = permissionsCheck;
+
     try {
       await requestEvent(payload);
       await refetchHistoryData();
@@ -215,9 +216,8 @@ const BtnSchedule = ({
               onPress={onPressEnter}
               buttonStyle={[styles.checkButton, styles.buttonCommon]}
               disabled={
-                isAllowedAfterEnd ||
-                !isAttendTime ||
-                !!historyData?.completeEvent
+                !!historyData?.completeEvent &&
+                (!isAttendTime || isAllowedAfterEnd)
               }
               fontSize={12}
               noMargin

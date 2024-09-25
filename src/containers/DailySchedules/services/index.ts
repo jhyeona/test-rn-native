@@ -2,10 +2,19 @@ import {requestGet, requestPost} from '#apis/index.ts';
 import {
   GetScheduleHistoryProps,
   GetScheduleProps,
+  LectureProps,
   PostEventProps,
   ScheduleDataProps,
   ScheduleHistoryDataProps,
 } from '#types/schedule.ts';
+
+export const requestGetLectureList = async (
+  academyId: string,
+): Promise<LectureProps[]> => {
+  // 선택된 기관의 강의 리스트
+  const url = `/lecture/list/academy/${academyId}`;
+  return requestGet(url);
+};
 
 export const requestGetDaySchedule = async (
   payload: GetScheduleProps,

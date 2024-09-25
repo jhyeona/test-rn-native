@@ -15,7 +15,7 @@ import {useChangeWidth} from '#hooks/useGlobal.ts';
 import {useGetWeekSchedule} from '#hooks/useSchedule.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
-import {convertTimeFormat} from '#utils/scheduleHelper.ts';
+// import {convertTimeFormat} from '#utils/scheduleHelper.ts';
 
 const TimeTable = () => {
   const selectAcademy = useRecoilValue(GlobalState.selectedAcademy);
@@ -64,16 +64,16 @@ const TimeTable = () => {
     setSelectedDate(prev => ({...prev, date: moment(fromDate)}));
   };
 
-  useEffect(() => {
-    if (weekScheduleData && weekScheduleData?.scheduleList.length > 0) {
-      const start = convertTimeFormat(
-        weekScheduleData.scheduleList[0].scheduleStartTime,
-      );
-      setStartTime(start < 1 ? 0 : Math.floor(start - 0.5));
-      return;
-    }
-    setStartTime(0);
-  }, [weekScheduleData]);
+  // useEffect(() => {
+  //   if (weekScheduleData && weekScheduleData?.scheduleList.length > 0) {
+  //     const start = convertTimeFormat(
+  //       weekScheduleData.scheduleList[0].scheduleStartTime,
+  //     );
+  //     setStartTime(start < 1 ? 0 : Math.floor(start - 0.5));
+  //     return;
+  //   }
+  //   setStartTime(0);
+  // }, [weekScheduleData]);
 
   useEffect(() => {
     // 가로 사이즈가 변하면 (ex. galaxy fold) 화면 재렌더링 // 추후 변경 예정

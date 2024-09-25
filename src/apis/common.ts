@@ -1,10 +1,7 @@
 import {Alert} from 'react-native';
 
-import axios from 'axios';
-
 import {instanceWithoutToken} from '#apis/instance.ts';
-import {ApiResponseProps} from '#types/common.ts';
-import {storage} from '#utils/storageHelper.ts';
+import {setItem, storage} from '#utils/storageHelper.ts';
 
 export const tokenRefresh = async () => {
   // token refresh
@@ -16,10 +13,10 @@ export const tokenRefresh = async () => {
       headers: header,
     });
     const {access_token, refresh_token} = response.data.data;
-    storage.set('access_token', access_token);
-    storage.set('refresh_token', refresh_token);
+    setItem('access_token', access_token);
+    setItem('refresh_token', refresh_token);
     return true;
-  } catch (error: any) {
+  } catch (error) {
     // if (axios.isAxiosError<ApiResponseProps<null>, any>(error)) {
     //   if (error?.response?.data.code === '4102') {
     //     Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
