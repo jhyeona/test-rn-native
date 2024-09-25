@@ -3,9 +3,17 @@ import {useEffect} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
+import {useSetRecoilState} from 'recoil';
+
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {ACTIONS} from '#constants/imageActions.ts';
+import GlobalState from '#recoil/Global';
+import {
+  handleOpenSettings,
+  requestCameraPermissions,
+  requestLibraryPermissions,
+} from '#utils/permissionsHelper.ts';
 
 /**
  * fileType: number 1~6
@@ -25,9 +33,11 @@ const FileUploader = ({
   setHidden: () => void;
   handleImgList?: (assets: any) => void;
 }) => {
+  const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
+
   const [response, setResponse] = React.useState<any>(null);
 
-  const onButtonPress = React.useCallback((type: number) => {
+  const onButtonPress = React.useCallback(async (type: number) => {
     setHidden();
     const action = ACTIONS[type - 1];
     if (!action) {
@@ -36,7 +46,30 @@ const FileUploader = ({
     }
     if (type % 2 === 0) {
       // index 2,4,6 은 갤러리 접근
+      const libraryPermissions = await requestLibraryPermissions();
+      if (!libraryPermissions) {
+        setGlobalModalState({
+          isVisible: true,
+          title: '권한 설정 안내',
+          message: `첨부를 위해 사진첩 접근 권한이 필요합니다. \n확인을 누르시면 설정으로 이동합니다.`,
+          isConfirm: true,
+          onPressConfirm: () => handleOpenSettings(),
+        });
+        return;
+      }
       launchImageLibrary(action.options, setResponse).then();
+      return;
+    }
+
+    const cameraPermissions = await requestCameraPermissions();
+    if (!cameraPermissions) {
+      setGlobalModalState({
+        isVisible: true,
+        title: '권한 설정 안내',
+        message: `첨부를 위해 카메라 사용 권한이 필요합니다. \n확인을 누르시면 설정으로 이동합니다.`,
+        isConfirm: true,
+        onPressConfirm: () => handleOpenSettings(),
+      });
       return;
     }
     launchCamera(action.options, setResponse).then();
