@@ -5,7 +5,7 @@ import {UseMutateAsyncFunction} from '@tanstack/react-query';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 
 import CButton from '#components/common/CommonButton/CButton.tsx';
-import {IS_ANDROID} from '#constants/common.ts';
+import {APP_VERSION, IS_ANDROID} from '#constants/common.ts';
 import BtnScheduleAttendInfo from '#containers/DailySchedules/components/BtnScheduleAttendInfo.tsx';
 import {
   useGetScheduleHistory,
@@ -136,6 +136,7 @@ const BtnSchedule = ({
       scheduleId: scheduleData?.scheduleId ?? '',
       deviceInfo: deviceId,
       os: `${Platform.OS} ${Platform.Version}`,
+      appVersion: APP_VERSION,
       latitude: locationData?.latitude ?? 0.1,
       longitude: locationData?.longitude ?? 0.1,
       altitude: locationData?.altitude ?? 0.1,

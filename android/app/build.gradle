@@ -79,6 +79,7 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
+def packageJson = new groovy.json.JsonSlurper().parseText(file("$rootDir/../package.json").text)
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -90,8 +91,8 @@ android {
         applicationId "io.lpin.checkhere"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "1.0.4"
+        versionCode 7
+        versionName packageJson.version
         resValue "string", "build_config_package", "io.lpin.checkhere"
     }
     signingConfigs {

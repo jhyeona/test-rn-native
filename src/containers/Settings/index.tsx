@@ -11,6 +11,7 @@ import Header from '#components/common/Header/Header.tsx';
 import Toggle from '#components/common/Toggle/Toggle.tsx';
 import MenuButton from '#components/Mypage/MenuButton.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {APP_VERSION} from '#constants/common.ts';
 import {patchUpdatePush} from '#hooks/useMypage.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
@@ -146,6 +147,12 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
           onPressHandler={onPressWithdraw}
         />
       </ScrollView>
+      <CText
+        fontSize={12}
+        text={`체크히어 v${APP_VERSION}`}
+        style={styles.version}
+        color={COLORS.placeholder}
+      />
     </CSafeAreaView>
   );
 };
@@ -160,6 +167,10 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.layout,
+  },
+  version: {
+    marginVertical: 10,
+    textAlign: 'center',
   },
 });
 

@@ -3,6 +3,8 @@ import {Platform} from 'react-native';
 import {ColorType} from '#components/common/StatusInfoContainer';
 import {COLORS} from '#constants/colors.ts';
 
+import {version} from '../../package.json';
+
 export const IS_IOS = Platform.OS === 'ios';
 export const IS_ANDROID = Platform.OS === 'android';
 export const BEACON_UUID = [
@@ -28,3 +30,4 @@ export const STATUS_STYLE_MAP: Record<
 };
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 3; // 3MB
+export const APP_VERSION = version;
