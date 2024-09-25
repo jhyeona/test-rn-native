@@ -11,6 +11,7 @@ import {
 import moment from 'moment/moment';
 import {useRecoilValue} from 'recoil';
 
+import CButton from '#components/common/CommonButton/CButton.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Dropdown, {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import NoData from '#components/common/NoData';
@@ -61,7 +62,14 @@ const ReasonTable = ({
 
   // 상세보기 (수정) 이동
   const handleDetail = (reasonId: string) => {
+    setPayload(prev => ({...prev, page: 1})); // 초기화하기 위함
     handleNavigate({isCreate: false, reasonId});
+  };
+
+  // 사유서 작성 이동
+  const handleCreate = () => {
+    setPayload(prev => ({...prev, page: 1})); // 초기화하기 위함
+    handleNavigate({isCreate: true});
   };
 
   useEffect(() => {
@@ -136,6 +144,7 @@ const ReasonTable = ({
           <NoData fullHeight message="📝 작성된 사유서가 없습니다." />
         }
       />
+      <CButton text="사유서 작성하기" onPress={handleCreate} />
     </>
   );
 };
