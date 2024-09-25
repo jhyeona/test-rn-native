@@ -1,9 +1,13 @@
 import {Alert} from 'react-native';
 
+import {useSetRecoilState} from 'recoil';
+
 import {instanceWithoutToken} from '#apis/instance.ts';
+import GlobalState from '#recoil/Global';
 import {setItem, storage} from '#utils/storageHelper.ts';
 
-export const tokenRefresh = async () => {
+export const useTokenRefresh = async () => {
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   // token refresh
   const url = '/token/refresh';
   const refreshToken = storage.getString('refresh_token');
@@ -26,6 +30,7 @@ export const tokenRefresh = async () => {
     storage.delete('access_token');
     storage.delete('refresh_token');
     storage.clearAll();
+    setIsLogin(false);
     return false;
   }
 };

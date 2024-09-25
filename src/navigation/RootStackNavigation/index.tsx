@@ -25,11 +25,7 @@ import TabNavigation from '#navigation/TabNavigation';
 import GlobalState from '#recoil/Global';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
-import {
-  addStorageListener,
-  getItem,
-  removeStorageListener,
-} from '#utils/storageHelper.ts';
+import {getItem} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -61,18 +57,6 @@ const RootStackNavigation = () => {
 
     const token = getItem('access_token');
     setIsLogin(!!token);
-
-    // storage 리스너
-    const onStorageChange = ({key, value}: {key: string; value: string}) => {
-      console.log('storageChange:', key, value);
-      if (key === 'access_token') {
-        setIsLogin(!!value);
-      }
-    };
-    addStorageListener(onStorageChange);
-    return () => {
-      removeStorageListener(onStorageChange);
-    };
   }, []);
 
   return (

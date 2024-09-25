@@ -2,7 +2,7 @@ import Config from 'react-native-config';
 
 import axios, {AxiosResponse} from 'axios';
 
-import {tokenRefresh} from '#apis/common.ts';
+import {useTokenRefresh} from '#apis/common.ts';
 import {storage} from '#utils/storageHelper.ts';
 
 // 토큰 미사용 인스턴스
@@ -57,7 +57,7 @@ instance.interceptors.response.use(
       error.response.data.code === '4102' //&& // 토큰 만료 status code 401 / response code 4102
     ) {
       originalRequest._retry = true;
-      const isRefreshSuccessful = await tokenRefresh();
+      const isRefreshSuccessful = await useTokenRefresh();
       if (isRefreshSuccessful) {
         return instance(originalRequest);
       }

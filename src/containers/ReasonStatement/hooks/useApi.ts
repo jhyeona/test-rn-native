@@ -23,10 +23,6 @@ export const useGetReasonList = (payload: ReqGetReasonList) => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);
 
-  useEffect(() => {
-    console.log(data?.content.length);
-  }, [data]);
-
   return {reasonList: data, refetchReasonList: refetch};
 };
 

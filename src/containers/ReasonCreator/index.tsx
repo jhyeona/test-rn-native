@@ -80,8 +80,9 @@ const ReasonCreator = ({
   const handleCreate = async () => {
     try {
       const formData = new FormData();
-      const deletedImages: string[] = [];
+      const deletedImages: string[] = []; // 원래 있던 데이터 중 삭제할 데이터 목록
       imgList.forEach((img, i) => {
+        // 첨부한 이미지 추가
         if (!img.isOriginal) {
           formData.append(`image0${i + 1}`, {
             uri: img.uri,
@@ -113,7 +114,6 @@ const ReasonCreator = ({
       }
       navigation.navigate('ReasonStatement');
     } catch (error) {
-      console.log('ERROR', error);
       await setAttToCrashlytics({
         reasonId,
         attendeeId,
@@ -126,7 +126,7 @@ const ReasonCreator = ({
     }
   };
 
-  const onPressDelete = (uri: string) => {
+  const onPressDeletePhoto = (uri: string) => {
     const filtered = imgList
       .filter(item => !(item.uri === uri && !item.isOriginal)) // 원래 데이터가 아니면 리스트에서 삭제
       .map(item =>
@@ -149,6 +149,7 @@ const ReasonCreator = ({
       setImgList(imgListData);
     }
 
+    // 기존에 선택된 강의가 있을 경우 자동 선택
     const selectedLecture = isCreate
       ? lectureItems[0]
       : lectureItems.filter(item => item.id === reasonDetails?.lectureId)?.[0];
@@ -159,6 +160,7 @@ const ReasonCreator = ({
   }, [reasonDetails, lectureItems]);
 
   useEffect(() => {
+    // 총 이미지 개수 (삭제된건 포함하지 않음)
     setImgListLength(imgList?.filter(item => !item.isDelete).length ?? 0);
   }, [imgList]);
 
@@ -249,7 +251,7 @@ const ReasonCreator = ({
                   <PhotoBox
                     disabled={disabled}
                     key={`reason-image-${item.id ?? moment()}-${item.uri}`}
-                    onPressDelete={() => onPressDelete(item.uri)}
+                    onPressDelete={() => onPressDeletePhoto(item.uri)}
                     source={item.uri}
                   />
                 );
