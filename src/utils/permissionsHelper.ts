@@ -1,4 +1,3 @@
-import {Platform} from 'react-native';
 import {
   openSettings,
   PERMISSIONS,
@@ -8,7 +7,7 @@ import {
 } from 'react-native-permissions';
 import {Permission} from 'react-native-permissions/src/types.ts';
 
-import {IS_ANDROID, IS_IOS} from '#constants/common.ts';
+import {IS_IOS} from '#constants/common.ts';
 import {platformVersion} from '#services/device.ts';
 
 export const handleOpenSettings = () => {
@@ -48,4 +47,44 @@ export const requestLocationPermissions = async () => {
       statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED
     );
   });
+};
+
+export const requestLibraryPermissions = async () => {
+  let permissionsList: Array<Permission> = [];
+  if (IS_IOS) {
+    permissionsList = [PERMISSIONS.IOS.PHOTO_LIBRARY];
+
+    return requestMultiple(permissionsList).then(statuses => {
+      return statuses[PERMISSIONS.IOS.PHOTO_LIBRARY] === RESULTS.GRANTED;
+    });
+  } else {
+    permissionsList = [
+      PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
+      PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
+    ];
+
+    return requestMultiple(permissionsList).then(statuses => {
+      return (
+        statuses[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES] === RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.READ_MEDIA_VIDEO] === RESULTS.GRANTED
+      );
+    });
+  }
+};
+
+export const requestCameraPermissions = async () => {
+  let permissionsList: Array<Permission> = [];
+  if (IS_IOS) {
+    permissionsList = [PERMISSIONS.IOS.CAMERA];
+
+    return requestMultiple(permissionsList).then(statuses => {
+      return statuses[PERMISSIONS.IOS.CAMERA] === RESULTS.GRANTED;
+    });
+  } else {
+    permissionsList = [PERMISSIONS.ANDROID.CAMERA];
+
+    return requestMultiple(permissionsList).then(statuses => {
+      return statuses[PERMISSIONS.ANDROID.CAMERA] === RESULTS.GRANTED;
+    });
+  }
 };

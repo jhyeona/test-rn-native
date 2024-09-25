@@ -18,7 +18,7 @@ export const getWeekSchedule = async (payload: GetScheduleProps) => {
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const {data, refetch, fetchStatus} = useQuery({
+  const {data, refetch, fetchStatus, status} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
       return getWeekSchedule(payload);
@@ -27,22 +27,10 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   });
 
   useEffect(() => {
-    setIsLoading(true);
-    if (fetchStatus === 'idle') {
-      setIsLoading(false);
-    }
+    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [fetchStatus, setIsLoading]);
 
   return {weekScheduleData: data, refetchWeekSchedule: refetch};
-};
-
-export const getEventHistory = async (payload: {
-  academyId: string;
-  startDate: string;
-  endDate: string;
-}) => {
-  const response = await requestGetEventHistory(payload);
-  return response;
 };
 
 export const getLectureInfo = async (payload: GetScheduleHistoryProps) => {

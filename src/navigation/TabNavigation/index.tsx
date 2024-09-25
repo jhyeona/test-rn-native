@@ -72,7 +72,11 @@ const TabNavigation = () => {
         tabBarIcon: ({focused}) => {
           return <TabBar routeName={route.name} focused={focused} />;
         },
-        tabBarStyle: {height: 80, paddingHorizontal: 20, paddingVertical: 15},
+        tabBarStyle: {
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          height: 70,
+        },
         tabBarShowLabel: false,
       })}>
       <Tab.Screen

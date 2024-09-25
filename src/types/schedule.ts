@@ -66,7 +66,15 @@ export interface ScheduleHistoryDataProps extends ScheduleDefaultProps {
   intervalEventList: Array<EventProps> | null;
 }
 
-export interface SchedulePeriodDataProps {
+// 내 출석 기록 요청
+export interface ReqGetScheduleHistory {
+  academyId: string;
+  startDate: string;
+  endDate: string;
+}
+
+// 내 출석 기록 응답
+export interface ResSchedulePeriodDataProps {
   academyId: string;
   historyList: Array<{
     schedule: ScheduleDefaultProps;

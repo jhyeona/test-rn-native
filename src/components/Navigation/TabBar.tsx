@@ -23,7 +23,7 @@ const TabBar = (props: TabBarProps) => {
   const {routeName, focused} = props;
 
   const routeData: RouteDataProps = {
-    scheduleHistory: {icon: 'm_Finder', label: '조회'},
+    scheduleHistory: {icon: 'm_Finder', label: '출석 기록'},
     dailySchedules: {icon: 'm_Daily', label: '일간 일정'},
     weeklySchedules: {icon: 'm_Weekly', label: '주간 일정'},
     settings: {icon: 'm_Setting', label: '설정'},
