@@ -54,7 +54,6 @@
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ihereapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ihereapp/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ihereapp/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ihereapp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ihereapp/main.m; sourceTree = "<group>"; };
 		3FE116078B093C72189F2AE7 /* Pods-ihereapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp.debug.xcconfig"; path = "Target Support Files/Pods-ihereapp/Pods-ihereapp.debug.xcconfig"; sourceTree = "<group>"; };
 		4F1F51B88534FA25D8290CBF /* Pods-ihereapp-ihereappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ihereapp-ihereappTests.debug.xcconfig"; path = "Target Support Files/Pods-ihereapp-ihereappTests/Pods-ihereapp-ihereappTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -68,6 +67,7 @@
 		C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Prod.plist"; sourceTree = "<group>"; };
 		C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C432D78D2B7361260086F715 /* ihereapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ihereapp.entitlements; path = ihereapp/ihereapp.entitlements; sourceTree = "<group>"; };
+		C47037E42CA3F52E003CA57F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		C4A261F22B73426A00571C2A /* WiFiHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiHelper.swift; sourceTree = "<group>"; };
 		C4A261F42B73426A00571C2A /* BeaconModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconModule.swift; sourceTree = "<group>"; };
 		C4A261F52B73426A00571C2A /* BeaconModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconModule.m; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				13B07FB61A68108700A75B9A /* Info.plist */,
+				C47037E52CA3F52E003CA57F /* Info.plist */,
 				C4D783C52B54DE840086145F /* BootSplash.storyboard */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -532,6 +532,18 @@
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C47037E52CA3F52E003CA57F /* Info.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C47037E42CA3F52E003CA57F /* Base */,
+			);
+			name = Info.plist;
+			path = ihereapp;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {

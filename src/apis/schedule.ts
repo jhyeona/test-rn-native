@@ -1,14 +1,11 @@
-import {requestGet, requestPost} from '#apis/index.ts';
-import {ApiResponseProps} from '#types/common.ts';
+import {requestGet} from '#apis/index.ts';
 import {
   GetScheduleHistoryProps,
-  GetScheduleHistoryWeekProps,
   GetScheduleProps,
-  PostEventProps,
   ScheduleDataProps,
   ScheduleHistoryDataProps,
-  ScheduleHistoryWeekDataProps,
-  SchedulePeriodDataProps,
+  ResSchedulePeriodDataProps,
+  ReqGetScheduleHistory,
 } from '#types/schedule.ts';
 
 export const requestGetWeekSchedule = async (
@@ -20,11 +17,9 @@ export const requestGetWeekSchedule = async (
   return requestGet(url);
 };
 
-export const requestGetEventHistory = async (payload: {
-  academyId: string;
-  startDate: string;
-  endDate: string;
-}): Promise<SchedulePeriodDataProps> => {
+export const requestGetEventHistory = async (
+  payload: ReqGetScheduleHistory,
+): Promise<ResSchedulePeriodDataProps> => {
   // 기간별 이벤트 히스토리 조회
   const url = `/event/history/academy/${payload.academyId}/start/${payload.startDate}/end/${payload.endDate}`;
   return requestGet(url);

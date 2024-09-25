@@ -258,9 +258,12 @@ const ReasonCreator = ({
               }
             })}
           </View>
-          {/* 강의 선택까지 해야 disabled 해제 */}
           {(isCreate || !disabled) && (
-            <CButton text="저장하기" onPress={handleCreate} disabled={!text} />
+            <CButton
+              text="저장하기"
+              onPress={handleCreate}
+              disabled={!selectedData.lecture || !text}
+            />
           )}
         </ScrollView>
       </CView>
