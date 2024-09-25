@@ -20,6 +20,7 @@ import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {useSignIn} from '#containers/SignIn/hooks/useApi.ts';
 import {errorToCrashlytics, logToCrashlytics} from '#services/firebase.ts';
+import {getDeviceUUID} from '#utils/common.ts';
 
 const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [id, setId] = useState('');
@@ -27,7 +28,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [isIdWarning, setIsIdWarning] = useState(false);
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
 
-  const {signIn} = useSignIn(); //TODO: deviceInfo 데이터 추가
+  const {signIn} = useSignIn();
 
   const onChangeId = (value: string) => {
     setId(value);
@@ -61,7 +62,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     }
 
     try {
-      await signIn({phone: id, password});
+      const deviceId = await getDeviceUUID();
+      await signIn({phone: id, password, deviceInfo: deviceId});
     } catch (error) {
       logToCrashlytics('user login');
       errorToCrashlytics(error, 'requestGetTokenError');

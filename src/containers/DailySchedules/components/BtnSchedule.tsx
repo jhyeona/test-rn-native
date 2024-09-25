@@ -33,6 +33,7 @@ import {
   ScheduleDefaultProps,
   ScheduleHistoryDataProps,
 } from '#types/schedule.ts';
+import {getDeviceUUID} from '#utils/common.ts';
 import {validBeaconList, validWifiList} from '#utils/locationHelper.ts';
 import {
   handleOpenSettings,
@@ -97,7 +98,6 @@ const BtnSchedule = ({
       beaconList = beacon ? validBeaconList(beacon) : [];
       setBeaconState(beaconList);
     }
-
     const beaconListData = beaconList.map(beaconItem => {
       return {
         uuid: beaconItem.uuid,
@@ -106,6 +106,7 @@ const BtnSchedule = ({
         rssi: beaconItem.rssi,
       };
     });
+
     // WIFI
     let wifiList = wifiState;
     const isWifiValid = validWifiList(wifiState);
@@ -115,7 +116,6 @@ const BtnSchedule = ({
         setWifiState(wifi ?? []);
       });
     }
-
     const wifiListData = wifiList.map(wifiItem => {
       return {
         ssid: wifiItem.ssid,
@@ -126,11 +126,15 @@ const BtnSchedule = ({
 
     // Location
     const locationData = await requestGetLocationInfo();
+
+    // device Id
+    const deviceId = await getDeviceUUID();
+
     // 출석 체크 payload
     return {
       attendeeId: attendeeId,
       scheduleId: scheduleData?.scheduleId ?? '',
-      deviceInfo: '',
+      deviceInfo: deviceId,
       os: `${Platform.OS} ${Platform.Version}`,
       latitude: locationData?.latitude ?? 0.1,
       longitude: locationData?.longitude ?? 0.1,
