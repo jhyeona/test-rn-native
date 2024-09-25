@@ -1,7 +1,7 @@
-import {AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 
 import instance from '#apis/instance.ts';
-import {ApiResponseErrorProps, ApiResponseProps} from '#types/common.ts';
+import {ApiResponseErrorProps} from '#types/common.ts';
 
 export const requestGet = async <T>(
   url: string,
@@ -51,7 +51,7 @@ export const requestPost = async <T>(
     .post(url, data, config)
     .then(async axiosResponse => {
       // const response: AxiosResponse<CommonResponseProps<T> = axiosResponse;
-      const responseCode = axiosResponse.data.code;
+      const responseCode = axiosResponse?.data?.code ?? axiosResponse;
       if (responseCode === '0000') {
         return axiosResponse.data?.data ?? axiosResponse.data;
       }

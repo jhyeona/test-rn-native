@@ -14,6 +14,7 @@ import Initialize from '#containers/Initialize';
 import LectureDetail from '#containers/LectureDetail/index.tsx';
 import Onboarding from '#containers/Onboarding';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
+import ReasonCreator from '#containers/ReasonCreator';
 import ReasonStatement from '#containers/ReasonStatement';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import SignIn from '#containers/SignIn';
@@ -24,7 +25,7 @@ import TabNavigation from '#navigation/TabNavigation';
 import GlobalState from '#recoil/Global';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
-import {storage} from '#utils/storageHelper.ts';
+import {getItem} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -51,14 +52,11 @@ const RootStackNavigation = () => {
     routeNameRef.current = currentRouteName;
   };
 
-  const token = storage.getString('access_token');
-
-  useEffect(() => {
-    token ? setIsLogin(true) : setIsLogin(false);
-  }, [setIsLogin, token]);
-
   useEffect(() => {
     onesignalInit();
+
+    const token = getItem('access_token');
+    setIsLogin(!!token);
   }, []);
 
   return (
@@ -67,7 +65,7 @@ const RootStackNavigation = () => {
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
       <RootStack.Navigator>
-        {!isLogin && !token ? (
+        {!isLogin ? (
           <>
             <RootStack.Screen
               name="Init"
@@ -115,6 +113,11 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="ReasonStatement"
               component={ReasonStatement}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="ReasonCreator"
+              component={ReasonCreator}
               options={{headerShown: false}}
             />
             <RootStack.Screen

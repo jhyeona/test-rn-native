@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {SetterOrUpdater} from 'recoil';
@@ -12,7 +12,6 @@ import {useGetAttendeeId} from '#containers/DailySchedules/hooks/useSchedules.ts
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import {ScheduleDefaultProps} from '#types/schedule.ts';
-import {attendList} from '#utils/scheduleHelper.ts';
 
 type StatusIconType = 'IntervalComplete' | 'IntervalMiss' | 'IntervalEmpty';
 
@@ -42,17 +41,17 @@ const BtnScheduleAttendInfo = ({
   const updateTimeStatus = useCallback(() => {
     const newStatusList =
       scheduleData?.scheduleTimeList.map((data, i) => {
-        const {isAttendBetween, isAfter, isAttendEnter} = allowScheduleTime({
-          scheduleData,
-          startTime: data.timeStart,
-          endTime: data.timeEnd,
-        });
+        const {isAttendBetween, isAttendAfter, isAttendEnter} =
+          allowScheduleTime({
+            scheduleData,
+            startTime: data.timeStart,
+            endTime: data.timeEnd,
+          });
         // 시간별 출결의 출석 상태 아이콘
-        // TODO: eventList 가 맞는 데이터인지 확인
         const isEntered = !!historyData?.intervalEventList?.[i];
         const status: StatusIconType = isEntered
           ? 'IntervalComplete'
-          : isAfter
+          : isAttendAfter
             ? 'IntervalMiss'
             : 'IntervalEmpty';
 
@@ -76,7 +75,6 @@ const BtnScheduleAttendInfo = ({
           );
         }
       });
-
       // 상태가 변경된 경우에만 업데이트
       if (hasChanged) {
         if (setIsEnter) {

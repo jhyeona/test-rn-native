@@ -7,18 +7,9 @@ import {
   requestGetEventHistory,
   requestGetLectureInfo,
   requestGetWeekSchedule,
-  requestPostEventAttend,
-  requestPostEventComeback,
-  requestPostEventComplete,
-  requestPostEventEnter,
-  requestPostEventLeave,
 } from '#apis/schedule.ts';
 import GlobalState from '#recoil/Global/index.ts';
-import {
-  GetScheduleHistoryProps,
-  GetScheduleProps,
-  PostEventProps,
-} from '#types/schedule.ts';
+import {GetScheduleHistoryProps, GetScheduleProps} from '#types/schedule.ts';
 
 export const getWeekSchedule = async (payload: GetScheduleProps) => {
   const response = await requestGetWeekSchedule(payload);
@@ -27,7 +18,6 @@ export const getWeekSchedule = async (payload: GetScheduleProps) => {
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-
   const {data, refetch, fetchStatus} = useQuery({
     queryKey: ['weekSchedule', payload],
     queryFn: async () => {
@@ -44,31 +34,6 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   }, [fetchStatus, setIsLoading]);
 
   return {weekScheduleData: data, refetchWeekSchedule: refetch};
-};
-
-export const postEventEnter = async (payload: PostEventProps) => {
-  const response = await requestPostEventEnter(payload);
-  return response;
-};
-
-export const postEventComplete = async (payload: PostEventProps) => {
-  const response = await requestPostEventComplete(payload);
-  return response;
-};
-
-export const postEventLeave = async (payload: PostEventProps) => {
-  const response = await requestPostEventLeave(payload);
-  return response;
-};
-
-export const postEventAttend = async (payload: PostEventProps) => {
-  const response = await requestPostEventAttend(payload);
-  return response;
-};
-
-export const postEventComeback = async (payload: PostEventProps) => {
-  const response = await requestPostEventComeback(payload);
-  return response;
 };
 
 export const getEventHistory = async (payload: {

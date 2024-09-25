@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+
+import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+
+import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
+import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
-import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
-import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import CButton from '#components/common/CommonButton/CButton.tsx';
-import {storage} from '#utils/storageHelper.ts';
-import {FlatList, StyleSheet, View} from 'react-native';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
+import {setItem, storage} from '#utils/storageHelper.ts';
 
 const Onboarding = ({
   navigation,
@@ -41,7 +43,7 @@ const Onboarding = ({
   };
 
   const onPressComplete = () => {
-    storage.set('isVisitor', isChecked);
+    setItem('isVisitor', isChecked);
     navigation.navigate('SignIn');
   };
 

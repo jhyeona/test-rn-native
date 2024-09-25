@@ -16,8 +16,8 @@ export const onesignalInit = () => {
   }
 };
 
-export const onesignalLogin = async (userId: number, isPushApp: boolean) => {
-  OneSignal.login(String(userId));
+export const onesignalLogin = async (userId: string, isPushApp: boolean) => {
+  OneSignal.login(userId);
   await onesignalChangeSubscription(isPushApp);
 };
 

@@ -7,25 +7,27 @@ import {
   TimelineCalendarHandle,
 } from '@howljs/calendar-kit';
 import moment from 'moment/moment';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 
 import {timeTableTheme} from '#constants/calendar.ts';
+import {getRandomColor} from '#containers/WeeklySchedules/utils/textToColor.ts';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
 import {useGetWeekSchedule} from '#hooks/useSchedule.ts';
 import GlobalState from '#recoil/Global';
-import {convertTimeFormat} from '#utils/scheduleHelper.ts';
+import scheduleState from '#recoil/Schedule';
+// import {convertTimeFormat} from '#utils/scheduleHelper.ts';
 
 const TimeTable = () => {
   const selectAcademy = useRecoilValue(GlobalState.selectedAcademy);
 
-  const [selectWeekDate, setSelectWeekDate] = useState(
-    moment().format('YYYY-MM-DD'),
+  const [{date: selectedDate}, setSelectedDate] = useRecoilState(
+    scheduleState.selectedCalendarDate,
   );
 
   const {weekScheduleData} = useGetWeekSchedule({
     // 주간 데이터
     academyId: selectAcademy,
-    date: moment(selectWeekDate).format('YYYYMMDD'),
+    date: selectedDate.format('YYYYMMDD'),
   });
 
   const [isInitRendering, setIsInitRendering] = useState(false);
@@ -38,7 +40,6 @@ const TimeTable = () => {
 
   const formattedData = () => {
     const formatted: EventItem[] = [];
-    console.log(weekScheduleData?.scheduleList.length);
     weekScheduleData?.scheduleList &&
       weekScheduleData.scheduleList.map((info, i) => {
         formatted.push({
@@ -48,7 +49,7 @@ const TimeTable = () => {
           end: moment(info.scheduleEndTime).toISOString(),
           containerStyle: {
             borderRadius: 0,
-            backgroundColor: '#E5F3FF',
+            backgroundColor: getRandomColor(info.lecture.lectureId).bg,
           },
         });
       });
@@ -60,39 +61,41 @@ const TimeTable = () => {
     const fromDate = new Date(date);
     const toDate = new Date(date);
     toDate.setDate(toDate.getDate() + numOfDays);
-    setSelectWeekDate(moment(fromDate).format('YYYYMMDD'));
+    setSelectedDate(prev => ({...prev, date: moment(fromDate)}));
   };
 
-  useEffect(() => {
-    if (weekScheduleData && weekScheduleData?.scheduleList.length > 0) {
-      const start = convertTimeFormat(
-        weekScheduleData.scheduleList[0].scheduleStartTime,
-      );
-      setStartTime(start < 1 ? 0 : Math.floor(start - 0.5));
-      return;
-    }
-    setStartTime(0);
-  }, [weekScheduleData]);
-
-  useEffect(() => {
-    setSelectWeekDate(moment().format('YYYY-MM-DD'));
-  }, [setSelectWeekDate]);
+  // useEffect(() => {
+  //   if (weekScheduleData && weekScheduleData?.scheduleList.length > 0) {
+  //     const start = convertTimeFormat(
+  //       weekScheduleData.scheduleList[0].scheduleStartTime,
+  //     );
+  //     setStartTime(start < 1 ? 0 : Math.floor(start - 0.5));
+  //     return;
+  //   }
+  //   setStartTime(0);
+  // }, [weekScheduleData]);
 
   useEffect(() => {
     // 가로 사이즈가 변하면 (ex. galaxy fold) 화면 재렌더링 // 추후 변경 예정
     setIsInitRendering(false);
     setTimeout(() => {
       setIsInitRendering(true);
-      // calendarRef.current?.goToHour(moment().hour());
     }, 200);
   }, [changeWidth]);
+
+  useEffect(() => {
+    // 오늘 버튼 클릭 시 오늘 날짜가 포함된 이번 주로 이동
+    if (selectedDate.isSame(moment(), 'day')) {
+      calendarRef.current?.goToDate({date: selectedDate.format('YYYY-MM-DD')});
+    }
+  }, [selectedDate]);
 
   return (
     <View style={{flexGrow: 1, paddingTop: 4}}>
       {isInitRendering && (
         <TimelineCalendar
           ref={calendarRef}
-          initialDate={moment(selectWeekDate).format('YYYY-MM-DD')}
+          initialDate={selectedDate.format('YYYY-MM-DD')}
           calendarWidth={changeWidth}
           viewMode="week"
           events={formattedData()}

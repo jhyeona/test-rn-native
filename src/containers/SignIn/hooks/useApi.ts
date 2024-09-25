@@ -5,7 +5,7 @@ import {requestPostGetToken} from '#containers/SignIn/services';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqSignIn} from '#types/user.ts';
-import {storage} from '#utils/storageHelper.ts';
+import {setItem, storage} from '#utils/storageHelper.ts';
 
 export const useSignIn = () => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
@@ -24,8 +24,8 @@ export const useSignIn = () => {
     },
     onSuccess: data => {
       setIsLogin(true);
-      storage.set('access_token', data.access_token);
-      storage.set('refresh_token', data.refresh_token);
+      setItem('access_token', data.access_token);
+      setItem('refresh_token', data.refresh_token);
     },
     onError: (error: CommonResponseProps<null>) => {
       setIsLogin(false);

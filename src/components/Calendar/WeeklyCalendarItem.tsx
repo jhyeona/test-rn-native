@@ -22,7 +22,7 @@ const WeeklyCalendarItem: React.FC<RenderItemProps> = ({
 }) => {
   const {date, isWeekly} = useRecoilValue(scheduleState.selectedCalendarDate);
 
-  const isToday = useMemo(() => moment().isSame(item.date, 'day'), [item.date]);
+  const isToday = moment().isSame(item.date, 'day');
   const isSelected = item.date.isSame(date, 'day');
 
   const textColor = isSelected ? 'white' : isToday ? COLORS.primary : 'black';

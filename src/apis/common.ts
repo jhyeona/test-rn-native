@@ -1,38 +1,36 @@
 import {Alert} from 'react-native';
 
-import axios from 'axios';
+import {useSetRecoilState} from 'recoil';
 
 import {instanceWithoutToken} from '#apis/instance.ts';
-import {ApiResponseProps} from '#types/common.ts';
-import {storage} from '#utils/storageHelper.ts';
+import GlobalState from '#recoil/Global';
+import {setItem, storage} from '#utils/storageHelper.ts';
 
-export const tokenRefresh = async () => {
+export const useTokenRefresh = async () => {
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   // token refresh
   const url = '/token/refresh';
   const refreshToken = storage.getString('refresh_token');
-  const header = {Authorization: `Bearer ${refreshToken}`};
-
+  const header = {Authorization: `Bearer Token ${refreshToken}`};
   try {
-    const response = await instanceWithoutToken.post(
-      url,
-      {},
-      {
-        headers: header,
-      },
-    );
+    const response = await instanceWithoutToken.post(url, null, {
+      headers: header,
+    });
     const {access_token, refresh_token} = response.data.data;
-    storage.set('access_token', access_token);
-    storage.set('refresh_token', refresh_token);
+    setItem('access_token', access_token);
+    setItem('refresh_token', refresh_token);
     return true;
-  } catch (error: any) {
-    if (axios.isAxiosError<ApiResponseProps<null>, any>(error)) {
-      if (error?.response?.data.code === '4102') {
-        Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
-        storage.delete('access_token');
-        storage.delete('refresh_token');
-        storage.clearAll();
-      }
-    }
+  } catch (error) {
+    // if (axios.isAxiosError<ApiResponseProps<null>, any>(error)) {
+    //   if (error?.response?.data.code === '4102') {
+    //     Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
+    //   }
+    // }
+    Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
+    storage.delete('access_token');
+    storage.delete('refresh_token');
+    storage.clearAll();
+    setIsLogin(false);
     return false;
   }
 };

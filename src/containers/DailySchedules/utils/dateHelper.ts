@@ -61,5 +61,7 @@ export const allowScheduleTime = ({
     isAttendBetween: isBetween(allowStartMinusTime, moment(endTime)),
     // (시간별 출결) 출석 버튼을 누를 수 있는 시간
     isAttendEnter: isBetween(allowStartMinusTime, allowStartPlusTime),
+    // (시간별 출결) 출석 인정 시간 종료 이후
+    isAttendAfter: moment().isAfter(allowStartPlusTime),
   };
 };
