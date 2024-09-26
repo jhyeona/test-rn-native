@@ -44,6 +44,7 @@ interface SignUpDataProps {
   password: string;
   rePassword: string;
 }
+const TEST_PHONE = '01072337376';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
@@ -109,27 +110,13 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     {isValid: !!signUpData.telecom, message: '통신사를'},
   ];
 
-  // SMS 인증 문자 요청
-  const requestSmsCode = async () => {
-    const payload = {phone: signUpData.phone};
-    try {
-      await signUpReqSmsCode(payload);
-      setSignUpData(prev => ({...prev, smsCode: ''}));
-      setIsTimer(true);
-      setRestartTimer(true);
-    } catch (error) {
-      setIsSend(false);
-      errorToCrashlytics(error, 'requestSignupSendSMS');
-    }
-  };
-
   // 인증 문자 발송 클릭
   const onPressCertification = async () => {
     for (const {isValid, message} of validations) {
       if (!validateAndSetModal(isValid, message)) return;
     }
     // === FOR APP STORE TEST DATA ===
-    if (signUpData.phone === '01072337376') {
+    if (signUpData.phone === TEST_PHONE) {
       commonModal('인증 문자가 발송되었습니다.');
       setSignUpData(prev => ({...prev, smsCode: ''}));
       setIsSend(true);
@@ -150,11 +137,13 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     };
 
     try {
-      await signUpCheckPhone(signUpData.phone);
-      const response = await signUpTAS(payload);
+      const checkPhoneResponse = await signUpCheckPhone(signUpData.phone);
+      const tasResponse = await signUpTAS(payload);
 
-      if (response?.code === '0000') {
+      if (checkPhoneResponse?.code === '0000' && tasResponse?.code === '0000') {
         setIsCertification(false);
+        // SMS 인증 요청
+        await requestSmsCode();
       }
     } catch (error) {
       setIsCertification(false);
@@ -162,9 +151,20 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       await setAttToCrashlytics(payload);
       errorToCrashlytics(error, 'requestSignupTAS');
     }
+  };
 
-    // SMS 인증 요청
-    await requestSmsCode();
+  // SMS 인증 문자 요청
+  const requestSmsCode = async () => {
+    const payload = {phone: signUpData.phone};
+    try {
+      await signUpReqSmsCode(payload);
+      setSignUpData(prev => ({...prev, smsCode: ''}));
+      setIsTimer(true);
+      setRestartTimer(true);
+    } catch (error) {
+      setIsSend(false);
+      errorToCrashlytics(error, 'requestSignupSendSMS');
+    }
   };
 
   // 인증번호 입력 + 자동 확인
@@ -172,7 +172,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     setSignUpData(prev => ({...prev, smsCode: value}));
     if (value.length === 6) {
       // === FOR APP STORE TEST DATA ===
-      if (signUpData.phone === '01072337376') {
+      if (signUpData.phone === TEST_PHONE) {
         setIsCertification(true);
         setIsTimer(false);
         return;
@@ -180,7 +180,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
       const payload = {
         phone: signUpData.phone,
-        verifyCode: signUpData.smsCode,
+        verifyCode: value,
       };
       try {
         await smsConfirm(payload);
@@ -360,7 +360,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               }
               maxLength={6}
               inputMode="numeric"
-              readOnly={!isSend || isCertification}
+              readOnly={false}
               timer={isTimer}
               onChangeTimeHandler={onChangeTimeHandler}
               setTime={120}
