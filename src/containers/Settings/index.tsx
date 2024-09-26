@@ -12,6 +12,7 @@ import Toggle from '#components/common/Toggle/Toggle.tsx';
 import MenuButton from '#components/Mypage/MenuButton.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {APP_VERSION} from '#constants/common.ts';
+import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import {patchUpdatePush} from '#hooks/useMypage.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
@@ -47,20 +48,7 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   };
 
   const onPressLogout = () => {
-    setGlobalModalState({
-      isVisible: true,
-      title: '안내',
-      message: '로그아웃하시겠습니까?',
-      isConfirm: true,
-      onPressConfirm: () => {
-        storage.delete('access_token');
-        storage.delete('refresh_token');
-        storage.clearAll();
-        onesignalLogout();
-        setUserData(null);
-        setIsLogin(false);
-      },
-    });
+    handleLogout({setGlobalModalState, setUserData, setIsLogin});
   };
 
   const onPressWithdraw = () => {

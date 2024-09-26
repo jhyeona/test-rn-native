@@ -14,6 +14,7 @@ import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import {usePreviousScreenName} from '#hooks/useNavigation.ts';
 import {
   postJoinAcademy,
@@ -21,6 +22,7 @@ import {
   useGetUserInfo,
 } from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
+import userState from '#recoil/User';
 
 interface CheckboxStateProps {
   isChecked: boolean;
@@ -35,13 +37,17 @@ interface CheckboxStateProps {
 }
 
 const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
+  const queryClient = useQueryClient();
   const prevScreenName = usePreviousScreenName(navigation);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
+  const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
+  const setUserData = useSetRecoilState(userState.userInfoState);
+
   const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
   const {refetchUserData} = useGetUserInfo();
 
-  const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>();
-  const queryClient = useQueryClient();
+  const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>([]);
 
   const handleCheckboxChange = (id: string) => {
     setCheckboxState(
@@ -140,32 +146,42 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             </ScrollView>
           </>
         ) : (
-          <>
+          <View style={{flex: 1}}>
             <CText
               text="초대 받은 기관이 없어요."
+              fontSize={16}
               fontWeight="600"
               style={{marginVertical: 20}}
             />
             <View
               style={{
+                flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                paddingVertical: 60,
               }}>
               <SvgIcon name="Invite" />
             </View>
-          </>
+          </View>
         )}
-        <CButton
-          text="선택하기"
-          onPress={onPressSelectAcademy}
-          disabled={!checkboxState || checkboxState.length === 0}
-          buttonStyle={{
-            alignSelf: 'center',
-            position: 'absolute',
-            bottom: 0,
-          }}
-        />
+        {checkboxState.length > 0 && (
+          <CButton
+            text="선택하기"
+            onPress={onPressSelectAcademy}
+            buttonStyle={{
+              alignSelf: 'center',
+              position: 'absolute',
+              bottom: 0,
+            }}
+          />
+        )}
+        {!prevScreenName && (
+          <CButton
+            text="로그아웃"
+            onPress={() =>
+              handleLogout({setGlobalModalState, setUserData, setIsLogin})
+            }
+          />
+        )}
       </CView>
     </CSafeAreaView>
   );
