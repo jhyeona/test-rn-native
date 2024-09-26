@@ -343,7 +343,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                 setSignUpData(prev => ({...prev, telecom: value.id}))
               }
               dropDownDisabled={isSend}
-              dropDownPlaceHolder="통신사"
+              dropDownPlaceHolder="통신사(알뜰포함)"
               dropDownStyle={{flex: 1}}
             />
           </View>

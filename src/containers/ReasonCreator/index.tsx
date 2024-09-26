@@ -276,6 +276,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   info: {
+    marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

@@ -28,7 +28,7 @@ interface Props {
   placeholder?: string;
   disabled?: boolean;
   fullWidth?: DimensionValue;
-  fullHeight?: DimensionValue;
+  height?: number;
   fontSize?: number;
   style?: StyleProp<ViewStyle>;
 }
@@ -40,7 +40,7 @@ const Dropdown = (props: Props) => {
     selected,
     placeholder = '옵션을 선택하세요.',
     disabled = false,
-    fullHeight,
+    height,
     fontSize,
     style,
   } = props;
@@ -69,7 +69,7 @@ const Dropdown = (props: Props) => {
           styles.container,
           style,
           {
-            height: fullHeight ?? 42,
+            height: height ?? 42,
             backgroundColor: isDisabled ? COLORS.lightGray : 'white',
           },
         ]}
@@ -90,8 +90,8 @@ const Dropdown = (props: Props) => {
       </Pressable>
       {isVisible && (
         <ScrollView
-          contentContainerStyle={{paddingVertical: 15}}
-          style={[styles.optionsContainer, {top: fullHeight ?? 45}]}>
+          contentContainerStyle={styles.optionsContentContainer}
+          style={[styles.optionsContainer, {top: height ? height + 3 : 45}]}>
           {items.map((item, index) => (
             <TouchableOpacity
               style={styles.optionItem}
@@ -109,7 +109,6 @@ const Dropdown = (props: Props) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginBottom: 10,
     borderWidth: 1,
     borderRadius: 7,
     borderColor: COLORS.layout,
@@ -143,6 +142,9 @@ const styles = StyleSheet.create({
         elevation: 6, // = boxShadow
       },
     }),
+  },
+  optionsContentContainer: {
+    paddingVertical: 15,
   },
   optionItem: {
     paddingVertical: 10,
