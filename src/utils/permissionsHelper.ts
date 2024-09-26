@@ -34,13 +34,15 @@ export const requestLocationPermissions = async () => {
   permissionsList = [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
   if (platformVersion > 30) {
     permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_SCAN);
+    permissionsList.push(PERMISSIONS.ANDROID.BLUETOOTH_CONNECT);
   }
   return requestMultiple(permissionsList).then(statuses => {
     if (platformVersion > 30) {
       return (
         statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] ===
           RESULTS.GRANTED &&
-        statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
+        statuses[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED &&
+        statuses[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.GRANTED
       );
     }
     return (

@@ -17,7 +17,7 @@ export const requestBluetoothEnable = async () => {
   try {
     return await BeaconModule.requestToBluetoothEnable();
   } catch (error) {
-    console.log('error', error);
+    console.log('requestBluetoothEnable error', error);
     return false;
   }
 };
@@ -29,7 +29,7 @@ export const requestStartBeaconScanning = async () => {
         return true;
       })
       .catch(e => {
-        console.log('error', e);
+        console.log('requestStartBeaconScanning error', e);
         return false;
       });
   } catch (e) {
