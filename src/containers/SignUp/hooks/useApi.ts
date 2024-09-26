@@ -32,19 +32,31 @@ export const useReqSignUpPhone = () => {
 };
 
 export const useReqSignUpTAS = () => {
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
+  const setToast = useSetRecoilState(GlobalState.globalToastState);
 
   const {mutateAsync: signUpTAS} = useMutation({
     mutationFn: (payload: ReqSignUpTAS) => {
       return requestPostSignUpTAS(payload);
     },
     onMutate: () => {
-      // TAS 인증 시간 지연 (약 4~7초 딜레이 되는 것으로 파악)으로 인해 메세지 먼저 출력
+      setIsLoading(true);
+
+      // TAS 인증 시간 지연 (약 4~7초 딜레이 되는 것으로 파악)으로 인해 안내 문구 출력
+      setToast({
+        isVisible: true,
+        time: 4000,
+        message:
+          '인증 요청되었습니다. \n환경에 따라 다소 시간이 지연될 수 있습니다.',
+      });
+    },
+    onSettled: () => {
+      setIsLoading(false);
       setModalState({
         isVisible: true,
         title: '안내',
-        message:
-          '인증 요청되었습니다.\n환경에 따라 다소 시간이 지연될 수 있습니다. \n조금만 기다려 주세요.',
+        message: '인증 요청이 완료되었습니다.',
       });
     },
     onError: (error: CommonResponseProps<null>) => {

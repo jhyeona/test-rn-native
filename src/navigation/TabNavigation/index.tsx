@@ -18,6 +18,7 @@ import {
   requestStopBeaconScanning,
 } from '#services/beaconScanner.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
+import {commonStyles} from '#utils/common.ts';
 import {onesignalLogin} from '#utils/onesignalHelper.ts';
 import {
   requestLocationPermissions,
@@ -72,11 +73,7 @@ const TabNavigation = () => {
         tabBarIcon: ({focused}) => {
           return <TabBar routeName={route.name} focused={focused} />;
         },
-        tabBarStyle: {
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          height: 70,
-        },
+        tabBarStyle: commonStyles.tabBarStyle,
         tabBarShowLabel: false,
       })}>
       <Tab.Screen

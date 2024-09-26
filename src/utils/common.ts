@@ -1,3 +1,4 @@
+import {StyleSheet} from 'react-native';
 import {getAndroidId, getDeviceId, getUniqueId} from 'react-native-device-info';
 
 import {IS_ANDROID} from '#constants/common.ts';
@@ -16,3 +17,11 @@ export const getDeviceUUID = async () => {
     errorToCrashlytics(error, 'rn_getDeviceUUID');
   }
 };
+
+export const commonStyles = StyleSheet.create({
+  tabBarStyle: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 70,
+  },
+});
