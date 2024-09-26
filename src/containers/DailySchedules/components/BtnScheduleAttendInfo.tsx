@@ -24,6 +24,7 @@ const BtnScheduleAttendInfo = ({
 }) => {
   const [timeStatusList, setTimeStatusList] = useState<
     {
+      isCheck: boolean;
       isBetween: boolean;
       isAttendEnter: boolean;
       eventType: string;
@@ -60,6 +61,7 @@ const BtnScheduleAttendInfo = ({
           isAttendEnter,
           eventType: isEntered ? 'ATTEND' : '',
           status,
+          isCheck: data.check,
         };
       }) ?? [];
 
@@ -71,17 +73,18 @@ const BtnScheduleAttendInfo = ({
             current?.isBetween !== newStatus?.isBetween ||
             current?.isAttendEnter !== newStatus?.isAttendEnter ||
             current?.eventType !== newStatus?.eventType ||
-            current?.status !== newStatus?.status
+            current?.status !== newStatus?.status ||
+            current?.isCheck !== newStatus?.isCheck
           );
         }
       });
       // 상태가 변경된 경우에만 업데이트
       if (hasChanged) {
         if (setIsEnter) {
-          // 시간별 출결의 출석 유효 시간 + 미출석일 경우 [출석] 버튼 활성화 되도록 전달
+          // 시간별 출결의 출석 유효 시간 + 미출석 + 시간별 체크 활성화 일 경우 [출석] 버튼 활성화 되도록 전달
           const isEnter = newStatusList.some(
-            ({isAttendEnter, status}) =>
-              isAttendEnter && status === 'IntervalEmpty',
+            ({isAttendEnter, status, isCheck}) =>
+              isAttendEnter && status === 'IntervalEmpty' && isCheck,
           );
           setIsEnter(isEnter);
         }
@@ -89,7 +92,7 @@ const BtnScheduleAttendInfo = ({
       }
       return prevList;
     });
-  }, [scheduleData]);
+  }, [scheduleData, historyData]);
 
   useGlobalInterval(updateTimeStatus, 3000);
 
@@ -109,7 +112,6 @@ const BtnScheduleAttendInfo = ({
               <View style={styles.scheduleTime}>
                 <CText
                   text={`${i + 1}교시`}
-                  fontSize={16}
                   fontWeight="700"
                   color={COLORS.primary}
                 />

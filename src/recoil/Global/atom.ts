@@ -8,11 +8,13 @@ export const globalToastState = atom<{
   isVisible: boolean;
   message?: string;
   content?: ReactNode;
+  time?: number;
 }>({
   key: 'globalToastState',
   default: {
     isVisible: false,
     message: '',
+    time: 3000,
   },
 });
 

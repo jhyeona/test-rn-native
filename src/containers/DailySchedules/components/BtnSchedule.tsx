@@ -50,6 +50,7 @@ const BtnSchedule = ({
   isBtnAvailable: boolean;
   isAllowedAfterEnd: boolean;
 }) => {
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
   const [beaconState, setBeaconState] = useRecoilState(GlobalState.beaconState);
   const [wifiState, setWifiState] = useRecoilState(GlobalState.wifiState);
@@ -129,7 +130,6 @@ const BtnSchedule = ({
 
     // device Id
     const deviceId = await getDeviceUUID();
-
     // 출석 체크 payload
     return {
       attendeeId: attendeeId,
@@ -155,18 +155,20 @@ const BtnSchedule = ({
     >,
     eventName: string,
   ) => {
+    setIsLoading(true);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
-
     const payload = await eventPayload();
     payload.locationPermit = permissionsCheck;
-
     try {
       await requestEvent(payload);
       await refetchHistoryData();
     } catch (e: any) {
+      console.log('req enter error', e);
       await setAttToCrashlytics({...payload, permission: isPermissions});
       errorToCrashlytics(e, eventName);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -213,7 +215,7 @@ const BtnSchedule = ({
 
   return (
     <>
-      {isBtnAvailable && (
+      {isBtnAvailable && !historyData?.completeEvent && (
         <>
           <View style={styles.checkButtons}>
             <CButton
@@ -221,8 +223,9 @@ const BtnSchedule = ({
               onPress={onPressEnter}
               buttonStyle={[styles.checkButton, styles.buttonCommon]}
               disabled={
-                !!historyData?.completeEvent &&
-                (!isAttendTime || isAllowedAfterEnd)
+                !!historyData?.completeEvent ||
+                !isAttendTime ||
+                isAllowedAfterEnd
               }
               fontSize={12}
               noMargin
