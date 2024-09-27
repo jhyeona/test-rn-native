@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
 
 import {UseMutateAsyncFunction} from '@tanstack/react-query';
@@ -215,45 +215,49 @@ const BtnSchedule = ({
 
   return (
     <>
-      {isBtnAvailable && !historyData?.completeEvent && (
-        <>
-          <View style={styles.checkButtons}>
-            <CButton
-              text="출석"
-              onPress={onPressEnter}
-              buttonStyle={[styles.checkButton, styles.buttonCommon]}
-              disabled={
-                !!historyData?.completeEvent ||
-                !isAttendTime ||
-                isAllowedAfterEnd
-              }
-              fontSize={12}
-              noMargin
-            />
-            <CButton
-              text="퇴실"
-              onPress={onPressComplete}
-              buttonStyle={[styles.checkButton, styles.buttonCommon]}
-              disabled={
-                !historyData?.enterEvent || !!historyData?.completeEvent
-              }
-              fontSize={12}
-              noMargin
-            />
-          </View>
-          {!historyData?.completeEvent && (
-            <CButton
-              text={historyData?.isLeaved ? '외출 종료' : '외출 시작'}
-              onPress={historyData?.isLeaved ? onPressComeback : onPressLeave}
-              buttonStyle={styles.buttonCommon}
-              fontSize={12}
-              whiteButton={historyData?.isLeaved}
-              noMargin
-              disabled={!historyData?.enterEvent || isAllowedAfterEnd}
-            />
-          )}
-        </>
-      )}
+      {isBtnAvailable &&
+        !historyData?.completeEvent &&
+        (!isAllowedAfterEnd ?? !!historyData?.enterEvent) && (
+          <>
+            <View style={styles.checkButtons}>
+              <CButton
+                text={historyData?.enterEvent ? '출석' : '입실'}
+                onPress={onPressEnter}
+                buttonStyle={[styles.checkButton, styles.buttonCommon]}
+                disabled={
+                  isAllowedAfterEnd || // 퇴실 이후이면
+                  !!historyData?.completeEvent || // 퇴실 있으면
+                  !!historyData?.enterEvent
+                    ? !isAttendTime // 입실 했으면 조건에 따라
+                    : false // 입실 안했으면
+                }
+                fontSize={12}
+                noMargin
+              />
+              <CButton
+                text="퇴실"
+                onPress={onPressComplete}
+                buttonStyle={[styles.checkButton, styles.buttonCommon]}
+                disabled={
+                  !historyData?.enterEvent || !!historyData?.completeEvent
+                }
+                fontSize={12}
+                noMargin
+              />
+            </View>
+            {!historyData?.completeEvent && (
+              <CButton
+                text={historyData?.isLeaved ? '외출 종료' : '외출 시작'}
+                onPress={historyData?.isLeaved ? onPressComeback : onPressLeave}
+                buttonStyle={styles.buttonCommon}
+                fontSize={12}
+                whiteButton={historyData?.isLeaved}
+                noMargin
+                disabled={!historyData?.enterEvent || isAllowedAfterEnd}
+              />
+            )}
+          </>
+        )}
       {/* 시간별 출결일 경우 */}
       {scheduleData?.scheduleTimeList?.length && (
         <BtnScheduleAttendInfo
