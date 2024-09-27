@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Alert, ScrollView, StyleSheet, TextInput, View} from 'react-native';
 
 import {RouteProp} from '@react-navigation/core/src/types.tsx';
+import {useRoute} from '@react-navigation/native';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import moment, {Moment} from 'moment';
 
@@ -44,11 +45,13 @@ export interface ImgListProps {
 
 const ReasonCreator = ({
   navigation,
-  route,
 }: {
   navigation: NativeStackNavigationHelpers;
-  route: RouteProp<{ReasonCreator: NavigateReasonProps}, 'ReasonCreator'>;
 }) => {
+  const route =
+    useRoute<
+      RouteProp<{ReasonCreator: NavigateReasonProps}, 'ReasonCreator'>
+    >();
   const {isCreate, reasonId} = route.params;
   const attendeeId = useGetAttendeeId();
   const {lectureItems} = useGetLectureList();
