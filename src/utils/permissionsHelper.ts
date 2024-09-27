@@ -59,19 +59,25 @@ export const requestLibraryPermissions = async () => {
     return requestMultiple(permissionsList).then(statuses => {
       return statuses[PERMISSIONS.IOS.PHOTO_LIBRARY] === RESULTS.GRANTED;
     });
-  } else {
-    permissionsList = [
-      PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
-      PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
-    ];
-
-    return requestMultiple(permissionsList).then(statuses => {
-      return (
-        statuses[PERMISSIONS.ANDROID.READ_MEDIA_IMAGES] === RESULTS.GRANTED &&
-        statuses[PERMISSIONS.ANDROID.READ_MEDIA_VIDEO] === RESULTS.GRANTED
-      );
-    });
   }
+
+  // 32 이하 : READ_EXTERNAL_STORAGE
+  // 33 이상 : READ_MEDIA_IMAGES
+  // 34 이상 : READ_MEDIA_VISUAL_USER_SELECTED
+  if (platformVersion <= 32) {
+    permissionsList.push(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+  } else {
+    permissionsList.push(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
+    if (platformVersion >= 34) {
+      permissionsList.push(PERMISSIONS.ANDROID.READ_MEDIA_VISUAL_USER_SELECTED);
+    }
+  }
+
+  return requestMultiple(permissionsList).then(statuses => {
+    return permissionsList.every(permission => {
+      return statuses[permission] === RESULTS.GRANTED;
+    });
+  });
 };
 
 export const requestCameraPermissions = async () => {

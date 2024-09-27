@@ -51,7 +51,7 @@ const FileUploader = ({
         setGlobalModalState({
           isVisible: true,
           title: '권한 설정 안내',
-          message: `첨부를 위해 사진첩 접근 권한이 필요합니다. \n확인을 누르시면 설정으로 이동합니다.`,
+          message: `첨부를 위해 사진첩 접근 권한이 필요합니다. 확인을 누르시면 설정으로 이동합니다.`,
           isConfirm: true,
           onPressConfirm: () => handleOpenSettings(),
         });
@@ -66,7 +66,7 @@ const FileUploader = ({
       setGlobalModalState({
         isVisible: true,
         title: '권한 설정 안내',
-        message: `첨부를 위해 카메라 사용 권한이 필요합니다. \n확인을 누르시면 설정으로 이동합니다.`,
+        message: `첨부를 위해 카메라 사용 권한이 필요합니다. 확인을 누르시면 설정으로 이동합니다.`,
         isConfirm: true,
         onPressConfirm: () => handleOpenSettings(),
       });
