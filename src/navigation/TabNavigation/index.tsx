@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
+import {useSetRecoilState} from 'recoil';
 
 import TabBar from '#components/Navigation/TabBar.tsx';
 import DailySchedule from '#containers/DailySchedules';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import Settings from '#containers/Settings';
 import WeeklySchedules from '#containers/WeeklySchedules';
+import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
-import userState from '#recoil/User';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
@@ -30,7 +30,8 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   const setWifiState = useSetRecoilState(GlobalState.wifiState);
   const setBeaconState = useSetRecoilState(GlobalState.beaconState);
-  const userData = useRecoilValue(userState.userInfoState);
+
+  const {userData} = useGetUserInfo();
 
   const tabOptions = {headerShown: false};
 
@@ -61,9 +62,11 @@ const TabNavigation = () => {
   }, [setBeaconState, setWifiState]);
 
   useEffect(() => {
-    if (userData) {
-      onesignalLogin(userData.userId, userData.settingPushApp).then();
-    }
+    (async () => {
+      if (userData) {
+        await onesignalLogin(userData.userId, userData.settingPushApp);
+      }
+    })();
   }, [userData]);
 
   return (

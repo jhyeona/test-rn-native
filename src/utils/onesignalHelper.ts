@@ -18,12 +18,13 @@ export const onesignalInit = () => {
 
 export const onesignalLogin = async (userId: string, isPushApp: boolean) => {
   OneSignal.login(userId);
+  onesignalAddTag({tagName: 'userId', tagValue: userId});
   await onesignalChangeSubscription(isPushApp);
 };
 
 export const onesignalChangeSubscription = async (isPushApp: boolean) => {
-  let permission = await OneSignal.Notifications.getPermissionAsync();
-  // const id = OneSignal.User.pushSubscription.getPushSubscriptionId();
+  const permission = await OneSignal.Notifications.getPermissionAsync();
+
   if (permission && isPushApp) {
     OneSignal.User.pushSubscription.optIn();
   } else {
@@ -33,4 +34,14 @@ export const onesignalChangeSubscription = async (isPushApp: boolean) => {
 
 export const onesignalLogout = () => {
   OneSignal.logout();
+};
+
+export const onesignalAddTag = ({
+  tagName,
+  tagValue,
+}: {
+  tagName: string;
+  tagValue: string;
+}) => {
+  OneSignal.User.addTag(tagName, tagValue);
 };
