@@ -144,43 +144,43 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                 );
               })}
             </ScrollView>
+            <CButton
+              text="선택하기"
+              onPress={onPressSelectAcademy}
+              buttonStyle={{
+                alignSelf: 'center',
+                position: 'absolute',
+                bottom: 0,
+              }}
+            />
           </>
         ) : (
-          <View style={{flex: 1}}>
-            <CText
-              text="초대 받은 기관이 없어요."
-              fontSize={16}
-              fontWeight="600"
-              style={{marginVertical: 20}}
-            />
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <SvgIcon name="Invite" />
+          <>
+            <View style={{flex: 1}}>
+              <CText
+                text="초대 받은 기관이 없어요."
+                fontSize={16}
+                fontWeight="600"
+                style={{marginVertical: 20}}
+              />
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <SvgIcon name="Invite" />
+              </View>
             </View>
-          </View>
-        )}
-        {checkboxState.length > 0 && (
-          <CButton
-            text="선택하기"
-            onPress={onPressSelectAcademy}
-            buttonStyle={{
-              alignSelf: 'center',
-              position: 'absolute',
-              bottom: 0,
-            }}
-          />
-        )}
-        {!prevScreenName && (
-          <CButton
-            text="로그아웃"
-            onPress={() =>
-              handleLogout({setGlobalModalState, setUserData, setIsLogin})
-            }
-          />
+            {!prevScreenName && (
+              <CButton
+                text="로그아웃"
+                onPress={() =>
+                  handleLogout({setGlobalModalState, setUserData, setIsLogin})
+                }
+              />
+            )}
+          </>
         )}
       </CView>
     </CSafeAreaView>
