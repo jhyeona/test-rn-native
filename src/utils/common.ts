@@ -22,6 +22,7 @@ export const commonStyles = StyleSheet.create({
   tabBarStyle: {
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: 70,
+    height: 80,
+    paddingTop: 5,
   },
 });
