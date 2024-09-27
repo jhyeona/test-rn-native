@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
@@ -11,6 +11,7 @@ import CView from '#components/common/CommonView/CView';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {useGetLectureList} from '#containers/DailySchedules/hooks/useApi.ts';
 import RefreshHistory from '#containers/ScheduleHistory/components/RefreshHistory.tsx';
 import {useGetHistory} from '#containers/ScheduleHistory/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
@@ -89,6 +90,8 @@ const ScheduleHistory = ({
             </View>
             {getHistory?.historyList.length ? (
               getHistory.historyList.map((history, i) => {
+                const scheduleEndTime = history.schedule.scheduleEndTime;
+                const isBeforeEnd = moment().isBefore(moment(scheduleEndTime));
                 const {statusType, statusColor, enteredTime, completedTime} =
                   eventStatus(history.eventList);
                 return (
@@ -102,7 +105,10 @@ const ScheduleHistory = ({
                       </Text>
                     </View>
                     <View style={styles.cell}>
-                      <CText color={statusColor} text={statusType} />
+                      <CText
+                        color={isBeforeEnd ? 'black' : statusColor}
+                        text={isBeforeEnd ? '-' : statusType}
+                      />
                     </View>
                     <View style={styles.cell}>
                       <CText
