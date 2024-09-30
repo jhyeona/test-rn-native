@@ -2,7 +2,7 @@ import {useCallback, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {useSetRecoilState} from 'recoil';
 
@@ -16,6 +16,7 @@ import Academy from '#containers/Academy';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import scheduleState from '#recoil/Schedule';
+import {commonStyles} from '#utils/common.ts';
 
 const DailySchedule = ({
   navigation,
@@ -23,8 +24,23 @@ const DailySchedule = ({
   navigation: BottomTabNavigationHelpers;
 }) => {
   const {userData} = useGetUserInfo();
+  const navigate = useNavigation();
 
   const setSelectedDate = useSetRecoilState(scheduleState.selectedCalendarDate);
+
+  useEffect(() => {
+    // 기관이 없을 경우 기관 설정 페이지에서는 하단 네비게이션 숨김
+    if (userData) {
+      navigate.setOptions({
+        tabBarStyle: [
+          {
+            display: userData.studentList.length > 0 ? 'flex' : 'none',
+          },
+          commonStyles.tabBarStyle,
+        ],
+      });
+    }
+  }, [navigate, userData]);
 
   useFocusEffect(
     useCallback(() => {
@@ -44,8 +60,7 @@ const DailySchedule = ({
                 <WeeklyCalendar />
                 <DaySchedules />
                 <CButton
-                  text="사유서"
-                  noMargin
+                  text="사유서 목록"
                   onPress={() => {
                     navigation.navigate('ReasonStatement');
                   }}
@@ -63,7 +78,6 @@ const DailySchedule = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: 14,
   },
 });
 export default DailySchedule;

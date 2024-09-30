@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
+import {useSetRecoilState} from 'recoil';
 
 import TabBar from '#components/Navigation/TabBar.tsx';
 import DailySchedule from '#containers/DailySchedules';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import Settings from '#containers/Settings';
 import WeeklySchedules from '#containers/WeeklySchedules';
+import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
-import userState from '#recoil/User';
 import {
   requestAddBeaconListener,
   requestBeaconScanList,
@@ -18,6 +18,7 @@ import {
   requestStopBeaconScanning,
 } from '#services/beaconScanner.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
+import {commonStyles} from '#utils/common.ts';
 import {onesignalLogin} from '#utils/onesignalHelper.ts';
 import {
   requestLocationPermissions,
@@ -29,7 +30,8 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   const setWifiState = useSetRecoilState(GlobalState.wifiState);
   const setBeaconState = useSetRecoilState(GlobalState.beaconState);
-  const userData = useRecoilValue(userState.userInfoState);
+
+  const {userData} = useGetUserInfo();
 
   const tabOptions = {headerShown: false};
 
@@ -60,9 +62,11 @@ const TabNavigation = () => {
   }, [setBeaconState, setWifiState]);
 
   useEffect(() => {
-    if (userData) {
-      onesignalLogin(userData.userId, userData.settingPushApp).then();
-    }
+    (async () => {
+      if (userData) {
+        await onesignalLogin(userData.userId);
+      }
+    })();
   }, [userData]);
 
   return (
@@ -72,11 +76,7 @@ const TabNavigation = () => {
         tabBarIcon: ({focused}) => {
           return <TabBar routeName={route.name} focused={focused} />;
         },
-        tabBarStyle: {
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          height: 70,
-        },
+        tabBarStyle: commonStyles.tabBarStyle,
         tabBarShowLabel: false,
       })}>
       <Tab.Screen

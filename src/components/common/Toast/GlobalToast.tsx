@@ -11,7 +11,7 @@ const GlobalToast = () => {
   const [toastState, setToastState] = useRecoilState(
     GlobalState.globalToastState,
   );
-  const {isVisible, message, content} = toastState;
+  const {isVisible, message, content, time} = toastState;
   const [animation] = useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const GlobalToast = () => {
           duration: 500,
           useNativeDriver: true,
         }).start(() => setToastState({isVisible: false, message: ''}));
-      }, 3000);
+      }, time ?? 3000);
 
       return () => clearTimeout(timer);
     } else {
@@ -63,7 +63,14 @@ const GlobalToast = () => {
             borderRadius: 20,
             transform: [{translateY: modalTranslateY}],
           }}>
-          <CText text={message ?? ''} fontWeight="700" color="white" />
+          <CText
+            style={{textAlign: 'center'}}
+            text={message ?? ''}
+            lineBreak
+            lineHeight={24}
+            fontWeight="700"
+            color="white"
+          />
           {content}
         </Animated.View>
       )}

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
 import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
@@ -79,6 +79,7 @@ export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
 
 // 입실 요청
 export const useReqEnter = () => {
+  const queryClient = useQueryClient();
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
@@ -93,6 +94,11 @@ export const useReqEnter = () => {
       setIsLoading(false);
     },
     onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: ['daySchedule', 'scheduleHistory'],
+        })
+        .then();
       setModalState({
         isVisible: true,
         title: '안내',
@@ -101,7 +107,6 @@ export const useReqEnter = () => {
     },
     onError: (error: CommonResponseProps<null>) => {
       const errorMessage = handleErrorResponse(error.code);
-      console.log(error);
       setModalState({
         isVisible: true,
         title: '안내',
@@ -114,6 +119,7 @@ export const useReqEnter = () => {
 
 // 퇴실 요청
 export const useReqComplete = () => {
+  const queryClient = useQueryClient();
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
@@ -128,6 +134,11 @@ export const useReqComplete = () => {
       setIsLoading(false);
     },
     onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: ['daySchedule', 'scheduleHistory'],
+        })
+        .then();
       setModalState({
         isVisible: true,
         title: '안내',
@@ -149,6 +160,7 @@ export const useReqComplete = () => {
 
 // 외출 요청
 export const useReqLeave = () => {
+  const queryClient = useQueryClient();
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
@@ -163,6 +175,11 @@ export const useReqLeave = () => {
       setIsLoading(false);
     },
     onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: ['daySchedule', 'scheduleHistory'],
+        })
+        .then();
       setModalState({
         isVisible: true,
         title: '안내',
@@ -184,6 +201,7 @@ export const useReqLeave = () => {
 
 // 복귀 요청
 export const useReqComeback = () => {
+  const queryClient = useQueryClient();
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
@@ -198,6 +216,11 @@ export const useReqComeback = () => {
       setIsLoading(false);
     },
     onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: ['daySchedule', 'scheduleHistory'],
+        })
+        .then();
       setModalState({
         isVisible: true,
         title: '안내',
@@ -219,6 +242,7 @@ export const useReqComeback = () => {
 
 // 시간별 체크 요청
 export const useReqAttend = () => {
+  const queryClient = useQueryClient();
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
@@ -233,6 +257,11 @@ export const useReqAttend = () => {
       setIsLoading(false);
     },
     onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: ['daySchedule', 'scheduleHistory'],
+        })
+        .then();
       setModalState({
         isVisible: true,
         title: '안내',

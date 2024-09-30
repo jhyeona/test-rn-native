@@ -1,4 +1,7 @@
+import {useEffect} from 'react';
+
 import {useQuery} from '@tanstack/react-query';
+import {useSetRecoilState} from 'recoil';
 
 import {
   requestDeleteUser,
@@ -6,25 +9,44 @@ import {
   requestGetUserInfo,
   requestPostJoinAcademy,
 } from '#apis/user.ts';
+import GlobalState from '#recoil/Global';
 
 export const useGetUserInfo = () => {
-  const {data, refetch} = useQuery({
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+
+  const {data, refetch, status, fetchStatus} = useQuery({
     queryKey: ['userInfo'],
     queryFn: async () => {
       return requestGetUserInfo();
     },
   });
+  useEffect(() => {
+    setIsLoading(true);
+    if (status === 'success' || status === 'error') {
+      setIsLoading(false);
+    }
+  }, [status, fetchStatus]);
 
   return {userData: data, refetchUserData: refetch};
 };
 
 export const useGetInvitedList = () => {
-  const {data, refetch} = useQuery({
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
+
+  const {data, refetch, status, fetchStatus} = useQuery({
     queryKey: ['invitedList'],
     queryFn: async () => {
       return requestGetInvitedAcademyList();
     },
   });
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (status === 'success' || status === 'error') {
+      setIsLoading(false);
+    }
+  }, [status, fetchStatus]);
+
   return {data, refetch};
 };
 

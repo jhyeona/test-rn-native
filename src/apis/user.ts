@@ -4,7 +4,6 @@ import {
   requestPatch,
   requestPost,
 } from '#apis/index.ts';
-import {ApiResponseProps} from '#types/common.ts';
 import {
   InvitedAcademyListProps,
   JoinAcademyProps,

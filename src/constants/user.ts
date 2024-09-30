@@ -9,7 +9,4 @@ export const TELECOM_LIST = [
   {label: 'SKT', id: 'SKT'},
   {label: 'KT', id: 'KT'},
   {label: 'LG U+', id: 'LGT'},
-  {label: 'SKT 알뜰', id: 'SKT'},
-  {label: 'KT 알뜰', id: 'KT'},
-  {label: 'LG 알뜰', id: 'LGT'},
 ];

@@ -89,16 +89,18 @@ const CInputWithDropdown = (props: Props) => {
             />
           </View>
         </View>
-        <Dropdown
-          items={dropDownItems}
-          onSelect={dropDownOnSelect}
-          selected={dropdownSelected}
-          fullHeight={52}
-          fontSize={16}
-          placeholder={dropDownPlaceHolder}
-          disabled={dropDownDisabled}
-          style={dropDownStyle}
-        />
+        <View style={{flex: 1, height: 52}}>
+          <Dropdown
+            items={dropDownItems}
+            onSelect={dropDownOnSelect}
+            selected={dropdownSelected}
+            height={52}
+            fontSize={16}
+            placeholder={dropDownPlaceHolder}
+            disabled={dropDownDisabled}
+            style={dropDownStyle}
+          />
+        </View>
       </View>
     </View>
   );

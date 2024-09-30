@@ -35,6 +35,7 @@ const TabBar = (props: TabBarProps) => {
         name={icon}
         size={20}
         color={focused ? 'black' : COLORS.placeholder}
+        stroke={focused ? 'black' : COLORS.placeholder}
       />
       <CText
         text={label}
