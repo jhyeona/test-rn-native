@@ -67,7 +67,7 @@ export const requestLibraryPermissions = async () => {
   if (platformVersion <= 32) {
     permissionsList.push(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
   } else {
-    permissionsList.push(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
+    // permissionsList.push(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
     if (platformVersion >= 34) {
       permissionsList.push(PERMISSIONS.ANDROID.READ_MEDIA_VISUAL_USER_SELECTED);
     }
