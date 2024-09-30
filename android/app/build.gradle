@@ -91,7 +91,7 @@ android {
         applicationId "io.lpin.checkhere"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
+        versionCode 8
         versionName packageJson.version
         resValue "string", "build_config_package", "io.lpin.checkhere"
     }
