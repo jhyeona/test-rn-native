@@ -9,6 +9,7 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import scheduleState from '#recoil/Schedule';
+import CText from '#components/common/CustomText/CText.tsx';
 
 const WeeklySchedules = () => {
   const setSelectedDate = useSetRecoilState(scheduleState.selectedCalendarDate);
@@ -24,7 +25,8 @@ const WeeklySchedules = () => {
       <ScheduleHeader />
       <CView>
         {/*<AcademySelector />*/}
-        <TimeTable />
+        {/*<TimeTable />*/}
+        <CText text="TODO: new timeline table" />
       </CView>
     </CSafeAreaView>
   );

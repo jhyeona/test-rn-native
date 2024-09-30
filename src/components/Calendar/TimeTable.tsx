@@ -1,10 +1,8 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {View} from 'react-native';
-
+import TimelineCalendar from '@howljs/calendar-kit';
 import {
-  EventItem,
-  TimelineCalendar,
-  TimelineCalendarHandle,
+  EventItem,CalendarKitHandle
 } from '@howljs/calendar-kit';
 import moment from 'moment/moment';
 import {useRecoilState, useRecoilValue} from 'recoil';
@@ -15,7 +13,6 @@ import {useChangeWidth} from '#hooks/useGlobal.ts';
 import {useGetWeekSchedule} from '#hooks/useSchedule.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
-// import {convertTimeFormat} from '#utils/scheduleHelper.ts';
 
 const TimeTable = () => {
   const selectAcademy = useRecoilValue(GlobalState.selectedAcademy);
@@ -34,7 +31,7 @@ const TimeTable = () => {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(24.5);
 
-  const calendarRef = useRef<TimelineCalendarHandle>(null);
+  const calendarRef = useRef<CalendarKitHandle>(null);
   const changeWidth = useChangeWidth();
   const theme = useMemo(() => timeTableTheme, []);
 
@@ -45,8 +42,8 @@ const TimeTable = () => {
         formatted.push({
           id: i.toString(),
           title: info.lecture.lectureName,
-          start: moment(info.scheduleStartTime).toISOString(),
-          end: moment(info.scheduleEndTime).toISOString(),
+          start: {dateTime: moment(info.scheduleStartTime).toISOString()},
+          end: {dateTime: moment(info.scheduleEndTime).toISOString()},
           containerStyle: {
             borderRadius: 0,
             backgroundColor: getRandomColor(info.lecture.lectureId).bg,
@@ -97,7 +94,7 @@ const TimeTable = () => {
           ref={calendarRef}
           initialDate={selectedDate.format('YYYY-MM-DD')}
           calendarWidth={changeWidth}
-          viewMode="week"
+          // viewMode="week"
           events={formattedData()}
           onDateChanged={onChangeDate}
           locale="ko"
@@ -106,7 +103,7 @@ const TimeTable = () => {
           firstDay={1} // 1: 월요일
           theme={theme}
           showNowIndicator
-          isShowHalfLine={false}
+          // isShowHalfLine={false}
           timeInterval={30}
           initialTimeIntervalHeight={27}
           allowPinchToZoom // 줌 확대 가능 여부
