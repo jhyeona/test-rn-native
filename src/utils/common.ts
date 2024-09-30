@@ -7,9 +7,11 @@ import {errorToCrashlytics, logToCrashlytics} from '#services/firebase.ts';
 export const getDeviceUUID = async () => {
   try {
     const deviceId = getDeviceId();
-    let uniqueId = await getUniqueId();
-    if (!!uniqueId && IS_ANDROID) {
+    let uniqueId = '';
+    if (IS_ANDROID) {
       uniqueId = await getAndroidId();
+    } else {
+      uniqueId = await getUniqueId();
     }
     return `${deviceId}-${uniqueId}`;
   } catch (error) {
