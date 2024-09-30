@@ -64,7 +64,7 @@ const TabNavigation = () => {
   useEffect(() => {
     (async () => {
       if (userData) {
-        await onesignalLogin(userData.userId, userData.settingPushApp);
+        await onesignalLogin(userData.userId);
       }
     })();
   }, [userData]);
