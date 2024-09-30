@@ -96,7 +96,7 @@ const UserWithdraw = ({
           <Checkbox
             isChecked={isChecked}
             onValueChangeHandler={setIsChecked}
-            labelMessage="회원탈퇴 유의사항을 확인하였으며, 동의합니다."
+            labelMessage="유의사항을 모두 확인하였으며, 동의합니다."
             fontSize={16}
           />
           <View style={{margin: 10}} />
