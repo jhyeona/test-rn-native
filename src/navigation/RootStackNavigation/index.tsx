@@ -56,11 +56,9 @@ const RootStackNavigation = () => {
 
   useEffect(() => {
     onesignalInit();
-
     // mmkv storage listener
     const storageListener = storage.addOnValueChangedListener(changedKey => {
       const newValue = getItem(changedKey);
-
       if (changedKey === ACCESS_TOKEN && newValue === TOKEN_ERROR) {
         Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
         setIsLogin(false);

@@ -47,6 +47,7 @@ if linkage != nil
 end
 
 target 'ihereapp' do
+  ENV['RCT_NEW_ARCH_ENABLED'] = '1'
   use_frameworks! :linkage => :static # => added
 
   config = use_native_modules!

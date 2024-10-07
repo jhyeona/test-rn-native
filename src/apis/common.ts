@@ -1,5 +1,3 @@
-import {Alert} from 'react-native';
-
 import {instanceWithoutToken} from '#apis/instance.ts';
 import {ACCESS_TOKEN, REFRESH_TOKEN, TOKEN_ERROR} from '#constants/common.ts';
 import {setItem, storage} from '#utils/storageHelper.ts';
