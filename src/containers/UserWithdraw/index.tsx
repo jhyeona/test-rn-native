@@ -12,6 +12,7 @@ import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import TextList from '#components/common/TextList/TextList.tsx';
+import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
 import {withdrawPolicyList} from '#constants/policy.ts';
 import {deleteUser} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
@@ -52,8 +53,8 @@ const UserWithdraw = ({
         title: '안내',
         message: '탈퇴 처리 되었습니다.',
       });
-      storage.delete('access_token');
-      storage.delete('refresh_token');
+      storage.delete(ACCESS_TOKEN);
+      storage.delete(REFRESH_TOKEN);
       setIsLogin(false);
     } catch (e: any) {
       console.log(e);

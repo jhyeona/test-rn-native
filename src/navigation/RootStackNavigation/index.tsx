@@ -1,4 +1,5 @@
 import React, {useEffect, useRef} from 'react';
+import {Alert} from 'react-native';
 import BootSplash from 'react-native-bootsplash';
 
 import {
@@ -8,6 +9,7 @@ import {
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useRecoilState} from 'recoil';
 
+import {ACCESS_TOKEN, TOKEN_ERROR} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import FindPassword from '#containers/FindPassword';
 import Initialize from '#containers/Initialize';
@@ -25,7 +27,7 @@ import TabNavigation from '#navigation/TabNavigation';
 import GlobalState from '#recoil/Global';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
-import {getItem} from '#utils/storageHelper.ts';
+import {getItem, storage} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -36,7 +38,7 @@ const RootStackNavigation = () => {
   const handleOnReady = () => {
     routeNameRef.current =
       navigationRef?.current?.getCurrentRoute()?.name ?? '';
-    // eslint-disable-next-line import/no-named-as-default-member
+
     BootSplash.hide({fade: true}).then();
   };
 
@@ -55,8 +57,22 @@ const RootStackNavigation = () => {
   useEffect(() => {
     onesignalInit();
 
-    const token = getItem('access_token');
+    // mmkv storage listener
+    const storageListener = storage.addOnValueChangedListener(changedKey => {
+      const newValue = getItem(changedKey);
+
+      if (changedKey === ACCESS_TOKEN && newValue === TOKEN_ERROR) {
+        Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
+        setIsLogin(false);
+      }
+    });
+
+    const token = getItem(ACCESS_TOKEN);
     setIsLogin(!!token);
+
+    return () => {
+      storageListener.remove();
+    };
   }, []);
 
   return (
