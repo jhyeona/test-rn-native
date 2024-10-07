@@ -12,11 +12,14 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import AcademySelector from '#components/Schedule/AcademySelector.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
+import {ACCESS_TOKEN} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
 import {useGetUserInfo} from '#hooks/useUser.ts';
+import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
 import {commonStyles} from '#utils/common.ts';
+import {getItem} from '#utils/storageHelper.ts';
 
 const DailySchedule = ({
   navigation,
@@ -27,10 +30,16 @@ const DailySchedule = ({
   const navigate = useNavigation();
 
   const setSelectedDate = useSetRecoilState(scheduleState.selectedCalendarDate);
+  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
 
   useEffect(() => {
-    // 기관이 없을 경우 기관 설정 페이지에서는 하단 네비게이션 숨김
     if (userData) {
+      const token = getItem(ACCESS_TOKEN);
+      if (!token) {
+        setIsLogin(false);
+        return;
+      }
+      // 기관이 없을 경우 기관 설정 페이지에서는 하단 네비게이션 숨김
       navigate.setOptions({
         tabBarStyle: [
           {

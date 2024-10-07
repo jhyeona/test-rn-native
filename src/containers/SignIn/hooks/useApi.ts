@@ -1,6 +1,7 @@
 import {useMutation} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
+import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
 import {requestPostGetToken} from '#containers/SignIn/services';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
@@ -24,8 +25,8 @@ export const useSignIn = () => {
     },
     onSuccess: data => {
       setIsLogin(true);
-      setItem('access_token', data.access_token);
-      setItem('refresh_token', data.refresh_token);
+      setItem(ACCESS_TOKEN, data.access_token);
+      setItem(REFRESH_TOKEN, data.refresh_token);
     },
     onError: (error: CommonResponseProps<null>) => {
       setIsLogin(false);

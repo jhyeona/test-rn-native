@@ -20,7 +20,7 @@ import {
 import {useChangeWidth} from '#hooks/useGlobal.ts';
 import scheduleState from '#recoil/Schedule';
 
-const WeeklyCalendar: React.FC = () => {
+const WeeklyCalendar = () => {
   // 현재 날짜 기준 월요일을 초기 날짜로 설정
   const startOfWeek = moment()
     .startOf('week')
@@ -35,7 +35,7 @@ const WeeklyCalendar: React.FC = () => {
     scheduleState.selectedCalendarDate,
   );
   const flatListRef = useRef<FlatList<CalendarItem>>(null);
-  const [dates, setDates] = useState<CalendarItem[]>([]);
+  const [dates, setDates] = useState<CalendarItem[]>(initialDates);
   const [lastPrependTime, setLastPrependTime] = useState(0);
 
   // 날짜 한 칸당 width 설정
@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WeeklyCalendar;
+export default React.memo(WeeklyCalendar);
