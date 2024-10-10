@@ -15,6 +15,7 @@ export {default as RightArrow} from './rightArrow.svg';
 export {default as ScheduleTimeLIne} from './scheduleTimeLine.svg';
 export {default as Close} from './close.svg';
 export {default as Invite} from './invitedAcademy.svg';
+export {default as Notepad} from './notepad.svg';
 export {default as m_Finder} from './menu_finder.svg';
 export {default as m_Daily} from './menu_daily.svg';
 export {default as m_Weekly} from './menu_weekly.svg';

@@ -1,18 +1,20 @@
 import {useCallback, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 
+import DraggableFAB from '#components/common/Animation/Floator.tsx';
 import DatePicker from '#components/common/Calendar/DatePicker.tsx';
-import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import CText from '#components/common/CustomText/CText.tsx';
 import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
-import AcademySelector from '#components/Schedule/AcademySelector.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
+import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
 import {ACCESS_TOKEN} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
@@ -90,14 +92,22 @@ const DailySchedule = ({
               <View style={styles.container}>
                 {/*<WeeklyCalendar />*/}
                 <DaySchedules />
-                <CButton
-                  text="사유서 목록"
-                  onPress={() => {
-                    navigation.navigate('ReasonStatement');
-                  }}
-                />
               </View>
             </CView>
+            <DraggableFAB>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('ReasonStatement');
+                }}
+                style={styles.btnReason}>
+                <SvgIcon name="Notepad" />
+                <CText
+                  text="사유서"
+                  color={COLORS.lightGray}
+                  fontWeight="700"
+                />
+              </Pressable>
+            </DraggableFAB>
           </CSafeAreaView>
         ) : (
           <Academy navigation={navigation} />
@@ -109,6 +119,17 @@ const DailySchedule = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  btnReason: {
+    gap: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 48,
+    backgroundColor: COLORS.primary,
+    ...BOX_SHADOW,
   },
 });
 export default DailySchedule;

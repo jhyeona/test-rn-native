@@ -84,6 +84,7 @@ const DatePicker = ({
         confirmTextIOS="확인"
         cancelTextIOS="취소"
         locale="ko-KR"
+        style={{zIndex: 1000}}
       />
     </>
   );
