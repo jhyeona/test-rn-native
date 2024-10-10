@@ -6,7 +6,7 @@ import {requestPostGetToken} from '#containers/SignIn/services';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqSignIn} from '#types/user.ts';
-import {setItem, storage} from '#utils/storageHelper.ts';
+import {setItem} from '#utils/storageHelper.ts';
 
 export const useSignIn = () => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);

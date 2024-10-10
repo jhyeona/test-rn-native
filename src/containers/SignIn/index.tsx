@@ -17,6 +17,7 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
+import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {useSignIn} from '#containers/SignIn/hooks/useApi.ts';
 import {errorToCrashlytics, logToCrashlytics} from '#services/firebase.ts';
@@ -80,18 +81,30 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       <CView isInput>
         <KeyboardAvoidingView style={styles.container}>
           <View style={styles.logo}>
-            <CText
-              text="통합 출결 관리 서비스"
-              fontSize={20}
-              fontWeight="600"
-            />
-            <CText text="체크히어" fontSize={40} fontWeight="800" />
-            {(Config.ENV === 'development' || Config.ENV === 'appcenter') && (
-              <Pressable
-                onPress={() => Alert.alert(`baseURL:${Config.BASE_URL}`)}>
-                <CText text={`${Config.ENV}`} />
-              </Pressable>
-            )}
+            <View style={{flexDirection: 'row', gap: 30, alignItems: 'center'}}>
+              <SvgIcon
+                name={
+                  Config.ENV === 'development' || Config.ENV === 'appcenter'
+                    ? 'NewLogoDark'
+                    : 'NewLogo'
+                }
+              />
+              <View>
+                <CText
+                  text="통합 출결 관리 서비스"
+                  fontSize={20}
+                  fontWeight="600"
+                />
+                <CText text="체크히어" fontSize={40} fontWeight="800" />
+                {(Config.ENV === 'development' ||
+                  Config.ENV === 'appcenter') && (
+                  <Pressable
+                    onPress={() => Alert.alert(`baseURL:${Config.BASE_URL}`)}>
+                    <CText text={`${Config.ENV}`} fontSize={20} />
+                  </Pressable>
+                )}
+              </View>
+            </View>
           </View>
           <View style={styles.textInputWrap}>
             <CInput
