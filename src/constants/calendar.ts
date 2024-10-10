@@ -1,6 +1,6 @@
 import {COLORS} from '#constants/colors.ts';
 
-export const FIRST_CELL_WIDTH = 80;
+export const FIRST_CELL_WIDTH = 75;
 
 export const timeTableTheme = {
   cellBorderColor: COLORS.layout,

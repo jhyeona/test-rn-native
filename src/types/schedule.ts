@@ -48,6 +48,7 @@ export interface EventProps {
   eventId: string;
   eventType: 'ENTER' | 'LEAVE' | 'COMEBACK' | 'ATTEND' | 'COMPLETE';
   eventTime: string;
+  baseTime: string;
   status: 'NORMAL' | 'LATE' | 'EARLY';
 }
 

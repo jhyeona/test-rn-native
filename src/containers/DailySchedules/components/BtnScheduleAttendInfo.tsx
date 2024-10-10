@@ -41,7 +41,7 @@ const BtnScheduleAttendInfo = ({
   // 현재 시간별 출결의 활성화 여부
   const updateTimeStatus = useCallback(() => {
     const newStatusList =
-      scheduleData?.scheduleTimeList.map((data, i) => {
+      scheduleData?.scheduleTimeList.map(data => {
         const {isAttendBetween, isAttendAfter, isAttendEnter} =
           allowScheduleTime({
             scheduleData,
@@ -49,7 +49,9 @@ const BtnScheduleAttendInfo = ({
             endTime: data.timeEnd,
           });
         // 시간별 출결의 출석 상태 아이콘
-        const isEntered = !!historyData?.intervalEventList?.[i];
+        const isEntered = historyData?.intervalEventList?.some(
+          item => item?.baseTime === data.timeStart,
+        );
         const status: StatusIconType = isEntered
           ? 'IntervalComplete'
           : isAttendAfter

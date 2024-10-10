@@ -217,7 +217,7 @@ const BtnSchedule = ({
     <>
       {isBtnAvailable &&
         !historyData?.completeEvent &&
-        (!isAllowedAfterEnd ?? !!historyData?.enterEvent) && (
+        (!isAllowedAfterEnd || !!historyData?.enterEvent) && (
           <>
             <View style={styles.checkButtons}>
               <CButton

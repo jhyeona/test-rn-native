@@ -5,7 +5,7 @@ import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/type
 import moment from 'moment';
 import {useRecoilValue} from 'recoil';
 
-import DatePicker from '#components/common/Calendar/DatePickerProps.tsx';
+import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView';
 import CText from '#components/common/CustomText/CText.tsx';
@@ -63,7 +63,7 @@ const ScheduleHistory = ({
       />
       <CView>
         <View style={styles.top}>
-          <DatePicker handleChangeDate={setSelectedDate} />
+          <DatePicker handleDateSelection={setSelectedDate} />
           <View style={{alignItems: 'flex-end'}}>
             <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
             <CText

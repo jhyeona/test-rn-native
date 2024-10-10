@@ -6,7 +6,7 @@ import {useRoute} from '@react-navigation/native';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import moment, {Moment} from 'moment';
 
-import DatePicker from '#components/common/Calendar/DatePickerProps.tsx';
+import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
@@ -203,7 +203,7 @@ const ReasonCreator = ({
           />
           <View style={styles.info}>
             <DatePicker
-              handleChangeDate={handleChangeDate}
+              handleDateSelection={handleChangeDate}
               disabled={disabled}
               defaultDate={reasonDetails?.date}
             />

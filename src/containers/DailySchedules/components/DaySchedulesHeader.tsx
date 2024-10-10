@@ -12,6 +12,7 @@ const DaySchedulesHeader: React.FC = () => {
         <CText
           style={styles.headerText}
           fontSize={16}
+          fontWeight="700"
           color={COLORS.primary}
           text="시간"
         />
@@ -20,8 +21,9 @@ const DaySchedulesHeader: React.FC = () => {
         <CText
           style={styles.headerText}
           fontSize={16}
+          fontWeight="700"
           color={COLORS.primary}
-          text="강의"
+          text="예정강의"
         />
       </View>
     </View>

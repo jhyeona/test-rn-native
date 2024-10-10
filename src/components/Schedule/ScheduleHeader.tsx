@@ -57,11 +57,11 @@ const ScheduleHeader = () => {
             gap: 15,
           }}>
           <BtnToday />
-          <TouchableOpacity onPress={onPressRefreshCalendar}>
-            <View>
-              <SvgIcon name="Refresh" size={24} />
-            </View>
-          </TouchableOpacity>
+          {/*<TouchableOpacity onPress={onPressRefreshCalendar}>*/}
+          {/*  <View>*/}
+          {/*    <SvgIcon name="Refresh" size={24} />*/}
+          {/*  </View>*/}
+          {/*</TouchableOpacity>*/}
         </View>
       </View>
     </View>
@@ -76,8 +76,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 24,
     height: 54,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.layout,
   },
   rowContainer: {
     width: '100%',

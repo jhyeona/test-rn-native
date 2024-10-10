@@ -6,6 +6,7 @@ import moment from 'moment/moment';
 import {useSetRecoilState} from 'recoil';
 
 import TimeTable from '#components/Calendar/TimeTable.tsx';
+import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
@@ -27,9 +28,7 @@ const WeeklySchedules = () => {
       <CView>
         {/*<AcademySelector />*/}
         {/*<TimeTable />*/}
-        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-          <CText text="🐣 오픈 예정 입니다." fontSize={20} />
-        </View>
+        <DatePicker format="YYYY년 MM월 DD일 (dd)" />
       </CView>
     </CSafeAreaView>
   );

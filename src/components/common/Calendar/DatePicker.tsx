@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Pressable} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -9,17 +9,22 @@ import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 
 interface DatePickerProps {
-  handleChangeDate?: (date: Moment) => void;
+  handleDateSelection?: (date: Moment) => void;
+  onDateChange?: Date;
   defaultDate?: string;
   disabled?: boolean;
+  format?: string;
 }
 
 const DatePicker = ({
-  handleChangeDate,
+  handleDateSelection,
+  onDateChange,
   defaultDate,
   disabled,
+  format,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -30,7 +35,7 @@ const DatePicker = ({
   };
 
   const handleConfirm = (date: Date) => {
-    if (handleChangeDate) handleChangeDate(moment(date));
+    if (handleDateSelection) handleDateSelection(moment(date));
     setSelectedDate(date);
     hideDatePicker();
   };
@@ -40,6 +45,12 @@ const DatePicker = ({
       setSelectedDate(new Date(defaultDate));
     }
   }, [defaultDate]);
+
+  useEffect(() => {
+    if (onDateChange && onDateChange !== selectedDate) {
+      setSelectedDate(onDateChange);
+    }
+  }, [onDateChange]);
 
   return (
     <>
@@ -59,7 +70,7 @@ const DatePicker = ({
         onPress={showDatePicker}>
         <CText
           color={disabled ? COLORS.placeholder : 'black'}
-          text={moment(selectedDate).format('YYYY-MM-DD')}
+          text={moment(selectedDate).format(format ?? 'YYYY-MM-DD')}
           style={{paddingRight: 12}}
         />
         <SvgIcon name="CalendarDot" />
