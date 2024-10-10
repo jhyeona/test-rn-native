@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Platform, StyleSheet, View} from 'react-native';
 
 import {UseMutateAsyncFunction} from '@tanstack/react-query';

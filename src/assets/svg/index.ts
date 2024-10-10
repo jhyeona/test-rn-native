@@ -3,6 +3,7 @@ export {default as Calendar} from './calendar.svg';
 export {default as CalendarDot} from './calendarDot.svg';
 export {default as Refresh} from './refresh.svg';
 export {default as DownArrow} from './downArrow.svg';
+export {default as DropDownArrow} from './dropdownArrow.svg';
 export {default as Home} from './home.svg';
 export {default as MapPoint} from './mapPoint.svg';
 export {default as Pencil} from './pencil.svg';
