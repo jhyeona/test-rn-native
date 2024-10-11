@@ -55,6 +55,7 @@ const UserWithdraw = ({
       });
       storage.delete(ACCESS_TOKEN);
       storage.delete(REFRESH_TOKEN);
+      storage.clearAll();
       setIsLogin(false);
     } catch (e: any) {
       console.log(e);

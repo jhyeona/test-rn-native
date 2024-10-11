@@ -22,7 +22,7 @@ const SelectAcademy = ({
 
   return (
     <CSafeAreaView>
-      <Header title="기관 설정" isBack />
+      <Header title="기관 설정" isBack navigation={navigation} />
       <CView style={styles.container}>
         <View style={{gap: 30}}>
           <CText text="일정을 확인할 기관을 선택해 주세요." />
