@@ -13,6 +13,7 @@ interface Props {
   lineHeight?: number;
   style?: StyleProp<TextStyle>;
   lineBreak?: boolean;
+  numberOfLines?: number;
 }
 const CText = (props: Props) => {
   const {
@@ -23,6 +24,7 @@ const CText = (props: Props) => {
     color,
     style,
     lineBreak,
+    numberOfLines,
   } = props;
 
   const realFontSize = IS_ANDROID ? fontSize - 1 : fontSize;
@@ -60,6 +62,8 @@ const CText = (props: Props) => {
   };
   return (
     <Text
+      numberOfLines={numberOfLines}
+      ellipsizeMode="tail"
       textBreakStrategy={lineBreak ? 'highQuality' : 'simple'}
       lineBreakStrategyIOS={lineBreak ? 'hangul-word' : 'none'}
       style={[

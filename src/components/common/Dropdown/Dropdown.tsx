@@ -63,7 +63,7 @@ const Dropdown = (props: Props) => {
   }, [items, disabled]);
 
   return (
-    <>
+    <View style={{position: 'relative'}}>
       <Pressable
         style={[
           styles.container,
@@ -102,7 +102,7 @@ const Dropdown = (props: Props) => {
           ))}
         </ScrollView>
       )}
-    </>
+    </View>
   );
 };
 
