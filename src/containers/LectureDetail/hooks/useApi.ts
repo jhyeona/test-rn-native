@@ -3,23 +3,23 @@ import {useEffect} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
-import {requestGetEventHistory} from '#containers/ScheduleHistory/services';
+import {requestGetLectureInfo} from '#containers/LectureDetail/services';
 import GlobalState from '#recoil/Global';
-import {ReqGetScheduleHistory} from '#types/schedule.ts';
+import {GetScheduleHistoryProps} from '#types/schedule.ts';
 
-export const useGetHistory = (payload: ReqGetScheduleHistory) => {
+export const useGetLectureInfo = (payload: GetScheduleHistoryProps) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const {data, refetch, fetchStatus, status} = useQuery({
-    queryKey: ['getHistory', payload],
+    queryKey: ['getLectureInfo', payload],
     queryFn: async () => {
-      return requestGetEventHistory(payload);
+      return requestGetLectureInfo(payload);
     },
-    enabled: !!payload.academyId,
+    enabled: !!payload.scheduleId,
   });
 
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [fetchStatus, setIsLoading]);
 
-  return {getHistory: data, refetchHistory: refetch};
+  return {lectureInfo: data, refetchHistory: refetch};
 };

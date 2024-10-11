@@ -1,6 +1,7 @@
 import {COLORS} from '#constants/colors.ts';
 
-export const FIRST_CELL_WIDTH = 75;
+export const DAY_SCHEDULE_FIRST_CELL_WIDTH = 75; // 일일 캘린더
+export const WEEKLY_SCHEDULE_LEFT_WIDTH = 50; // 주간 캘린더
 
 export const timeTableTheme = {
   cellBorderColor: COLORS.layout,
