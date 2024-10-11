@@ -44,7 +44,7 @@ interface SignUpDataProps {
   password: string;
   rePassword: string;
 }
-const TEST_PHONE = '01072337376';
+const TEST_PHONE = '00100010001';
 
 const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
@@ -135,7 +135,6 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       birth: signUpData.birthday.substring(2),
       telecom: signUpData.telecom,
     };
-
     try {
       const checkPhoneResponse = await signUpCheckPhone(signUpData.phone);
       const tasResponse = await signUpTAS(payload);

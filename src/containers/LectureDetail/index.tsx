@@ -1,4 +1,3 @@
-import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
@@ -11,8 +10,7 @@ import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {getLectureInfo} from '#hooks/useSchedule.ts';
-import {ScheduleHistoryDataProps} from '#types/schedule.ts';
+import {useGetLectureInfo} from '#containers/LectureDetail/hooks/useApi.ts';
 
 interface Props {
   navigation: BottomTabNavigationHelpers;
@@ -25,24 +23,11 @@ const LectureDetail = (props: Props) => {
   const {navigation} = props;
   const route = useRoute<RouteProp<RootTabParamList, 'LectureDetail'>>();
   const {attendeeId, scheduleId} = route.params;
-  const [lectureData, setLectureData] = useState<
-    ScheduleHistoryDataProps | undefined
-  >(undefined);
 
-  // const onPressHistory = () => {
-  //   navigation.navigate('ScheduleHistory');
-  // };
-  const setData = async () => {
-    const data = await getLectureInfo({
-      attendeeId: attendeeId,
-      scheduleId: scheduleId,
-    });
-    setLectureData(data);
-  };
-
-  useEffect(() => {
-    setData().then();
-  }, []);
+  const {lectureInfo} = useGetLectureInfo({
+    attendeeId: attendeeId,
+    scheduleId: scheduleId,
+  });
 
   return (
     <CSafeAreaView>
@@ -58,7 +43,7 @@ const LectureDetail = (props: Props) => {
               <CText text="강의명" fontWeight="600" />
             </View>
             <View style={[styles.cell, styles.body]}>
-              <CText text={lectureData?.lecture.lectureName ?? ''} />
+              <CText text={lectureInfo?.lecture.lectureName ?? ''} />
             </View>
           </View>
           <View style={styles.row}>
@@ -67,9 +52,9 @@ const LectureDetail = (props: Props) => {
             </View>
             <View style={[styles.cell, styles.body]}>
               <CText
-                text={`${moment(lectureData?.lecture.lectureStartDate).format(
+                text={`${moment(lectureInfo?.lecture.lectureStartDate).format(
                   'YYYY.MM.DD',
-                )} ~ ${moment(lectureData?.lecture.lectureEndDate).format(
+                )} ~ ${moment(lectureInfo?.lecture.lectureEndDate).format(
                   'YYYY.MM.DD',
                 )}`}
               />

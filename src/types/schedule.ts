@@ -8,12 +8,6 @@ export interface GetScheduleHistoryProps {
   scheduleId?: string;
 }
 
-export interface GetScheduleHistoryWeekProps {
-  academyId: string;
-  startDate: string;
-  endDate: string;
-}
-
 export interface ScheduleTimeProps {
   timeStart: string;
   timeEnd: string;
@@ -48,6 +42,7 @@ export interface EventProps {
   eventId: string;
   eventType: 'ENTER' | 'LEAVE' | 'COMEBACK' | 'ATTEND' | 'COMPLETE';
   eventTime: string;
+  baseTime: string;
   status: 'NORMAL' | 'LATE' | 'EARLY';
 }
 
@@ -80,15 +75,6 @@ export interface ResSchedulePeriodDataProps {
     schedule: ScheduleDefaultProps;
     eventList: Array<EventProps>;
   }>;
-}
-
-export interface ScheduleHistoryWeekDataProps
-  extends Pick<
-    ScheduleDefaultProps,
-    Exclude<keyof ScheduleDefaultProps, 'eventList'>
-  > {
-  academyId: string;
-  historyList: Array<ScheduleDefaultProps & {eventList: Array<EventProps>}>;
 }
 
 export interface PostEventProps {

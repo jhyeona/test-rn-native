@@ -1,17 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import moment from 'moment';
 import {useRecoilValue} from 'recoil';
 
-import DatePicker from '#components/common/Calendar/DatePickerProps.tsx';
+import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {useGetLectureList} from '#containers/DailySchedules/hooks/useApi.ts';
 import RefreshHistory from '#containers/ScheduleHistory/components/RefreshHistory.tsx';
 import {useGetHistory} from '#containers/ScheduleHistory/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
@@ -63,7 +62,7 @@ const ScheduleHistory = ({
       />
       <CView>
         <View style={styles.top}>
-          <DatePicker handleChangeDate={setSelectedDate} />
+          <DatePicker handleDateSelection={setSelectedDate} />
           <View style={{alignItems: 'flex-end'}}>
             <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
             <CText

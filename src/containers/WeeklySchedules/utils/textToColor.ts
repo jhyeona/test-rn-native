@@ -9,7 +9,7 @@ const colors = [
   {text: COLORS.dark.orange, bg: COLORS.light.orange},
 ];
 
-// 해시 값을 계산하는 함수
+// 해시 값을 계산
 const generateHash = (text: string): number => {
   let hash = 0;
   for (let i = 0; i < text.length; i++) {
@@ -18,7 +18,7 @@ const generateHash = (text: string): number => {
   return Math.abs(hash); // 음수일 수 있으므로 절대값으로 변환
 };
 
-// 입력된 텍스트에 따라 항상 같은 색상을 선택하는 함수
+// 입력된 텍스트에 따라 항상 같은 색상을 선택
 export const getRandomColor = (text: string): {text: string; bg: string} => {
   const hash = generateHash(text); // 텍스트로 해시 값 생성
   const index = hash % colors.length; // 해시 값을 색상 배열 크기로 나눈 나머지로 인덱스 계산

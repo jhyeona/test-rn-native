@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useState} from 'react';
 import {View} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';

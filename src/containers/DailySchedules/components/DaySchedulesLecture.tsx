@@ -5,6 +5,7 @@ import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import moment from 'moment/moment';
 
+import RotatingContainer from '#components/common/Animation/Rotator.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import StatusInfoContainer, {
@@ -28,6 +29,7 @@ const DaySchedulesLecture = ({
   scheduleData?: ScheduleDefaultProps;
   style?: StyleProp<ViewStyle>;
 }) => {
+  const [isDetailShown, setIsDetailSown] = useState(true);
   const [isBtnAvailable, setBtnAvailable] = useState(false);
   const [isAllowedAfterEnd, setIsAllowedAfterEnd] = useState(false);
   const [scheduleStatus, setScheduleStatus] = useState<ScheduleStatusProps>({
@@ -37,6 +39,11 @@ const DaySchedulesLecture = ({
 
   const formattedDate = (date?: string) => {
     return date ? moment(date).format('YYYY.MM.DD') : '-';
+  };
+
+  const onPressLectureArrow = (isRotated: boolean) => {
+    // console.log(isRotated);
+    setIsDetailSown(isRotated);
   };
 
   // 현재시간을 기준으로 강의 진행 상태 표시
@@ -94,36 +101,53 @@ const DaySchedulesLecture = ({
 
   return (
     <View style={[style, styles.container]}>
-      <CText
-        text={scheduleData?.lecture.lectureName ?? '-'}
-        fontSize={16}
-        fontWeight="600"
-      />
-      <CText
+      <View
+        style={{
+          gap: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <CText // 강의 명
+          text={scheduleData?.lecture.lectureName ?? '-'}
+          fontSize={16}
+          fontWeight="600"
+          lineBreak
+          style={{flex: 1}}
+        />
+        <RotatingContainer
+          onPress={onPressLectureArrow}
+          style={{marginTop: 6}}
+          duration={350}>
+          <SvgIcon name="DropDownArrow" />
+        </RotatingContainer>
+      </View>
+      <CText // 강의 기간
         text={`${formattedDate(
           scheduleData?.lecture.lectureStartDate,
-        )}~${formattedDate(scheduleData?.lecture.lectureEndDate)}`}
+        )} ~ ${formattedDate(scheduleData?.lecture.lectureEndDate)}`}
         fontSize={13}
       />
       <View style={styles.infoContainer}>
         <View style={styles.placeInfo}>
           <SvgIcon name="MapPoint" size={17} />
-          <CText
+          <CText // 강의 장소
             style={{flex: 1}}
             lineBreak
             text={scheduleData?.lecture.lecturePlaceName ?? '-'}
           />
         </View>
-        <StatusInfoContainer
+        <StatusInfoContainer // 현재 강의 상태 (강의 중, 강의 종료, 강의 예정)
           colorType={scheduleStatus.colorType}
           text={scheduleStatus.text}
         />
       </View>
-      <BtnSchedule
-        scheduleData={scheduleData}
-        isBtnAvailable={isBtnAvailable}
-        isAllowedAfterEnd={isAllowedAfterEnd}
-      />
+      {isDetailShown && (
+        <BtnSchedule // 입실/퇴실/외출 버튼 + 시간별 출결의 시간 리스트
+          scheduleData={scheduleData}
+          isBtnAvailable={isBtnAvailable}
+          isAllowedAfterEnd={isAllowedAfterEnd}
+        />
+      )}
     </View>
   );
 };

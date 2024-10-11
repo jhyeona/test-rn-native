@@ -18,7 +18,6 @@ const Icon = ({
   stroke,
   ...props
 }: IconProps) => {
-  // eslint-disable-next-line import/namespace
   const SvgIcon = Icons[name];
 
   const width = _width ?? size;
@@ -28,7 +27,14 @@ const Icon = ({
     ...(height !== undefined ? {height} : {}),
   };
 
-  return <SvgIcon {...props} {...sizeProps} fill={color} stroke={stroke} />;
+  return (
+    <SvgIcon
+      {...props}
+      {...sizeProps}
+      {...(color ? {fill: color} : {})}
+      {...(stroke ? {stroke: stroke} : {})}
+    />
+  );
 };
 
 export default Icon;

@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import CText from '#components/common/CustomText/CText.tsx';
-import {FIRST_CELL_WIDTH} from '#constants/calendar.ts';
+import {DAY_SCHEDULE_FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
 
 const DaySchedulesHeader: React.FC = () => {
@@ -12,6 +12,7 @@ const DaySchedulesHeader: React.FC = () => {
         <CText
           style={styles.headerText}
           fontSize={16}
+          fontWeight="700"
           color={COLORS.primary}
           text="시간"
         />
@@ -20,8 +21,9 @@ const DaySchedulesHeader: React.FC = () => {
         <CText
           style={styles.headerText}
           fontSize={16}
+          fontWeight="700"
           color={COLORS.primary}
-          text="강의"
+          text="예정강의"
         />
       </View>
     </View>
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
   },
   headerCellFirst: {
     flex: 0,
-    width: FIRST_CELL_WIDTH,
+    width: DAY_SCHEDULE_FIRST_CELL_WIDTH,
     borderRightWidth: 1,
     borderColor: COLORS.lineBlue,
   },

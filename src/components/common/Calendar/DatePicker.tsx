@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Pressable} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -9,17 +9,24 @@ import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 
 interface DatePickerProps {
-  handleChangeDate?: (date: Moment) => void;
-  defaultDate?: string;
+  handleDateSelection?: (date: Moment) => void; // date 반환
+  onDateChange?: Date; // 해당 값으로 값 변경
+  defaultDate?: string; // 시작 시 할당값
+  dateText?: string; // 선택된 값과 별개로 표시할 값
+  format?: string; // 날짜 형식
   disabled?: boolean;
 }
 
 const DatePicker = ({
-  handleChangeDate,
+  handleDateSelection,
+  onDateChange,
   defaultDate,
   disabled,
+  format,
+  dateText,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -30,7 +37,7 @@ const DatePicker = ({
   };
 
   const handleConfirm = (date: Date) => {
-    if (handleChangeDate) handleChangeDate(moment(date));
+    if (handleDateSelection) handleDateSelection(moment(date));
     setSelectedDate(date);
     hideDatePicker();
   };
@@ -40,6 +47,12 @@ const DatePicker = ({
       setSelectedDate(new Date(defaultDate));
     }
   }, [defaultDate]);
+
+  useEffect(() => {
+    if (onDateChange && onDateChange !== selectedDate) {
+      setSelectedDate(onDateChange);
+    }
+  }, [onDateChange]);
 
   return (
     <>
@@ -59,7 +72,7 @@ const DatePicker = ({
         onPress={showDatePicker}>
         <CText
           color={disabled ? COLORS.placeholder : 'black'}
-          text={moment(selectedDate).format('YYYY-MM-DD')}
+          text={dateText ?? moment(selectedDate).format(format ?? 'YYYY-MM-DD')}
           style={{paddingRight: 12}}
         />
         <SvgIcon name="CalendarDot" />
@@ -73,6 +86,7 @@ const DatePicker = ({
         confirmTextIOS="확인"
         cancelTextIOS="취소"
         locale="ko-KR"
+        style={{zIndex: 1000}}
       />
     </>
   );

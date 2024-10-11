@@ -15,7 +15,7 @@ import {
 
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
-import {COLORS} from '#constants/colors.ts';
+import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
 
 export interface ItemProps {
   label: string;
@@ -131,17 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: COLORS.layout,
     borderRadius: 7,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 6, // = boxShadow
-      },
-    }),
+    ...BOX_SHADOW,
   },
   optionsContentContainer: {
     paddingVertical: 15,

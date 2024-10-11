@@ -50,13 +50,12 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>([]);
 
   const handleCheckboxChange = (id: string) => {
-    setCheckboxState(
-      prevState =>
-        prevState?.map(item =>
-          item.academy.academyId === id
-            ? {...item, isChecked: !item.isChecked}
-            : item,
-        ),
+    setCheckboxState(prevState =>
+      prevState?.map(item =>
+        item.academy.academyId === id
+          ? {...item, isChecked: !item.isChecked}
+          : item,
+      ),
     );
   };
 

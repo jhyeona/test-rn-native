@@ -68,10 +68,7 @@ export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
   );
 
   useEffect(() => {
-    setIsLoading(true);
-    if (status === 'success' || status === 'error') {
-      setIsLoading(false);
-    }
+    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);
 
   return {historyData: data, refetchHistoryData: refetch};
