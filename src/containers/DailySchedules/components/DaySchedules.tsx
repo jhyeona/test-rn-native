@@ -4,7 +4,7 @@ import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 import {useRecoilValue} from 'recoil';
 
 import NoData from '#components/common/NoData';
-import {FIRST_CELL_WIDTH} from '#constants/calendar.ts';
+import {DAY_SCHEDULE_FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
 import DaySchedulesHeader from '#containers/DailySchedules/components/DaySchedulesHeader.tsx';
 import DaySchedulesLecture from '#containers/DailySchedules/components/DaySchedulesLecture.tsx';
@@ -31,7 +31,7 @@ const DaySchedules = () => {
       refetchDaySchedule().then(() => {
         setIsLoading(false);
       });
-    }, 50);
+    }, 100);
   };
 
   // 시간/강의 컬럼 데이터
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   cellFirst: {
     paddingHorizontal: 0,
     flex: 0,
-    width: FIRST_CELL_WIDTH,
+    width: DAY_SCHEDULE_FIRST_CELL_WIDTH,
     alignItems: 'center',
     borderRightWidth: 1,
     borderColor: COLORS.lineBlue,

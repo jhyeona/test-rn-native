@@ -24,6 +24,8 @@ import scheduleState from '#recoil/Schedule';
 import {commonStyles} from '#utils/common.ts';
 import {getItem} from '#utils/storageHelper.ts';
 
+const DATE_FORMAT = 'YYYY년 MM월 DD일 (dd)';
+
 const DailySchedule = ({
   navigation,
 }: {
@@ -83,14 +85,13 @@ const DailySchedule = ({
             <CView style={{display: 'flex', gap: 12}}>
               <DatePicker
                 onDateChange={new Date(moment(date).format('YYYY-MM-DD'))}
-                format="YYYY년 MM월 DD일 (dd)"
+                format={DATE_FORMAT}
                 handleDateSelection={selectedDate => {
                   setSelectedDate(prev => ({...prev, date: selectedDate}));
                 }}
               />
               {/*<AcademySelector />*/}
               <View style={styles.container}>
-                {/*<WeeklyCalendar />*/}
                 <DaySchedules />
               </View>
             </CView>
@@ -101,11 +102,7 @@ const DailySchedule = ({
                 }}
                 style={styles.btnReason}>
                 <SvgIcon name="Notepad" />
-                <CText
-                  text="사유서"
-                  color={COLORS.lightGray}
-                  fontWeight="700"
-                />
+                <CText text="사유서" color={COLORS.lightGray} />
               </Pressable>
             </DraggableFAB>
           </CSafeAreaView>

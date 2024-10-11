@@ -11,5 +11,5 @@ export const useGetAttendeeId = () => {
   const attendee = userData?.studentList.filter(val => {
     return val.academy.academyId === selectAcademyId;
   });
-  return attendee?.[0].attendeeId ?? '';
+  return attendee?.[0]?.attendeeId ?? '';
 };

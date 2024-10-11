@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import CText from '#components/common/CustomText/CText.tsx';
-import {FIRST_CELL_WIDTH} from '#constants/calendar.ts';
+import {DAY_SCHEDULE_FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
 
 const DaySchedulesHeader: React.FC = () => {
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   headerCellFirst: {
     flex: 0,
-    width: FIRST_CELL_WIDTH,
+    width: DAY_SCHEDULE_FIRST_CELL_WIDTH,
     borderRightWidth: 1,
     borderColor: COLORS.lineBlue,
   },
