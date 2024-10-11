@@ -9,11 +9,12 @@ import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 
 interface DatePickerProps {
-  handleDateSelection?: (date: Moment) => void;
-  onDateChange?: Date;
-  defaultDate?: string;
+  handleDateSelection?: (date: Moment) => void; // date 반환
+  onDateChange?: Date; // 해당 값으로 값 변경
+  defaultDate?: string; // 시작 시 할당값
+  dateText?: string; // 선택된 값과 별개로 표시할 값
+  format?: string; // 날짜 형식
   disabled?: boolean;
-  format?: string;
 }
 
 const DatePicker = ({
@@ -22,6 +23,7 @@ const DatePicker = ({
   defaultDate,
   disabled,
   format,
+  dateText,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -70,7 +72,7 @@ const DatePicker = ({
         onPress={showDatePicker}>
         <CText
           color={disabled ? COLORS.placeholder : 'black'}
-          text={moment(selectedDate).format(format ?? 'YYYY-MM-DD')}
+          text={dateText ?? moment(selectedDate).format(format ?? 'YYYY-MM-DD')}
           style={{paddingRight: 12}}
         />
         <SvgIcon name="CalendarDot" />

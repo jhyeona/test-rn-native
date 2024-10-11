@@ -13,10 +13,10 @@ export const COLORS = {
 
   // calendar event color
   light: {
-    red: '#FF3B3B1A',
-    orange: '#FF961B1A',
-    green: '#00BA341A',
-    blue: '#0085FF1A',
+    red: '#FDEAEA',
+    orange: '#FFF5EA',
+    green: '#E5F8EB',
+    blue: '#E5F3FF',
     gray: '#E8E8E8',
   },
   dark: {
