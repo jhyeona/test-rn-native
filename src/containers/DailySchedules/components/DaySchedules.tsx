@@ -56,12 +56,17 @@ const DaySchedules = () => {
       onRefresh={onRefresh}
       contentContainerStyle={[
         styles.scheduleContent,
-        dayScheduleData?.scheduleList?.length === 0 && {flexGrow: 1},
+        dayScheduleData?.scheduleList?.length === 0 && {
+          flexGrow: 1,
+          marginBottom: 20,
+        },
       ]}
       ListHeaderComponent={<DaySchedulesHeader />}
       renderItem={renderItem}
       data={dayScheduleData?.scheduleList ?? []}
-      ListEmptyComponent={<NoData fullHeight message="✏️ 강의가 없습니다." />}
+      ListEmptyComponent={
+        <NoData fullHeight message="✏️ 강의 일정이 없습니다." />
+      }
     />
   );
 };

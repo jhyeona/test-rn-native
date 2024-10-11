@@ -56,7 +56,7 @@ const GlobalToast = () => {
             width: '80%',
             alignSelf: 'center',
             alignItems: 'center',
-            backgroundColor: COLORS.dark.gray,
+            backgroundColor: '#00000060',
             opacity: isVisible ? 1 : 0,
             paddingVertical: 15,
             paddingHorizontal: 20,

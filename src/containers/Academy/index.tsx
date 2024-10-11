@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {useQueryClient} from '@tanstack/react-query';
@@ -89,6 +89,10 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
         title: '안내',
         message: '선택한 기관이 추가되었습니다.',
       });
+
+      if (prevScreenName) {
+        navigation.goBack();
+      }
     } catch (e: any) {
       console.log('Error:', e);
     }
@@ -108,7 +112,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
       <Header
-        title="가입기관 선택"
+        title="기관 추가"
         isBack={!!prevScreenName}
         navigation={navigation}
       />
@@ -130,21 +134,28 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                     ]}
                     key={index}>
                     <CheckboxCircle
+                      circleSize={16}
                       isChecked={val.isChecked}
                       onValueChangeHandler={() =>
                         handleCheckboxChange(val.academy.academyId)
-                      }
-                      labelMessage={`${val.academy.name} / ${moment(
-                        val.time,
-                      ).format('YYYY-MM-DD')}`}
-                      fontSize={16}
-                    />
+                      }>
+                      <View style={styles.academyItem}>
+                        <CText
+                          numberOfLines={2}
+                          text={val.academy.name}
+                          style={{flex: 1, marginHorizontal: 10}}
+                          lineBreak
+                        />
+                        <CText text={moment(val.time).format('YYYY.MM.DD')} />
+                      </View>
+                    </CheckboxCircle>
                   </View>
                 );
               })}
             </ScrollView>
             <CButton
-              text="선택하기"
+              text="추가하기"
+              disabled={!checkboxState.some(item => item.isChecked)}
               onPress={onPressSelectAcademy}
               buttonStyle={{
                 alignSelf: 'center',
@@ -200,6 +211,12 @@ const styles = StyleSheet.create({
   isCheckedContainer: {
     backgroundColor: COLORS.light.blue,
     borderColor: COLORS.primary,
+  },
+  academyItem: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 
