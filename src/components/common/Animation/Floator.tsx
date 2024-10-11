@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
@@ -22,7 +22,7 @@ const DraggableFAB = ({children}: {children: ReactNode}) => {
     if (x >= -60 && x <= 20) {
       translateX.value = x;
     }
-    if (y >= -200 && y <= 10) {
+    if (y >= -250 && y <= 10) {
       translateY.value = y;
     }
   };
@@ -39,7 +39,7 @@ const DraggableFAB = ({children}: {children: ReactNode}) => {
   return (
     <PanGestureHandler onGestureEvent={panGestureEvent}>
       <Animated.View style={[styles.fab, animatedStyle]}>
-        {children}
+        <View style={styles.childrenWrapper}>{children}</View>
       </Animated.View>
     </PanGestureHandler>
   );
@@ -49,7 +49,12 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     bottom: 20,
-    right: 20,
+    left: 0,
+    right: 0,
+  },
+  childrenWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
