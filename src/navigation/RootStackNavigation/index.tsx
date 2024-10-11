@@ -19,6 +19,7 @@ import PrivacyPolicy from '#containers/PrivacyPolicy';
 import ReasonCreator from '#containers/ReasonCreator';
 import ReasonStatement from '#containers/ReasonStatement';
 import ScheduleHistory from '#containers/ScheduleHistory';
+import SelectAcademy from '#containers/SelectAcademy';
 import SignIn from '#containers/SignIn';
 import SignUp from '#containers/SignUp';
 import UpdatePassword from '#containers/UpdatePassword';
@@ -137,6 +138,11 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="Academy"
               component={Academy}
+              options={{headerShown: false}}
+            />
+            <RootStack.Screen
+              name="SelectAcademy"
+              component={SelectAcademy}
               options={{headerShown: false}}
             />
             <RootStack.Screen
