@@ -63,6 +63,7 @@ const DatePicker = ({
           alignItems: 'center',
           paddingVertical: 10,
           paddingHorizontal: 15,
+          minWidth: 140,
           borderWidth: 1,
           borderColor: COLORS.layout,
           borderRadius: 7,

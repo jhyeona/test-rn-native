@@ -78,6 +78,8 @@ const Dropdown = (props: Props) => {
         <View style={[styles.dropdownButton]}>
           {option?.label?.length ? (
             <CText
+              style={{flex: 1}}
+              numberOfLines={1}
               text={option.label}
               fontSize={fontSize ?? 14}
               color={isDisabled ? COLORS.placeholder : 'black'}
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
     zIndex: 99,
   },
   dropdownButton: {
+    gap: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
