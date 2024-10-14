@@ -58,7 +58,6 @@ const FindPassword = ({
     <CSafeAreaView>
       <Header title="비밀번호 재발급" navigation={navigation} isBack />
       <CView isInput>
-        <View style={{marginTop: 20}} />
         <CInput
           title="휴대폰 번호"
           inputValue={phone}
