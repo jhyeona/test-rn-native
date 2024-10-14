@@ -12,7 +12,6 @@ import Config from 'react-native-config';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 
-import {Logo} from '#assets/svg';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
@@ -119,7 +118,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               inputValue={id}
               setInputValue={onChangeId}
               isWarning={isIdWarning}
-              errorMessage="올바른 휴대폰 번호를 입력해 주세요."
+              errorMessage="휴대폰 번호를 확인해주세요."
               inputMode="numeric"
               maxLength={11}
             />
@@ -128,7 +127,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               inputValue={password}
               setInputValue={onChangePassword}
               isWarning={isPasswordWarning}
-              errorMessage="올바른 비밀번호를 입력해 주세요."
+              errorMessage="비밀번호를 확인해주세요."
               secureTextEntry
             />
             <CButton text="로그인하기" onPress={onPressSignIn} />

@@ -30,6 +30,11 @@ const UpdatePassword = ({
       !checkPassword(rePassword) ||
       !isSamePassword
     ) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '비밀번호는 영문, 숫자 혼합 8자리 이상이어야 합니다.',
+      });
       return;
     }
     try {
@@ -63,7 +68,6 @@ const UpdatePassword = ({
       <Header title="비밀번호 변경" isBack navigation={navigation} />
       <CView isInput>
         <CInput
-          title=""
           inputValue={password}
           setInputValue={setPassword}
           placeholder="영문, 숫자 혼합 8자리 이상"
@@ -74,7 +78,6 @@ const UpdatePassword = ({
           <CText text="비밀번호 변경" fontSize={20} />
         </CInput>
         <CInput
-          title=""
           inputValue={rePassword}
           setInputValue={setRePassword}
           placeholder="한 번 더 입력해주세요."
