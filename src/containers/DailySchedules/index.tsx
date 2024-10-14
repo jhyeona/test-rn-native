@@ -15,7 +15,7 @@ import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
-import {ACCESS_TOKEN} from '#constants/common.ts';
+import {ACCESS_TOKEN, DATE_FORMAT} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
 import {useGetUserInfo} from '#hooks/useUser.ts';
@@ -24,7 +24,7 @@ import scheduleState from '#recoil/Schedule';
 import {commonStyles} from '#utils/common.ts';
 import {getItem} from '#utils/storageHelper.ts';
 
-const DATE_FORMAT = 'YYYY년 MM월 DD일 (dd)';
+const DATE_VIEW_FORMAT = 'YYYY년 MM월 DD일 (dd)';
 
 const DailySchedule = ({
   navigation,
@@ -84,8 +84,8 @@ const DailySchedule = ({
             <ScheduleHeader />
             <CView style={{display: 'flex', gap: 12}}>
               <DatePicker
-                onDateChange={new Date(moment(date).format('YYYY-MM-DD'))}
-                format={DATE_FORMAT}
+                onDateChange={new Date(moment(date).format(DATE_FORMAT))}
+                format={DATE_VIEW_FORMAT}
                 handleDateSelection={selectedDate => {
                   setSelectedDate(prev => ({...prev, date: selectedDate}));
                 }}
@@ -116,6 +116,7 @@ const DailySchedule = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 10,
   },
   btnReason: {
     gap: 5,

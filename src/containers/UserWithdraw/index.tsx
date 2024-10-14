@@ -12,13 +12,11 @@ import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import TextList from '#components/common/TextList/TextList.tsx';
-import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
 import {withdrawPolicyList} from '#constants/policy.ts';
-import {deleteUser} from '#hooks/useUser.ts';
+import {useDeleteUser} from '#containers/UserWithdraw/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {errorToCrashlytics} from '#services/firebase.ts';
 import {checkPassword} from '#utils/regExpHelper.ts';
-import {storage} from '#utils/storageHelper.ts';
 
 const UserWithdraw = ({
   navigation,
@@ -26,10 +24,11 @@ const UserWithdraw = ({
   navigation: NativeStackNavigationHelpers;
 }) => {
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
-  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState('');
   const [isPasswordWarning, setIsPasswordWarning] = useState(false);
+
+  const {deleteUser} = useDeleteUser();
 
   const onPressWithdraw = () => {
     if (!password) {
@@ -48,16 +47,7 @@ const UserWithdraw = ({
   const withdrawConfirm = async () => {
     try {
       await deleteUser({password: password});
-      setGlobalModalState({
-        isVisible: true,
-        title: '안내',
-        message: '탈퇴 처리 되었습니다.',
-      });
-      storage.delete(ACCESS_TOKEN);
-      storage.delete(REFRESH_TOKEN);
-      setIsLogin(false);
     } catch (e: any) {
-      console.log(e);
       if (e.code === '4000') {
         setIsPasswordWarning(true);
         setGlobalModalState({
@@ -70,7 +60,7 @@ const UserWithdraw = ({
       setGlobalModalState({
         isVisible: true,
         title: '오류',
-        message: '탈퇴에 실패했습니다.',
+        message: e.message ?? '탈퇴에 실패했습니다.',
       });
       errorToCrashlytics(e, 'requestUserDelete');
     }

@@ -36,3 +36,6 @@ export const STATUS_STYLE_MAP: Record<
 
 export const MAX_FILE_SIZE = 1024 * 1024 * 3; // 3MB
 export const APP_VERSION = version;
+
+export const DATE_FORMAT = 'YYYY-MM-DD';
+export const REQ_DATE_FORMAT = 'YYYYMMDD';

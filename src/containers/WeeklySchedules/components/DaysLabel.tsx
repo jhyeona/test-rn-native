@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
   },
   isToday: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    top: -2,
+    right: 2,
     width: 7,
     height: 7,
     borderRadius: 80,

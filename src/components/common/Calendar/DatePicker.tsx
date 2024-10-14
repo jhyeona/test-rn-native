@@ -7,6 +7,7 @@ import moment, {Moment} from 'moment';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {DATE_FORMAT} from '#constants/common.ts';
 
 interface DatePickerProps {
   handleDateSelection?: (date: Moment) => void; // date 반환
@@ -63,6 +64,7 @@ const DatePicker = ({
           alignItems: 'center',
           paddingVertical: 10,
           paddingHorizontal: 15,
+          minWidth: 140,
           borderWidth: 1,
           borderColor: COLORS.layout,
           borderRadius: 7,
@@ -72,7 +74,7 @@ const DatePicker = ({
         onPress={showDatePicker}>
         <CText
           color={disabled ? COLORS.placeholder : 'black'}
-          text={dateText ?? moment(selectedDate).format(format ?? 'YYYY-MM-DD')}
+          text={dateText ?? moment(selectedDate).format(format ?? DATE_FORMAT)}
           style={{paddingRight: 12}}
         />
         <SvgIcon name="CalendarDot" />

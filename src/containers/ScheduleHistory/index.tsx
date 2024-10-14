@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import moment from 'moment';
@@ -11,7 +11,7 @@ import CView from '#components/common/CommonView/CView';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
-import RefreshHistory from '#containers/ScheduleHistory/components/RefreshHistory.tsx';
+import {REQ_DATE_FORMAT} from '#constants/common.ts';
 import {useGetHistory} from '#containers/ScheduleHistory/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {EventProps} from '#types/schedule.ts';
@@ -25,10 +25,14 @@ const ScheduleHistory = ({
 
   const [selectedDate, setSelectedDate] = useState(moment());
 
-  const {getHistory, refetchHistory} = useGetHistory({
+  const {
+    getHistory: historyData,
+    refetchHistory,
+    isLoading,
+  } = useGetHistory({
     academyId: selectedAcademy,
-    startDate: selectedDate.format('YYYYMMDD'),
-    endDate: selectedDate.format('YYYYMMDD'),
+    startDate: selectedDate.format(REQ_DATE_FORMAT),
+    endDate: selectedDate.format(REQ_DATE_FORMAT),
   });
 
   const eventStatus = (eventList: Array<EventProps>) => {
@@ -55,23 +59,22 @@ const ScheduleHistory = ({
 
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
-      <Header
-        title="출석 기록"
-        navigation={navigation}
-        rightChildren={<RefreshHistory handleRefresh={refetchHistory} />}
-      />
+      <Header title="출석 기록" navigation={navigation} />
       <CView>
-        <View style={styles.top}>
-          <DatePicker handleDateSelection={setSelectedDate} />
-          <View style={{alignItems: 'flex-end'}}>
-            <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
-            <CText
-              color={COLORS.placeholder}
-              text="N/P: 지각, 결석 및 미퇴실"
-            />
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetchHistory} />
+          }>
+          <View style={styles.top}>
+            <DatePicker handleDateSelection={setSelectedDate} />
+            <View style={{alignItems: 'flex-end'}}>
+              <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
+              <CText
+                color={COLORS.placeholder}
+                text="N/P: 지각, 결석 및 미퇴실"
+              />
+            </View>
           </View>
-        </View>
-        <ScrollView>
           <View style={styles.table}>
             <View style={[styles.row, styles.tableHeader]}>
               <View style={[styles.cell, styles.firstCell]}>
@@ -87,8 +90,8 @@ const ScheduleHistory = ({
                 <CText text="퇴실" fontWeight="600" fontSize={15} />
               </View>
             </View>
-            {getHistory?.historyList.length ? (
-              getHistory.historyList.map((history, i) => {
+            {historyData?.historyList.length ? (
+              historyData.historyList.map((history, i) => {
                 const scheduleEndTime = history.schedule.scheduleEndTime;
                 const isBeforeEnd = moment().isBefore(moment(scheduleEndTime));
                 const {statusType, statusColor, enteredTime, completedTime} =

@@ -12,6 +12,7 @@ import Config from 'react-native-config';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 
+import {Logo} from '#assets/svg';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
@@ -85,8 +86,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               <SvgIcon
                 name={
                   Config.ENV === 'development' || Config.ENV === 'appcenter'
-                    ? 'NewLogoDark'
-                    : 'NewLogo'
+                    ? 'LogoDev'
+                    : 'Logo'
                 }
               />
               <View>
@@ -100,7 +101,13 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
                   Config.ENV === 'appcenter') && (
                   <Pressable
                     onPress={() => Alert.alert(`baseURL:${Config.BASE_URL}`)}>
-                    <CText text={`${Config.ENV}`} fontSize={20} />
+                    <CText
+                      color={COLORS.primary}
+                      text={`${Config.ENV}`}
+                      fontWeight="800"
+                      fontSize={20}
+                      style={{textDecorationLine: 'underline'}}
+                    />
                   </Pressable>
                 )}
               </View>

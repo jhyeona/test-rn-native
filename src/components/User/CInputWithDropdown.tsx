@@ -89,7 +89,7 @@ const CInputWithDropdown = (props: Props) => {
             />
           </View>
         </View>
-        <View style={{flex: 1, height: 52}}>
+        <View style={{flex: 1}}>
           <Dropdown
             items={dropDownItems}
             onSelect={dropDownOnSelect}
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     paddingHorizontal: 16,
     height: 52,
-    width: '60%',
+    flex: 1,
     borderWidth: 1,
     borderRadius: 7,
     borderColor: COLORS.layout,

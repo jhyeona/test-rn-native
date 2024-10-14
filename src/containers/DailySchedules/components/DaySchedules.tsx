@@ -6,6 +6,7 @@ import {useRecoilValue} from 'recoil';
 import NoData from '#components/common/NoData';
 import {DAY_SCHEDULE_FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
+import {REQ_DATE_FORMAT} from '#constants/common.ts';
 import DaySchedulesHeader from '#containers/DailySchedules/components/DaySchedulesHeader.tsx';
 import DaySchedulesLecture from '#containers/DailySchedules/components/DaySchedulesLecture.tsx';
 import DaySchedulesTime from '#containers/DailySchedules/components/DaySchedulesTime.tsx';
@@ -21,7 +22,7 @@ const DaySchedules = () => {
   // 스케쥴 데이터
   const {dayScheduleData, refetchDaySchedule} = useGetDaySchedule({
     academyId: selectAcademy,
-    date: date.format('YYYYMMDD'),
+    date: date.format(REQ_DATE_FORMAT),
   });
 
   // 당겨서 새로고침
@@ -56,12 +57,17 @@ const DaySchedules = () => {
       onRefresh={onRefresh}
       contentContainerStyle={[
         styles.scheduleContent,
-        dayScheduleData?.scheduleList?.length === 0 && {flexGrow: 1},
+        dayScheduleData?.scheduleList?.length === 0 && {
+          flexGrow: 1,
+          marginBottom: 20,
+        },
       ]}
       ListHeaderComponent={<DaySchedulesHeader />}
       renderItem={renderItem}
       data={dayScheduleData?.scheduleList ?? []}
-      ListEmptyComponent={<NoData fullHeight message="✏️ 강의가 없습니다." />}
+      ListEmptyComponent={
+        <NoData fullHeight message="✏️ 강의 일정이 없습니다." />
+      }
     />
   );
 };

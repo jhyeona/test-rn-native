@@ -134,7 +134,7 @@ const WeeklyCalendar = () => {
       keyExtractor={item => item.key}
       data={dates}
       renderItem={renderItem}
-      ListEmptyComponent={<NoData message="✏️ 강의가 없습니다." />}
+      ListEmptyComponent={<NoData message="✏️ 강의 일정이 없습니다." />}
       initialNumToRender={7}
       maxToRenderPerBatch={7}
       windowSize={7}

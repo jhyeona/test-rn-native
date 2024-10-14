@@ -26,5 +26,7 @@ export {default as IntervalComplete} from './intervalComplete.svg';
 export {default as TodayArrow} from './todayArrow.svg';
 export {default as Camera} from './camera.svg';
 export {default as Gallery} from './gallery.svg';
+export {default as Logo} from './logo.svg';
+export {default as LogoDev} from './logo_dev.svg';
 export {default as NewLogo} from './new_logo.svg';
 export {default as NewLogoDark} from './new_logo_dark.svg';

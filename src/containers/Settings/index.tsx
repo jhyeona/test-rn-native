@@ -17,12 +17,10 @@ import {patchUpdatePush} from '#hooks/useMypage.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import userState from '#recoil/User';
-import {onesignalLogout} from '#utils/onesignalHelper.ts';
 import {
   handleOpenSettings,
   requestNotificationsPermission,
 } from '#utils/permissionsHelper.ts';
-import {storage} from '#utils/storageHelper.ts';
 
 const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {userData, refetchUserData} = useGetUserInfo();
@@ -40,7 +38,7 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   };
 
   const onPressChangeAcademy = () => {
-    navigation.navigate('Academy');
+    navigation.navigate('SelectAcademy');
   };
 
   const onPressPrivacyPolicy = () => {
@@ -116,7 +114,7 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
         />
         <MenuButton
           buttonStyle={styles.containerRow}
-          buttonName="기관추가"
+          buttonName="기관 설정"
           onPressHandler={onPressChangeAcademy}
         />
         <MenuButton

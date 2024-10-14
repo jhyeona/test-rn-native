@@ -44,6 +44,7 @@ const GlobalModal = () => {
       onPressConfirm();
     }
     setModalState(initModal);
+    setMessageList([]);
     closeModal();
   };
 
@@ -52,6 +53,7 @@ const GlobalModal = () => {
       onPressCancel();
     }
     setModalState(initModal);
+    setMessageList([]);
     closeModal();
   };
 
@@ -69,13 +71,6 @@ const GlobalModal = () => {
     // }
   };
 
-  const splitMessage = () => {
-    const splitList = message.split('. ');
-    return splitList.map((item, index) => {
-      return index === splitList.length - 1 ? item : `${item}.`;
-    });
-  };
-
   useEffect(() => {
     if (isVisible) {
       // 메세지가 있을 경우 '.' 을 기준으로 잘라서 엔터 처리
@@ -91,12 +86,15 @@ const GlobalModal = () => {
         duration: 300,
         useNativeDriver: false,
       }).start();
+      return;
     }
+    setModalState(initModal);
+    setMessageList([]);
   }, [isVisible, fadeAnim]);
 
   return (
     <>
-      {isVisible && (
+      {isVisible && messageList.length > 0 && (
         <TouchableWithoutFeedback onPress={handleContainerPress}>
           <View style={styles.container}>
             <Animated.View style={[styles.modalContainer, {opacity: fadeAnim}]}>
@@ -109,9 +107,6 @@ const GlobalModal = () => {
                 />
                 <View style={styles.messageText}>
                   {messageList.map((item, i) => (
-                    // <p key={item} className="text-left text-gray-800">
-                    //   {item}
-                    // </p>
                     <CText
                       key={`modal-messages-${i}`}
                       text={item}
@@ -124,21 +119,21 @@ const GlobalModal = () => {
                 </View>
               </View>
               <View style={styles.buttonContainer}>
-                <CButton
-                  text="확인"
-                  onPress={handleConfirm}
-                  noMargin
-                  buttonStyle={{flex: 1}}
-                />
                 {isConfirm && (
                   <CButton
                     text="취소"
                     onPress={handleCancel}
                     noMargin
                     whiteButton
-                    buttonStyle={{flex: 1, marginLeft: 10}}
+                    buttonStyle={{flex: 0.5}}
                   />
                 )}
+                <CButton
+                  text="확인"
+                  onPress={handleConfirm}
+                  noMargin
+                  buttonStyle={{flex: isConfirm ? 0.5 : 1}}
+                />
               </View>
             </Animated.View>
           </View>
@@ -169,6 +164,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   buttonContainer: {
+    gap: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,

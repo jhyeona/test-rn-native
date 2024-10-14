@@ -77,10 +77,18 @@ export interface InvitedAcademyListProps {
   }>;
 }
 
-export interface JoinAcademyProps {
+export interface ReqJoinAcademyProps {
+  inviteIdList: Array<string>;
+}
+
+export interface ResJoinAcademyProps {
   attendeeList: Array<{
     attendeeId: string;
     typeAttendee: string;
     academy: AcademyProps;
   }>;
+}
+
+export interface ReqDeleteUser {
+  password: string;
 }

@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {useQueryClient} from '@tanstack/react-query';
 import moment from 'moment';
 import {useSetRecoilState} from 'recoil';
 
@@ -14,13 +19,13 @@ import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {
+  useGetInvitedList,
+  useJoinAcademy,
+} from '#containers/Academy/hooks/useApi.ts';
 import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import {usePreviousScreenName} from '#hooks/useNavigation.ts';
-import {
-  postJoinAcademy,
-  useGetInvitedList,
-  useGetUserInfo,
-} from '#hooks/useUser.ts';
+import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import userState from '#recoil/User';
 
@@ -37,14 +42,19 @@ interface CheckboxStateProps {
 }
 
 const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
-  const queryClient = useQueryClient();
   const prevScreenName = usePreviousScreenName(navigation);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const setUserData = useSetRecoilState(userState.userInfoState);
 
-  const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
+  const {
+    data: invitedList,
+    refetch: invitedRefetch,
+    isLoading,
+  } = useGetInvitedList();
+
+  const {joinAcademy} = useJoinAcademy();
   const {refetchUserData} = useGetUserInfo();
 
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>([]);
@@ -80,15 +90,13 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       return;
     }
     try {
-      await postJoinAcademy(payload);
+      await joinAcademy(payload);
       await invitedRefetch();
       await refetchUserData();
-      await queryClient.invalidateQueries({queryKey: ['userInfo']});
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '선택한 기관이 추가되었습니다.',
-      });
+
+      if (prevScreenName) {
+        navigation.goBack();
+      }
     } catch (e: any) {
       console.log('Error:', e);
     }
@@ -108,19 +116,27 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
       <Header
-        title="가입기관 선택"
+        title="기관 추가"
         isBack={!!prevScreenName}
         navigation={navigation}
       />
       <CView>
         {checkboxState && checkboxState.length > 0 ? (
           <>
-            <CText
-              text={`나를 초대한 기관이에요.\n가입하실 기관을 선택해 주세요. (중복 선택이 가능해요)`}
-              fontWeight="600"
-              lineHeight={22.4}
-            />
-            <ScrollView style={{marginTop: 30}}>
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={() => {
+                    invitedRefetch().then();
+                  }}
+                />
+              }>
+              <CText
+                text={`나를 초대한 기관이에요.\n가입하실 기관을 선택해 주세요. (중복 선택이 가능해요)`}
+                fontWeight="600"
+                lineHeight={22.4}
+              />
               {checkboxState.map((val, index) => {
                 return (
                   <View
@@ -130,56 +146,67 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                     ]}
                     key={index}>
                     <CheckboxCircle
+                      circleSize={16}
                       isChecked={val.isChecked}
                       onValueChangeHandler={() =>
                         handleCheckboxChange(val.academy.academyId)
-                      }
-                      labelMessage={`${val.academy.name} / ${moment(
-                        val.time,
-                      ).format('YYYY-MM-DD')}`}
-                      fontSize={16}
-                    />
+                      }>
+                      <View style={styles.academyItem}>
+                        <CText
+                          numberOfLines={2}
+                          text={val.academy.name}
+                          style={{flex: 1, marginHorizontal: 10}}
+                          lineBreak
+                        />
+                        <CText text={moment(val.time).format('YYYY.MM.DD')} />
+                      </View>
+                    </CheckboxCircle>
                   </View>
                 );
               })}
             </ScrollView>
             <CButton
-              text="선택하기"
+              text="추가하기"
+              disabled={!checkboxState.some(item => item.isChecked)}
               onPress={onPressSelectAcademy}
-              buttonStyle={{
-                alignSelf: 'center',
-                position: 'absolute',
-                bottom: 0,
-              }}
             />
           </>
         ) : (
-          <>
-            <View style={{flex: 1}}>
-              <CText
-                text="초대 받은 기관이 없어요."
-                fontSize={16}
-                fontWeight="600"
-                style={{marginVertical: 20}}
-              />
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <SvgIcon name="Invite" />
-              </View>
+          <View style={{flex: 1}}>
+            <CText
+              text="초대 받은 기관이 없어요."
+              fontSize={16}
+              fontWeight="600"
+            />
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <SvgIcon name="Invite" />
             </View>
+            <TouchableOpacity
+              onPress={() => {
+                invitedRefetch().then();
+              }}>
+              <CText
+                color={COLORS.primary}
+                text="새로고침하기"
+                style={styles.refreshText}
+              />
+            </TouchableOpacity>
             {!prevScreenName && (
               <CButton
+                whiteButton
+                buttonStyle={{marginTop: 0}}
                 text="로그아웃"
                 onPress={() =>
                   handleLogout({setGlobalModalState, setUserData, setIsLogin})
                 }
               />
             )}
-          </>
+          </View>
         )}
       </CView>
     </CSafeAreaView>
@@ -188,7 +215,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
 const styles = StyleSheet.create({
   checkContainer: {
-    marginBottom: 12,
+    marginVertical: 14,
     paddingVertical: 10,
     paddingHorizontal: 16,
     width: '100%',
@@ -200,6 +227,17 @@ const styles = StyleSheet.create({
   isCheckedContainer: {
     backgroundColor: COLORS.light.blue,
     borderColor: COLORS.primary,
+  },
+  academyItem: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  refreshText: {
+    textDecorationLine: 'underline',
+    textAlign: 'center',
+    marginVertical: 20,
   },
 });
 

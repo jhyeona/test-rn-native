@@ -64,18 +64,46 @@ export const getRowSpan = (startTime: string, endTime: string) => {
 
 // 5분 간격으로 24시간 생성 (24*60/5)
 export const generateHours = (start: string, end: string) => {
-  const [startHour, startMinute] = start.split(':').map(Number);
-  const [endHour, endMinute] = end.split(':').map(Number);
-  const totalStartMinutes = startHour * 60 + startMinute;
-  const totalEndMinutes = endHour * 60 + endMinute;
+  if (end !== '00:00') {
+    const [startHour, startMinute] = start.split(':').map(Number);
+    const [endHour, endMinute] = end.split(':').map(Number);
+    const totalStartMinutes = startHour * 60 + startMinute;
+    const totalEndMinutes = endHour * 60 + endMinute;
 
-  const generatedHours = [];
-  for (let i = totalStartMinutes; i <= totalEndMinutes; i += 5) {
-    const hour = Math.floor(i / 60);
-    const minute = i % 60;
-    generatedHours.push(
-      `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`,
-    );
+    const generatedHours = [];
+    for (let i = totalStartMinutes; i <= totalEndMinutes; i += 5) {
+      const hour = Math.floor(i / 60);
+      const minute = i % 60;
+      generatedHours.push(
+        `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`,
+      );
+    }
+    return generatedHours;
   }
-  return generatedHours;
+  return [];
+};
+
+// 오늘 버튼 클릭시 선택돼 있는 날짜가 이번주 중 하루인지
+export const isDateInSameWeek = (
+  selectedDate: Date,
+  referenceDate: Date,
+): boolean => {
+  const normalizeDate = (date: Date): Date =>
+    new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  // referenceDate 의 요일을 구하고, 월요일과 일요일 계산
+  const dayOfWeek = referenceDate.getDay();
+  const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // 월요일과의 차이 계산
+  const mondayOfWeek = new Date(referenceDate);
+  mondayOfWeek.setDate(referenceDate.getDate() - diffToMonday); // 주의 첫날(월요일)
+
+  const sundayOfWeek = new Date(mondayOfWeek);
+  sundayOfWeek.setDate(mondayOfWeek.getDate() + 6); // 주의 마지막 날(일요일)
+
+  // selectedDate 가 해당 주의 월요일과 일요일 사이에 있는지 확인
+  const normalizedSelectedDate = normalizeDate(selectedDate);
+  return (
+    normalizedSelectedDate >= normalizeDate(mondayOfWeek) &&
+    normalizedSelectedDate <= normalizeDate(sundayOfWeek)
+  );
 };

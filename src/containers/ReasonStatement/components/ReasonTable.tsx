@@ -140,6 +140,7 @@ const ReasonTable = ({
         renderItem={renderItem}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.2}
+        contentContainerStyle={{flex: data.length > 0 ? 0 : 1}}
         ListEmptyComponent={
           <NoData fullHeight message="📝 작성된 사유서가 없습니다." />
         }
