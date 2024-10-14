@@ -17,7 +17,7 @@ import StatusInfoContainer, {
   ColorType,
 } from '#components/common/StatusInfoContainer';
 import {COLORS} from '#constants/colors.ts';
-import {MAX_FILE_SIZE} from '#constants/common.ts';
+import {MAX_FILE_SIZE, REQ_DATE_FORMAT} from '#constants/common.ts';
 import {REASON_STATUS_MAP} from '#constants/reason.ts';
 import {useGetLectureList} from '#containers/DailySchedules/hooks/useApi.ts';
 import {useGetAttendeeId} from '#containers/DailySchedules/hooks/useSchedules.ts';
@@ -102,13 +102,13 @@ const ReasonCreator = ({
         // 생성
         formData.append('lectureId', selectedData?.lecture?.id ?? '');
         formData.append('attendeeId', attendeeId);
-        formData.append('date', selectedData.date.format('YYYYMMDD'));
+        formData.append('date', selectedData.date.format(REQ_DATE_FORMAT));
         formData.append('content', text);
         await createReason(formData);
       } else {
         // 수정
         formData.append('reasonId', reasonId ?? '');
-        formData.append('date', selectedData.date.format('YYYYMMDD'));
+        formData.append('date', selectedData.date.format(REQ_DATE_FORMAT));
         formData.append('content', text);
         if (deletedImages.length > 0) {
           formData.append('deletedImages', deletedImages.join(','));

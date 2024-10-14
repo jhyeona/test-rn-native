@@ -1,9 +1,12 @@
 import React from 'react';
-import {COLORS} from '#constants/colors.ts';
+import {Pressable} from 'react-native';
+
+import moment, {Moment} from 'moment';
+
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
-import {Pressable} from 'react-native';
-import moment, {Moment} from 'moment';
+import {COLORS} from '#constants/colors.ts';
+import {DATE_FORMAT} from '#constants/common.ts';
 
 interface Props {
   onPressCalendar: () => void;
@@ -26,7 +29,7 @@ const DateSelector = (props: Props) => {
           borderRadius: 7,
         }}
         onPress={onPressCalendar}>
-        <CText text={moment(selectedDate).format('YYYY-MM-DD')} />
+        <CText text={moment(selectedDate).format(DATE_FORMAT)} />
         <SvgIcon name="CalendarDot" />
       </Pressable>
     </>

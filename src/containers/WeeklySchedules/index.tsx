@@ -9,6 +9,7 @@ import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
+import {DATE_FORMAT, REQ_DATE_FORMAT} from '#constants/common.ts';
 import WeeklyGrid from '#containers/WeeklySchedules/components/WeeklyGrid.tsx';
 import {useGetWeekSchedule} from '#containers/WeeklySchedules/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
@@ -26,7 +27,7 @@ const WeeklySchedules = () => {
   const {formattedData, timeLineData, refetchWeekSchedule} = useGetWeekSchedule(
     {
       academyId: selectAcademy,
-      date: date.format('YYYYMMDD'),
+      date: date.format(REQ_DATE_FORMAT),
     },
   );
 
@@ -41,7 +42,7 @@ const WeeklySchedules = () => {
       <ScheduleHeader />
       <CView style={{display: 'flex', gap: 12}}>
         <DatePicker
-          onDateChange={new Date(moment(date).format('YYYY-MM-DD'))}
+          onDateChange={new Date(moment(date).format(DATE_FORMAT))}
           format={MONTH_FORMAT}
           dateText={weekOfMonth(date)}
           handleDateSelection={selectedDate => {

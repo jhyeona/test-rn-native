@@ -5,6 +5,7 @@ import {useRecoilState, useSetRecoilState} from 'recoil';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {DATE_FORMAT} from '#constants/common.ts';
 import {isDateInSameWeek} from '#containers/WeeklySchedules/utils/scheduleHelper.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
@@ -27,7 +28,7 @@ const BtnToday = () => {
     // 주간 일정일 경우에는 이번주 내의 날짜인지 확인
     const isOnWeek =
       isWeekly &&
-      isDateInSameWeek(new Date(date.format('YYYY-MM-DD')), new Date());
+      isDateInSameWeek(new Date(date.format(DATE_FORMAT)), new Date());
     if (isOnWeek) {
       showToast('이번 주 일자 입니다.');
       return;

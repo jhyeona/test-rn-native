@@ -15,6 +15,7 @@ import DefaultModal from '#components/common/Modal/DefaultModal.tsx';
 import CWebView from '#components/common/WebView/CWebView.tsx';
 import CInputWithDropdown from '#components/User/CInputWithDropdown.tsx';
 import CInputWithTimer from '#components/User/CInputWithTimer.tsx';
+import {REQ_DATE_FORMAT} from '#constants/common.ts';
 import {PersonalInformationUrl, TermsOfServiceUrl} from '#constants/policy.ts';
 import {GENDER_LIST, TELECOM_LIST} from '#constants/user.ts';
 import {
@@ -304,7 +305,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               setInputValue={value =>
                 setSignUpData(prev => ({...prev, birthday: value}))
               }
-              placeholder="YYYYMMDD"
+              placeholder={REQ_DATE_FORMAT}
               errorMessage="생년월일을 입력해 주세요."
               maxLength={8}
               inputMode="numeric"

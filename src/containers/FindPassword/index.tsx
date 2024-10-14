@@ -8,6 +8,7 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import Header from '#components/common/Header/Header.tsx';
+import {REQ_DATE_FORMAT} from '#constants/common.ts';
 import {useReqFindPassword} from '#containers/FindPassword/hooks/useApi.ts';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 import {checkDate, checkName, checkPhone} from '#utils/regExpHelper.ts';
@@ -83,7 +84,7 @@ const FindPassword = ({
           inputValue={birthday}
           setInputValue={setBirthday}
           inputMode="numeric"
-          placeholder="YYYYMMDD"
+          placeholder={REQ_DATE_FORMAT}
           isWarning={isWarningBirthday}
           errorMessage="생년월일을 확인해 주세요."
           maxLength={8}

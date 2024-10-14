@@ -11,6 +11,7 @@ import CView from '#components/common/CommonView/CView';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {REQ_DATE_FORMAT} from '#constants/common.ts';
 import {useGetHistory} from '#containers/ScheduleHistory/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {EventProps} from '#types/schedule.ts';
@@ -30,8 +31,8 @@ const ScheduleHistory = ({
     isLoading,
   } = useGetHistory({
     academyId: selectedAcademy,
-    startDate: selectedDate.format('YYYYMMDD'),
-    endDate: selectedDate.format('YYYYMMDD'),
+    startDate: selectedDate.format(REQ_DATE_FORMAT),
+    endDate: selectedDate.format(REQ_DATE_FORMAT),
   });
 
   const eventStatus = (eventList: Array<EventProps>) => {
