@@ -8,6 +8,7 @@ import {
   requestUpdateReason,
 } from '#containers/ReasonStatement/services';
 import {ReasonQueryOptions} from '#containers/ReasonStatement/services/queries.ts';
+import {useHandleError} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqGetReasonDetails, ReqGetReasonList} from '#types/reason.ts';
@@ -15,10 +16,11 @@ import {ReqGetReasonDetails, ReqGetReasonList} from '#types/reason.ts';
 // 사유서 리스트
 export const useGetReasonList = (payload: ReqGetReasonList) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const {data, refetch, status, fetchStatus} = useQuery(
+  const {data, refetch, status, fetchStatus, error, isError} = useQuery(
     ReasonQueryOptions.getReasonList(payload),
   );
 
+  useHandleError(isError, error);
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);
@@ -29,10 +31,11 @@ export const useGetReasonList = (payload: ReqGetReasonList) => {
 // 사유서 상세
 export const useGetReasonDetails = (payload: ReqGetReasonDetails) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const {data, refetch, status, fetchStatus} = useQuery(
+  const {data, refetch, status, fetchStatus, error, isError} = useQuery(
     ReasonQueryOptions.getReasonDetails(payload),
   );
 
+  useHandleError(isError, error);
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);

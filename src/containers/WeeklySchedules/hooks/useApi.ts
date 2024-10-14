@@ -7,6 +7,7 @@ import {useSetRecoilState} from 'recoil';
 import {WeeklyScheduleQueryOptions} from '#containers/WeeklySchedules/services/queries.ts';
 import {getAdjustedTimes} from '#containers/WeeklySchedules/utils/scheduleHelper.ts';
 import {getRandomColor} from '#containers/WeeklySchedules/utils/textToColor.ts';
+import {useHandleError} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {GetScheduleProps} from '#types/schedule.ts';
 
@@ -33,10 +34,11 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
     timeLineEnd: '00:00',
   });
 
-  const {data, refetch, fetchStatus, status} = useQuery(
+  const {data, refetch, fetchStatus, status, error, isError} = useQuery(
     WeeklyScheduleQueryOptions.getWeeklySchedules(payload),
   );
 
+  useHandleError(isError, error);
   useEffect(() => {
     if (data) {
       const timeLineTimes = getAdjustedTimes(data.scheduleList);

@@ -12,6 +12,7 @@ import {
   requestPostEventLeave,
 } from '#containers/DailySchedules/services';
 import {ScheduleQueryOptions} from '#containers/DailySchedules/services/queries.ts';
+import {useHandleError} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {
@@ -27,9 +28,11 @@ export const useGetLectureList = (academyId?: string) => {
   const selectedAcademy = useRecoilValue(GlobalState.selectedAcademy);
   const [lectureItems, setLectureItems] = useState<ItemProps[]>([]);
 
-  const {data, refetch, status, fetchStatus} = useQuery(
+  const {data, refetch, status, fetchStatus, isError, error} = useQuery(
     ScheduleQueryOptions.getLectureList(academyId ?? selectedAcademy),
   );
+
+  useHandleError(isError, error);
 
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
@@ -49,10 +52,11 @@ export const useGetLectureList = (academyId?: string) => {
 // 하루 일정
 export const useGetDaySchedule = (payload: GetScheduleProps) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const {data, refetch, status, fetchStatus} = useQuery(
+  const {data, refetch, status, fetchStatus, isError, error} = useQuery(
     ScheduleQueryOptions.getDaySchedules(payload),
   );
 
+  useHandleError(isError, error);
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);
@@ -63,10 +67,11 @@ export const useGetDaySchedule = (payload: GetScheduleProps) => {
 // 일정에 기록된 스케쥴 데이터
 export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const {data, status, refetch, fetchStatus} = useQuery(
+  const {data, status, refetch, fetchStatus, isError, error} = useQuery(
     ScheduleQueryOptions.getDayScheduleHistory(payload),
   );
 
+  useHandleError(isError, error);
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);

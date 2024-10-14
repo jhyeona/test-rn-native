@@ -71,7 +71,6 @@ const CText = (props: Props) => {
       style={[
         style,
         {
-          flex: flex ? 1 : 0,
           color: color ?? 'black',
           fontSize: realFontSize,
           lineHeight: lineHeight,

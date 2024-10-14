@@ -7,6 +7,7 @@ import {
   requestGetInvitedAcademyList,
   requestPostJoinAcademy,
 } from '#containers/Academy/services';
+import {useHandleError} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqJoinAcademyProps} from '#types/user.ts';
@@ -14,13 +15,14 @@ import {ReqJoinAcademyProps} from '#types/user.ts';
 export const useGetInvitedList = () => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
 
-  const {data, refetch, status, fetchStatus} = useQuery({
+  const {data, refetch, status, fetchStatus, error, isError} = useQuery({
     queryKey: ['invitedList'],
     queryFn: async () => {
       return requestGetInvitedAcademyList();
     },
   });
 
+  useHandleError(isError, error);
   useEffect(() => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [status, fetchStatus]);

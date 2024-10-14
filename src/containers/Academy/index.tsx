@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {useQueryClient} from '@tanstack/react-query';
 import moment from 'moment';
 import {useSetRecoilState} from 'recoil';
 
@@ -168,7 +167,6 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               })}
             </ScrollView>
             <CButton
-              noMargin
               text="추가하기"
               disabled={!checkboxState.some(item => item.isChecked)}
               onPress={onPressSelectAcademy}
@@ -176,20 +174,11 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           </>
         ) : (
           <View style={{flex: 1}}>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <CText
-                text="초대 받은 기관이 없어요."
-                fontSize={16}
-                fontWeight="600"
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  invitedRefetch().then();
-                }}>
-                <SvgIcon name="Refresh" />
-              </TouchableOpacity>
-            </View>
+            <CText
+              text="초대 받은 기관이 없어요."
+              fontSize={16}
+              fontWeight="600"
+            />
             <View
               style={{
                 flex: 1,
@@ -198,15 +187,27 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               }}>
               <SvgIcon name="Invite" />
             </View>
+            <TouchableOpacity
+              onPress={() => {
+                invitedRefetch().then();
+              }}>
+              <CText
+                color={COLORS.primary}
+                text="새로고침하기"
+                style={styles.refreshText}
+              />
+            </TouchableOpacity>
+            {!prevScreenName && (
+              <CButton
+                whiteButton
+                buttonStyle={{marginTop: 0}}
+                text="로그아웃"
+                onPress={() =>
+                  handleLogout({setGlobalModalState, setUserData, setIsLogin})
+                }
+              />
+            )}
           </View>
-        )}
-        {!prevScreenName && (
-          <CButton
-            text="로그아웃"
-            onPress={() =>
-              handleLogout({setGlobalModalState, setUserData, setIsLogin})
-            }
-          />
         )}
       </CView>
     </CSafeAreaView>
@@ -233,6 +234,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  refreshText: {
+    textDecorationLine: 'underline',
+    textAlign: 'center',
+    marginVertical: 20,
   },
 });
 

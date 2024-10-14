@@ -25,7 +25,7 @@ const ScheduleHistory = ({
 
   const [selectedDate, setSelectedDate] = useState(moment());
 
-  const {getHistory, refetchHistory} = useGetHistory({
+  const {getHistory: historyData, refetchHistory} = useGetHistory({
     academyId: selectedAcademy,
     startDate: selectedDate.format('YYYYMMDD'),
     endDate: selectedDate.format('YYYYMMDD'),
@@ -87,8 +87,8 @@ const ScheduleHistory = ({
                 <CText text="퇴실" fontWeight="600" fontSize={15} />
               </View>
             </View>
-            {getHistory?.historyList.length ? (
-              getHistory.historyList.map((history, i) => {
+            {historyData?.historyList.length ? (
+              historyData.historyList.map((history, i) => {
                 const scheduleEndTime = history.schedule.scheduleEndTime;
                 const isBeforeEnd = moment().isBefore(moment(scheduleEndTime));
                 const {statusType, statusColor, enteredTime, completedTime} =

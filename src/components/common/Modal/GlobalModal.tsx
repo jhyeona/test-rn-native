@@ -119,21 +119,21 @@ const GlobalModal = () => {
                 </View>
               </View>
               <View style={styles.buttonContainer}>
-                <CButton
-                  text="확인"
-                  onPress={handleConfirm}
-                  noMargin
-                  buttonStyle={{flex: 1}}
-                />
                 {isConfirm && (
                   <CButton
                     text="취소"
                     onPress={handleCancel}
                     noMargin
                     whiteButton
-                    buttonStyle={{flex: 1, marginLeft: 10}}
+                    buttonStyle={{flex: 0.5}}
                   />
                 )}
+                <CButton
+                  text="확인"
+                  onPress={handleConfirm}
+                  noMargin
+                  buttonStyle={{flex: isConfirm ? 0.5 : 1}}
+                />
               </View>
             </Animated.View>
           </View>
@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   buttonContainer: {
+    gap: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
