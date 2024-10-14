@@ -9,7 +9,6 @@ import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
-import DaysLabel from '#containers/WeeklySchedules/components/DaysLabel.tsx';
 import WeeklyGrid from '#containers/WeeklySchedules/components/WeeklyGrid.tsx';
 import {useGetWeekSchedule} from '#containers/WeeklySchedules/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
@@ -50,8 +49,8 @@ const WeeklySchedules = () => {
           }}
         />
         <View style={{flex: 1}}>
-          <DaysLabel date={date} />
           <WeeklyGrid
+            date={date}
             scheduleData={formattedData}
             timeLineData={timeLineData}
             refetch={refetchWeekSchedule}

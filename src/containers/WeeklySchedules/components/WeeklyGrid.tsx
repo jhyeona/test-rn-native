@@ -2,11 +2,13 @@ import {useMemo, useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 
 import {QueryObserverResult} from '@tanstack/react-query';
+import {Moment} from 'moment';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import NoData from '#components/common/NoData';
 import {WEEKLY_SCHEDULE_LEFT_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
+import DaysLabel from '#containers/WeeklySchedules/components/DaysLabel.tsx';
 import {
   TimeLineDataProps,
   WeekScheduleFormatProps,
@@ -20,12 +22,14 @@ const FIVE_MINUTES_HEIGHTS = 5;
 const days = ['월', '화', '수', '목', '금', '토', '일'];
 
 interface TimelineCalendarProps {
+  date: Moment;
   timeLineData: TimeLineDataProps;
   scheduleData?: WeekScheduleFormatProps[];
   refetch?: () => Promise<QueryObserverResult<any, unknown>>;
 }
 
 const WeeklyGrid = ({
+  date,
   scheduleData,
   timeLineData,
   refetch,
@@ -128,6 +132,7 @@ const WeeklyGrid = ({
 
   return (
     <FlatList
+      ListHeaderComponent={<DaysLabel date={date} />}
       data={hours}
       renderItem={renderRow}
       refreshing={isLoading}

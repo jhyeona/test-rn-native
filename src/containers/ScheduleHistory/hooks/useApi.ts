@@ -24,5 +24,9 @@ export const useGetHistory = (payload: ReqGetScheduleHistory) => {
     setIsLoading(status === 'pending' && fetchStatus === 'fetching');
   }, [fetchStatus, setIsLoading]);
 
-  return {getHistory: data, refetchHistory: refetch};
+  return {
+    getHistory: data,
+    refetchHistory: refetch,
+    isLoading: status === 'pending' && fetchStatus === 'fetching',
+  };
 };

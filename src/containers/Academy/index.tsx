@@ -123,13 +123,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       <CView>
         {checkboxState && checkboxState.length > 0 ? (
           <>
-            <CText
-              text={`나를 초대한 기관이에요.\n가입하실 기관을 선택해 주세요. (중복 선택이 가능해요)`}
-              fontWeight="600"
-              lineHeight={22.4}
-            />
             <ScrollView
-              style={{marginVertical: 20}}
               refreshControl={
                 <RefreshControl
                   refreshing={isLoading}
@@ -138,6 +132,11 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                   }}
                 />
               }>
+              <CText
+                text={`나를 초대한 기관이에요.\n가입하실 기관을 선택해 주세요. (중복 선택이 가능해요)`}
+                fontWeight="600"
+                lineHeight={22.4}
+              />
               {checkboxState.map((val, index) => {
                 return (
                   <View
@@ -216,7 +215,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
 const styles = StyleSheet.create({
   checkContainer: {
-    marginBottom: 12,
+    marginVertical: 14,
     paddingVertical: 10,
     paddingHorizontal: 16,
     width: '100%',

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import moment from 'moment';
@@ -11,7 +11,6 @@ import CView from '#components/common/CommonView/CView';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
-import RefreshHistory from '#containers/ScheduleHistory/components/RefreshHistory.tsx';
 import {useGetHistory} from '#containers/ScheduleHistory/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {EventProps} from '#types/schedule.ts';
@@ -25,7 +24,11 @@ const ScheduleHistory = ({
 
   const [selectedDate, setSelectedDate] = useState(moment());
 
-  const {getHistory: historyData, refetchHistory} = useGetHistory({
+  const {
+    getHistory: historyData,
+    refetchHistory,
+    isLoading,
+  } = useGetHistory({
     academyId: selectedAcademy,
     startDate: selectedDate.format('YYYYMMDD'),
     endDate: selectedDate.format('YYYYMMDD'),
@@ -55,23 +58,22 @@ const ScheduleHistory = ({
 
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
-      <Header
-        title="출석 기록"
-        navigation={navigation}
-        rightChildren={<RefreshHistory handleRefresh={refetchHistory} />}
-      />
+      <Header title="출석 기록" navigation={navigation} />
       <CView>
-        <View style={styles.top}>
-          <DatePicker handleDateSelection={setSelectedDate} />
-          <View style={{alignItems: 'flex-end'}}>
-            <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
-            <CText
-              color={COLORS.placeholder}
-              text="N/P: 지각, 결석 및 미퇴실"
-            />
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetchHistory} />
+          }>
+          <View style={styles.top}>
+            <DatePicker handleDateSelection={setSelectedDate} />
+            <View style={{alignItems: 'flex-end'}}>
+              <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
+              <CText
+                color={COLORS.placeholder}
+                text="N/P: 지각, 결석 및 미퇴실"
+              />
+            </View>
           </View>
-        </View>
-        <ScrollView>
           <View style={styles.table}>
             <View style={[styles.row, styles.tableHeader]}>
               <View style={[styles.cell, styles.firstCell]}>
