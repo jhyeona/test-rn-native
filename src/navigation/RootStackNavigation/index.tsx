@@ -5,7 +5,7 @@ import BootSplash from 'react-native-bootsplash';
 import {
   NavigationContainer,
   useNavigationContainerRef,
-} from '@react-navigation/native';
+} from '@'react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useRecoilState} from 'recoil';
 
