@@ -193,7 +193,7 @@ const ReasonCreator = ({
         navigation={navigation}
       />
       <CView>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} bounces={false}>
           <Dropdown
             disabled={!isCreate || disabled}
             items={lectureItems}

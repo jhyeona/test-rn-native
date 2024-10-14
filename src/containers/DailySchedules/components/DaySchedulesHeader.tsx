@@ -23,7 +23,7 @@ const DaySchedulesHeader: React.FC = () => {
           fontSize={16}
           fontWeight="700"
           color={COLORS.primary}
-          text="예정강의"
+          text="강의"
         />
       </View>
     </View>

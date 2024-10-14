@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {useQueryClient} from '@tanstack/react-query';
@@ -14,13 +20,13 @@ import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {
+  useGetInvitedList,
+  useJoinAcademy,
+} from '#containers/Academy/hooks/useApi.ts';
 import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import {usePreviousScreenName} from '#hooks/useNavigation.ts';
-import {
-  postJoinAcademy,
-  useGetInvitedList,
-  useGetUserInfo,
-} from '#hooks/useUser.ts';
+import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import userState from '#recoil/User';
 
@@ -37,14 +43,19 @@ interface CheckboxStateProps {
 }
 
 const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
-  const queryClient = useQueryClient();
   const prevScreenName = usePreviousScreenName(navigation);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const setUserData = useSetRecoilState(userState.userInfoState);
 
-  const {data: invitedList, refetch: invitedRefetch} = useGetInvitedList();
+  const {
+    data: invitedList,
+    refetch: invitedRefetch,
+    isLoading,
+  } = useGetInvitedList();
+
+  const {joinAcademy} = useJoinAcademy();
   const {refetchUserData} = useGetUserInfo();
 
   const [checkboxState, setCheckboxState] = useState<CheckboxStateProps[]>([]);
@@ -80,15 +91,9 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       return;
     }
     try {
-      await postJoinAcademy(payload);
+      await joinAcademy(payload);
       await invitedRefetch();
       await refetchUserData();
-      await queryClient.invalidateQueries({queryKey: ['userInfo']});
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '선택한 기관이 추가되었습니다.',
-      });
 
       if (prevScreenName) {
         navigation.goBack();
@@ -124,7 +129,16 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               fontWeight="600"
               lineHeight={22.4}
             />
-            <ScrollView style={{marginTop: 30}}>
+            <ScrollView
+              style={{marginVertical: 20}}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={() => {
+                    invitedRefetch().then();
+                  }}
+                />
+              }>
               {checkboxState.map((val, index) => {
                 return (
                   <View
@@ -154,43 +168,45 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               })}
             </ScrollView>
             <CButton
+              noMargin
               text="추가하기"
               disabled={!checkboxState.some(item => item.isChecked)}
               onPress={onPressSelectAcademy}
-              buttonStyle={{
-                alignSelf: 'center',
-                position: 'absolute',
-                bottom: 0,
-              }}
             />
           </>
         ) : (
-          <>
-            <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <CText
                 text="초대 받은 기관이 없어요."
                 fontSize={16}
                 fontWeight="600"
-                style={{marginVertical: 20}}
               />
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
+              <TouchableOpacity
+                onPress={() => {
+                  invitedRefetch().then();
                 }}>
-                <SvgIcon name="Invite" />
-              </View>
+                <SvgIcon name="Refresh" />
+              </TouchableOpacity>
             </View>
-            {!prevScreenName && (
-              <CButton
-                text="로그아웃"
-                onPress={() =>
-                  handleLogout({setGlobalModalState, setUserData, setIsLogin})
-                }
-              />
-            )}
-          </>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <SvgIcon name="Invite" />
+            </View>
+          </View>
+        )}
+        {!prevScreenName && (
+          <CButton
+            text="로그아웃"
+            onPress={() =>
+              handleLogout({setGlobalModalState, setUserData, setIsLogin})
+            }
+          />
         )}
       </CView>
     </CSafeAreaView>

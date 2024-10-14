@@ -14,6 +14,7 @@ interface Props {
   style?: StyleProp<TextStyle>;
   lineBreak?: boolean;
   numberOfLines?: number;
+  flex?: boolean;
 }
 const CText = (props: Props) => {
   const {
@@ -25,6 +26,7 @@ const CText = (props: Props) => {
     style,
     lineBreak,
     numberOfLines,
+    flex,
   } = props;
 
   const realFontSize = IS_ANDROID ? fontSize - 1 : fontSize;
@@ -69,6 +71,7 @@ const CText = (props: Props) => {
       style={[
         style,
         {
+          flex: flex ? 1 : 0,
           color: color ?? 'black',
           fontSize: realFontSize,
           lineHeight: lineHeight,
