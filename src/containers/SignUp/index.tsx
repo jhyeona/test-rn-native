@@ -292,7 +292,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             setInputValue={value =>
               setSignUpData(prev => ({...prev, name: value}))
             }
-            errorMessage="이름을 입력해 주세요."
+            errorMessage="이름을 확인해 주세요."
             isWarning={!!signUpData.name && !checkName(signUpData.name)}
             maxLength={4}
             inputMode="text"
@@ -306,7 +306,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                 setSignUpData(prev => ({...prev, birthday: value}))
               }
               placeholder={REQ_DATE_FORMAT}
-              errorMessage="생년월일을 입력해 주세요."
+              errorMessage="생년월일을 확인해 주세요."
               maxLength={8}
               inputMode="numeric"
               readOnly={isSend}
@@ -333,7 +333,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                 setSignUpData(prev => ({...prev, phone: value}))
               }
               placeholder="01012341234"
-              errorMessage="휴대폰 번호를 바르게 입력해 주세요."
+              errorMessage="휴대폰 번호를 확인해 주세요."
               isWarning={!!signUpData.phone && !checkPhone(signUpData.phone)}
               maxLength={11}
               inputMode="tel"
