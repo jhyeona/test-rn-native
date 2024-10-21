@@ -2,7 +2,7 @@ import Config from 'react-native-config';
 
 import axios, {AxiosResponse} from 'axios';
 
-import {useTokenRefresh} from '#apis/common.ts';
+import {tokenRefresh} from '#apis/common.ts';
 import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
 import {storage} from '#utils/storageHelper.ts';
 
@@ -13,11 +13,7 @@ export const instanceWithoutToken = axios.create({
 
 instanceWithoutToken.interceptors.response.use(
   function (response: AxiosResponse) {
-    const responseCode = response.data.code;
-    if (responseCode === '0000') {
-      return response.data?.data ?? response.data;
-    }
-    return response;
+    return response.data?.data ?? response.data;
   },
   async function (error): Promise<AxiosResponse> {
     if (axios.isAxiosError<any>(error)) {
@@ -59,7 +55,7 @@ instance.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      const isRefreshSuccessful = await useTokenRefresh();
+      const isRefreshSuccessful = await tokenRefresh();
       if (isRefreshSuccessful) {
         return instance(originalRequest);
       }
