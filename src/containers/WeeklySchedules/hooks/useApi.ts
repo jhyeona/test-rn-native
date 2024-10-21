@@ -2,13 +2,11 @@ import {useEffect, useState} from 'react';
 
 import {useQuery} from '@tanstack/react-query';
 import moment from 'moment';
-import {useSetRecoilState} from 'recoil';
 
 import {WeeklyScheduleQueryOptions} from '#containers/WeeklySchedules/services/queries.ts';
 import {getAdjustedTimes} from '#containers/WeeklySchedules/utils/scheduleHelper.ts';
 import {getRandomColor} from '#containers/WeeklySchedules/utils/textToColor.ts';
-import {useHandleError} from '#hooks/useApi.ts';
-import GlobalState from '#recoil/Global';
+import {useHandleError, useLoadingEffect} from '#hooks/useApi.ts';
 import {GetScheduleProps} from '#types/schedule.ts';
 
 export interface WeekScheduleFormatProps {
@@ -25,7 +23,6 @@ export interface TimeLineDataProps {
 }
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const [formattedData, setFormattedData] = useState<WeekScheduleFormatProps[]>(
     [],
   );
@@ -39,7 +36,6 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
     WeeklyScheduleQueryOptions.getWeeklySchedules(payload),
   );
 
-  useHandleError(isError, error);
   useEffect(() => {
     if (data) {
       const adjustTimes = getAdjustedTimes(data.scheduleList);
@@ -64,9 +60,8 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
     }
   }, [data]);
 
-  useEffect(() => {
-    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
-  }, [fetchStatus, setIsLoading]);
+  useLoadingEffect(status, fetchStatus);
+  useHandleError(isError, error);
 
   return {
     weekScheduleData: data,

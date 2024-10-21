@@ -4,7 +4,7 @@ import {useMutation} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
 import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
-import {loginErrorMessage} from '#constants/errorMessage.ts';
+import {loginErrorMessage} from '#constants/responseMessage.ts';
 import {requestPostGetToken} from '#containers/SignIn/services';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';

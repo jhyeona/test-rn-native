@@ -91,7 +91,6 @@ const DailySchedule = ({
                 }}
                 todayDot
               />
-              {/*<AcademySelector />*/}
               <View style={styles.container}>
                 <DaySchedules />
               </View>
