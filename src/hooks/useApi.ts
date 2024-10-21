@@ -6,6 +6,7 @@ import GlobalState from '#recoil/Global';
 
 export const useHandleError = (isError: boolean, error?: Error | null) => {
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
+  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
 
   useEffect(() => {
     if (isError) {
@@ -14,6 +15,7 @@ export const useHandleError = (isError: boolean, error?: Error | null) => {
         title: '오류',
         message: error?.message ?? '오류가 발생했습니다.',
       });
+      setIsLoading(false);
     }
-  }, [isError, error, setModalState]);
+  }, [isError, error, setModalState, setIsLoading]);
 };

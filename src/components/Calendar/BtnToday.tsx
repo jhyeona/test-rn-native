@@ -1,14 +1,17 @@
-import {TouchableOpacity} from 'react-native';
+import React from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import moment from 'moment';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 
+import CButton from '#components/common/CommonButton/CButton.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
 import {DATE_FORMAT} from '#constants/common.ts';
 import {isDateInSameWeek} from '#containers/WeeklySchedules/utils/scheduleHelper.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
+// import SvgIcon from '#components/common/Icon/Icon.tsx';
 
 const BtnToday = () => {
   const setToast = useSetRecoilState(GlobalState.globalToastState);
@@ -41,11 +44,30 @@ const BtnToday = () => {
   };
 
   return (
-    <TouchableOpacity onPress={onPressSetToday}>
-      <SvgIcon name="TodayArrow" />
-      <CText text="오늘" />
+    <TouchableOpacity onPress={onPressSetToday} style={styles.todayWrapper}>
+      {/*<SvgIcon name="TodayArrow" />*/}
+      {/*<CText text="오늘" />*/}
+      <View style={styles.todayDot} />
+      <CText text="오늘" style={{marginRight: 8}} fontWeight="700" />
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  todayWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  todayDot: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: 7,
+    height: 7,
+    borderRadius: 10,
+    backgroundColor: COLORS.primary,
+  },
+});
 
 export default BtnToday;

@@ -6,6 +6,7 @@ import {useRecoilValue} from 'recoil';
 import BtnToday from '#components/Calendar/BtnToday.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
 import scheduleState from '#recoil/Schedule';
 
 const ScheduleHeader = () => {
@@ -22,15 +23,7 @@ const ScheduleHeader = () => {
           />
           <SvgIcon name="Calendar" size={24} />
         </View>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 15,
-          }}>
-          <BtnToday />
-        </View>
+        <BtnToday />
       </View>
     </View>
   );
@@ -44,6 +37,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 24,
     height: 54,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.layout,
   },
   rowContainer: {
     width: '100%',
