@@ -24,6 +24,7 @@ export interface ReqSignIn {
   phone: string;
   password: string;
   deviceInfo?: string;
+  isRevive?: boolean;
 }
 
 export interface UserDefaultProps {
