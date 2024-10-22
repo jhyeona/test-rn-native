@@ -1,139 +1,56 @@
-import {useCallback, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-
-import {SetterOrUpdater} from 'recoil';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {TimeStatusProps} from '#containers/DailySchedules/components/BtnSchedule.tsx';
 import {formattedDate} from '#containers/DailySchedules/components/DaySchedulesTime.tsx';
-import {useGetScheduleHistory} from '#containers/DailySchedules/hooks/useApi.ts';
-import {useGetAttendeeId} from '#containers/DailySchedules/hooks/useSchedules.ts';
-import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
-import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import {ScheduleDefaultProps} from '#types/schedule.ts';
-
-type StatusIconType = 'IntervalComplete' | 'IntervalMiss' | 'IntervalEmpty';
 
 const BtnScheduleAttendInfo = ({
   scheduleData,
-  setIsEnter,
+  timeStatusList,
 }: {
   scheduleData?: ScheduleDefaultProps;
-  setIsEnter?: SetterOrUpdater<boolean>;
+  timeStatusList: TimeStatusProps[];
 }) => {
-  const [timeStatusList, setTimeStatusList] = useState<
-    {
-      isCheck: boolean;
-      isBetween: boolean;
-      isAttendEnter: boolean;
-      eventType: string;
-      status: StatusIconType;
-    }[]
-  >([]);
-
-  const attendeeId = useGetAttendeeId();
-  const {historyData} = useGetScheduleHistory({
-    attendeeId: attendeeId,
-    scheduleId: scheduleData?.scheduleId,
-  });
-
-  // 현재 시간별 출결의 활성화 여부
-  const updateTimeStatus = useCallback(() => {
-    const newStatusList =
-      scheduleData?.scheduleTimeList.map(data => {
-        const {isAttendBetween, isAttendAfter, isAttendEnter} =
-          allowScheduleTime({
-            scheduleData,
-            startTime: data.timeStart,
-            endTime: data.timeEnd,
-          });
-        // 시간별 출결의 출석 상태 아이콘
-        const isEntered = historyData?.intervalEventList?.some(
-          item => item?.baseTime === data.timeStart,
-        );
-        const status: StatusIconType = isEntered
-          ? 'IntervalComplete'
-          : isAttendAfter
-            ? 'IntervalMiss'
-            : 'IntervalEmpty';
-
-        return {
-          isBetween: isAttendBetween,
-          isAttendEnter,
-          eventType: isEntered ? 'ATTEND' : '',
-          status,
-          isCheck: data.check,
-        };
-      }) ?? [];
-
-    setTimeStatusList(prevList => {
-      const hasChanged = newStatusList.some((newStatus, i) => {
-        if (newStatusList) {
-          const current = prevList[i];
-          return (
-            current?.isBetween !== newStatus?.isBetween ||
-            current?.isAttendEnter !== newStatus?.isAttendEnter ||
-            current?.eventType !== newStatus?.eventType ||
-            current?.status !== newStatus?.status ||
-            current?.isCheck !== newStatus?.isCheck
-          );
-        }
-      });
-      // 상태가 변경된 경우에만 업데이트
-      if (hasChanged) {
-        if (setIsEnter) {
-          // 시간별 출결의 출석 유효 시간 + 미출석 + 시간별 체크 활성화 일 경우 [출석] 버튼 활성화 되도록 전달
-          const isEnter = newStatusList.some(
-            ({isAttendEnter, status, isCheck}) =>
-              isAttendEnter && status === 'IntervalEmpty' && isCheck,
-          );
-          setIsEnter(isEnter);
-        }
-        return newStatusList;
-      }
-      return prevList;
-    });
-  }, [scheduleData, historyData]);
-
-  useGlobalInterval(updateTimeStatus, 3000);
-
   return (
     <View style={styles.container}>
-      {scheduleData?.scheduleTimeList.map((data, i) => {
-        const {isBetween, status} = timeStatusList[i] || {};
-        return (
-          <View
-            key={`schedule-interval-info-${i}`}
-            style={styles.scheduleContainer}>
+      {timeStatusList.length > 0 &&
+        scheduleData?.scheduleTimeList.map((data, i) => {
+          const {isBetween, status} = timeStatusList[i];
+          return (
             <View
-              style={[
-                styles.scheduleInfo,
-                {borderColor: isBetween ? COLORS.primary : COLORS.light.gray},
-              ]}>
-              <View style={styles.scheduleTime}>
-                <CText
-                  text={`${i + 1}교시`}
-                  fontWeight="700"
-                  color={COLORS.primary}
-                />
-                <CText
-                  text={`${formattedDate(data.timeStart)} ~ ${formattedDate(
-                    data.timeEnd,
-                  )}`}
-                />
-              </View>
-              <View style={styles.buttonWrap}>
-                {data.check ? (
-                  status && <SvgIcon name={status} width={23} height={23} />
-                ) : (
-                  <View style={styles.statusPass} />
-                )}
+              key={`schedule-interval-info-${i}`}
+              style={styles.scheduleContainer}>
+              <View
+                style={[
+                  styles.scheduleInfo,
+                  {borderColor: isBetween ? COLORS.primary : COLORS.light.gray},
+                ]}>
+                <View style={styles.scheduleTime}>
+                  <CText
+                    text={`${i + 1}교시`}
+                    fontWeight="700"
+                    color={COLORS.primary}
+                  />
+                  <CText
+                    text={`${formattedDate(data.timeStart)} ~ ${formattedDate(
+                      data.timeEnd,
+                    )}`}
+                  />
+                </View>
+                <View style={styles.buttonWrap}>
+                  {data.check ? (
+                    status && <SvgIcon name={status} width={23} height={23} />
+                  ) : (
+                    <View style={styles.statusPass} />
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        );
-      })}
+          );
+        })}
     </View>
   );
 };

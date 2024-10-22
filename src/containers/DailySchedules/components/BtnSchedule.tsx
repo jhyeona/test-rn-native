@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import React, {useCallback, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
 import {UseMutateAsyncFunction} from '@tanstack/react-query';
-import {useRecoilState, useSetRecoilState} from 'recoil';
+import {useSetRecoilState} from 'recoil';
 
 import CButton from '#components/common/CommonButton/CButton.tsx';
-import {APP_VERSION, IS_ANDROID} from '#constants/common.ts';
+import {IS_ANDROID} from '#constants/common.ts';
 import BtnScheduleAttendInfo from '#containers/DailySchedules/components/BtnScheduleAttendInfo.tsx';
 import {
   useGetScheduleHistory,
@@ -15,30 +15,34 @@ import {
   useReqEnter,
   useReqLeave,
 } from '#containers/DailySchedules/hooks/useApi.ts';
-import {useGetAttendeeId} from '#containers/DailySchedules/hooks/useSchedules.ts';
+import {
+  useEventPayload,
+  useGetAttendeeId,
+} from '#containers/DailySchedules/hooks/useSchedules.ts';
+import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
+import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import GlobalState from '#recoil/Global';
-import {
-  requestAddBeaconListener,
-  requestBeaconScanList,
-  requestStartBeaconScanning,
-} from '#services/beaconScanner.ts';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
-import {
-  requestGetLocationInfo,
-  requestWifiList,
-} from '#services/locationScanner.ts';
 import {CommonResponseProps} from '#types/common.ts';
 import {
+  EventType,
   PostEventProps,
   ScheduleDefaultProps,
   ScheduleHistoryDataProps,
 } from '#types/schedule.ts';
-import {getDeviceUUID} from '#utils/common.ts';
-import {validBeaconList, validWifiList} from '#utils/locationHelper.ts';
 import {
   handleOpenSettings,
   requestLocationPermissions,
 } from '#utils/permissionsHelper.ts';
+
+type StatusIconType = 'IntervalComplete' | 'IntervalMiss' | 'IntervalEmpty';
+export interface TimeStatusProps {
+  isCheck: boolean;
+  isBetween: boolean;
+  isAttendEnter: boolean;
+  eventType: string;
+  status: StatusIconType;
+}
 
 const BUTTON_HEIGHT = 28;
 const BtnSchedule = ({
@@ -52,16 +56,16 @@ const BtnSchedule = ({
 }) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
-  const [beaconState, setBeaconState] = useRecoilState(GlobalState.beaconState);
-  const [wifiState, setWifiState] = useRecoilState(GlobalState.wifiState);
-  const [isPermissions, setIsPermissions] = useState(false);
-  const [isAttendTime, setIsAttendTime] = useState(false);
 
-  const {reqEnterEvent} = useReqEnter();
-  const {reqCompleteEvent} = useReqComplete();
-  const {reqLeaveEvent} = useReqLeave();
-  const {reqComebackEvent} = useReqComeback();
-  const {reqAttendEvent} = useReqAttend();
+  const [isAttendTime, setIsAttendTime] = useState(false);
+  const [timeStatusList, setTimeStatusList] = useState<TimeStatusProps[]>([]);
+
+  const fetchEventPayload = useEventPayload();
+  const {mutateAsync: reqEnterEvent} = useReqEnter();
+  const {mutateAsync: reqCompleteEvent} = useReqComplete();
+  const {mutateAsync: reqLeaveEvent} = useReqLeave();
+  const {mutateAsync: reqComebackEvent} = useReqComeback();
+  const {mutateAsync: reqAttendEvent} = useReqAttend();
 
   const attendeeId = useGetAttendeeId();
   const {historyData, refetchHistoryData} = useGetScheduleHistory({
@@ -69,9 +73,9 @@ const BtnSchedule = ({
     scheduleId: scheduleData?.scheduleId,
   });
 
+  // 권한 확인
   const permissionGranted = async () => {
     const grantedResult = await requestLocationPermissions();
-    setIsPermissions(grantedResult);
     if (!grantedResult) {
       setGlobalModalState({
         isVisible: true,
@@ -82,67 +86,8 @@ const BtnSchedule = ({
         isConfirm: true,
         onPressConfirm: () => handleOpenSettings(),
       });
-      return false;
     }
-    return true;
-  };
-
-  const eventPayload = async (): Promise<PostEventProps> => {
-    // BEACON
-    let beaconList = validBeaconList(beaconState);
-    if (beaconList.length === 0) {
-      const result = await requestStartBeaconScanning();
-      if (result) {
-        requestAddBeaconListener();
-      }
-      const beacon = await requestBeaconScanList();
-      beaconList = beacon ? validBeaconList(beacon) : [];
-      setBeaconState(beaconList);
-    }
-    const beaconListData = beaconList.map(beaconItem => {
-      return {
-        uuid: beaconItem.uuid,
-        major: beaconItem.major,
-        minor: beaconItem.minor,
-        rssi: beaconItem.rssi,
-      };
-    });
-
-    // WIFI
-    let wifiList = wifiState;
-    const isWifiValid = validWifiList(wifiState);
-    if (!isWifiValid) {
-      await requestWifiList().then(wifi => {
-        wifiList = wifi;
-        setWifiState(wifi ?? []);
-      });
-    }
-    const wifiListData = wifiList.map(wifiItem => {
-      return {
-        ssid: wifiItem.ssid,
-        bssid: wifiItem.bssid,
-        rssi: wifiItem.rssi,
-      };
-    });
-
-    // Location
-    const locationData = await requestGetLocationInfo();
-
-    // device Id
-    const deviceId = await getDeviceUUID();
-    // 출석 체크 payload
-    return {
-      attendeeId: attendeeId,
-      scheduleId: scheduleData?.scheduleId ?? '',
-      deviceInfo: deviceId,
-      os: `${Platform.OS} ${Platform.Version}`,
-      appVersion: APP_VERSION,
-      latitude: locationData?.latitude ?? 0.1,
-      longitude: locationData?.longitude ?? 0.1,
-      altitude: locationData?.altitude ?? 0.1,
-      wifis: wifiListData,
-      bles: beaconListData,
-    };
+    return grantedResult;
   };
 
   // 이벤트 요청 공통 함수
@@ -158,60 +103,118 @@ const BtnSchedule = ({
     setIsLoading(true);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
-    const payload = await eventPayload();
+    const payload = await fetchEventPayload(
+      attendeeId,
+      scheduleData?.scheduleId ?? 'scheduleId',
+    );
     payload.locationPermit = permissionsCheck;
+    console.log('EVENT PAYLOAD:', payload);
     try {
       await requestEvent(payload);
       await refetchHistoryData();
     } catch (e: any) {
       console.log('req enter error', e);
-      await setAttToCrashlytics({...payload, permission: isPermissions});
+      await setAttToCrashlytics({...payload, permission: permissionsCheck});
       errorToCrashlytics(e, eventName);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // 입실 / 재실 버튼 클릭
   const onPressEnter = async () => {
     const isEntered = !!historyData?.enterEvent;
     if (isEntered && isAttendTime) {
-      await handleEvent(reqAttendEvent, 'requestEventAttend');
+      await handleEvent(reqAttendEvent, 'requestEventAttend'); // 재실
       return;
     }
-    await handleEvent(reqEnterEvent, 'requestEventEnter');
+    await handleEvent(reqEnterEvent, 'requestEventEnter'); // 입실
   };
 
-  const onPressComplete = async () => {
+  // 퇴실 / 외출 / 외출 종료 버튼 클릭
+  const onPressAction = (eventType: EventType) => {
+    const eventInfo = {
+      COMPLETE: {
+        message: '퇴실하시겠습니까?',
+        eventFn: () => handleEvent(reqCompleteEvent, 'requestEventComplete'),
+      },
+      LEAVE: {
+        message: '외출하시겠습니까?',
+        eventFn: () => handleEvent(reqLeaveEvent, 'requestEventLeave'),
+      },
+      COMEBACK: {
+        message: '외출 종료하시겠습니까?',
+        eventFn: () => handleEvent(reqComebackEvent, 'requestEventComeback'),
+      },
+      ATTEND: {message: '', eventFn: () => {}},
+      ENTER: {message: '', eventFn: () => {}},
+    };
+
     setGlobalModalState({
       isVisible: true,
       title: '안내',
-      message: '퇴실하시겠습니까?',
+      message: eventInfo[eventType].message,
       isConfirm: true,
-      onPressConfirm: () =>
-        handleEvent(reqCompleteEvent, 'requestEventComplete'),
+      onPressConfirm: eventInfo[eventType].eventFn,
     });
   };
 
-  const onPressLeave = () => {
-    setGlobalModalState({
-      isVisible: true,
-      title: '안내',
-      message: '외출하시겠습니까?',
-      isConfirm: true,
-      onPressConfirm: () => handleEvent(reqLeaveEvent, 'requestEventLeave'),
-    });
-  };
+  // 현재 시간별 출결의 활성화 여부
+  const updateTimeStatus = useCallback(() => {
+    const newStatusList =
+      scheduleData?.scheduleTimeList.map(data => {
+        const {isAttendBetween, isAttendAfter, isAttendEnter} =
+          allowScheduleTime({
+            scheduleData,
+            startTime: data.timeStart,
+            endTime: data.timeEnd,
+          });
+        // 시간별 출결의 출석 상태 아이콘
+        const isEntered = historyData?.intervalEventList?.some(
+          item => item?.baseTime === data.timeStart,
+        );
+        const status: StatusIconType = isEntered
+          ? 'IntervalComplete'
+          : isAttendAfter
+            ? 'IntervalMiss'
+            : 'IntervalEmpty';
 
-  const onPressComeback = () => {
-    setGlobalModalState({
-      isVisible: true,
-      title: '안내',
-      message: '외출 종료하시겠습니까?',
-      isConfirm: true,
-      onPressConfirm: () =>
-        handleEvent(reqComebackEvent, 'requestEventComeback'),
+        return {
+          isBetween: isAttendBetween,
+          isAttendEnter,
+          eventType: isEntered ? 'ATTEND' : '',
+          status,
+          isCheck: data.check,
+        };
+      }) ?? [];
+
+    setTimeStatusList(prevList => {
+      const hasChanged = newStatusList.some((newStatus, i) => {
+        if (newStatusList) {
+          const current = prevList[i];
+          return (
+            current?.isBetween !== newStatus?.isBetween ||
+            current?.isAttendEnter !== newStatus?.isAttendEnter ||
+            current?.eventType !== newStatus?.eventType ||
+            current?.status !== newStatus?.status ||
+            current?.isCheck !== newStatus?.isCheck
+          );
+        }
+      });
+      // 상태가 변경된 경우에만 업데이트
+      if (hasChanged) {
+        // 시간별 출결의 출석 유효 시간 + 미출석 + 시간별 체크 활성화 일 경우 [출석] 버튼 활성화 되도록 전달
+        const isEnter = newStatusList.some(
+          ({isAttendEnter, status, isCheck}) =>
+            isAttendEnter && status === 'IntervalEmpty' && isCheck,
+        );
+        setIsAttendTime(isEnter);
+        return newStatusList;
+      }
+      return prevList;
     });
-  };
+  }, [scheduleData, historyData]);
+  useGlobalInterval(updateTimeStatus, 3000);
 
   return (
     <>
@@ -236,7 +239,9 @@ const BtnSchedule = ({
               />
               <CButton
                 text="퇴실"
-                onPress={onPressComplete}
+                onPress={() => {
+                  onPressAction('COMPLETE');
+                }}
                 buttonStyle={[styles.checkButton, styles.buttonCommon]}
                 disabled={
                   !historyData?.enterEvent || !!historyData?.completeEvent
@@ -248,7 +253,11 @@ const BtnSchedule = ({
             {!historyData?.completeEvent && (
               <CButton
                 text={historyData?.isLeaved ? '외출 종료' : '외출 시작'}
-                onPress={historyData?.isLeaved ? onPressComeback : onPressLeave}
+                onPress={() =>
+                  historyData?.isLeaved
+                    ? onPressAction('COMEBACK')
+                    : onPressAction('LEAVE')
+                }
                 buttonStyle={styles.buttonCommon}
                 fontSize={12}
                 whiteButton={historyData?.isLeaved}
@@ -262,7 +271,7 @@ const BtnSchedule = ({
       {scheduleData?.scheduleTimeList?.length && (
         <BtnScheduleAttendInfo
           scheduleData={scheduleData}
-          setIsEnter={setIsAttendTime}
+          timeStatusList={timeStatusList}
         />
       )}
     </>
