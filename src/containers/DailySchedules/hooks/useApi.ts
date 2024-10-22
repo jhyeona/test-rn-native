@@ -77,16 +77,17 @@ export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
   return {historyData: data, refetchHistoryData: refetch};
 };
 
-// 입실 요청
-export const useReqEnter = () => {
+// 이벤트 요청 처리 공통 훅
+const useRequestEvent = (
+  mutationFn: (payload: PostEventProps) => Promise<any>,
+  successMessage: string,
+) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const invalidateQueriesAndShowModal = useInvalidateQueriesAndShowModal();
 
-  const {mutateAsync: reqEnterEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventEnter(payload);
-    },
+  const {mutateAsync} = useMutation({
+    mutationFn,
     onMutate: () => {
       setIsLoading(true);
     },
@@ -94,120 +95,43 @@ export const useReqEnter = () => {
       setIsLoading(false);
     },
     onSuccess: async () => {
-      const message = eventSuccessMessage.ENTER;
-      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, message);
+      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, successMessage);
     },
     onError: (error: CommonResponseProps<null>) => {
       showErrorModal(error.code, setModalState);
     },
   });
-  return {reqEnterEvent};
+
+  return {mutateAsync};
+};
+
+// 입실 요청
+export const useReqEnter = () => {
+  return useRequestEvent(requestPostEventEnter, eventSuccessMessage.ENTER);
 };
 
 // 퇴실 요청
 export const useReqComplete = () => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-  const invalidateQueriesAndShowModal = useInvalidateQueriesAndShowModal();
-
-  const {mutateAsync: reqCompleteEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventComplete(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: async () => {
-      const message = eventSuccessMessage.COMPLETE;
-      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, message);
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      showErrorModal(error.code, setModalState);
-    },
-  });
-  return {reqCompleteEvent};
+  return useRequestEvent(
+    requestPostEventComplete,
+    eventSuccessMessage.COMPLETE,
+  );
 };
 
 // 외출 요청
 export const useReqLeave = () => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-  const invalidateQueriesAndShowModal = useInvalidateQueriesAndShowModal();
-
-  const {mutateAsync: reqLeaveEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventLeave(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: async () => {
-      const message = eventSuccessMessage.LEAVE;
-      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, message);
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      showErrorModal(error.code, setModalState);
-    },
-  });
-  return {reqLeaveEvent};
+  return useRequestEvent(requestPostEventLeave, eventSuccessMessage.LEAVE);
 };
 
 // 복귀 요청
 export const useReqComeback = () => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-  const invalidateQueriesAndShowModal = useInvalidateQueriesAndShowModal();
-
-  const {mutateAsync: reqComebackEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventComeback(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: async () => {
-      const message = eventSuccessMessage.COMEBACK;
-      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, message);
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      showErrorModal(error.code, setModalState);
-    },
-  });
-  return {reqComebackEvent};
+  return useRequestEvent(
+    requestPostEventComeback,
+    eventSuccessMessage.COMEBACK,
+  );
 };
 
 // 시간별 체크 요청
 export const useReqAttend = () => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-  const invalidateQueriesAndShowModal = useInvalidateQueriesAndShowModal();
-
-  const {mutateAsync: reqAttendEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventAttend(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: async () => {
-      const message = eventSuccessMessage.ATTEND;
-      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, message);
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      showErrorModal(error.code, setModalState);
-    },
-  });
-  return {reqAttendEvent};
+  return useRequestEvent(requestPostEventAttend, eventSuccessMessage.ATTEND);
 };
