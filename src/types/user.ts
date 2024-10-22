@@ -6,6 +6,14 @@ export interface GetAccessTokenProps {
   expires_in: number;
 }
 
+export interface ResRefreshToken {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  role: string;
+  token_type: string;
+}
+
 export interface ResSmsConfirmProps {
   smsConfirmedId: string;
   phone: string;
