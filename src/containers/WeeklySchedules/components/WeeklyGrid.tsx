@@ -5,7 +5,6 @@ import {QueryObserverResult} from '@tanstack/react-query';
 import {Moment} from 'moment';
 
 import CText from '#components/common/CustomText/CText.tsx';
-import NoData from '#components/common/NoData';
 import {WEEKLY_SCHEDULE_LEFT_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
 import DaysLabel from '#containers/WeeklySchedules/components/DaysLabel.tsx';
@@ -144,7 +143,10 @@ const WeeklyGrid = ({
       }}
       style={{marginBottom: 20}}
       scrollEnabled={true}
-      ListEmptyComponent={<NoData message="강의 일정이 없습니다." fullHeight />}
+      ListFooterComponentStyle={styles.footerForNodata}
+      ListFooterComponent={
+        <CText text={scheduleData?.length ? '' : '강의 일정이 없습니다.'} />
+      }
     />
   );
 };
@@ -187,6 +189,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
+  },
+  footerForNodata: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: [{translateX: '-50%'}, {translateY: '-50%'}],
   },
 });
 export default WeeklyGrid;

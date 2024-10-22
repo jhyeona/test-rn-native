@@ -30,8 +30,9 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
     [],
   );
   const [timeLineData, setTimeLineData] = useState<TimeLineDataProps>({
-    timeLineStart: '00:00',
-    timeLineEnd: '00:00',
+    // 주간일정 캘린더의 타임라인을 표시할 시작/종료 시간
+    timeLineStart: '09:00',
+    timeLineEnd: '15:00',
   });
 
   const {data, refetch, fetchStatus, status, error, isError} = useQuery(
@@ -41,11 +42,11 @@ export const useGetWeekSchedule = (payload: GetScheduleProps) => {
   useHandleError(isError, error);
   useEffect(() => {
     if (data) {
-      const timeLineTimes = getAdjustedTimes(data.scheduleList);
+      const adjustTimes = getAdjustedTimes(data.scheduleList);
       setTimeLineData({
-        timeLineStart: timeLineTimes.adjustedEarliest ?? '00:00',
-        timeLineEnd: timeLineTimes.adjustedLatest ?? '00:00',
-      });
+        timeLineStart: adjustTimes.adjustedEarliest ?? '09:00',
+        timeLineEnd: adjustTimes.adjustedLatest ?? '15:00',
+      }); // 데이터가 없을 경우 09:00~15:00 으로 세팅
       const formatted = data.scheduleList.map(item => {
         const colors = getRandomColor(item.lecture.lectureName);
         const startTime = moment(item.scheduleStartTime);

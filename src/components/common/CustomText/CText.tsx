@@ -6,7 +6,7 @@ import {TextStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 import {IS_ANDROID} from '#constants/common.ts';
 
 interface Props {
-  text: string;
+  text?: string;
   color?: string;
   fontSize?: number;
   fontWeight?: string;
@@ -14,7 +14,6 @@ interface Props {
   style?: StyleProp<TextStyle>;
   lineBreak?: boolean;
   numberOfLines?: number;
-  flex?: boolean;
 }
 const CText = (props: Props) => {
   const {
@@ -26,7 +25,6 @@ const CText = (props: Props) => {
     style,
     lineBreak,
     numberOfLines,
-    flex,
   } = props;
 
   const realFontSize = IS_ANDROID ? fontSize - 1 : fontSize;

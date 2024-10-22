@@ -235,9 +235,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   refreshText: {
+    marginVertical: 50,
     textDecorationLine: 'underline',
     textAlign: 'center',
-    marginVertical: 20,
   },
 });
 

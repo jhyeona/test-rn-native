@@ -34,7 +34,6 @@ interface Props {
   readOnly?: boolean;
   maxLength?: number;
   inputMode?: InputModeOptions;
-  fullWidth?: DimensionValue;
   fontSize?: number;
   children?: ReactNode;
 }
@@ -56,38 +55,44 @@ const CInputWithDropdown = (props: Props) => {
     readOnly,
     maxLength,
     inputMode,
-    fullWidth,
     fontSize,
     children,
   } = props;
   return (
-    <View style={{width: fullWidth ?? '100%'}}>
+    <View style={{flex: 1, marginBottom: 8}}>
       <View style={styles.titleContainer}>
         {children ?? (
           <CText text={title} fontWeight={'500'} fontSize={fontSize} />
         )}
-        {isWarning && <Text style={styles.errorMessage}>{errorMessage}</Text>}
       </View>
-      <View style={{flexDirection: 'row'}}>
-        <View
-          style={[
-            styles.inputContainer,
-            {borderColor: isWarning ? COLORS.warning : COLORS.layout},
-          ]}>
-          <View style={{flex: 1}}>
-            <TextInput
-              placeholder={placeholder}
-              placeholderTextColor={COLORS.placeholder}
-              onChangeText={text => setInputValue(text)}
-              value={inputValue}
-              style={[styles.input, {flex: 1, fontSize: fontSize ?? 14}]}
-              secureTextEntry={secureTextEntry}
-              autoCapitalize="none"
-              readOnly={readOnly}
-              maxLength={maxLength}
-              inputMode={inputMode}
-            />
+      <View style={{gap: 10, flexDirection: 'row'}}>
+        <View style={{flex: 1}}>
+          <View
+            style={[
+              styles.inputContainer,
+              {borderColor: isWarning ? COLORS.warning : COLORS.layout},
+            ]}>
+            <View style={{flex: 1}}>
+              <TextInput
+                placeholder={placeholder}
+                placeholderTextColor={COLORS.placeholder}
+                onChangeText={text => setInputValue(text)}
+                value={inputValue}
+                style={[styles.input, {flex: 1, fontSize: fontSize ?? 14}]}
+                secureTextEntry={secureTextEntry}
+                autoCapitalize="none"
+                readOnly={readOnly}
+                maxLength={maxLength}
+                inputMode={inputMode}
+              />
+            </View>
           </View>
+          <CText
+            text={isWarning ? errorMessage : ''}
+            style={styles.errorMessage}
+            fontSize={12}
+            color={COLORS.warning}
+          />
         </View>
         <View style={{flex: 1}}>
           <Dropdown
@@ -108,9 +113,7 @@ const CInputWithDropdown = (props: Props) => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    justifyContent: 'center',
-    marginBottom: 24,
-    marginRight: 10,
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     height: 52,
     flex: 1,
@@ -127,6 +130,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
-  errorMessage: {marginLeft: 8, color: COLORS.warning, fontSize: 12},
+  errorMessage: {
+    margin: 4,
+    color: COLORS.warning,
+    fontSize: 12,
+  },
 });
 export default CInputWithDropdown;

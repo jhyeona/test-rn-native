@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Pressable} from 'react-native';
+import {Pressable, View} from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import moment, {Moment} from 'moment';
@@ -16,6 +16,7 @@ interface DatePickerProps {
   dateText?: string; // 선택된 값과 별개로 표시할 값
   format?: string; // 날짜 형식
   disabled?: boolean;
+  todayDot?: boolean;
 }
 
 const DatePicker = ({
@@ -25,6 +26,7 @@ const DatePicker = ({
   disabled,
   format,
   dateText,
+  todayDot,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -72,11 +74,26 @@ const DatePicker = ({
         }}
         disabled={disabled}
         onPress={showDatePicker}>
-        <CText
-          color={disabled ? COLORS.placeholder : 'black'}
-          text={dateText ?? moment(selectedDate).format(format ?? DATE_FORMAT)}
-          style={{paddingRight: 12}}
-        />
+        <View style={{position: 'relative'}}>
+          <CText
+            color={disabled ? COLORS.placeholder : 'black'}
+            text={
+              dateText ?? moment(selectedDate).format(format ?? DATE_FORMAT)
+            }
+          />
+          {todayDot && moment().isSame(moment(selectedDate), 'day') && (
+            <View
+              style={{
+                position: 'absolute',
+                right: -8,
+                width: 7,
+                height: 7,
+                borderRadius: 7,
+                backgroundColor: COLORS.primary,
+              }}
+            />
+          )}
+        </View>
         <SvgIcon name="CalendarDot" />
       </Pressable>
       <DateTimePickerModal

@@ -122,9 +122,9 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
-  - OneSignalXCFramework (5.2.4):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.4)
-  - OneSignalXCFramework/OneSignal (5.2.4):
+  - OneSignalXCFramework (5.2.5):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.5)
+  - OneSignalXCFramework/OneSignal (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -132,38 +132,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.4):
+  - OneSignalXCFramework/OneSignalComplete (5.2.5):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.4)
-  - OneSignalXCFramework/OneSignalExtension (5.2.4):
+  - OneSignalXCFramework/OneSignalCore (5.2.5)
+  - OneSignalXCFramework/OneSignalExtension (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.4):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.4):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.4):
+  - OneSignalXCFramework/OneSignalLocation (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.4):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.4):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.5):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.4):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.5):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.4):
+  - OneSignalXCFramework/OneSignalUser (5.2.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -1449,8 +1449,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-onesignal (5.2.4):
-    - OneSignalXCFramework (= 5.2.4)
+  - react-native-onesignal (5.2.5):
+    - OneSignalXCFramework (= 5.2.5)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-safe-area-context (4.11.0):
     - DoubleConversion
@@ -1518,7 +1518,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-webview (13.12.2):
+  - react-native-webview (13.12.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1799,7 +1799,7 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
-  - RNBootSplash (6.1.3):
+  - RNBootSplash (6.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1841,7 +1841,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDeviceInfo (13.0.0):
+  - RNDeviceInfo (13.1.0):
     - React-Core
   - RNFBAnalytics (21.0.0):
     - Firebase/Analytics (= 11.2.0)
@@ -1855,27 +1855,6 @@ PODS:
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNFlashList (1.7.1):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - RNGestureHandler (2.20.0):
     - DoubleConversion
     - glog
@@ -1918,7 +1897,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.15.3):
+  - RNReanimated (3.15.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1938,10 +1917,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.3)
-    - RNReanimated/worklets (= 3.15.3)
+    - RNReanimated/reanimated (= 3.15.5)
+    - RNReanimated/worklets (= 3.15.5)
     - Yoga
-  - RNReanimated/reanimated (3.15.3):
+  - RNReanimated/reanimated (3.15.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1962,7 +1941,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.15.3):
+  - RNReanimated/worklets (3.15.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2151,7 +2130,6 @@ DEPENDENCIES:
   - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
-  - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -2329,8 +2307,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
     :path: "../node_modules/@react-native-firebase/crashlytics"
-  RNFlashList:
-    :path: "../node_modules/@shopify/flash-list"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNPermissions:
@@ -2364,7 +2340,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   hermes-engine: 8d2103d6c0176779aea4e25df6bb1410f9946680
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  OneSignalXCFramework: 46ca7cd13f44fc5bec42ec3a5f4ff1548a9244d4
+  OneSignalXCFramework: 76ca508fc2b941317729d13fdec96817f8ef5b3b
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
@@ -2400,9 +2376,9 @@ SPEC CHECKSUMS:
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-image-picker: df6597d4b1878a443796be11eb2b7286ed10ece6
   react-native-mmkv: 6a5f027f0d39569e7e12c56799bb6adae17e32cf
-  react-native-onesignal: b2ccb145f06433f23c834be17a5f6522308e80f0
+  react-native-onesignal: 505a974a74b97e81d7ab090a63ea065566e2339f
   react-native-safe-area-context: 4571abffff5db8a314b849a2c72aae5cba2e4c7a
-  react-native-webview: 095d4767cb4e74b5d2d0c1b768648972b0fbe9f3
+  react-native-webview: b20d2755d69776b5e254822e8c8f452694f9d2b2
   React-nativeconfig: 31072ab0146e643594f6959c7f970a04b6c9ddd0
   React-NativeModulesApple: f49bb0befd8650ac3ff8fc2684072b16c09bf478
   React-perflogger: 59e1a3182dca2cee7b9f1f7aab204018d46d1914
@@ -2429,16 +2405,15 @@ SPEC CHECKSUMS:
   React-utils: d1bae5ac6a5fb94a772ebfc7a7e1aba3a6706a3a
   ReactCodegen: 99b435b58bd874bb0626b3fb16437d2e8735d370
   ReactCommon: 1007c09a406a451ddbd874e51511aa541d6034f6
-  RNBootSplash: 316e95b384570dc35d3f428dc58fe1982b1d4cec
+  RNBootSplash: c6c32951732fa673251ca51fc7cb82c75d59e3b1
   RNDateTimePicker: b4dbbbe7a49cf4c9d9c01179f6d30242018e20da
-  RNDeviceInfo: 55264dd7cc939dad6e9c231a7621311f5277f1dc
+  RNDeviceInfo: e13b7d68878fba693c9fbb13ca4d56ad57d95917
   RNFBAnalytics: e8219c0955286d0f30e1d7895fce8481fda5208d
   RNFBApp: 4122dd41d8d7ff017b6ecf777a6224f5b349ca04
   RNFBCrashlytics: 8a58cefd68fd73d91c7610d4c203aa9cfdc3335f
-  RNFlashList: b85e7b9e77c3b6d9169f88d60ed6dca0a479a822
   RNGestureHandler: 854a91154965db8d756a9c5efbff38eb889e1cb0
   RNPermissions: cf7efb34cbe7c8df3a6d84e5b7e3244517002177
-  RNReanimated: ad4f634edc93e287fe4d75ff28a0fac772543868
+  RNReanimated: 1e0869d2e1e7e662814003000a4ffdaa49dcdc2f
   RNScreens: 47d5b0b48402f5a2da5b2dd543deae3c9083a5ac
   RNSVG: 2046b471030c6ac19cb800d2428e33ca59df1929
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d

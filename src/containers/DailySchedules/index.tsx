@@ -89,6 +89,7 @@ const DailySchedule = ({
                 handleDateSelection={selectedDate => {
                   setSelectedDate(prev => ({...prev, date: selectedDate}));
                 }}
+                todayDot
               />
               {/*<AcademySelector />*/}
               <View style={styles.container}>
