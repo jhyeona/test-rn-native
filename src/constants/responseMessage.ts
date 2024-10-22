@@ -3,7 +3,7 @@ import {EventType} from '#types/schedule.ts';
 
 // 로그인 에러 메세지
 export const loginErrorMessage: Record<string, string> = {
-  '4018': '회원 탈퇴 대기중입니다.\n탈퇴를 철회하고 로그인할까요?',
+  '4018': '회원 탈퇴 유예기간(7일)입니다.\n탈퇴를 철회하고 로그인할까요?',
   '4000': '휴대폰 번호와 비밀번호를 확인해주세요.',
   '4019':
     '사용 중지된 기관의 테스트 계정입니다.\n기관 재사용은 엘핀에 문의해주세요.',

@@ -43,11 +43,12 @@ export const useSignIn = () => {
 
       // 탈퇴 대기중에 로그인 요청했을 경우 탈퇴 철회 가능하도록 처리
       if (error.code === '4018') {
+        console.log(error);
         setModalState({
           isVisible: true,
           isConfirm: true,
           title: '안내',
-          message,
+          message: error.description ?? message,
           onPressConfirm: async () => {
             if (requestData) {
               await signIn({...requestData, isRevive: true});
