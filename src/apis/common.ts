@@ -4,7 +4,9 @@ import {setItem} from '#utils/storageHelper.ts';
 
 export const tokenRefresh = async () => {
   try {
-    const {access_token, refresh_token} = await requestPostRefreshToken();
+    const {access_token, refresh_token, expires_in} =
+      await requestPostRefreshToken();
+    console.log('TOKEN REFRESH(expires):', expires_in);
     setItem(ACCESS_TOKEN, access_token);
     setItem(REFRESH_TOKEN, refresh_token);
     return true;

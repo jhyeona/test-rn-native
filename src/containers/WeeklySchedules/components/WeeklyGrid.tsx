@@ -139,7 +139,8 @@ const WeeklyGrid = ({
       keyExtractor={item => item}
       contentContainerStyle={{
         flex: hours.length > 0 ? 0 : 1,
-        marginVertical: 10,
+        marginTop: 10,
+        marginBottom: 20,
       }}
       style={{marginBottom: 20}}
       scrollEnabled={true}
