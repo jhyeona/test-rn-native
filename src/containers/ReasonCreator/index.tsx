@@ -20,7 +20,6 @@ import {COLORS} from '#constants/colors.ts';
 import {MAX_FILE_SIZE, REQ_DATE_FORMAT} from '#constants/common.ts';
 import {REASON_STATUS_MAP} from '#constants/reason.ts';
 import {useGetLectureList} from '#containers/DailySchedules/hooks/useApi.ts';
-import {useGetAttendeeId} from '#containers/DailySchedules/hooks/useSchedules.ts';
 import PhotoBox from '#containers/ReasonCreator/components/PhotoBox.tsx';
 import {NavigateReasonProps} from '#containers/ReasonStatement';
 import {
@@ -53,7 +52,6 @@ const ReasonCreator = ({
       RouteProp<{ReasonCreator: NavigateReasonProps}, 'ReasonCreator'>
     >();
   const {isCreate, reasonId} = route.params;
-  const attendeeId = useGetAttendeeId();
   const {lectureItems} = useGetLectureList();
 
   const [disabled, setDisabled] = useState(false);
@@ -81,6 +79,8 @@ const ReasonCreator = ({
   };
 
   const handleCreate = async () => {
+    const lectureId = selectedData?.lecture?.id ?? '';
+    const date = selectedData.date.format(REQ_DATE_FORMAT);
     try {
       const formData = new FormData();
       const deletedImages: string[] = []; // 원래 있던 데이터 중 삭제할 데이터 목록
@@ -100,15 +100,14 @@ const ReasonCreator = ({
 
       if (isCreate) {
         // 생성
-        formData.append('lectureId', selectedData?.lecture?.id ?? '');
-        formData.append('attendeeId', attendeeId);
-        formData.append('date', selectedData.date.format(REQ_DATE_FORMAT));
+        formData.append('lectureId', lectureId);
+        formData.append('date', date);
         formData.append('content', text);
         await createReason(formData);
       } else {
         // 수정
-        formData.append('reasonId', reasonId ?? '');
-        formData.append('date', selectedData.date.format(REQ_DATE_FORMAT));
+        formData.append('reasonId', reasonId);
+        formData.append('date', date);
         formData.append('content', text);
         if (deletedImages.length > 0) {
           formData.append('deletedImages', deletedImages.join(','));
@@ -119,8 +118,7 @@ const ReasonCreator = ({
     } catch (error) {
       await setAttToCrashlytics({
         reasonId,
-        attendeeId,
-        lectureId: selectedData?.lecture?.id,
+        lectureId,
       });
       errorToCrashlytics(
         error,
@@ -146,6 +144,7 @@ const ReasonCreator = ({
       setText(reasonDetails.content);
 
       const imgListData = reasonDetails.imagePathList.map(img => {
+        console.log('imgURL: ', img);
         const imgUrl = img.replace('{aws.s3.bucket-name}', 'checkhere-dev');
         return {uri: imgUrl, isOriginal: true};
       });
