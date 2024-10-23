@@ -22,7 +22,7 @@ import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
 import {commonStyles} from '#utils/common.ts';
-import {getItem} from '#utils/storageHelper.ts';
+import {getStorageItem} from '#utils/storageHelper.ts';
 
 const DATE_VIEW_FORMAT = 'YYYY년 MM월 DD일 (dd)';
 
@@ -42,7 +42,7 @@ const DailySchedule = ({
 
   useEffect(() => {
     if (userData) {
-      const token = getItem(ACCESS_TOKEN);
+      const token = getStorageItem(ACCESS_TOKEN);
       if (!token) {
         setIsLogin(false);
         return;

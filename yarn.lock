@@ -7575,7 +7575,7 @@ __metadata:
     react-native-gesture-handler: "npm:^2.20.0"
     react-native-get-random-values: "npm:^1.11.0"
     react-native-image-picker: "npm:^7.1.2"
-    react-native-mmkv: "npm:3.0.2"
+    react-native-mmkv: "npm:^3.1.0"
     react-native-modal-datetime-picker: "npm:^18.0.0"
     react-native-onesignal: "npm:^5.2.4"
     react-native-permissions: "npm:^4.1.5"
@@ -10723,13 +10723,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-mmkv@npm:3.0.2":
-  version: 3.0.2
-  resolution: "react-native-mmkv@npm:3.0.2"
+"react-native-mmkv@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "react-native-mmkv@npm:3.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/ffc9fd0f2a070b2ae5c4f5ec2c8c6ca3c69678f380d55405ab8079c54f76777ce0c792858d3a0496bc3f837e073d5084b3502b9ed78998503cbe4d07cd8d9d31
+  checksum: 10c0/baaa1d2c76cc7bb697476d27cd0e62a3619d33644511a919fd681140de5ed790e479487435e905ff50ea14cfc8cb4702f933158c2a3fafce2833e9f030be69fb
   languageName: node
   linkType: hard
 

@@ -3,8 +3,8 @@ import Config from 'react-native-config';
 import axios, {AxiosResponse} from 'axios';
 
 import {tokenRefresh} from '#apis/common.ts';
-import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
-import {storage} from '#utils/storageHelper.ts';
+import {ACCESS_TOKEN} from '#constants/common.ts';
+import {clearStorage, getStorageItem} from '#utils/storageHelper.ts';
 
 // 토큰 미사용 인스턴스
 export const instanceWithoutToken = axios.create({
@@ -31,7 +31,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     // 요청이 전달되기 전에 작업 수행 -> token 확인
-    const accessToken = storage.getString(ACCESS_TOKEN);
+    const accessToken = getStorageItem(ACCESS_TOKEN);
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -62,9 +62,7 @@ instance.interceptors.response.use(
     }
     if (error.response.data.code === '4103') {
       // 유효하지 않은 토큰
-      storage.delete(ACCESS_TOKEN);
-      storage.delete(REFRESH_TOKEN);
-      storage.clearAll();
+      clearStorage();
     }
 
     if (axios.isAxiosError<any>(error)) {

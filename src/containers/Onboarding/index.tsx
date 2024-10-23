@@ -9,7 +9,7 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
-import {setItem, storage} from '#utils/storageHelper.ts';
+import {setStorageItem, storage} from '#utils/storageHelper.ts';
 
 const Onboarding = ({
   navigation,
@@ -43,7 +43,7 @@ const Onboarding = ({
   };
 
   const onPressComplete = () => {
-    setItem('isVisitor', isChecked);
+    setStorageItem('isVisitor', isChecked);
     navigation.navigate('SignIn');
   };
 

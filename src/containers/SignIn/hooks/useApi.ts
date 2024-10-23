@@ -9,7 +9,7 @@ import {requestPostGetToken} from '#containers/SignIn/services';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqSignIn} from '#types/user.ts';
-import {setItem} from '#utils/storageHelper.ts';
+import {setStorageItem} from '#utils/storageHelper.ts';
 
 export const useSignIn = () => {
   const [requestData, setRequestData] = useState<ReqSignIn | null>(null);
@@ -30,8 +30,8 @@ export const useSignIn = () => {
     },
     onSuccess: data => {
       setIsLogin(true);
-      setItem(ACCESS_TOKEN, data.access_token);
-      setItem(REFRESH_TOKEN, data.refresh_token);
+      setStorageItem(ACCESS_TOKEN, data.access_token);
+      setStorageItem(REFRESH_TOKEN, data.refresh_token);
     },
     onError: (error: CommonResponseProps<null>) => {
       setIsLogin(false);

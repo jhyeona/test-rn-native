@@ -27,7 +27,7 @@ import TabNavigation from '#navigation/TabNavigation';
 import GlobalState from '#recoil/Global';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
-import {getItem, storage} from '#utils/storageHelper.ts';
+import {getStorageItem, storage} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const RootStackNavigation = () => {
@@ -58,14 +58,14 @@ const RootStackNavigation = () => {
     onesignalInit();
     // mmkv storage listener
     const storageListener = storage.addOnValueChangedListener(changedKey => {
-      const newValue = getItem(changedKey);
+      const newValue = getStorageItem(changedKey);
       if (changedKey === ACCESS_TOKEN && newValue === TOKEN_ERROR) {
         Alert.alert('세션이 만료되었습니다.\n다시 로그인해주세요.');
         setIsLogin(false);
       }
     });
 
-    const token = getItem(ACCESS_TOKEN);
+    const token = getStorageItem(ACCESS_TOKEN);
     setIsLogin(!!token);
 
     return () => {
