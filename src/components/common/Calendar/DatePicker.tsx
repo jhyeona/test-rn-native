@@ -7,7 +7,7 @@ import moment, {Moment} from 'moment';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {DATE_FORMAT} from '#constants/common.ts';
+import {DATE_FORMAT_DASH} from '#constants/common.ts';
 
 interface DatePickerProps {
   handleDateSelection?: (date: Moment) => void; // date 반환
@@ -78,7 +78,8 @@ const DatePicker = ({
           <CText
             color={disabled ? COLORS.placeholder : 'black'}
             text={
-              dateText ?? moment(selectedDate).format(format ?? DATE_FORMAT)
+              dateText ??
+              moment(selectedDate).format(format ?? DATE_FORMAT_DASH)
             }
           />
           {todayDot && moment().isSame(moment(selectedDate), 'day') && (

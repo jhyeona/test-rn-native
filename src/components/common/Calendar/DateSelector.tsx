@@ -6,7 +6,7 @@ import moment, {Moment} from 'moment';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {DATE_FORMAT} from '#constants/common.ts';
+import {DATE_FORMAT_DASH} from '#constants/common.ts';
 
 interface Props {
   onPressCalendar: () => void;
@@ -29,7 +29,7 @@ const DateSelector = (props: Props) => {
           borderRadius: 7,
         }}
         onPress={onPressCalendar}>
-        <CText text={moment(selectedDate).format(DATE_FORMAT)} />
+        <CText text={moment(selectedDate).format(DATE_FORMAT_DASH)} />
         <SvgIcon name="CalendarDot" />
       </Pressable>
     </>

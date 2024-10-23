@@ -101,7 +101,6 @@ const UserWithdraw = ({
             placeholder="현재 비밀번호를 입력해주세요."
             secureTextEntry
           />
-
           <CButton
             text="탈퇴하기"
             onPress={onPressWithdraw}

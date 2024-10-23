@@ -93,13 +93,7 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
     <CSafeAreaView>
       <Header title="설정" />
       <ScrollView>
-        <View
-          style={[
-            styles.containerRow,
-            {
-              paddingBottom: 16,
-            },
-          ]}>
+        <View style={[styles.containerRow, {paddingBottom: 16}]}>
           <CText text="PUSH 알림 설정" fontSize={20} fontWeight="500" />
           <Toggle
             isActive={isPushApp}

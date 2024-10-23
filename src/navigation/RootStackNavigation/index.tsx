@@ -13,7 +13,6 @@ import {ACCESS_TOKEN, TOKEN_ERROR} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import FindPassword from '#containers/FindPassword';
 import Initialize from '#containers/Initialize';
-import LectureDetail from '#containers/LectureDetail/index.tsx';
 import Onboarding from '#containers/Onboarding';
 import PrivacyPolicy from '#containers/PrivacyPolicy';
 import ReasonCreator from '#containers/ReasonCreator';
@@ -113,11 +112,6 @@ const RootStackNavigation = () => {
             <RootStack.Screen
               name="Root"
               component={TabNavigation}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="LectureDetail"
-              component={LectureDetail}
               options={{headerShown: false}}
             />
             <RootStack.Screen
