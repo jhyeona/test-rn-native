@@ -4,6 +4,7 @@ import {Alert} from 'react-native';
 import {useRecoilState} from 'recoil';
 
 import Dropdown, {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
+import {getUniqueAcademyList} from '#containers/SelectAcademy/services/AcademyListHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 
@@ -21,14 +22,8 @@ const AcademySelector = () => {
   };
 
   useEffect(() => {
-    if (userData && userData.studentList.length > 0) {
-      const newList: Array<ItemProps> = [];
-      userData?.studentList.map(val => {
-        newList.push({
-          label: val.academy.name,
-          id: String(val.academy.academyId),
-        });
-      });
+    if (userData) {
+      const newList = getUniqueAcademyList(userData);
 
       // 변경된 경우에만 업데이트
       const isListChanged =

@@ -154,7 +154,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                       <View style={styles.academyItem}>
                         <CText
                           numberOfLines={2}
-                          text={val.academy.name}
+                          text={`${val.academy.name}${val.type === 'TEACHER' ? ' (강사)' : ''}`}
                           style={{flex: 1, marginHorizontal: 10}}
                           lineBreak
                         />
