@@ -6,8 +6,7 @@ export interface GetScheduleProps {
 }
 
 export interface GetScheduleHistoryProps {
-  attendeeId: string;
-  scheduleId?: string;
+  scheduleId: string;
 }
 
 export interface ScheduleTimeProps {

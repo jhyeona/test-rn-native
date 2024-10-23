@@ -69,8 +69,7 @@ const BtnSchedule = ({
 
   const attendeeId = useGetAttendeeId();
   const {historyData, refetchHistoryData} = useGetScheduleHistory({
-    attendeeId: attendeeId,
-    scheduleId: scheduleData?.scheduleId,
+    scheduleId: scheduleData?.scheduleId ?? '',
   });
 
   // 권한 확인
