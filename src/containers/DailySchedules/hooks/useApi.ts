@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
 
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 
 import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
+import {eventSuccessMessage} from '#constants/responseMessage.ts';
 import {
   requestPostEventAttend,
   requestPostEventComeback,
@@ -12,7 +13,12 @@ import {
   requestPostEventLeave,
 } from '#containers/DailySchedules/services';
 import {ScheduleQueryOptions} from '#containers/DailySchedules/services/queries.ts';
-import {useHandleError} from '#hooks/useApi.ts';
+import {showErrorModal} from '#containers/DailySchedules/utils/modalHelper.ts';
+import {
+  useHandleError,
+  useInvalidateQueriesAndShowModal,
+  useLoadingEffect,
+} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {
@@ -20,11 +26,12 @@ import {
   GetScheduleProps,
   PostEventProps,
 } from '#types/schedule.ts';
-import {handleErrorResponse} from '#utils/scheduleHelper.ts';
+
+// 캐시 데이터를 초기화할 쿼리키 리스트
+const INVALID_QUERY_KEYS = ['daySchedule', 'scheduleHistory'];
 
 // 선택된 기관의 강의 리스트
 export const useGetLectureList = (academyId?: string) => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const selectedAcademy = useRecoilValue(GlobalState.selectedAcademy);
   const [lectureItems, setLectureItems] = useState<ItemProps[]>([]);
 
@@ -32,11 +39,8 @@ export const useGetLectureList = (academyId?: string) => {
     ScheduleQueryOptions.getLectureList(academyId ?? selectedAcademy),
   );
 
+  useLoadingEffect(status, fetchStatus);
   useHandleError(isError, error);
-
-  useEffect(() => {
-    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
-  }, [status, fetchStatus]);
 
   useEffect(() => {
     const formattedData =
@@ -51,234 +55,83 @@ export const useGetLectureList = (academyId?: string) => {
 
 // 하루 일정
 export const useGetDaySchedule = (payload: GetScheduleProps) => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const {data, refetch, status, fetchStatus, isError, error} = useQuery(
     ScheduleQueryOptions.getDaySchedules(payload),
   );
 
+  useLoadingEffect(status, fetchStatus);
   useHandleError(isError, error);
-  useEffect(() => {
-    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
-  }, [status, fetchStatus]);
 
   return {dayScheduleData: data, refetchDaySchedule: refetch};
 };
 
 // 일정에 기록된 스케쥴 데이터
 export const useGetScheduleHistory = (payload: GetScheduleHistoryProps) => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const {data, status, refetch, fetchStatus, isError, error} = useQuery(
     ScheduleQueryOptions.getDayScheduleHistory(payload),
   );
 
+  useLoadingEffect(status, fetchStatus);
   useHandleError(isError, error);
-  useEffect(() => {
-    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
-  }, [status, fetchStatus]);
 
   return {historyData: data, refetchHistoryData: refetch};
 };
 
-// 입실 요청
-export const useReqEnter = () => {
-  const queryClient = useQueryClient();
+// 이벤트 요청 처리 공통 훅
+const useRequestEvent = (
+  mutationFn: (payload: PostEventProps) => Promise<any>,
+  successMessage: string,
+) => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
+  const invalidateQueriesAndShowModal = useInvalidateQueriesAndShowModal();
 
-  const {mutateAsync: reqEnterEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventEnter(payload);
-    },
+  const {mutateAsync} = useMutation({
+    mutationFn,
     onMutate: () => {
       setIsLoading(true);
     },
     onSettled: () => {
       setIsLoading(false);
     },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['daySchedule', 'scheduleHistory'],
-        })
-        .then();
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '입실 처리 되었습니다.',
-      });
+    onSuccess: async () => {
+      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, successMessage);
     },
     onError: (error: CommonResponseProps<null>) => {
-      const errorMessage = handleErrorResponse(error.code);
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: errorMessage ?? '',
-      });
+      showErrorModal(error.code, setModalState);
     },
   });
-  return {reqEnterEvent};
+
+  return {mutateAsync};
+};
+
+// 입실 요청
+export const useReqEnter = () => {
+  return useRequestEvent(requestPostEventEnter, eventSuccessMessage.ENTER);
 };
 
 // 퇴실 요청
 export const useReqComplete = () => {
-  const queryClient = useQueryClient();
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-
-  const {mutateAsync: reqCompleteEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventComplete(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['daySchedule', 'scheduleHistory'],
-        })
-        .then();
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '퇴실 처리 되었습니다.',
-      });
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      const errorMessage = handleErrorResponse(error.code);
-      console.log(error);
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: errorMessage ?? '',
-      });
-    },
-  });
-  return {reqCompleteEvent};
+  return useRequestEvent(
+    requestPostEventComplete,
+    eventSuccessMessage.COMPLETE,
+  );
 };
 
 // 외출 요청
 export const useReqLeave = () => {
-  const queryClient = useQueryClient();
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-
-  const {mutateAsync: reqLeaveEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventLeave(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['daySchedule', 'scheduleHistory'],
-        })
-        .then();
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '외출 처리 되었습니다.',
-      });
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      const errorMessage = handleErrorResponse(error.code);
-      console.log(error);
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: errorMessage ?? '',
-      });
-    },
-  });
-  return {reqLeaveEvent};
+  return useRequestEvent(requestPostEventLeave, eventSuccessMessage.LEAVE);
 };
 
 // 복귀 요청
 export const useReqComeback = () => {
-  const queryClient = useQueryClient();
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-
-  const {mutateAsync: reqComebackEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventComeback(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['daySchedule', 'scheduleHistory'],
-        })
-        .then();
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '외출이 종료 되었습니다.',
-      });
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      const errorMessage = handleErrorResponse(error.code);
-      console.log(error);
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: errorMessage ?? '',
-      });
-    },
-  });
-  return {reqComebackEvent};
+  return useRequestEvent(
+    requestPostEventComeback,
+    eventSuccessMessage.COMEBACK,
+  );
 };
 
 // 시간별 체크 요청
 export const useReqAttend = () => {
-  const queryClient = useQueryClient();
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
-
-  const {mutateAsync: reqAttendEvent} = useMutation({
-    mutationFn: (payload: PostEventProps) => {
-      return requestPostEventAttend(payload);
-    },
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSettled: () => {
-      setIsLoading(false);
-    },
-    onSuccess: () => {
-      queryClient
-        .invalidateQueries({
-          queryKey: ['daySchedule', 'scheduleHistory'],
-        })
-        .then();
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: '출석 처리 되었습니다.',
-      });
-    },
-    onError: (error: CommonResponseProps<null>) => {
-      const errorMessage = handleErrorResponse(error.code);
-      console.log(error);
-      setModalState({
-        isVisible: true,
-        title: '안내',
-        message: errorMessage ?? '',
-      });
-    },
-  });
-  return {reqAttendEvent};
+  return useRequestEvent(requestPostEventAttend, eventSuccessMessage.ATTEND);
 };

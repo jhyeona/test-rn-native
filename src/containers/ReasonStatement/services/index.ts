@@ -1,6 +1,4 @@
 import {requestGet, requestPatch, requestPost} from '#apis/index.ts';
-import instance from '#apis/instance.ts';
-import {ApiResponseErrorProps} from '#types/common.ts';
 import {
   ReqGetReasonDetails,
   ReqGetReasonList,

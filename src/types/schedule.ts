@@ -1,3 +1,5 @@
+export type EventType = 'ENTER' | 'LEAVE' | 'COMEBACK' | 'ATTEND' | 'COMPLETE';
+
 export interface GetScheduleProps {
   academyId?: string;
   date: string;
@@ -40,7 +42,7 @@ export interface ScheduleDefaultProps {
 
 export interface EventProps {
   eventId: string;
-  eventType: 'ENTER' | 'LEAVE' | 'COMEBACK' | 'ATTEND' | 'COMPLETE';
+  eventType: EventType;
   eventTime: string;
   baseTime: string;
   status: 'NORMAL' | 'LATE' | 'EARLY';

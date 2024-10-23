@@ -1,5 +1,3 @@
-import {useEffect} from 'react';
-
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
@@ -7,14 +5,12 @@ import {
   requestGetInvitedAcademyList,
   requestPostJoinAcademy,
 } from '#containers/Academy/services';
-import {useHandleError} from '#hooks/useApi.ts';
+import {useHandleError, useLoadingEffect} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqJoinAcademyProps} from '#types/user.ts';
 
 export const useGetInvitedList = () => {
-  const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
-
   const {data, refetch, status, fetchStatus, error, isError} = useQuery({
     queryKey: ['invitedList'],
     queryFn: async () => {
@@ -22,10 +18,8 @@ export const useGetInvitedList = () => {
     },
   });
 
+  useLoadingEffect(status, fetchStatus);
   useHandleError(isError, error);
-  useEffect(() => {
-    setIsLoading(status === 'pending' && fetchStatus === 'fetching');
-  }, [status, fetchStatus]);
 
   return {
     data,

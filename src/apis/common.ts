@@ -1,18 +1,12 @@
-import {instanceWithoutToken} from '#apis/instance.ts';
+import {requestPostRefreshToken} from '#apis/user.ts';
 import {ACCESS_TOKEN, REFRESH_TOKEN, TOKEN_ERROR} from '#constants/common.ts';
-import {setItem, storage} from '#utils/storageHelper.ts';
+import {setItem} from '#utils/storageHelper.ts';
 
 export const tokenRefresh = async () => {
-  // token refresh
-  const url = '/token/refresh';
-  const refreshToken = storage.getString(REFRESH_TOKEN);
-  const header = {Authorization: `Bearer ${refreshToken}`};
-
   try {
-    const response = await instanceWithoutToken.post(url, null, {
-      headers: header,
-    });
-    const {access_token, refresh_token} = response.data.data;
+    const {access_token, refresh_token, expires_in} =
+      await requestPostRefreshToken();
+    console.log('TOKEN REFRESH(expires):', expires_in);
     setItem(ACCESS_TOKEN, access_token);
     setItem(REFRESH_TOKEN, refresh_token);
     return true;

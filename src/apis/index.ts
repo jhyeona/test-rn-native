@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig} from 'axios';
+import {AxiosRequestConfig} from 'axios';
 
 import instance from '#apis/instance.ts';
 import {ApiResponseErrorProps} from '#types/common.ts';
