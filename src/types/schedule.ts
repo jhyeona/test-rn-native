@@ -79,7 +79,6 @@ export interface ResSchedulePeriodDataProps {
 }
 
 export interface PostEventProps {
-  attendeeId: string;
   scheduleId: string;
   deviceInfo?: string;
   os?: string;

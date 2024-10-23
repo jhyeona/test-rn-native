@@ -15,10 +15,7 @@ import {
   useReqEnter,
   useReqLeave,
 } from '#containers/DailySchedules/hooks/useApi.ts';
-import {
-  useEventPayload,
-  useGetAttendeeId,
-} from '#containers/DailySchedules/hooks/useSchedules.ts';
+import {useEventPayload} from '#containers/DailySchedules/hooks/useSchedules.ts';
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import GlobalState from '#recoil/Global';
@@ -67,7 +64,6 @@ const BtnSchedule = ({
   const {mutateAsync: reqComebackEvent} = useReqComeback();
   const {mutateAsync: reqAttendEvent} = useReqAttend();
 
-  const attendeeId = useGetAttendeeId();
   const {historyData, refetchHistoryData} = useGetScheduleHistory({
     scheduleId: scheduleData?.scheduleId ?? '',
   });
@@ -102,17 +98,14 @@ const BtnSchedule = ({
     setIsLoading(true);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
-    const payload = await fetchEventPayload(
-      attendeeId,
-      scheduleData?.scheduleId ?? 'scheduleId',
-    );
+    const payload = await fetchEventPayload(scheduleData?.scheduleId ?? '');
     payload.locationPermit = permissionsCheck;
     console.log('EVENT PAYLOAD:', payload);
     try {
       await requestEvent(payload);
       await refetchHistoryData();
     } catch (e: any) {
-      console.log('req enter error', e);
+      console.log(`* ${eventName} error`, e);
       await setAttToCrashlytics({...payload, permission: permissionsCheck});
       errorToCrashlytics(e, eventName);
     } finally {
@@ -290,4 +283,5 @@ const styles = StyleSheet.create({
     flex: 0.5,
   },
 });
+
 export default BtnSchedule;
