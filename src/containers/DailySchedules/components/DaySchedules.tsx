@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
 
+import moment from 'moment';
 import {useRecoilValue} from 'recoil';
 
 import NoData from '#components/common/NoData';

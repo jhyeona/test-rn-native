@@ -8,6 +8,7 @@ import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {CalendarItem} from '#containers/DailySchedules/utils/dateHelper.ts';
 import scheduleState from '#recoil/Schedule';
+import {getIsToday} from '#utils/scheduleHelper.ts';
 
 interface RenderItemProps {
   item: CalendarItem;
@@ -22,7 +23,7 @@ const WeeklyCalendarItem: React.FC<RenderItemProps> = ({
 }) => {
   const {date, isWeekly} = useRecoilValue(scheduleState.selectedCalendarDate);
 
-  const isToday = moment().isSame(item.date, 'day');
+  const isToday = getIsToday(item.date);
   const isSelected = item.date.isSame(date, 'day');
 
   const textColor = isSelected ? 'white' : isToday ? COLORS.primary : 'black';
