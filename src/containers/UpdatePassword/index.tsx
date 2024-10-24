@@ -9,7 +9,7 @@ import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
-import {patchUpdatePassword} from '#hooks/useMypage.ts';
+import {useUpdatePassword} from '#containers/UpdatePassword/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {errorToCrashlytics} from '#services/firebase.ts';
 import {checkPassword} from '#utils/regExpHelper.ts';
@@ -19,10 +19,13 @@ const UpdatePassword = ({
 }: {
   navigation: NativeStackNavigationHelpers;
 }) => {
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
+
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [isSamePassword, setIsSamePassword] = useState(true);
-  const setModalState = useSetRecoilState(GlobalState.globalModalState);
+
+  const {updatePassword} = useUpdatePassword();
 
   const onPressUpdatePassword = async () => {
     if (
@@ -38,7 +41,7 @@ const UpdatePassword = ({
       return;
     }
     try {
-      await patchUpdatePassword({password: password});
+      await updatePassword({password: password});
       setModalState({
         isVisible: true,
         title: '안내',

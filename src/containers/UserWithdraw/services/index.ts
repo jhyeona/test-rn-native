@@ -1,8 +1,8 @@
 import {requestDelete} from '#apis/index.ts';
-import {ReqDeleteUser, UserInfoProps} from '#types/user.ts';
+import {ReqPasswordType, UserInfoProps} from '#types/user.ts';
 
 export const requestDeleteUser = async (
-  payload: ReqDeleteUser,
+  payload: ReqPasswordType,
 ): Promise<UserInfoProps> => {
   // 회원탈퇴
   const url = `/user/delete`;

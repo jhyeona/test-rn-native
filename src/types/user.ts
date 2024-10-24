@@ -98,6 +98,10 @@ export interface ResJoinAcademyProps {
   }>;
 }
 
-export interface ReqDeleteUser {
+export interface ReqPasswordType {
   password: string;
+}
+
+export interface ReqUpdatePush {
+  settingPushApp: boolean;
 }

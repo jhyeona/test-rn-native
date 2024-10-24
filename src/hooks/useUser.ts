@@ -1,10 +1,10 @@
 import {useQuery} from '@tanstack/react-query';
 
 import {requestGetUserInfo} from '#apis/user.ts';
-import {useLoadingEffect} from '#hooks/useApi.ts';
+import {useHandleError, useLoadingEffect} from '#hooks/useApi.ts';
 
 export const useGetUserInfo = () => {
-  const {data, refetch, status, fetchStatus} = useQuery({
+  const {data, refetch, status, fetchStatus, error, isError} = useQuery({
     queryKey: ['userInfo'],
     queryFn: async () => {
       return requestGetUserInfo();
@@ -12,6 +12,7 @@ export const useGetUserInfo = () => {
   });
 
   useLoadingEffect(status, fetchStatus);
+  useHandleError(isError, error);
 
   return {userData: data, refetchUserData: refetch};
 };
