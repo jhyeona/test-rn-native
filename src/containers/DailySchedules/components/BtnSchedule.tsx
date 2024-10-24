@@ -27,10 +27,7 @@ import {
   ScheduleDefaultProps,
   ScheduleHistoryDataProps,
 } from '#types/schedule.ts';
-import {
-  handleOpenSettings,
-  requestLocationPermissions,
-} from '#utils/permissionsHelper.ts';
+import {handleOpenSettings, requestLocationPermissions} from '#utils/permissionsHelper.ts';
 
 type StatusIconType = 'IntervalComplete' | 'IntervalMiss' | 'IntervalEmpty';
 export interface TimeStatusProps {
@@ -155,12 +152,11 @@ const BtnSchedule = ({
   const updateTimeStatus = useCallback(() => {
     const newStatusList =
       scheduleData?.scheduleTimeList.map(data => {
-        const {isAttendBetween, isAttendAfter, isAttendEnter} =
-          allowScheduleTime({
-            scheduleData,
-            startTime: data.timeStart,
-            endTime: data.timeEnd,
-          });
+        const {isAttendBetween, isAttendAfter, isAttendEnter} = allowScheduleTime({
+          scheduleData,
+          startTime: data.timeStart,
+          endTime: data.timeEnd,
+        });
         // 시간별 출결의 출석 상태 아이콘
         const isEntered = historyData?.intervalEventList?.some(
           item => item?.baseTime === data.timeStart,
@@ -235,9 +231,7 @@ const BtnSchedule = ({
                   onPressAction('COMPLETE');
                 }}
                 buttonStyle={[styles.checkButton, styles.buttonCommon]}
-                disabled={
-                  !historyData?.enterEvent || !!historyData?.completeEvent
-                }
+                disabled={!historyData?.enterEvent || !!historyData?.completeEvent}
                 fontSize={12}
                 noMargin
               />
@@ -246,9 +240,7 @@ const BtnSchedule = ({
               <CButton
                 text={historyData?.isLeaved ? '외출 종료' : '외출 시작'}
                 onPress={() =>
-                  historyData?.isLeaved
-                    ? onPressAction('COMEBACK')
-                    : onPressAction('LEAVE')
+                  historyData?.isLeaved ? onPressAction('COMEBACK') : onPressAction('LEAVE')
                 }
                 buttonStyle={styles.buttonCommon}
                 fontSize={12}
@@ -261,10 +253,7 @@ const BtnSchedule = ({
         )}
       {/* 시간별 출결일 경우 */}
       {scheduleData?.scheduleTimeList?.length && (
-        <BtnScheduleAttendInfo
-          scheduleData={scheduleData}
-          timeStatusList={timeStatusList}
-        />
+        <BtnScheduleAttendInfo scheduleData={scheduleData} timeStatusList={timeStatusList} />
       )}
     </>
   );

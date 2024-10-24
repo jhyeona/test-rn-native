@@ -2,10 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {Alert} from 'react-native';
 import BootSplash from 'react-native-bootsplash';
 
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from '@react-navigation/native';
+import {NavigationContainer, useNavigationContainerRef} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useRecoilState} from 'recoil';
 
@@ -30,14 +27,15 @@ import {onesignalInit} from '#utils/onesignalHelper.ts';
 import {getStorageItem, storage} from '#utils/storageHelper.ts';
 const RootStack = createNativeStackNavigator();
 
+const screenOptions = {headerShown: false};
+
 const RootStackNavigation = () => {
   const navigationRef = useNavigationContainerRef();
   const [isLogin, setIsLogin] = useRecoilState(GlobalState.isLoginState);
   const routeNameRef = useRef<string>();
 
   const handleOnReady = () => {
-    routeNameRef.current =
-      navigationRef?.current?.getCurrentRoute()?.name ?? '';
+    routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name ?? '';
 
     BootSplash.hide({fade: true}).then();
   };
@@ -45,8 +43,7 @@ const RootStackNavigation = () => {
   const handleOnStateChange = async () => {
     // connected Firebase
     const previousRouteName = routeNameRef.current;
-    const currentRouteName: string =
-      navigationRef?.current?.getCurrentRoute()?.name ?? '';
+    const currentRouteName: string = navigationRef?.current?.getCurrentRoute()?.name ?? '';
 
     if (previousRouteName !== currentRouteName) {
       await logScreenViewToAnalytics(currentRouteName, currentRouteName);
@@ -78,82 +75,26 @@ const RootStackNavigation = () => {
       ref={navigationRef}
       onReady={() => handleOnReady()}
       onStateChange={handleOnStateChange}>
-      <RootStack.Navigator>
+      <RootStack.Navigator screenOptions={screenOptions}>
         {!isLogin ? (
           <>
-            <RootStack.Screen
-              name="Init"
-              component={Initialize}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="SignUp"
-              component={SignUp}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="FindPassword"
-              component={FindPassword}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{headerShown: false}}
-            />
+            <RootStack.Screen name="Init" component={Initialize} />
+            <RootStack.Screen name="SignIn" component={SignIn} />
+            <RootStack.Screen name="SignUp" component={SignUp} />
+            <RootStack.Screen name="FindPassword" component={FindPassword} />
+            <RootStack.Screen name="Onboarding" component={Onboarding} />
           </>
         ) : (
           <>
-            <RootStack.Screen
-              name="Root"
-              component={TabNavigation}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="ScheduleHistory"
-              component={ScheduleHistory}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="ReasonStatement"
-              component={ReasonStatement}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="ReasonCreator"
-              component={ReasonCreator}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="Academy"
-              component={Academy}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="SelectAcademy"
-              component={SelectAcademy}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="UpdatePassword"
-              component={UpdatePassword}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="UserWithdraw"
-              component={UserWithdraw}
-              options={{headerShown: false}}
-            />
-            <RootStack.Screen
-              name="PrivacyPolicy"
-              component={PrivacyPolicy}
-              options={{headerShown: false}}
-            />
+            <RootStack.Screen name="Root" component={TabNavigation} />
+            <RootStack.Screen name="ScheduleHistory" component={ScheduleHistory} />
+            <RootStack.Screen name="ReasonStatement" component={ReasonStatement} />
+            <RootStack.Screen name="ReasonCreator" component={ReasonCreator} />
+            <RootStack.Screen name="Academy" component={Academy} />
+            <RootStack.Screen name="SelectAcademy" component={SelectAcademy} />
+            <RootStack.Screen name="UpdatePassword" component={UpdatePassword} />
+            <RootStack.Screen name="UserWithdraw" component={UserWithdraw} />
+            <RootStack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
           </>
         )}
       </RootStack.Navigator>
