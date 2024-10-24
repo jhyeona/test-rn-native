@@ -8,6 +8,7 @@
     "pod-install": "cd ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install",
     "lint": "eslint .",
     "start": "react-native start",
+    "start:reset": "watchman watch-del-all && npx react-native start --reset-cache",
     "test": "jest",
     "postinstall": "patch-package",
     "android:ac": "react-native run-android --mode=appcenterRelease --appIdSuffix appcenter",
