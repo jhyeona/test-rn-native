@@ -6,9 +6,9 @@ import {useSetRecoilState} from 'recoil';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
-import MenuButton from '#components/Mypage/MenuButton.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {APP_VERSION} from '#constants/common.ts';
+import MenuButton from '#containers/Settings/components/MenuButton.tsx';
 import PushControl from '#containers/Settings/components/PushControl.tsx';
 import {styles} from '#containers/Settings/styles';
 import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
@@ -33,23 +33,11 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
       <Header title="설정" />
       <ScrollView>
         <PushControl />
-        <MenuButton
-          title="비밀번호 변경"
-          onPress={() => handleNavigate('UpdatePassword')}
-        />
-        <MenuButton
-          title="기관 설정"
-          onPress={() => handleNavigate('SelectAcademy')}
-        />
-        <MenuButton
-          title="개인정보처리방침"
-          onPress={() => handleNavigate('PrivacyPolicy')}
-        />
+        <MenuButton title="비밀번호 변경" onPress={() => handleNavigate('UpdatePassword')} />
+        <MenuButton title="기관 설정" onPress={() => handleNavigate('SelectAcademy')} />
+        <MenuButton title="개인정보처리방침" onPress={() => handleNavigate('PrivacyPolicy')} />
         <MenuButton title="로그아웃" onPress={onPressLogout} />
-        <MenuButton
-          title="회원탈퇴"
-          onPress={() => handleNavigate('UserWithdraw')}
-        />
+        <MenuButton title="회원탈퇴" onPress={() => handleNavigate('UserWithdraw')} />
       </ScrollView>
       <CText
         fontSize={12}
