@@ -29,7 +29,7 @@ export const requestGetScheduleHistory = async (
   payload: GetScheduleHistoryProps,
 ): Promise<ScheduleHistoryDataProps> => {
   // 스케쥴에 대한 이벤트 히스토리 = 출석 기록
-  const url = `/event/history/attendee/${payload.attendeeId}/schedule/${payload.scheduleId}`;
+  const url = `/event/history/schedule/${payload.scheduleId}`;
   return requestGet(url);
 };
 

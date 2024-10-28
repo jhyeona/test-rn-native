@@ -1,19 +1,18 @@
 import {useMutation} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
-import {requestDeleteUser} from '#containers/UserWithdraw/services';
+import {requestPatchUpdatePassword} from '#containers/UpdatePassword/services';
 import GlobalState from '#recoil/Global';
+import {CommonResponseProps} from '#types/common.ts';
 import {ReqPasswordType} from '#types/user.ts';
-import {clearStorage} from '#utils/storageHelper.ts';
 
-export const useDeleteUser = () => {
+export const useUpdatePassword = () => {
   const setIsLoading = useSetRecoilState(GlobalState.globalLoadingState);
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
-  const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
 
-  const {mutateAsync: deleteUser} = useMutation({
+  const {mutateAsync: updatePassword} = useMutation({
     mutationFn: (payload: ReqPasswordType) => {
-      return requestDeleteUser(payload);
+      return requestPatchUpdatePassword(payload);
     },
     onMutate: () => {
       setIsLoading(true);
@@ -21,16 +20,14 @@ export const useDeleteUser = () => {
     onSettled: () => {
       setIsLoading(false);
     },
-    onSuccess: () => {
+    onError: (error: CommonResponseProps<null>) => {
       setModalState({
         isVisible: true,
         title: '안내',
-        message: '탈퇴 처리 되었습니다.',
+        message: error.message ?? '',
       });
-      clearStorage();
-      setIsLogin(false);
     },
   });
 
-  return {deleteUser};
+  return {updatePassword};
 };

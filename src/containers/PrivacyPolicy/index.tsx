@@ -1,8 +1,8 @@
-import React from 'react';
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
+
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
-import Header from '#components/common/Header/Header.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import Header from '#components/common/Header/Header.tsx';
 import CWebView from '#components/common/WebView/CWebView.tsx';
 import {PrivacyPolicyUrl} from '#constants/policy.ts';
 

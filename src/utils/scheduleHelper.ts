@@ -1,5 +1,10 @@
 import moment, {Moment} from 'moment/moment';
 
+/** 주어진 날짜가 오늘인지 */
+export const getIsToday = (date: Moment) => {
+  return moment().isSame(date, 'day');
+};
+
 /**
  * 주어진 날짜를 기준으로 해당 주의 주차
  * @param date - 기준 날짜

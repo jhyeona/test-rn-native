@@ -15,34 +15,28 @@ import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
-import {ACCESS_TOKEN, DATE_FORMAT} from '#constants/common.ts';
+import {ACCESS_TOKEN, DATE_FORMAT_DASH} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
 import {commonStyles} from '#utils/common.ts';
-import {getItem} from '#utils/storageHelper.ts';
+import {getStorageItem} from '#utils/storageHelper.ts';
 
 const DATE_VIEW_FORMAT = 'YYYY년 MM월 DD일 (dd)';
 
-const DailySchedule = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const DailySchedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {userData} = useGetUserInfo();
   const navigate = useNavigation();
 
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const setSelectAcademy = useSetRecoilState(GlobalState.selectedAcademy);
-  const [{date}, setSelectedDate] = useRecoilState(
-    scheduleState.selectedCalendarDate,
-  );
+  const [{date}, setSelectedDate] = useRecoilState(scheduleState.selectedCalendarDate);
 
   useEffect(() => {
     if (userData) {
-      const token = getItem(ACCESS_TOKEN);
+      const token = getStorageItem(ACCESS_TOKEN);
       if (!token) {
         setIsLogin(false);
         return;
@@ -84,7 +78,7 @@ const DailySchedule = ({
             <ScheduleHeader />
             <CView style={{display: 'flex', gap: 12}}>
               <DatePicker
-                onDateChange={new Date(moment(date).format(DATE_FORMAT))}
+                onDateChange={new Date(moment(date).format(DATE_FORMAT_DASH))}
                 format={DATE_VIEW_FORMAT}
                 handleDateSelection={selectedDate => {
                   setSelectedDate(prev => ({...prev, date: selectedDate}));

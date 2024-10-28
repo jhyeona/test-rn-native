@@ -7,7 +7,9 @@ import moment, {Moment} from 'moment';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
-import {DATE_FORMAT} from '#constants/common.ts';
+import {DATE_FORMAT_DASH} from '#constants/common.ts';
+import {useGlobalInterval} from '#hooks/useGlobal.ts';
+import {getIsToday} from '#utils/scheduleHelper.ts';
 
 interface DatePickerProps {
   handleDateSelection?: (date: Moment) => void; // date 반환
@@ -29,6 +31,7 @@ const DatePicker = ({
   todayDot,
 }: DatePickerProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isToday, setIsToday] = useState(false);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -57,6 +60,11 @@ const DatePicker = ({
     }
   }, [onDateChange]);
 
+  useGlobalInterval(() => {
+    const selectedDateIsToday = getIsToday(moment(selectedDate));
+    setIsToday(selectedDateIsToday);
+  }, 600000);
+
   return (
     <>
       <Pressable
@@ -78,10 +86,11 @@ const DatePicker = ({
           <CText
             color={disabled ? COLORS.placeholder : 'black'}
             text={
-              dateText ?? moment(selectedDate).format(format ?? DATE_FORMAT)
+              dateText ??
+              moment(selectedDate).format(format ?? DATE_FORMAT_DASH)
             }
           />
-          {todayDot && moment().isSame(moment(selectedDate), 'day') && (
+          {todayDot && isToday && (
             <View
               style={{
                 position: 'absolute',

@@ -11,6 +11,7 @@ import SvgIcon from '#components/common/Icon/Icon.tsx';
 import StatusInfoContainer, {
   ColorType,
 } from '#components/common/StatusInfoContainer';
+import {DATE_FORMAT_DOT} from '#constants/common.ts';
 import BtnSchedule from '#containers/DailySchedules/components/BtnSchedule.tsx';
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useGlobalInterval} from '#hooks/useGlobal.ts';
@@ -38,7 +39,7 @@ const DaySchedulesLecture = ({
   }); // 강의 예정 : red / 강의중 : blue / 강의 종료 : gray
 
   const formattedDate = (date?: string) => {
-    return date ? moment(date).format('YYYY.MM.DD') : '-';
+    return date ? moment(date).format(DATE_FORMAT_DOT) : '-';
   };
 
   const onPressLectureArrow = (isRotated: boolean) => {

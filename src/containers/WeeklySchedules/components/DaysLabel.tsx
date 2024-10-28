@@ -6,7 +6,7 @@ import moment, {Moment} from 'moment/moment';
 import CText from '#components/common/CustomText/CText.tsx';
 import {WEEKLY_SCHEDULE_LEFT_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
-import {getDatesOfWeek} from '#utils/scheduleHelper.ts';
+import {getDatesOfWeek, getIsToday} from '#utils/scheduleHelper.ts';
 
 const DaysLabel = ({date}: {date: Moment}) => {
   const [dateList, setDateList] = useState<Moment[]>([]);
@@ -19,7 +19,7 @@ const DaysLabel = ({date}: {date: Moment}) => {
   return (
     <View style={styles.dateContainer}>
       {dateList.map((day, i) => {
-        const isToday = moment().isSame(day, 'day');
+        const isToday = getIsToday(day);
         return (
           <View style={styles.date} key={`schedule-table-date-${i}`}>
             {isToday && <View style={styles.isToday} />}

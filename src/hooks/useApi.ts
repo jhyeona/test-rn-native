@@ -31,6 +31,7 @@ const useHandleError = (isError: boolean, error?: Error | null) => {
 
   useEffect(() => {
     if (isError) {
+      console.log('GET ERROR:', error);
       setModalState({
         isVisible: true,
         title: '오류',

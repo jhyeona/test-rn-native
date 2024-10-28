@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import CText from '#components/common/CustomText/CText.tsx';
@@ -16,7 +17,7 @@ const BtnScheduleAttendInfo = ({
 }) => {
   return (
     <View style={styles.container}>
-      {timeStatusList.length > 0 &&
+      {timeStatusList.length === scheduleData?.scheduleTimeList.length &&
         scheduleData?.scheduleTimeList.map((data, i) => {
           const {isBetween, status} = timeStatusList[i];
           return (

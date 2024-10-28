@@ -67,7 +67,6 @@
 		C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Prod.plist"; sourceTree = "<group>"; };
 		C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C432D78D2B7361260086F715 /* ihereapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ihereapp.entitlements; path = ihereapp/ihereapp.entitlements; sourceTree = "<group>"; };
-		C47037E42CA3F52E003CA57F /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/Info.plist; sourceTree = "<group>"; };
 		C4A261F22B73426A00571C2A /* WiFiHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiHelper.swift; sourceTree = "<group>"; };
 		C4A261F42B73426A00571C2A /* BeaconModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconModule.swift; sourceTree = "<group>"; };
 		C4A261F52B73426A00571C2A /* BeaconModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconModule.m; sourceTree = "<group>"; };
@@ -75,6 +74,7 @@
 		C4A261F72B73426A00571C2A /* LocationModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationModule.swift; sourceTree = "<group>"; };
 		C4A262022B73472100571C2A /* imhereV2-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "imhereV2-Bridging-Header.h"; sourceTree = "<group>"; };
 		C4CE30D42B6A185A001A01CC /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
+		C4D595072CCA24880037A7AA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ihereapp/Info.plist; sourceTree = "<group>"; };
 		C4D783C52B54DE840086145F /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = ihereapp/BootSplash.storyboard; sourceTree = "<group>"; };
 		C4F7B2BA2BD7AF5600658E86 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -129,8 +129,8 @@
 				C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				C4D595072CCA24880037A7AA /* Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
-				C47037E52CA3F52E003CA57F /* Info.plist */,
 				C4D783C52B54DE840086145F /* BootSplash.storyboard */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -532,18 +532,6 @@
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		C47037E52CA3F52E003CA57F /* Info.plist */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C47037E42CA3F52E003CA57F /* Base */,
-			);
-			name = Info.plist;
-			path = ihereapp;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {

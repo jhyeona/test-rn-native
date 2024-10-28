@@ -65,7 +65,7 @@ export interface UserInfoProps {
   email: string;
   dateVerifyEmail: string;
   studentList: Array<StudentInfoProps>;
-  teacherList: Array<{}>;
+  teacherList: Array<StudentInfoProps>;
   settingPushApp: boolean;
   dateDelete: string | null;
   isDelete: boolean;
@@ -98,6 +98,10 @@ export interface ResJoinAcademyProps {
   }>;
 }
 
-export interface ReqDeleteUser {
+export interface ReqPasswordType {
   password: string;
+}
+
+export interface ReqUpdatePush {
+  settingPushApp: boolean;
 }

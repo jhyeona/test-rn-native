@@ -15,10 +15,7 @@ import {
   useReqEnter,
   useReqLeave,
 } from '#containers/DailySchedules/hooks/useApi.ts';
-import {
-  useEventPayload,
-  useGetAttendeeId,
-} from '#containers/DailySchedules/hooks/useSchedules.ts';
+import {useEventPayload} from '#containers/DailySchedules/hooks/useSchedules.ts';
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useGlobalInterval} from '#hooks/useGlobal.ts';
 import GlobalState from '#recoil/Global';
@@ -30,10 +27,7 @@ import {
   ScheduleDefaultProps,
   ScheduleHistoryDataProps,
 } from '#types/schedule.ts';
-import {
-  handleOpenSettings,
-  requestLocationPermissions,
-} from '#utils/permissionsHelper.ts';
+import {handleOpenSettings, requestLocationPermissions} from '#utils/permissionsHelper.ts';
 
 type StatusIconType = 'IntervalComplete' | 'IntervalMiss' | 'IntervalEmpty';
 export interface TimeStatusProps {
@@ -67,10 +61,8 @@ const BtnSchedule = ({
   const {mutateAsync: reqComebackEvent} = useReqComeback();
   const {mutateAsync: reqAttendEvent} = useReqAttend();
 
-  const attendeeId = useGetAttendeeId();
   const {historyData, refetchHistoryData} = useGetScheduleHistory({
-    attendeeId: attendeeId,
-    scheduleId: scheduleData?.scheduleId,
+    scheduleId: scheduleData?.scheduleId ?? '',
   });
 
   // 권한 확인
@@ -103,17 +95,14 @@ const BtnSchedule = ({
     setIsLoading(true);
     const permissionsCheck = await permissionGranted();
     if (!permissionsCheck) return;
-    const payload = await fetchEventPayload(
-      attendeeId,
-      scheduleData?.scheduleId ?? 'scheduleId',
-    );
+    const payload = await fetchEventPayload(scheduleData?.scheduleId ?? '');
     payload.locationPermit = permissionsCheck;
     console.log('EVENT PAYLOAD:', payload);
     try {
       await requestEvent(payload);
       await refetchHistoryData();
     } catch (e: any) {
-      console.log('req enter error', e);
+      console.log(`* ${eventName} error`, e);
       await setAttToCrashlytics({...payload, permission: permissionsCheck});
       errorToCrashlytics(e, eventName);
     } finally {
@@ -163,12 +152,11 @@ const BtnSchedule = ({
   const updateTimeStatus = useCallback(() => {
     const newStatusList =
       scheduleData?.scheduleTimeList.map(data => {
-        const {isAttendBetween, isAttendAfter, isAttendEnter} =
-          allowScheduleTime({
-            scheduleData,
-            startTime: data.timeStart,
-            endTime: data.timeEnd,
-          });
+        const {isAttendBetween, isAttendAfter, isAttendEnter} = allowScheduleTime({
+          scheduleData,
+          startTime: data.timeStart,
+          endTime: data.timeEnd,
+        });
         // 시간별 출결의 출석 상태 아이콘
         const isEntered = historyData?.intervalEventList?.some(
           item => item?.baseTime === data.timeStart,
@@ -243,9 +231,7 @@ const BtnSchedule = ({
                   onPressAction('COMPLETE');
                 }}
                 buttonStyle={[styles.checkButton, styles.buttonCommon]}
-                disabled={
-                  !historyData?.enterEvent || !!historyData?.completeEvent
-                }
+                disabled={!historyData?.enterEvent || !!historyData?.completeEvent}
                 fontSize={12}
                 noMargin
               />
@@ -254,9 +240,7 @@ const BtnSchedule = ({
               <CButton
                 text={historyData?.isLeaved ? '외출 종료' : '외출 시작'}
                 onPress={() =>
-                  historyData?.isLeaved
-                    ? onPressAction('COMEBACK')
-                    : onPressAction('LEAVE')
+                  historyData?.isLeaved ? onPressAction('COMEBACK') : onPressAction('LEAVE')
                 }
                 buttonStyle={styles.buttonCommon}
                 fontSize={12}
@@ -269,10 +253,7 @@ const BtnSchedule = ({
         )}
       {/* 시간별 출결일 경우 */}
       {scheduleData?.scheduleTimeList?.length && (
-        <BtnScheduleAttendInfo
-          scheduleData={scheduleData}
-          timeStatusList={timeStatusList}
-        />
+        <BtnScheduleAttendInfo scheduleData={scheduleData} timeStatusList={timeStatusList} />
       )}
     </>
   );
@@ -291,4 +272,5 @@ const styles = StyleSheet.create({
     flex: 0.5,
   },
 });
+
 export default BtnSchedule;

@@ -1,15 +1,43 @@
+import {Platform} from 'react-native';
 import Config from 'react-native-config';
 
-import axios, {AxiosResponse} from 'axios';
+import axios, {AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 
 import {tokenRefresh} from '#apis/common.ts';
-import {ACCESS_TOKEN, REFRESH_TOKEN} from '#constants/common.ts';
-import {storage} from '#utils/storageHelper.ts';
+import {ACCESS_TOKEN, APP_VERSION, TOKEN_ERROR} from '#constants/common.ts';
+import {getDeviceUUID} from '#utils/common.ts';
+import {clearStorage, getStorageItem, setStorageItem} from '#utils/storageHelper.ts';
+
+// 공통 인스턴스 설정
+const commonInstance = {
+  baseURL: Config.BASE_URL,
+  timeout: 1000 * 180, // 3분
+  maxRedirects: 3,
+};
+
+// 공통 헤더 설정
+const setCommonHeaders = async (config: InternalAxiosRequestConfig) => {
+  config.headers.checkhere_uuid = await getDeviceUUID();
+  config.headers.checkhere_version = APP_VERSION;
+  config.headers.checkhere_os = `${Platform.OS} ${Platform.Version}`;
+  return config;
+};
 
 // 토큰 미사용 인스턴스
-export const instanceWithoutToken = axios.create({
-  baseURL: Config.BASE_URL,
-});
+export const instanceWithoutToken = axios.create({...commonInstance});
+instanceWithoutToken.interceptors.request.use(
+  async function (config) {
+    try {
+      await setCommonHeaders(config);
+      return config;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+  function (error) {
+    return Promise.reject(error);
+  },
+);
 
 instanceWithoutToken.interceptors.response.use(
   function (response: AxiosResponse) {
@@ -24,23 +52,26 @@ instanceWithoutToken.interceptors.response.use(
 );
 
 // 토큰 사용 인스턴스
-const instance = axios.create({
-  baseURL: Config.BASE_URL,
-});
+const instance = axios.create(commonInstance);
 
 instance.interceptors.request.use(
-  function (config) {
-    // 요청이 전달되기 전에 작업 수행 -> token 확인
-    const accessToken = storage.getString(ACCESS_TOKEN);
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+  async function (config) {
+    try {
+      const accessToken = getStorageItem(ACCESS_TOKEN);
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+      }
+      await setCommonHeaders(config);
+      return config;
+    } catch (error) {
+      return Promise.reject(error);
     }
-    return config;
   },
   function (error) {
     return Promise.reject(error);
   },
 );
+
 // 응답 인터셉터
 instance.interceptors.response.use(
   function (response: AxiosResponse) {
@@ -62,9 +93,8 @@ instance.interceptors.response.use(
     }
     if (error.response.data.code === '4103') {
       // 유효하지 않은 토큰
-      storage.delete(ACCESS_TOKEN);
-      storage.delete(REFRESH_TOKEN);
-      storage.clearAll();
+      setStorageItem(ACCESS_TOKEN, TOKEN_ERROR);
+      clearStorage();
     }
 
     if (axios.isAxiosError<any>(error)) {

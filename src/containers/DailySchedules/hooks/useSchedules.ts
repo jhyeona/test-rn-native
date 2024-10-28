@@ -36,7 +36,7 @@ export const useEventPayload = () => {
   const [wifiState, setWifiState] = useRecoilState(GlobalState.wifiState);
 
   return useCallback(
-    async (attendeeId: string, scheduleId: string): Promise<PostEventProps> => {
+    async (scheduleId: string): Promise<PostEventProps> => {
       // BEACON 처리
       let beaconList = validBeaconList(beaconState);
       if (beaconList.length === 0) {
@@ -77,7 +77,6 @@ export const useEventPayload = () => {
 
       // 출석 체크 payload 생성
       return {
-        attendeeId,
         scheduleId,
         deviceInfo: deviceId,
         os: `${Platform.OS} ${Platform.Version}`,

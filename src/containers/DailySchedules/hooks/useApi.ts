@@ -43,6 +43,7 @@ export const useGetLectureList = (academyId?: string) => {
   useHandleError(isError, error);
 
   useEffect(() => {
+    // 드롭다운에 사용될 기관 리스트
     const formattedData =
       data?.map(lecture => {
         return {label: lecture.lectureName, id: lecture.lectureId};
