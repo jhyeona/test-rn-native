@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import moment from 'moment';
@@ -20,10 +14,7 @@ import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
 import {DATE_FORMAT_DOT} from '#constants/common.ts';
-import {
-  useGetInvitedList,
-  useJoinAcademy,
-} from '#containers/Academy/hooks/useApi.ts';
+import {useGetInvitedList, useJoinAcademy} from '#containers/Academy/hooks/useApi.ts';
 import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import {usePreviousScreenName} from '#hooks/useNavigation.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
@@ -49,11 +40,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const setUserData = useSetRecoilState(userState.userInfoState);
 
-  const {
-    data: invitedList,
-    refetch: invitedRefetch,
-    isLoading,
-  } = useGetInvitedList();
+  const {data: invitedList, refetch: invitedRefetch, isLoading} = useGetInvitedList();
 
   const {joinAcademy} = useJoinAcademy();
   const {refetchUserData} = useGetUserInfo();
@@ -63,9 +50,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const handleCheckboxChange = (id: string) => {
     setCheckboxState(prevState =>
       prevState?.map(item =>
-        item.academy.academyId === id
-          ? {...item, isChecked: !item.isChecked}
-          : item,
+        item.academy.academyId === id ? {...item, isChecked: !item.isChecked} : item,
       ),
     );
   };
@@ -111,11 +96,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
 
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
-      <Header
-        title="기관 추가"
-        isBack={!!prevScreenName}
-        navigation={navigation}
-      />
+      <Header title="기관 추가" isBack={!!prevScreenName} navigation={navigation} />
       <CView>
         {checkboxState && checkboxState.length > 0 ? (
           <>
@@ -134,20 +115,15 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                 lineHeight={22.4}
               />
               {checkboxState.map((val, index) => {
-                const academyName = `${val.academy.name}${val.type === 'TEACHER' && ' (강사)'}`;
+                const academyName = `${val.academy.name}${val.type === 'TEACHER' ? ' (강사)' : ''}`;
                 return (
                   <View
-                    style={[
-                      styles.checkContainer,
-                      val.isChecked && styles.isCheckedContainer,
-                    ]}
+                    style={[styles.checkContainer, val.isChecked && styles.isCheckedContainer]}
                     key={index}>
                     <CheckboxCircle
                       circleSize={16}
                       isChecked={val.isChecked}
-                      onValueChangeHandler={() =>
-                        handleCheckboxChange(val.academy.academyId)
-                      }>
+                      onValueChangeHandler={() => handleCheckboxChange(val.academy.academyId)}>
                       <View style={styles.academyItem}>
                         <CText
                           numberOfLines={2}
@@ -155,9 +131,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                           style={styles.academyName}
                           lineBreak
                         />
-                        <CText
-                          text={moment(val.time).format(DATE_FORMAT_DOT)}
-                        />
+                        <CText text={moment(val.time).format(DATE_FORMAT_DOT)} />
                       </View>
                     </CheckboxCircle>
                   </View>
@@ -172,11 +146,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           </>
         ) : (
           <View style={{flex: 1}}>
-            <CText
-              text="초대 받은 기관이 없어요."
-              fontSize={16}
-              fontWeight="600"
-            />
+            <CText text="초대 받은 기관이 없어요." fontSize={16} fontWeight="600" />
             <View
               style={{
                 flex: 1,
@@ -189,20 +159,14 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               onPress={() => {
                 invitedRefetch().then();
               }}>
-              <CText
-                color={COLORS.primary}
-                text="새로고침하기"
-                style={styles.refreshText}
-              />
+              <CText color={COLORS.primary} text="새로고침하기" style={styles.refreshText} />
             </TouchableOpacity>
             {!prevScreenName && (
               <CButton
                 whiteButton
                 buttonStyle={{marginTop: 0}}
                 text="로그아웃"
-                onPress={() =>
-                  handleLogout({setGlobalModalState, setUserData, setIsLogin})
-                }
+                onPress={() => handleLogout({setGlobalModalState, setUserData, setIsLogin})}
               />
             )}
           </View>
