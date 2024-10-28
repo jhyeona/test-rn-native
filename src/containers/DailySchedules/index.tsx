@@ -26,19 +26,13 @@ import {getStorageItem} from '#utils/storageHelper.ts';
 
 const DATE_VIEW_FORMAT = 'YYYY년 MM월 DD일 (dd)';
 
-const DailySchedule = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const DailySchedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const {userData} = useGetUserInfo();
   const navigate = useNavigation();
 
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
   const setSelectAcademy = useSetRecoilState(GlobalState.selectedAcademy);
-  const [{date}, setSelectedDate] = useRecoilState(
-    scheduleState.selectedCalendarDate,
-  );
+  const [{date}, setSelectedDate] = useRecoilState(scheduleState.selectedCalendarDate);
 
   useEffect(() => {
     if (userData) {
