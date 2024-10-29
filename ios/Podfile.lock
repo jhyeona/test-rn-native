@@ -1452,7 +1452,7 @@ PODS:
   - react-native-onesignal (5.2.5):
     - OneSignalXCFramework (= 5.2.5)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-safe-area-context (4.11.0):
+  - react-native-safe-area-context (4.12.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1465,8 +1465,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-safe-area-context/common (= 4.11.0)
-    - react-native-safe-area-context/fabric (= 4.11.0)
+    - react-native-safe-area-context/common (= 4.12.0)
+    - react-native-safe-area-context/fabric (= 4.12.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1475,7 +1475,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (4.11.0):
+  - react-native-safe-area-context/common (4.12.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1496,7 +1496,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (4.11.0):
+  - react-native-safe-area-context/fabric (4.12.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1799,7 +1799,7 @@ PODS:
     - React-logger (= 0.75.4)
     - React-perflogger (= 0.75.4)
     - React-utils (= 0.75.4)
-  - RNBootSplash (6.2.0):
+  - RNBootSplash (6.2.5):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1841,21 +1841,21 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDeviceInfo (13.1.0):
+  - RNDeviceInfo (13.2.0):
     - React-Core
-  - RNFBAnalytics (21.0.0):
-    - Firebase/Analytics (= 11.2.0)
-    - React-Core
-    - RNFBApp
-  - RNFBApp (21.0.0):
-    - Firebase/CoreOnly (= 11.2.0)
-    - React-Core
-  - RNFBCrashlytics (21.0.0):
-    - Firebase/Crashlytics (= 11.2.0)
-    - FirebaseCoreExtension
+  - RNFBAnalytics (21.2.0):
+    - Firebase/Analytics (<= 11.4.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.20.0):
+  - RNFBApp (21.2.0):
+    - Firebase/CoreOnly (<= 11.4.0)
+    - React-Core
+  - RNFBCrashlytics (21.2.0):
+    - Firebase/Crashlytics (<= 11.4.0)
+    - FirebaseCoreExtension (<= 11.4.0)
+    - React-Core
+    - RNFBApp
+  - RNGestureHandler (2.20.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1897,7 +1897,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (3.15.5):
+  - RNReanimated (3.16.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1917,10 +1917,32 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.5)
-    - RNReanimated/worklets (= 3.15.5)
+    - RNReanimated/reanimated (= 3.16.1)
+    - RNReanimated/worklets (= 3.16.1)
     - Yoga
-  - RNReanimated/reanimated (3.15.5):
+  - RNReanimated/reanimated (3.16.1):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNReanimated/reanimated/apple (= 3.16.1)
+    - Yoga
+  - RNReanimated/reanimated/apple (3.16.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1941,7 +1963,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.15.5):
+  - RNReanimated/worklets (3.16.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1962,7 +1984,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.34.0):
+  - RNScreens (3.35.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1983,9 +2005,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 3.34.0)
+    - RNScreens/common (= 3.35.0)
     - Yoga
-  - RNScreens/common (3.34.0):
+  - RNScreens/common (3.35.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2007,7 +2029,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.7.1):
+  - RNSVG (15.8.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2027,9 +2049,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNSVG/common (= 15.7.1)
+    - RNSVG/common (= 15.8.0)
     - Yoga
-  - RNSVG/common (15.7.1):
+  - RNSVG/common (15.8.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2377,7 +2399,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: df6597d4b1878a443796be11eb2b7286ed10ece6
   react-native-mmkv: 11fe311036310bb5ec12e9846afa6717238f4db2
   react-native-onesignal: 505a974a74b97e81d7ab090a63ea065566e2339f
-  react-native-safe-area-context: 4571abffff5db8a314b849a2c72aae5cba2e4c7a
+  react-native-safe-area-context: 908ee3cf872b29ed987a0514f1a6ccbf57f0fef4
   react-native-webview: b20d2755d69776b5e254822e8c8f452694f9d2b2
   React-nativeconfig: 31072ab0146e643594f6959c7f970a04b6c9ddd0
   React-NativeModulesApple: f49bb0befd8650ac3ff8fc2684072b16c09bf478
@@ -2405,17 +2427,17 @@ SPEC CHECKSUMS:
   React-utils: d1bae5ac6a5fb94a772ebfc7a7e1aba3a6706a3a
   ReactCodegen: 99b435b58bd874bb0626b3fb16437d2e8735d370
   ReactCommon: 1007c09a406a451ddbd874e51511aa541d6034f6
-  RNBootSplash: c6c32951732fa673251ca51fc7cb82c75d59e3b1
+  RNBootSplash: 5639789474656b970b1be268d587857742da080f
   RNDateTimePicker: b4dbbbe7a49cf4c9d9c01179f6d30242018e20da
-  RNDeviceInfo: e13b7d68878fba693c9fbb13ca4d56ad57d95917
-  RNFBAnalytics: e8219c0955286d0f30e1d7895fce8481fda5208d
-  RNFBApp: 4122dd41d8d7ff017b6ecf777a6224f5b349ca04
-  RNFBCrashlytics: 8a58cefd68fd73d91c7610d4c203aa9cfdc3335f
-  RNGestureHandler: 854a91154965db8d756a9c5efbff38eb889e1cb0
+  RNDeviceInfo: 29e01d5ae94bdb5a0f6c11a4c438132545b4df80
+  RNFBAnalytics: 53cb18c79f25935697162f595f19ac84d73ba30b
+  RNFBApp: 91c5eba32f43787a66f4c00cf7625f472cd3e0fb
+  RNFBCrashlytics: 761aaa065ab40b46fc5f773cf383755ebd947f21
+  RNGestureHandler: 598e45cedb905b157e9764acbef0b5e365693451
   RNPermissions: cf7efb34cbe7c8df3a6d84e5b7e3244517002177
-  RNReanimated: 1e0869d2e1e7e662814003000a4ffdaa49dcdc2f
-  RNScreens: 47d5b0b48402f5a2da5b2dd543deae3c9083a5ac
-  RNSVG: 2046b471030c6ac19cb800d2428e33ca59df1929
+  RNReanimated: 6fcf220ebb16ef0eee855de14f7b5e6594258c39
+  RNScreens: f493b156fe5de2434806b5a2c410800b2cd76c0e
+  RNSVG: 568f3246803db2088000ed771eb21f7f75065ccf
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: b05994d1933f507b0a28ceaa4fdb968dc18da178
 
