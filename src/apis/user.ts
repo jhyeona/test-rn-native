@@ -1,7 +1,7 @@
 import {requestGet} from '#apis/index.ts';
 import {instanceWithoutToken} from '#apis/instance.ts';
 import {REFRESH_TOKEN} from '#constants/common.ts';
-import {ResRefreshToken, UserInfoProps} from '#types/user.ts';
+import {AcademyProps, ResRefreshToken, UserInfoProps} from '#types/user.ts';
 import {getStorageItem} from '#utils/storageHelper.ts';
 
 // 유저 정보
@@ -18,4 +18,11 @@ export const requestPostRefreshToken = async (): Promise<ResRefreshToken> => {
   return instanceWithoutToken.post(url, null, {
     headers: header,
   });
+};
+
+// UUID 초기화 필요 기관 확인
+export const requestGetCheckUuid = async (uuid?: string): Promise<AcademyProps[]> => {
+  const url = '/user/check-uuid';
+  const config = {headers: {checkhere_uuid: uuid ?? ''}};
+  return requestGet(url, config);
 };

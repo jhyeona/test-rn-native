@@ -9,11 +9,7 @@ import GlobalState from '#recoil/Global';
 
 // import {storage} from '#utils/storageHelper.ts';
 
-const Initialize = ({
-  navigation,
-}: {
-  navigation: NativeStackNavigationHelpers;
-}) => {
+const Initialize = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const queryClient = useQueryClient();
   const isLogin = useRecoilValue(GlobalState.isLoginState);
 
@@ -41,10 +37,7 @@ const Initialize = ({
         alignItems: 'center',
         backgroundColor: 'white',
       }}>
-      <Image
-        style={{width: 100, height: 100}}
-        source={require('../../assets/logo.png')}
-      />
+      <Image style={{width: 100, height: 100}} source={require('../../assets/logo.png')} />
     </View>
   );
 };

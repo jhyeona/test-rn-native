@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSetRecoilState} from 'recoil';
@@ -8,7 +8,7 @@ import DailySchedule from '#containers/DailySchedules';
 import ScheduleHistory from '#containers/ScheduleHistory';
 import Settings from '#containers/Settings';
 import WeeklySchedules from '#containers/WeeklySchedules';
-import {useGetUserInfo} from '#hooks/useUser.ts';
+import {useGetCheckUuid, useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import {
   requestAddBeaconListener,
@@ -18,7 +18,7 @@ import {
   requestStopBeaconScanning,
 } from '#services/beaconScanner.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
-import {commonStyles} from '#utils/common.ts';
+import {commonStyles, getDeviceUUID} from '#utils/common.ts';
 import {onesignalLogin} from '#utils/onesignalHelper.ts';
 import {
   requestLocationPermissions,
@@ -28,12 +28,33 @@ import {
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
+  const [deviceUuid, setDeviceUuid] = useState<string>();
+
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const setWifiState = useSetRecoilState(GlobalState.wifiState);
   const setBeaconState = useSetRecoilState(GlobalState.beaconState);
 
   const {userData} = useGetUserInfo();
+  const {uuidCheckedList} = useGetCheckUuid(deviceUuid);
 
   const tabOptions = {headerShown: false};
+
+  useEffect(() => {
+    getDeviceUUID().then(uuid => {
+      setDeviceUuid(uuid);
+    });
+  }, []);
+
+  useEffect(() => {
+    const list = uuidCheckedList?.map(academy => academy.name);
+    if (list.length) {
+      setModalState({
+        isVisible: true,
+        title: '기기 변경 안내',
+        message: `${list?.join(', ')}에서는\n기기 변경 시 초기화 후 출결이 가능합니다.\n자세한 내용은 기관에 문의해 주세요.`,
+      });
+    }
+  }, [uuidCheckedList]);
 
   useEffect(() => {
     (async () => {
@@ -79,16 +100,8 @@ const TabNavigation = () => {
         tabBarStyle: commonStyles.tabBarStyle,
         tabBarShowLabel: false,
       })}>
-      <Tab.Screen
-        name="scheduleHistory"
-        component={ScheduleHistory}
-        options={tabOptions}
-      />
-      <Tab.Screen
-        name="dailySchedules"
-        component={DailySchedule}
-        options={tabOptions}
-      />
+      <Tab.Screen name="scheduleHistory" component={ScheduleHistory} options={tabOptions} />
+      <Tab.Screen name="dailySchedules" component={DailySchedule} options={tabOptions} />
       <Tab.Screen
         name="weeklySchedules"
         component={WeeklySchedules}
