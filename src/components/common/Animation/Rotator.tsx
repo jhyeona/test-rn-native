@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Pressable, Animated, ViewStyle} from 'react-native';
+import {Pressable, Animated, ViewStyle, View} from 'react-native';
 
 interface RotatingContainerProps {
   onPress?: (isRotated: boolean) => void;
@@ -8,12 +8,7 @@ interface RotatingContainerProps {
   style?: ViewStyle; // 외부 스타일 적용을 위한 props
 }
 
-const RotatingContainer = ({
-  onPress,
-  children,
-  duration,
-  style,
-}: RotatingContainerProps) => {
+const RotatingContainer = ({onPress, children, duration, style}: RotatingContainerProps) => {
   const [isRotated, setIsRotated] = useState(false);
   const rotateAnim = useRef(new Animated.Value(0)).current; // 회전 상태 관리
 
@@ -34,9 +29,9 @@ const RotatingContainer = ({
 
   return (
     <Pressable onPress={handlePress}>
-      <Animated.View style={[{transform: [{rotate: rotation}]}, style]}>
-        {children}
-      </Animated.View>
+      <View style={style}>
+        <Animated.View style={[{transform: [{rotate: rotation}]}]}>{children}</Animated.View>
+      </View>
     </Pressable>
   );
 };

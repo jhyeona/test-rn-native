@@ -8,9 +8,7 @@ import moment from 'moment/moment';
 import RotatingContainer from '#components/common/Animation/Rotator.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
-import StatusInfoContainer, {
-  ColorType,
-} from '#components/common/StatusInfoContainer';
+import StatusInfoContainer, {ColorType} from '#components/common/StatusInfoContainer';
 import {DATE_FORMAT_DOT} from '#constants/common.ts';
 import BtnSchedule from '#containers/DailySchedules/components/BtnSchedule.tsx';
 import {allowScheduleTime} from '#containers/DailySchedules/utils/dateHelper.ts';
@@ -50,9 +48,7 @@ const DaySchedulesLecture = ({
   // 현재시간을 기준으로 강의 진행 상태 표시
   const setStatusValue = () => {
     const now = moment();
-    const newStatus: ScheduleStatusProps = now.isBefore(
-      moment(scheduleData?.scheduleStartTime),
-    )
+    const newStatus: ScheduleStatusProps = now.isBefore(moment(scheduleData?.scheduleStartTime))
       ? {colorType: 'red', text: '강의 예정'}
       : now.isAfter(moment(scheduleData?.scheduleEndTime))
         ? {colorType: 'gray', text: '강의 종료'}
@@ -69,12 +65,11 @@ const DaySchedulesLecture = ({
   // 강의 허용시간에 맞춰 출결/외출 버튼 표시
   const setAvailableTime = () => {
     if (scheduleData) {
-      const {allowStartMinusTime, allowEndPlusTime, isAfter} =
-        allowScheduleTime({
-          scheduleData,
-          startTime: scheduleData?.scheduleStartTime,
-          endTime: scheduleData?.scheduleEndTime,
-        });
+      const {allowStartMinusTime, allowEndPlusTime, isAfter} = allowScheduleTime({
+        scheduleData,
+        startTime: scheduleData?.scheduleStartTime,
+        endTime: scheduleData?.scheduleEndTime,
+      });
 
       // 당일 퇴실 제한 여부에 따라 버튼 표시
       const allowEndTime = scheduleData?.lecture.lectureIsAllowedAfterEnd
@@ -84,9 +79,7 @@ const DaySchedulesLecture = ({
       setBtnAvailable(isAllowNow);
 
       // 강의 종료 후 + 퇴실 제한 없는 경우 퇴실 버튼만 살리기 위함
-      setIsAllowedAfterEnd(
-        isAfter && scheduleData?.lecture.lectureIsAllowedAfterEnd,
-      );
+      setIsAllowedAfterEnd(isAfter && scheduleData?.lecture.lectureIsAllowedAfterEnd);
     }
   };
 
@@ -104,30 +97,32 @@ const DaySchedulesLecture = ({
     <View style={[style, styles.container]}>
       <View
         style={{
+          flex: 1,
           gap: 10,
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <CText // 강의 명
-          text={scheduleData?.lecture.lectureName ?? '-'}
-          fontSize={16}
-          fontWeight="600"
-          lineBreak
-          style={{flex: 1}}
-        />
+        <View style={{flex: 1}}>
+          <CText // 강의 명
+            text={scheduleData?.lecture.lectureName ?? '-'}
+            fontSize={16}
+            fontWeight="600"
+            lineBreak
+          />
+          <CText // 강의 기간
+            text={`${formattedDate(
+              scheduleData?.lecture.lectureStartDate,
+            )} ~ ${formattedDate(scheduleData?.lecture.lectureEndDate)}`}
+            fontSize={13}
+          />
+        </View>
         <RotatingContainer
           onPress={onPressLectureArrow}
-          style={{marginTop: 6}}
+          style={styles.rotatingContainer}
           duration={350}>
           <SvgIcon name="DropDownArrow" />
         </RotatingContainer>
       </View>
-      <CText // 강의 기간
-        text={`${formattedDate(
-          scheduleData?.lecture.lectureStartDate,
-        )} ~ ${formattedDate(scheduleData?.lecture.lectureEndDate)}`}
-        fontSize={13}
-      />
       <View style={styles.infoContainer}>
         <View style={styles.placeInfo}>
           <SvgIcon name="MapPoint" size={17} />
@@ -174,6 +169,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'row',
     alignItems: 'flex-start',
+  },
+  rotatingContainer: {
+    paddingLeft: 15,
+    paddingTop: 10,
   },
 });
 
