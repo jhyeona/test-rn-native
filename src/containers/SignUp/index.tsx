@@ -28,12 +28,7 @@ import {
 import GlobalState from '#recoil/Global';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 import {GenderType} from '#types/user.ts';
-import {
-  checkDate,
-  checkName,
-  checkPassword,
-  checkPhone,
-} from '#utils/regExpHelper.ts';
+import {checkDate, checkName, checkPassword, checkPhone} from '#utils/regExpHelper.ts';
 
 interface SignUpDataProps {
   name: string;
@@ -69,9 +64,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [samePassword, setSamePassword] = useState(false);
   const [isFirstChecked, setIsFirstChecked] = useState(false);
   const [isSecondChecked, setIsSecondChecked] = useState(false);
-  const [isAllCheck, setIsAllCheck] = useState(
-    isFirstChecked && isSecondChecked,
-  );
+  const [isAllCheck, setIsAllCheck] = useState(isFirstChecked && isSecondChecked);
   const [defaultModalState, setDefaultModalState] = useState({
     isVisible: false,
     title: '',
@@ -263,10 +256,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   };
 
   // 약관 개별 동의 시 전체 동의 처리
-  const updateAllCheckState = (
-    firstChecked: boolean,
-    secondChecked: boolean,
-  ) => {
+  const updateAllCheckState = (firstChecked: boolean, secondChecked: boolean) => {
     // 하나씩 동의
     setIsAllCheck(firstChecked && secondChecked);
   };
@@ -275,8 +265,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     // 비밀번호와 재입력 비밀번호 비교
     if (signUpData.password && signUpData.rePassword) {
       const isSame =
-        signUpData.password === signUpData.rePassword &&
-        checkPassword(signUpData.rePassword);
+        signUpData.password === signUpData.rePassword && checkPassword(signUpData.rePassword);
       setSamePassword(isSame);
     }
   }, [signUpData.password, signUpData.rePassword]);
@@ -289,9 +278,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           <CInput
             title="성명"
             inputValue={signUpData.name}
-            setInputValue={value =>
-              setSignUpData(prev => ({...prev, name: value}))
-            }
+            setInputValue={value => setSignUpData(prev => ({...prev, name: value}))}
             errorMessage="이름을 확인해 주세요."
             isWarning={!!signUpData.name && !checkName(signUpData.name)}
             maxLength={4}
@@ -302,9 +289,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             <CInputWithDropdown
               title="생년월일"
               inputValue={signUpData.birthday}
-              setInputValue={value =>
-                setSignUpData(prev => ({...prev, birthday: value}))
-              }
+              setInputValue={value => setSignUpData(prev => ({...prev, birthday: value}))}
               placeholder={REQ_DATE_FORMAT}
               errorMessage="생년월일을 확인해 주세요."
               maxLength={8}
@@ -319,9 +304,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               }
               dropDownDisabled={isSend}
               dropDownPlaceHolder="성별"
-              isWarning={
-                !!signUpData.birthday && !checkDate(signUpData.birthday)
-              }
+              isWarning={!!signUpData.birthday && !checkDate(signUpData.birthday)}
               dropDownStyle={{flex: 1}}
             />
           </View>
@@ -329,9 +312,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             <CInputWithDropdown
               title="휴대폰 번호"
               inputValue={signUpData.phone}
-              setInputValue={value =>
-                setSignUpData(prev => ({...prev, phone: value}))
-              }
+              setInputValue={value => setSignUpData(prev => ({...prev, phone: value}))}
               placeholder="01012341234"
               errorMessage="휴대폰 번호를 확인해 주세요."
               isWarning={!!signUpData.phone && !checkPhone(signUpData.phone)}
@@ -339,9 +320,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               inputMode="tel"
               readOnly={isSend}
               dropDownItems={TELECOM_LIST}
-              dropDownOnSelect={value =>
-                setSignUpData(prev => ({...prev, telecom: value.id}))
-              }
+              dropDownOnSelect={value => setSignUpData(prev => ({...prev, telecom: value.id}))}
               dropDownDisabled={isSend}
               dropDownPlaceHolder="통신사(알뜰포함)"
               dropDownStyle={{flex: 1}}
@@ -353,14 +332,10 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
               inputValue={signUpData.smsCode}
               setInputValue={handleChangeSmsCode}
               errorMessage="올바른 인증번호를 입력해 주세요."
-              isWarning={
-                isSend
-                  ? !!signUpData.smsCode && signUpData.smsCode.length < 6
-                  : false
-              }
+              isWarning={isSend ? !!signUpData.smsCode && signUpData.smsCode.length < 6 : false}
               maxLength={6}
               inputMode="numeric"
-              readOnly={false}
+              readOnly={!isSend || isCertification}
               timer={isTimer}
               onChangeTimeHandler={onChangeTimeHandler}
               setTime={120}
@@ -369,7 +344,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             <View style={{width: '40%'}}>
               {isSend ? (
                 <CButton
-                  text={isCertification ? '발송 완료' : '재발송'}
+                  text={isCertification ? '완료' : '재발송'}
                   onPress={onPressCertification}
                   disabled={countDown > 100 || isCertification}
                 />
@@ -381,22 +356,16 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
           <CInput
             title="비밀번호 입력"
             inputValue={signUpData.password}
-            setInputValue={value =>
-              setSignUpData(prev => ({...prev, password: value}))
-            }
+            setInputValue={value => setSignUpData(prev => ({...prev, password: value}))}
             errorMessage="영문+숫자 조합 8자리 이상 입력해 주세요."
-            isWarning={
-              !!signUpData.password && !checkPassword(signUpData.password)
-            }
+            isWarning={!!signUpData.password && !checkPassword(signUpData.password)}
             secureTextEntry
             placeholder="영문+숫자 조합 8자리 이상"
           />
           <CInput
             title="비밀번호 입력 확인"
             inputValue={signUpData.rePassword}
-            setInputValue={value =>
-              setSignUpData(prev => ({...prev, rePassword: value}))
-            }
+            setInputValue={value => setSignUpData(prev => ({...prev, rePassword: value}))}
             errorMessage="동일한 비밀번호를 입력해 주세요."
             isWarning={!!signUpData.rePassword && !samePassword}
             secureTextEntry

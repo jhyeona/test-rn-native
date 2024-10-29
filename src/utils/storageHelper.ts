@@ -27,6 +27,6 @@ export const deleteStorageItem = (key: string) => {
 export const clearStorage = () => {
   deleteStorageItem(ACCESS_TOKEN);
   deleteStorageItem(REFRESH_TOKEN);
-  storage.recrypt(undefined); // remove encrypt
+  // storage.recrypt(undefined); // remove encrypt
   return storage.clearAll();
 };

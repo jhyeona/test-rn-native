@@ -11,10 +11,18 @@ export const getIsToday = (date: Moment) => {
  * @return 날짜가 해당 월의 몇 주 차인지
  */
 export const weekOfMonth = (date: Moment) => {
-  const weekOfMonthNumber = (date: Moment) =>
-    date.week() - moment(date).startOf('month').week() + 1;
+  const weekOfMonthNumber = (date2: Moment) => {
+    const currentWeek = date2.week();
+    const startOfMonth = moment(date2).startOf('month').week();
 
-  return `${date.format('YYYY년 MM월')} ${weekOfMonthNumber(date)}주차`;
+    if (startOfMonth > currentWeek) {
+      // 52(1년의 총 주수, 53주는 고려하지 않음) - startOfMonth(선택된 날의 달의 첫번째 주가 1년중 몇번째 주인지) + currentWeek(선택된 날짜가 몇번째 주인지) + 1(0 방지)
+      return 52 - startOfMonth + currentWeek + 1;
+    }
+    return currentWeek - startOfMonth + 1;
+  };
+
+  return `${date.format('YYYY년 M월')} ${weekOfMonthNumber(date)}주차`;
 };
 
 /**
@@ -40,7 +48,5 @@ export const getMondayOfWeek = (date: Moment): Moment => {
  */
 export const getDatesOfWeek = (date: Moment): Moment[] => {
   const monday = getMondayOfWeek(date);
-  return Array.from({length: 7}, (_, index) =>
-    monday.clone().add(index, 'days'),
-  );
+  return Array.from({length: 7}, (_, index) => monday.clone().add(index, 'days'));
 };

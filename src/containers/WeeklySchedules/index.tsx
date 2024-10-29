@@ -20,16 +20,12 @@ const MONTH_FORMAT = 'YYYY년 MM월';
 
 const WeeklySchedules = () => {
   const selectAcademy = useRecoilValue(GlobalState.selectedAcademy); // 선택된 기관
-  const [{date}, setSelectedDate] = useRecoilState(
-    scheduleState.selectedCalendarDate,
-  );
+  const [{date}, setSelectedDate] = useRecoilState(scheduleState.selectedCalendarDate);
 
-  const {formattedData, timeLineData, refetchWeekSchedule} = useGetWeekSchedule(
-    {
-      academyId: selectAcademy,
-      date: date.format(REQ_DATE_FORMAT),
-    },
-  );
+  const {formattedData, timeLineData, refetchWeekSchedule} = useGetWeekSchedule({
+    academyId: selectAcademy,
+    date: date.format(REQ_DATE_FORMAT),
+  });
 
   useFocusEffect(
     useCallback(() => {

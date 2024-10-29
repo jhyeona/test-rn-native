@@ -40,10 +40,7 @@ const DaySchedules = () => {
   const renderItem: ListRenderItem<ScheduleDefaultProps> = ({item, index}) => {
     return (
       <View key={`day-schedule-time-item-${index}`} style={styles.row}>
-        <DaySchedulesTime
-          scheduleData={item}
-          style={[styles.cell, styles.cellFirst]}
-        />
+        <DaySchedulesTime scheduleData={item} style={[styles.cell, styles.cellFirst]} />
         <View style={[styles.cell]}>
           <DaySchedulesLecture scheduleData={item} />
         </View>
@@ -66,9 +63,7 @@ const DaySchedules = () => {
       ListHeaderComponent={<DaySchedulesHeader />}
       renderItem={renderItem}
       data={dayScheduleData?.scheduleList ?? []}
-      ListEmptyComponent={
-        <NoData fullHeight message="✏️ 강의 일정이 없습니다." />
-      }
+      ListEmptyComponent={<NoData fullHeight message="✏️ 강의 일정이 없습니다." />}
     />
   );
 };
