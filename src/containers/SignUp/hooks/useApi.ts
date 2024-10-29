@@ -47,8 +47,7 @@ export const useReqSignUpTAS = () => {
       setToast({
         isVisible: true,
         time: 4000,
-        message:
-          '인증 요청되었습니다. \n환경에 따라 다소 시간이 지연될 수 있습니다.',
+        message: '인증 요청되었습니다. \n환경에 따라 다소 시간이 지연될 수 있습니다.',
       });
     },
     onSettled: () => {
@@ -147,7 +146,7 @@ export const useReqSignUp = () => {
       setModalState({
         isVisible: true,
         title: '안내',
-        message: `회원가입이 완료되었습니다. \n로그인해 주세요.`,
+        message: `회원가입이 완료되었습니다. 로그인해 주세요.`,
       });
     },
     onError: (error: CommonResponseProps<null>) => {
