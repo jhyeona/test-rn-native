@@ -3,11 +3,9 @@ import {clearStorage} from '#utils/storageHelper.ts';
 
 export const handleLogout = ({
   setGlobalModalState,
-  setUserData,
   setIsLogin,
 }: {
   setGlobalModalState: (value: any) => void;
-  setUserData: (value: any) => void;
   setIsLogin: (value: boolean) => void;
 }) => {
   setGlobalModalState({
@@ -18,7 +16,6 @@ export const handleLogout = ({
     onPressConfirm: () => {
       clearStorage();
       onesignalLogout();
-      setUserData(null);
       setIsLogin(false);
     },
   });
