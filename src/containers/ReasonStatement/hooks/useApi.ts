@@ -1,16 +1,9 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
-import {
-  requestCreateReason,
-  requestUpdateReason,
-} from '#containers/ReasonStatement/services';
+import {requestCreateReason, requestUpdateReason} from '#containers/ReasonStatement/services';
 import {ReasonQueryOptions} from '#containers/ReasonStatement/services/queries.ts';
-import {
-  useHandleError,
-  useInvalidateQueriesAndShowModal,
-  useLoadingEffect,
-} from '#hooks/useApi.ts';
+import {useHandleError, useInvalidateQueriesAndShowModal, useLoadingEffect} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
 import {ReqGetReasonDetails, ReqGetReasonList} from '#types/reason.ts';
@@ -59,10 +52,7 @@ export const useCreateReason = () => {
       setIsLoading(false);
     },
     onSuccess: async () => {
-      await invalidateQueriesAndShowModal(
-        INVALID_QUERY_KEYS,
-        '사유서가 작성되었습니다.',
-      );
+      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, '사유서가 작성되었습니다.');
     },
     onError: (error: CommonResponseProps<null>) => {
       setModalState({
@@ -92,10 +82,7 @@ export const useUpdateReason = () => {
       setIsLoading(false);
     },
     onSuccess: async () => {
-      await invalidateQueriesAndShowModal(
-        INVALID_QUERY_KEYS,
-        '사유서가 수정되었습니다.',
-      );
+      await invalidateQueriesAndShowModal(INVALID_QUERY_KEYS, '사유서가 수정되었습니다.');
     },
     onError: (error: CommonResponseProps<null>) => {
       setModalState({

@@ -13,9 +13,7 @@ import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import Dropdown, {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import Header from '#components/common/Header/Header.tsx';
-import StatusInfoContainer, {
-  ColorType,
-} from '#components/common/StatusInfoContainer';
+import StatusInfoContainer, {ColorType} from '#components/common/StatusInfoContainer';
 import {COLORS} from '#constants/colors.ts';
 import {MAX_FILE_SIZE, REQ_DATE_FORMAT} from '#constants/common.ts';
 import {REASON_STATUS_MAP} from '#constants/reason.ts';
@@ -42,15 +40,8 @@ export interface ImgListProps {
   width?: number;
 }
 
-const ReasonCreator = ({
-  navigation,
-}: {
-  navigation: NativeStackNavigationHelpers;
-}) => {
-  const route =
-    useRoute<
-      RouteProp<{ReasonCreator: NavigateReasonProps}, 'ReasonCreator'>
-    >();
+const ReasonCreator = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
+  const route = useRoute<RouteProp<{ReasonCreator: NavigateReasonProps}, 'ReasonCreator'>>();
   const {isCreate, reasonId} = route.params;
   const {lectureItems} = useGetLectureList();
 
@@ -89,8 +80,7 @@ const ReasonCreator = ({
         if (!img.isOriginal) {
           formData.append(`image0${i + 1}`, {
             uri: img.uri,
-            name:
-              img.fileName || `${moment().format('YYYY-MM-DD_HH:mm:ss')}.jpg`,
+            name: img.fileName || `${moment().format('YYYY-MM-DD_HH:mm:ss')}.jpg`,
             type: img.type || 'image/jpeg',
           });
         } else if (img.isDelete) {
@@ -120,19 +110,14 @@ const ReasonCreator = ({
         reasonId,
         lectureId,
       });
-      errorToCrashlytics(
-        error,
-        isCreate ? 'requestCreateReason' : 'requestUpdateReason',
-      );
+      errorToCrashlytics(error, isCreate ? 'requestCreateReason' : 'requestUpdateReason');
     }
   };
 
   const onPressDeletePhoto = (uri: string) => {
     const filtered = imgList
       .filter(item => !(item.uri === uri && !item.isOriginal)) // 원래 데이터가 아니면 리스트에서 삭제
-      .map(item =>
-        item.uri === uri && item.isOriginal ? {...item, isDelete: true} : item,
-      ); // 원래 데이터면 isDelete 값 추가
+      .map(item => (item.uri === uri && item.isOriginal ? {...item, isDelete: true} : item)); // 원래 데이터면 isDelete 값 추가
     setImgList(filtered);
   };
 
@@ -167,13 +152,9 @@ const ReasonCreator = ({
   }, [imgList]);
 
   const handleImgList = (assets: any) => {
-    const isOverSize = assets.some(
-      (item: {fileSize: number}) => item.fileSize > MAX_FILE_SIZE,
-    );
+    const isOverSize = assets.some((item: {fileSize: number}) => item.fileSize > MAX_FILE_SIZE);
     if (isOverSize) {
-      Alert.alert(
-        `이미지 1장당 크기는 최대 ${MAX_FILE_SIZE / 1024 / 1024}MB 입니다.`,
-      );
+      Alert.alert(`이미지 1장당 크기는 최대 ${MAX_FILE_SIZE / 1024 / 1024}MB 입니다.`);
       return;
     }
     if (imgListLength + assets.length > 3) {
@@ -207,10 +188,7 @@ const ReasonCreator = ({
               defaultDate={reasonDetails?.date}
             />
             <View style={styles.row}>
-              <StatusInfoContainer
-                colorType={status.colorType}
-                text={status.text}
-              />
+              <StatusInfoContainer colorType={status.colorType} text={status.text} />
             </View>
           </View>
           <View style={[styles.textContainer, disabled && styles.textDisabled]}>
@@ -218,10 +196,7 @@ const ReasonCreator = ({
               multiline
               scrollEnabled
               value={text}
-              style={[
-                styles.textArea,
-                {color: disabled ? COLORS.placeholder : 'black'},
-              ]}
+              style={[styles.textArea, {color: disabled ? COLORS.placeholder : 'black'}]}
               textAlignVertical="top"
               maxLength={500}
               onChangeText={setText}
