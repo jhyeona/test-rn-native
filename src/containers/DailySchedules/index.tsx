@@ -16,6 +16,7 @@ import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
 import {ACCESS_TOKEN, DATE_FORMAT_DASH} from '#constants/common.ts';
 import Academy from '#containers/Academy';
+import BtnReasonList from '#containers/DailySchedules/components/BtnReasonList.tsx';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
 import {getUniqueAcademyList} from '#containers/SelectAcademy/services/AcademyListHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
@@ -80,16 +81,7 @@ const DailySchedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) =
                 <DaySchedules />
               </View>
             </CView>
-            <DraggableFAB>
-              <Pressable
-                onPress={() => {
-                  navigation.navigate('ReasonStatement');
-                }}
-                style={styles.btnReason}>
-                <SvgIcon name="Notepad" />
-                <CText text="사유서" color={COLORS.lightGray} />
-              </Pressable>
-            </DraggableFAB>
+            <BtnReasonList navigation={navigation} />
           </CSafeAreaView>
         ) : (
           <Academy navigation={navigation} />
@@ -102,17 +94,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 10,
-  },
-  btnReason: {
-    gap: 5,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 48,
-    backgroundColor: COLORS.primary,
-    ...BOX_SHADOW,
   },
 });
 export default DailySchedule;
