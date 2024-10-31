@@ -11,13 +11,13 @@ import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
-import {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
 import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
 import {ACCESS_TOKEN, DATE_FORMAT_DASH} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import DaySchedules from '#containers/DailySchedules/components/DaySchedules.tsx';
+import {getUniqueAcademyList} from '#containers/SelectAcademy/services/AcademyListHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
 import scheduleState from '#recoil/Schedule';
@@ -36,30 +36,21 @@ const DailySchedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) =
 
   useEffect(() => {
     if (userData) {
-      const token = getStorageItem(ACCESS_TOKEN);
-      if (!token) {
+      // 토큰 확인
+      if (!getStorageItem(ACCESS_TOKEN)) {
         setIsLogin(false);
         return;
       }
 
-      if (userData.studentList.length > 0) {
-        const newList: Array<ItemProps> = [];
-        userData?.studentList.map(val => {
-          newList.push({
-            label: val.academy.name,
-            id: String(val.academy.academyId),
-          });
-        });
-        setSelectAcademy(newList[0].id); // 기관의 기본 선택 데이터는 첫번째 기관
+      const isAcademyList = userData.studentList.length;
+      if (isAcademyList) {
+        const newList = getUniqueAcademyList(userData);
+        setSelectAcademy(getStorageItem('academy') ?? newList[0].id); // 기관의 기본 선택 데이터는 첫번째 기관
       }
+
       // 기관이 없을 경우 기관 설정 페이지에서는 하단 네비게이션 숨김
       navigate.setOptions({
-        tabBarStyle: [
-          {
-            display: userData.studentList.length > 0 ? 'flex' : 'none',
-          },
-          commonStyles.tabBarStyle,
-        ],
+        tabBarStyle: [{display: isAcademyList ? 'flex' : 'none'}, commonStyles.tabBarStyle],
       });
     }
   }, [navigate, userData]);

@@ -7,18 +7,18 @@ import Dropdown, {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import {getUniqueAcademyList} from '#containers/SelectAcademy/services/AcademyListHelper.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
+import {setStorageItem} from '#utils/storageHelper.ts';
 
 const AcademySelector = () => {
   const {userData} = useGetUserInfo();
-  const [selectAcademy, setSelectAcademy] = useRecoilState(
-    GlobalState.selectedAcademy,
-  );
+  const [selectAcademy, setSelectAcademy] = useRecoilState(GlobalState.selectedAcademy);
 
   const [academyList, setAcademyList] = useState([{label: '', id: ''}]);
 
   const onSelectAcademy = (item: ItemProps) => {
     Alert.alert(`${item.label} 기관이 선택되었습니다.`);
     setSelectAcademy(item.id);
+    setStorageItem('academy', item.id);
   };
 
   useEffect(() => {
