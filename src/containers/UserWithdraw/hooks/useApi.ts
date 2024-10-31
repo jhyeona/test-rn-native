@@ -25,7 +25,7 @@ export const useDeleteUser = () => {
       setModalState({
         isVisible: true,
         title: '안내',
-        message: '탈퇴 처리 되었습니다.',
+        message: '탈퇴 처리 요청 되었습니다.',
       });
       clearStorage();
       setIsLogin(false);
