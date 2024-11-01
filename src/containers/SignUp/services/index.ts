@@ -1,11 +1,5 @@
 import {instanceWithoutToken} from '#apis/instance.ts';
-import {
-  ReqSignUpTAS,
-  ReqPhone,
-  ReqSmsConfirm,
-  ReqSignUp,
-  ResSmsConfirmProps,
-} from '#types/user.ts';
+import {ReqSignUpTAS, ReqPhone, ReqSmsConfirm, ReqSignUp, ResSmsConfirmProps} from '#types/user.ts';
 
 export const requestPostSignUpPhone = async (phone: string): Promise<any> => {
   // 아이디 (휴대폰) 중복 여부 체크
@@ -13,17 +7,13 @@ export const requestPostSignUpPhone = async (phone: string): Promise<any> => {
   return instanceWithoutToken.get(url);
 };
 
-export const requestPostSignUpTAS = async (
-  payload: ReqSignUpTAS,
-): Promise<any> => {
+export const requestPostSignUpTAS = async (payload: ReqSignUpTAS): Promise<any> => {
   // 본인 확인용 TAS 요청
   const url = '/user/signup/tas/request';
   return instanceWithoutToken.post(url, payload);
 };
 
-export const requestPostSignUpSMSCode = async (
-  payload: ReqPhone,
-): Promise<ResSmsConfirmProps> => {
+export const requestPostSignUpSMSCode = async (payload: ReqPhone): Promise<ResSmsConfirmProps> => {
   // 회원가입 시 SMS 코드 요청
   const url = '/user/signup/sms/request';
   return instanceWithoutToken.post(url, payload);

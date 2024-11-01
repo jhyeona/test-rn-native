@@ -9,13 +9,9 @@ import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
-import {setStorageItem, storage} from '#utils/storageHelper.ts';
+import {setStorageItem} from '#utils/storageHelper.ts';
 
-const Onboarding = ({
-  navigation,
-}: {
-  navigation: NativeStackNavigationHelpers;
-}) => {
+const Onboarding = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const [isChecked, setIsChecked] = useState(true);
   const invalidWidth = useChangeWidth();
   const flatListData = [
@@ -24,16 +20,8 @@ const Onboarding = ({
     {key: '3', backgroundColor: '#9b59b6', text: 'Enjoy Using My App'},
   ];
 
-  const renderItem = ({
-    item,
-  }: {
-    item: {backgroundColor: string; text: string};
-  }) => (
-    <View
-      style={[
-        styles.slide,
-        {backgroundColor: item.backgroundColor, width: invalidWidth},
-      ]}>
+  const renderItem = ({item}: {item: {backgroundColor: string; text: string}}) => (
+    <View style={[styles.slide, {backgroundColor: item.backgroundColor, width: invalidWidth}]}>
       <CText style={styles.text} text={item.text} />
     </View>
   );
@@ -50,10 +38,7 @@ const Onboarding = ({
   return (
     <CSafeAreaView edges={['top', 'bottom']}>
       <CView>
-        <CText
-          style={{alignSelf: 'center'}}
-          text={`체크히어에 오신것을 환영합니다!`}
-        />
+        <CText style={{alignSelf: 'center'}} text={`체크히어에 오신것을 환영합니다!`} />
         <FlatList
           data={flatListData}
           renderItem={renderItem}

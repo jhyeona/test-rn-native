@@ -44,10 +44,7 @@ const PhotoBox = ({
         ) : (
           <View style={styles.photo}>
             {!disabled && (
-              <TouchableOpacity
-                disabled={disabled}
-                onPress={onPressDelete}
-                style={styles.close}>
+              <TouchableOpacity disabled={disabled} onPress={onPressDelete} style={styles.close}>
                 <SvgIcon name="Close" width={10} height={10} />
               </TouchableOpacity>
             )}

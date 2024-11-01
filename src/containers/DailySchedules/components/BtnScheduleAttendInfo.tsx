@@ -1,4 +1,3 @@
-import {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 
 import CText from '#components/common/CustomText/CText.tsx';
@@ -21,24 +20,16 @@ const BtnScheduleAttendInfo = ({
         scheduleData?.scheduleTimeList.map((data, i) => {
           const {isBetween, status} = timeStatusList[i];
           return (
-            <View
-              key={`schedule-interval-info-${i}`}
-              style={styles.scheduleContainer}>
+            <View key={`schedule-interval-info-${i}`} style={styles.scheduleContainer}>
               <View
                 style={[
                   styles.scheduleInfo,
                   {borderColor: isBetween ? COLORS.primary : COLORS.light.gray},
                 ]}>
                 <View style={styles.scheduleTime}>
+                  <CText text={`${i + 1}교시`} fontWeight="700" color={COLORS.primary} />
                   <CText
-                    text={`${i + 1}교시`}
-                    fontWeight="700"
-                    color={COLORS.primary}
-                  />
-                  <CText
-                    text={`${formattedDate(data.timeStart)} ~ ${formattedDate(
-                      data.timeEnd,
-                    )}`}
+                    text={`${formattedDate(data.timeStart)} ~ ${formattedDate(data.timeEnd)}`}
                   />
                 </View>
                 <View style={styles.buttonWrap}>

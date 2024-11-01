@@ -84,22 +84,14 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             <View style={{flexDirection: 'row', gap: 30, alignItems: 'center'}}>
               <SvgIcon
                 name={
-                  Config.ENV === 'development' || Config.ENV === 'appcenter'
-                    ? 'LogoDev'
-                    : 'Logo'
+                  Config.ENV === 'development' || Config.ENV === 'appcenter' ? 'LogoDev' : 'Logo'
                 }
               />
               <View>
-                <CText
-                  text="통합 출결 관리 서비스"
-                  fontSize={20}
-                  fontWeight="600"
-                />
+                <CText text="통합 출결 관리 서비스" fontSize={20} fontWeight="600" />
                 <CText text="체크히어" fontSize={40} fontWeight="800" />
-                {(Config.ENV === 'development' ||
-                  Config.ENV === 'appcenter') && (
-                  <Pressable
-                    onPress={() => Alert.alert(`baseURL:${Config.BASE_URL}`)}>
+                {(Config.ENV === 'development' || Config.ENV === 'appcenter') && (
+                  <Pressable onPress={() => Alert.alert(`baseURL:${Config.BASE_URL}`)}>
                     <CText
                       color={COLORS.primary}
                       text={`${Config.ENV}`}
@@ -133,14 +125,10 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
             <CButton text="로그인하기" onPress={onPressSignIn} />
           </View>
           <View style={styles.footerTextContainer}>
-            <TouchableOpacity
-              style={styles.footerText}
-              onPress={() => handlePage('SignUp')}>
+            <TouchableOpacity style={styles.footerText} onPress={() => handlePage('SignUp')}>
               <CText text="회원가입" fontSize={12} color={COLORS.primary} />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.footerText}
-              onPress={() => handlePage('FindPassword')}>
+            <TouchableOpacity style={styles.footerText} onPress={() => handlePage('FindPassword')}>
               <CText text="비밀번호 재발급" fontSize={12} color={COLORS.gray} />
             </TouchableOpacity>
           </View>

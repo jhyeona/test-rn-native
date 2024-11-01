@@ -24,8 +24,7 @@ export const useReqFindPassword = () => {
       setModalState({
         isVisible: true,
         title: '안내',
-        message:
-          '임시 비밀번호를 전송하였습니다.\n임시 비밀번호로 로그인해주세요.',
+        message: '임시 비밀번호를 전송하였습니다.\n임시 비밀번호로 로그인해주세요.',
       });
     },
     onError: (error: CommonResponseProps<null>) => {

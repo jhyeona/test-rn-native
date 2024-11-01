@@ -11,33 +11,23 @@ export const getAdjustedTimes = (scheduleList: ScheduleDefaultProps[]) => {
     const startTime = moment(schedule.scheduleStartTime).format('HH:mm');
     const endTime = moment(schedule.scheduleEndTime).format('HH:mm');
 
-    if (
-      !earliestTime ||
-      moment(startTime, 'HH:mm').isBefore(moment(earliestTime, 'HH:mm'))
-    ) {
+    if (!earliestTime || moment(startTime, 'HH:mm').isBefore(moment(earliestTime, 'HH:mm'))) {
       earliestTime = startTime;
     }
 
-    if (
-      !latestTime ||
-      moment(endTime, 'HH:mm').isAfter(moment(latestTime, 'HH:mm'))
-    ) {
+    if (!latestTime || moment(endTime, 'HH:mm').isAfter(moment(latestTime, 'HH:mm'))) {
       latestTime = endTime;
     }
   });
 
   if (earliestTime && latestTime) {
     // 01:00 미만이면 무조건 00:00으로 설정
-    const adjustedEarliest = moment(earliestTime, 'HH:mm').isBefore(
-      moment('01:00', 'HH:mm'),
-    )
+    const adjustedEarliest = moment(earliestTime, 'HH:mm').isBefore(moment('01:00', 'HH:mm'))
       ? '00:00'
       : moment(earliestTime, 'HH:mm').subtract(1, 'hours').format('HH:mm');
 
     // 23:00 이후이면 무조건 24:00으로 설정
-    const adjustedLatest = moment(latestTime, 'HH:mm').isAfter(
-      moment('23:00', 'HH:mm'),
-    )
+    const adjustedLatest = moment(latestTime, 'HH:mm').isAfter(moment('23:00', 'HH:mm'))
       ? '24:00'
       : moment(latestTime, 'HH:mm').add(1, 'hours').format('HH:mm');
 
@@ -47,10 +37,7 @@ export const getAdjustedTimes = (scheduleList: ScheduleDefaultProps[]) => {
   return {adjustedEarliest: null, adjustedLatest: null};
 };
 // 시간 차이를 분 단위로 계산하는 함수
-export const getTimeDifferenceInMinutes = (
-  startTime: string,
-  endTime: string,
-) => {
+export const getTimeDifferenceInMinutes = (startTime: string, endTime: string) => {
   const [startHour, startMinute] = startTime.split(':').map(Number);
   const [endHour, endMinute] = endTime.split(':').map(Number);
   return (endHour - startHour) * 60 + (endMinute - startMinute);
@@ -74,9 +61,7 @@ export const generateHours = (start: string, end: string) => {
     for (let i = totalStartMinutes; i <= totalEndMinutes; i += 5) {
       const hour = Math.floor(i / 60);
       const minute = i % 60;
-      generatedHours.push(
-        `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`,
-      );
+      generatedHours.push(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
     }
     return generatedHours;
   }
@@ -84,10 +69,7 @@ export const generateHours = (start: string, end: string) => {
 };
 
 // 오늘 버튼 클릭시 선택돼 있는 날짜가 이번주 중 하루인지
-export const isDateInSameWeek = (
-  selectedDate: Date,
-  referenceDate: Date,
-): boolean => {
+export const isDateInSameWeek = (selectedDate: Date, referenceDate: Date): boolean => {
   const normalizeDate = (date: Date): Date =>
     new Date(date.getFullYear(), date.getMonth(), date.getDate());
 

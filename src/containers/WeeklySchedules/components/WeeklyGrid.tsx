@@ -12,10 +12,7 @@ import {
   TimeLineDataProps,
   WeekScheduleFormatProps,
 } from '#containers/WeeklySchedules/hooks/useApi.ts';
-import {
-  generateHours,
-  getRowSpan,
-} from '#containers/WeeklySchedules/utils/scheduleHelper.ts';
+import {generateHours, getRowSpan} from '#containers/WeeklySchedules/utils/scheduleHelper.ts';
 
 const FIVE_MINUTES_HEIGHTS = 5;
 const days = ['월', '화', '수', '목', '금', '토', '일'];
@@ -27,12 +24,7 @@ interface TimelineCalendarProps {
   refetch?: () => Promise<QueryObserverResult<any, unknown>>;
 }
 
-const WeeklyGrid = ({
-  date,
-  scheduleData,
-  timeLineData,
-  refetch,
-}: TimelineCalendarProps) => {
+const WeeklyGrid = ({date, scheduleData, timeLineData, refetch}: TimelineCalendarProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // 당겨서 새로고침
@@ -52,10 +44,7 @@ const WeeklyGrid = ({
   );
 
   const scheduleDataMap = useMemo(() => {
-    const map: Record<
-      string,
-      Record<string, WeekScheduleFormatProps | undefined>
-    > = {};
+    const map: Record<string, Record<string, WeekScheduleFormatProps | undefined>> = {};
 
     if (scheduleData) {
       days.forEach(day => {
@@ -88,9 +77,7 @@ const WeeklyGrid = ({
             // 시작 시간일 경우에만 셀 생성
             if (i === hours.indexOf(cellData.startTime)) {
               return (
-                <View
-                  key={`${day}-${time}`}
-                  style={[styles.cell, styles.schedule]}>
+                <View key={`${day}-${time}`} style={[styles.cell, styles.schedule]}>
                   <View
                     style={[
                       styles.scheduleCell,
@@ -145,9 +132,7 @@ const WeeklyGrid = ({
       style={{marginBottom: 20}}
       scrollEnabled={true}
       ListFooterComponentStyle={styles.footerForNodata}
-      ListFooterComponent={
-        <CText text={scheduleData?.length ? '' : '강의 일정이 없습니다.'} />
-      }
+      ListFooterComponent={<CText text={scheduleData?.length ? '' : '강의 일정이 없습니다.'} />}
     />
   );
 };

@@ -82,15 +82,9 @@ const FileUploader = ({
   }, [response]);
 
   return (
-    <TouchableOpacity
-      onPress={() => onButtonPress(uploaderType)}
-      style={styles.container}>
+    <TouchableOpacity onPress={() => onButtonPress(uploaderType)} style={styles.container}>
       <CText text={ACTIONS[uploaderType - 1].title} />
-      <SvgIcon
-        name={uploaderType % 2 === 0 ? 'Gallery' : 'Camera'}
-        width={18}
-        height={18}
-      />
+      <SvgIcon name={uploaderType % 2 === 0 ? 'Gallery' : 'Camera'} width={18} height={18} />
     </TouchableOpacity>
 
     // <SafeAreaView style={styles.container}>

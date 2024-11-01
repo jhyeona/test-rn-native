@@ -28,9 +28,7 @@ export const requestGetReasonDetails = async (
   return requestGet(url);
 };
 
-export const requestCreateReason = async (
-  formData: FormData,
-): Promise<ResGetReasonDetails> => {
+export const requestCreateReason = async (formData: FormData): Promise<ResGetReasonDetails> => {
   // 사유서 생성
   const url = `/reason/create`;
   return requestPost(url, formData, {
@@ -38,9 +36,7 @@ export const requestCreateReason = async (
   });
 };
 
-export const requestUpdateReason = async (
-  payload: FormData,
-): Promise<ResGetReasonDetails> => {
+export const requestUpdateReason = async (payload: FormData): Promise<ResGetReasonDetails> => {
   // 사유서 수정
   const url = `/reason/update`;
   return requestPatch(url, payload, {

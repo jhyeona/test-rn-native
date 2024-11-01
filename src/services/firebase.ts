@@ -1,13 +1,11 @@
-import {firebase} from '@react-native-firebase/crashlytics';
 import analytics from '@react-native-firebase/analytics';
+import {firebase} from '@react-native-firebase/crashlytics';
+
 import {encryptData} from '#services/common.ts';
 
 const defaultAppCrashlytics = firebase.crashlytics();
 
-export const logScreenViewToAnalytics = async (
-  screenName: string,
-  screenClass: string,
-) => {
+export const logScreenViewToAnalytics = async (screenName: string, screenClass: string) => {
   // Analytics Screen Tracking
   try {
     await analytics().logScreenView({

@@ -1,8 +1,5 @@
 import {requestGet} from '#apis/index.ts';
-import {
-  ReqGetScheduleHistory,
-  ResSchedulePeriodDataProps,
-} from '#types/schedule.ts';
+import {ReqGetScheduleHistory, ResSchedulePeriodDataProps} from '#types/schedule.ts';
 
 export const requestGetEventHistory = async (
   payload: ReqGetScheduleHistory,

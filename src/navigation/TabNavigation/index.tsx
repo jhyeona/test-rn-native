@@ -17,6 +17,7 @@ import {
   requestStartBeaconScanning,
   requestStopBeaconScanning,
 } from '#services/beaconScanner.ts';
+import {errorToCrashlytics} from '#services/firebase.ts';
 import {requestWifiList} from '#services/locationScanner.ts';
 import {commonStyles, getDeviceUUID} from '#utils/common.ts';
 import {onesignalLogin} from '#utils/onesignalHelper.ts';
@@ -46,13 +47,17 @@ const TabNavigation = () => {
   }, []);
 
   useEffect(() => {
-    const list = uuidCheckedList?.map(academy => academy.name);
-    if (list.length) {
-      setModalState({
-        isVisible: true,
-        title: '기기 변경 안내',
-        message: `${list?.join(', ')}에서는\n기기 변경 시 초기화 후 출결이 가능합니다.\n자세한 내용은 기관에 문의해 주세요.`,
-      });
+    try {
+      const list = uuidCheckedList?.map(academy => academy.name);
+      if (list.length) {
+        setModalState({
+          isVisible: true,
+          title: '기기 변경 안내',
+          message: `${list?.join(', ')}에서는\n기기 변경 시 초기화 후 출결이 가능합니다.\n자세한 내용은 기관에 문의해 주세요.`,
+        });
+      }
+    } catch (e) {
+      errorToCrashlytics(e, 'uuidCheckedList');
     }
   }, [uuidCheckedList]);
 
@@ -66,7 +71,7 @@ const TabNavigation = () => {
           if (!result) {
             return;
           }
-          requestAddBeaconListener(beacon => {});
+          requestAddBeaconListener();
         });
         await requestWifiList().then(wifi => {
           setWifiState(wifi ?? []);
