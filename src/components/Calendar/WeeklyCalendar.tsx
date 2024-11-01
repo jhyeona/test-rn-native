@@ -13,23 +13,14 @@ import {useRecoilState} from 'recoil';
 import WeeklyCalendarItem from '#components/Calendar/WeeklyCalendarItem.tsx';
 import NoData from '#components/common/NoData';
 import {COLORS} from '#constants/colors.ts';
-import {
-  CalendarItem,
-  generateWeekDates,
-} from '#containers/DailySchedules/utils/dateHelper.ts';
+import {CalendarItem, generateWeekDates} from '#containers/DailySchedules/utils/dateHelper.ts';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
 import scheduleState from '#recoil/Schedule';
 
 const WeeklyCalendar = () => {
   // 현재 날짜 기준 월요일을 초기 날짜로 설정
-  const startOfWeek = moment()
-    .startOf('week')
-    .subtract(1, 'weeks')
-    .add(1, 'day');
-  const initialDates = useMemo(
-    () => generateWeekDates(startOfWeek, 14),
-    [startOfWeek],
-  );
+  const startOfWeek = moment().startOf('week').subtract(1, 'weeks').add(1, 'day');
+  const initialDates = useMemo(() => generateWeekDates(startOfWeek, 14), [startOfWeek]);
 
   const [{isWeekly, date: daily}, setSelectedDate] = useRecoilState(
     scheduleState.selectedCalendarDate,
@@ -93,18 +84,12 @@ const WeeklyCalendar = () => {
 
   // 아이템 렌더링
   const renderItem: ListRenderItem<CalendarItem> = ({item}) => (
-    <WeeklyCalendarItem
-      item={item}
-      itemWidth={itemWidth}
-      onPressDate={onPressDate}
-    />
+    <WeeklyCalendarItem item={item} itemWidth={itemWidth} onPressDate={onPressDate} />
   );
 
   // 특정 날짜로 스크롤 이동
   const scrollToDate = (date: moment.Moment) => {
-    const index = dates.findIndex(dateItem =>
-      dateItem.date.isSame(date, 'day'),
-    );
+    const index = dates.findIndex(dateItem => dateItem.date.isSame(date, 'day'));
     if (index >= 0) {
       flatListRef.current?.scrollToIndex({index, animated: true});
     }
@@ -126,6 +111,8 @@ const WeeklyCalendar = () => {
 
   return (
     <FlatList
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       style={[{flexGrow: 0}, isWeekly && {marginLeft: 20}]} // 주간 일정일 경우 timeLine 의 time 부분만큼 여백 생성
       ref={flatListRef}
       horizontal
@@ -142,7 +129,6 @@ const WeeklyCalendar = () => {
       onScroll={handleScroll}
       scrollEventThrottle={32}
       snapToInterval={screenWidth}
-      showsHorizontalScrollIndicator={false}
       getItemLayout={(_, index) => ({
         length: itemWidth,
         offset: itemWidth * index,

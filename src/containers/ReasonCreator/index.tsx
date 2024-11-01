@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, ScrollView, StyleSheet, TextInput, View} from 'react-native';
+import {Alert, StyleSheet, TextInput, View} from 'react-native';
 
 import {RouteProp} from '@react-navigation/core/src/types.tsx';
 import {useRoute} from '@react-navigation/native';
@@ -10,6 +10,7 @@ import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import {CustomScrollView} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import Dropdown, {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import Header from '#components/common/Header/Header.tsx';
@@ -173,7 +174,7 @@ const ReasonCreator = ({navigation}: {navigation: NativeStackNavigationHelpers})
         navigation={navigation}
       />
       <CView>
-        <ScrollView style={styles.container} bounces={false}>
+        <CustomScrollView style={styles.container} bounces={false}>
           <Dropdown
             disabled={!isCreate || disabled}
             items={lectureItems}
@@ -242,7 +243,7 @@ const ReasonCreator = ({navigation}: {navigation: NativeStackNavigationHelpers})
               disabled={!selectedData.lecture || !text}
             />
           )}
-        </ScrollView>
+        </CustomScrollView>
       </CView>
     </CSafeAreaView>
   );

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import {View} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {useSetRecoilState} from 'recoil';
@@ -9,6 +9,7 @@ import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
+import {CustomScrollView} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import TextList from '#components/common/TextList/TextList.tsx';
@@ -70,7 +71,7 @@ const UserWithdraw = ({navigation}: {navigation: NativeStackNavigationHelpers}) 
     <CSafeAreaView>
       <Header title="회원탈퇴" isBack navigation={navigation} />
       <CView>
-        <ScrollView>
+        <CustomScrollView>
           <View style={{flexDirection: 'row', marginBottom: 8}}>
             <CText text="체크히어" fontSize={20} fontWeight="700" />
             <CText text={`를 탈퇴하기 전에`} fontSize={20} />
@@ -95,7 +96,7 @@ const UserWithdraw = ({navigation}: {navigation: NativeStackNavigationHelpers}) 
             secureTextEntry
           />
           <CButton text="탈퇴하기" onPress={onPressWithdraw} disabled={!isChecked || !password} />
-        </ScrollView>
+        </CustomScrollView>
       </CView>
     </CSafeAreaView>
   );

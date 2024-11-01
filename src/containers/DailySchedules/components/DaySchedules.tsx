@@ -1,8 +1,9 @@
 import {useState} from 'react';
-import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
+import {ListRenderItem, StyleSheet, View} from 'react-native';
 
 import {useRecoilValue} from 'recoil';
 
+import {CustomFlatList} from '#components/common/CustomScrollComponents';
 import NoData from '#components/common/NoData';
 import {DAY_SCHEDULE_FIRST_CELL_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
@@ -48,7 +49,7 @@ const DaySchedules = () => {
   };
 
   return (
-    <FlatList
+    <CustomFlatList
       style={styles.container}
       refreshing={isLoading}
       onRefresh={onRefresh}

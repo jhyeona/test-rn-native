@@ -1,9 +1,10 @@
 import {useMemo, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 import {QueryObserverResult} from '@tanstack/react-query';
 import {Moment} from 'moment';
 
+import {CustomFlatList} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import {WEEKLY_SCHEDULE_LEFT_WIDTH} from '#constants/calendar.ts';
 import {COLORS} from '#constants/colors.ts';
@@ -117,7 +118,7 @@ const WeeklyGrid = ({date, scheduleData, timeLineData, refetch}: TimelineCalenda
   };
 
   return (
-    <FlatList
+    <CustomFlatList
       ListHeaderComponent={<DaysLabel date={date} />}
       data={hours}
       renderItem={renderRow}
