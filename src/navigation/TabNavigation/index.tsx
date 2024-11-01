@@ -99,9 +99,7 @@ const TabNavigation = () => {
     <Tab.Navigator
       initialRouteName="dailySchedules"
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused}) => {
-          return <TabBar routeName={route.name} focused={focused} />;
-        },
+        tabBarIcon: ({focused}) => TabBar({routeName: route.name, focused: focused}), // 함수 사용으로 매번 리렌더링되지 않도록 최적화
         tabBarStyle: commonStyles.tabBarStyle,
         tabBarShowLabel: false,
       })}>
