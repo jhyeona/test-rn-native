@@ -49,29 +49,22 @@ export const requestStopBeaconScanning = async () => {
 
 export const requestBeaconScanList = async () => {
   try {
-    return await BeaconModule.getScanResultsForDuration(1).then(
-      (beacon: BeaconProps[]) => {
-        return beacon;
-      },
-    );
+    return await BeaconModule.getScanResultsForDuration(1).then((beacon: BeaconProps[]) => {
+      return beacon;
+    });
   } catch (e) {
     console.log('beacon scan list error', e);
   }
 };
 
-export const requestAddBeaconListener = (
-  callback?: (beacon: BeaconProps) => void,
-) => {
+export const requestAddBeaconListener = (callback?: (beacon: BeaconProps) => void) => {
   try {
     if (eventEmitter.listenerCount('EVENT_BLUETOOTH_DETECTED') > 0) {
       throw new Error('Already Listening.');
     }
-    eventEmitter.addListener(
-      'EVENT_BLUETOOTH_DETECTED',
-      (beacon: BeaconProps) => {
-        callback && callback(beacon);
-      },
-    );
+    eventEmitter.addListener('EVENT_BLUETOOTH_DETECTED', (beacon: BeaconProps) => {
+      callback && callback(beacon);
+    });
   } catch (e) {
     console.log('add listener error:', e);
   }

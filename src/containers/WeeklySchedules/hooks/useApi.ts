@@ -23,9 +23,7 @@ export interface TimeLineDataProps {
 }
 
 export const useGetWeekSchedule = (payload: GetScheduleProps) => {
-  const [formattedData, setFormattedData] = useState<WeekScheduleFormatProps[]>(
-    [],
-  );
+  const [formattedData, setFormattedData] = useState<WeekScheduleFormatProps[]>([]);
   const [timeLineData, setTimeLineData] = useState<TimeLineDataProps>({
     // 주간일정 캘린더의 타임라인을 표시할 시작/종료 시간
     timeLineStart: '09:00',

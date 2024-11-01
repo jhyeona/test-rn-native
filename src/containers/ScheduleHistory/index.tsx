@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {RefreshControl, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import moment from 'moment';
@@ -16,11 +16,7 @@ import HistoryList from '#containers/ScheduleHistory/components/HistoryList.tsx'
 import {useGetHistory} from '#containers/ScheduleHistory/hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 
-const ScheduleHistory = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const ScheduleHistory = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const selectedAcademy = useRecoilValue(GlobalState.selectedAcademy);
 
   const [selectedDate, setSelectedDate] = useState(moment());
@@ -40,17 +36,12 @@ const ScheduleHistory = ({
       <Header title="출석 기록" navigation={navigation} />
       <CView>
         <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={refetchHistory} />
-          }>
+          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetchHistory} />}>
           <View style={styles.top}>
             <DatePicker handleDateSelection={setSelectedDate} />
             <View style={{alignItems: 'flex-end'}}>
               <CText color={COLORS.placeholder} text="P: 강의 출석 완료" />
-              <CText
-                color={COLORS.placeholder}
-                text="N/P: 지각, 결석 및 미퇴실"
-              />
+              <CText color={COLORS.placeholder} text="N/P: 지각, 결석 및 미퇴실" />
             </View>
           </View>
           <HistoryList historyData={historyData} />

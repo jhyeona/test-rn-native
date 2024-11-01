@@ -1,10 +1,7 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {useSetRecoilState} from 'recoil';
 
-import {
-  requestGetInvitedAcademyList,
-  requestPostJoinAcademy,
-} from '#containers/Academy/services';
+import {requestGetInvitedAcademyList, requestPostJoinAcademy} from '#containers/Academy/services';
 import {useHandleError, useLoadingEffect} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';

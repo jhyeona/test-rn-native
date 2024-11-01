@@ -11,10 +11,7 @@ import {
   requestBeaconScanList,
   requestStartBeaconScanning,
 } from '#services/beaconScanner.ts';
-import {
-  requestGetLocationInfo,
-  requestWifiList,
-} from '#services/locationScanner.ts';
+import {requestGetLocationInfo, requestWifiList} from '#services/locationScanner.ts';
 import {PostEventProps} from '#types/schedule.ts';
 import {getDeviceUUID} from '#utils/common.ts';
 import {validBeaconList, validWifiList} from '#utils/locationHelper.ts';

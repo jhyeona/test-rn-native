@@ -12,11 +12,7 @@ export interface NavigateReasonProps {
   reasonId?: string;
 }
 
-const ReasonStatement = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const ReasonStatement = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const navigateReasonCreator = ({isCreate, reasonId}: NavigateReasonProps) => {
     navigation.navigate('ReasonCreator', {isCreate, reasonId});
   };

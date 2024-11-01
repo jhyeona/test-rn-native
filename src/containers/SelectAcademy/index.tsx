@@ -10,11 +10,7 @@ import Header from '#components/common/Header/Header.tsx';
 import AcademySelector from '#components/Schedule/AcademySelector.tsx';
 import {COLORS} from '#constants/colors.ts';
 
-const SelectAcademy = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const SelectAcademy = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const onPressAddAcademy = () => {
     navigation.navigate('Academy');
   };
