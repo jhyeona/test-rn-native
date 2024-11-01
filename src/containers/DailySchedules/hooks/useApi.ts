@@ -14,18 +14,10 @@ import {
 } from '#containers/DailySchedules/services';
 import {ScheduleQueryOptions} from '#containers/DailySchedules/services/queries.ts';
 import {showErrorModal} from '#containers/DailySchedules/utils/modalHelper.ts';
-import {
-  useHandleError,
-  useInvalidateQueriesAndShowModal,
-  useLoadingEffect,
-} from '#hooks/useApi.ts';
+import {useHandleError, useInvalidateQueriesAndShowModal, useLoadingEffect} from '#hooks/useApi.ts';
 import GlobalState from '#recoil/Global';
 import {CommonResponseProps} from '#types/common.ts';
-import {
-  GetScheduleHistoryProps,
-  GetScheduleProps,
-  PostEventProps,
-} from '#types/schedule.ts';
+import {GetScheduleHistoryProps, GetScheduleProps, PostEventProps} from '#types/schedule.ts';
 
 // 캐시 데이터를 초기화할 쿼리키 리스트
 const INVALID_QUERY_KEYS = ['daySchedule', 'scheduleHistory'];
@@ -113,10 +105,7 @@ export const useReqEnter = () => {
 
 // 퇴실 요청
 export const useReqComplete = () => {
-  return useRequestEvent(
-    requestPostEventComplete,
-    eventSuccessMessage.COMPLETE,
-  );
+  return useRequestEvent(requestPostEventComplete, eventSuccessMessage.COMPLETE);
 };
 
 // 외출 요청
@@ -126,10 +115,7 @@ export const useReqLeave = () => {
 
 // 복귀 요청
 export const useReqComeback = () => {
-  return useRequestEvent(
-    requestPostEventComeback,
-    eventSuccessMessage.COMEBACK,
-  );
+  return useRequestEvent(requestPostEventComeback, eventSuccessMessage.COMEBACK);
 };
 
 // 시간별 체크 요청

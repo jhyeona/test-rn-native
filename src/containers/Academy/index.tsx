@@ -19,7 +19,6 @@ import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import {usePreviousScreenName} from '#hooks/useNavigation.ts';
 import {useGetUserInfo} from '#hooks/useUser.ts';
 import GlobalState from '#recoil/Global';
-import userState from '#recoil/User';
 
 interface CheckboxStateProps {
   isChecked: boolean;
@@ -38,7 +37,6 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
-  const setUserData = useSetRecoilState(userState.userInfoState);
 
   const {data: invitedList, refetch: invitedRefetch, isLoading} = useGetInvitedList();
 
@@ -166,7 +164,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                 whiteButton
                 buttonStyle={{marginTop: 0}}
                 text="로그아웃"
-                onPress={() => handleLogout({setGlobalModalState, setUserData, setIsLogin})}
+                onPress={() => handleLogout({setGlobalModalState, setIsLogin})}
               />
             )}
           </View>

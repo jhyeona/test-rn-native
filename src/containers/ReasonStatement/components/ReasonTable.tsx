@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  ListRenderItem,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import moment from 'moment/moment';
 import {useRecoilValue} from 'recoil';
@@ -28,13 +21,10 @@ import {ReqGetReasonList, ResGetReasonDetails} from '#types/reason.ts';
 
 const PAGE_SIZE = 25;
 
-const ReasonTable = ({
-  handleNavigate,
-}: {
-  handleNavigate: (param: NavigateReasonProps) => void;
-}) => {
+const ReasonTable = ({handleNavigate}: {handleNavigate: (param: NavigateReasonProps) => void}) => {
   const selectedAcademy = useRecoilValue(GlobalState.selectedAcademy);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ResGetReasonDetails[]>([]);
   const [items, setItems] = useState<ItemProps[]>([]);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
@@ -44,8 +34,8 @@ const ReasonTable = ({
     pageSize: PAGE_SIZE,
   });
 
-  const {reasonList} = useGetReasonList(payload);
-  const {lectureItems} = useGetLectureList();
+  const {reasonList, refetchReasonList} = useGetReasonList(payload);
+  const {lectureItems, refetchLectureList} = useGetLectureList();
 
   // 강의 변경
   const changedLecture = (item: ItemProps) => {
@@ -70,6 +60,15 @@ const ReasonTable = ({
   const handleCreate = () => {
     setPayload(prev => ({...prev, page: 1})); // 초기화하기 위함
     handleNavigate({isCreate: true});
+  };
+
+  // 당겨서 새로고침
+  const onRefresh = () => {
+    setIsLoading(true);
+    setTimeout(async () => {
+      await Promise.all([refetchLectureList(), refetchReasonList()]);
+      setIsLoading(false);
+    }, 100);
   };
 
   useEffect(() => {
@@ -99,10 +98,7 @@ const ReasonTable = ({
         style={reasonListTableStyles.row}
         onPress={() => handleDetail(item.reasonId)}>
         <View style={reasonListTableStyles.row1}>
-          <Text
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            lineBreakStrategyIOS="hangul-word">
+          <Text numberOfLines={2} ellipsizeMode="tail" lineBreakStrategyIOS="hangul-word">
             {item.lectureName}
           </Text>
           <CText
@@ -112,18 +108,12 @@ const ReasonTable = ({
           />
         </View>
         <View style={reasonListTableStyles.row2}>
-          <Text
-            numberOfLines={2}
-            ellipsizeMode="tail"
-            lineBreakStrategyIOS="hangul-word">
+          <Text numberOfLines={2} ellipsizeMode="tail" lineBreakStrategyIOS="hangul-word">
             {item.content}
           </Text>
         </View>
         <View style={reasonListTableStyles.row3}>
-          <StatusInfoContainer
-            colorType={status.colorType}
-            text={status.text}
-          />
+          <StatusInfoContainer colorType={status.colorType} text={status.text} />
         </View>
       </TouchableOpacity>
     );
@@ -138,12 +128,12 @@ const ReasonTable = ({
         stickyHeaderIndices={[0]}
         data={data}
         renderItem={renderItem}
+        refreshing={isLoading}
+        onRefresh={onRefresh}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.2}
         contentContainerStyle={{flex: data.length > 0 ? 0 : 1}}
-        ListEmptyComponent={
-          <NoData fullHeight message="📝 작성된 사유서가 없습니다." />
-        }
+        ListEmptyComponent={<NoData fullHeight message="📝 작성된 사유서가 없습니다." />}
       />
       <CButton text="사유서 작성하기" onPress={handleCreate} />
     </>

@@ -13,11 +13,9 @@ import PushControl from '#containers/Settings/components/PushControl.tsx';
 import {styles} from '#containers/Settings/styles';
 import {handleLogout} from '#containers/Settings/utils/logoutHelper.ts';
 import GlobalState from '#recoil/Global';
-import userState from '#recoil/User';
 
 const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const setIsLogin = useSetRecoilState(GlobalState.isLoginState);
-  const setUserData = useSetRecoilState(userState.userInfoState);
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const handleNavigate = (page: string) => {
@@ -25,7 +23,7 @@ const Settings = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   };
 
   const onPressLogout = () => {
-    handleLogout({setGlobalModalState, setUserData, setIsLogin});
+    handleLogout({setGlobalModalState, setIsLogin});
   };
 
   return (

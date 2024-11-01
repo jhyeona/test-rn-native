@@ -18,11 +18,7 @@ import GlobalState from '#recoil/Global';
 import {errorToCrashlytics} from '#services/firebase.ts';
 import {checkPassword} from '#utils/regExpHelper.ts';
 
-const UserWithdraw = ({
-  navigation,
-}: {
-  navigation: NativeStackNavigationHelpers;
-}) => {
+const UserWithdraw = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setGlobalModalState = useSetRecoilState(GlobalState.globalModalState);
   const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState('');
@@ -80,10 +76,7 @@ const UserWithdraw = ({
             <CText text={`를 탈퇴하기 전에`} fontSize={20} />
           </View>
           <CText text={`아래 정보를 확인해 주세요.`} fontSize={20} />
-          <TextList
-            textList={withdrawPolicyList}
-            style={{marginVertical: 15}}
-          />
+          <TextList textList={withdrawPolicyList} style={{marginVertical: 15}} />
           <Checkbox
             isChecked={isChecked}
             onValueChangeHandler={setIsChecked}
@@ -101,11 +94,7 @@ const UserWithdraw = ({
             placeholder="현재 비밀번호를 입력해주세요."
             secureTextEntry
           />
-          <CButton
-            text="탈퇴하기"
-            onPress={onPressWithdraw}
-            disabled={!isChecked}
-          />
+          <CButton text="탈퇴하기" onPress={onPressWithdraw} disabled={!isChecked || !password} />
         </ScrollView>
       </CView>
     </CSafeAreaView>
