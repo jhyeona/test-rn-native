@@ -12,11 +12,7 @@ import {useReqFindPassword} from '#containers/FindPassword/hooks/useApi.ts';
 import {errorToCrashlytics, setAttToCrashlytics} from '#services/firebase.ts';
 import {checkDate, checkName, checkPhone} from '#utils/regExpHelper.ts';
 
-const FindPassword = ({
-  navigation,
-}: {
-  navigation: BottomTabNavigationHelpers;
-}) => {
+const FindPassword = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');

@@ -222,11 +222,7 @@ const data = [
 ];
 
 const DaySchedules = () => {
-  const renderItem = ({
-    item,
-  }: {
-    item: {id: string; name: string; age: number};
-  }) => (
+  const renderItem = ({item}: {item: {id: string; name: string; age: number}}) => (
     <View style={styles.row}>
       <Text style={styles.cell}>{item.id}</Text>
       <Text style={styles.cell}>{item.name}</Text>

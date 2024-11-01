@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-import moment, {Moment} from 'moment/moment';
+import {Moment} from 'moment/moment';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import {WEEKLY_SCHEDULE_LEFT_WIDTH} from '#constants/calendar.ts';

@@ -38,15 +38,9 @@ const DaySchedulesTime = ({
 
   return (
     <View key={`schedule-time-${scheduleData?.scheduleId}`} style={style}>
-      <CText
-        {...timeProps}
-        text={formattedDate(scheduleData?.scheduleStartTime ?? '--:--')}
-      />
+      <CText {...timeProps} text={formattedDate(scheduleData?.scheduleStartTime ?? '--:--')} />
       <CText {...timeProps} text="~" />
-      <CText
-        {...timeProps}
-        text={formattedDate(scheduleData?.scheduleEndTime ?? '--:--')}
-      />
+      <CText {...timeProps} text={formattedDate(scheduleData?.scheduleEndTime ?? '--:--')} />
       {useArrow && <SvgIcon name="ScheduleTimeLIne" style={{marginTop: 10}} />}
     </View>
   );

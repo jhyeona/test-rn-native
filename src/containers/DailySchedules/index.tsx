@@ -1,19 +1,15 @@
 import {useCallback, useEffect} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import {BottomTabNavigationHelpers} from '@react-navigation/bottom-tabs/lib/typescript/src/types';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {useRecoilState, useSetRecoilState} from 'recoil';
 
-import DraggableFAB from '#components/common/Animation/Floator.tsx';
 import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
-import CText from '#components/common/CustomText/CText.tsx';
-import SvgIcon from '#components/common/Icon/Icon.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
-import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
 import {ACCESS_TOKEN, DATE_FORMAT_DASH} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import BtnReasonList from '#containers/DailySchedules/components/BtnReasonList.tsx';

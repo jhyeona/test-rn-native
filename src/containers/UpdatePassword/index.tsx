@@ -14,11 +14,7 @@ import GlobalState from '#recoil/Global';
 import {errorToCrashlytics} from '#services/firebase.ts';
 import {checkPassword} from '#utils/regExpHelper.ts';
 
-const UpdatePassword = ({
-  navigation,
-}: {
-  navigation: NativeStackNavigationHelpers;
-}) => {
+const UpdatePassword = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
   const setModalState = useSetRecoilState(GlobalState.globalModalState);
 
   const [password, setPassword] = useState('');
@@ -28,11 +24,7 @@ const UpdatePassword = ({
   const {updatePassword} = useUpdatePassword();
 
   const onPressUpdatePassword = async () => {
-    if (
-      !checkPassword(password) ||
-      !checkPassword(rePassword) ||
-      !isSamePassword
-    ) {
+    if (!checkPassword(password) || !checkPassword(rePassword) || !isSamePassword) {
       setModalState({
         isVisible: true,
         title: '안내',
@@ -85,10 +77,7 @@ const UpdatePassword = ({
           setInputValue={setRePassword}
           placeholder="한 번 더 입력해주세요."
           errorMessage="비밀번호를 확인하세요."
-          isWarning={
-            rePassword.length > 0 &&
-            (!checkPassword(rePassword) || !isSamePassword)
-          }
+          isWarning={rePassword.length > 0 && (!checkPassword(rePassword) || !isSamePassword)}
           fontSize={16}
           secureTextEntry>
           <CText text="비밀번호 변경 확인" fontSize={20} />

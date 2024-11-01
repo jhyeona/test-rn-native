@@ -33,15 +33,13 @@ const HistoryList = ({historyData}: HistoryListProps) => {
         historyData.historyList.map((history, i) => {
           const scheduleEndTime = history.schedule.scheduleEndTime;
           const isBeforeEnd = moment().isBefore(moment(scheduleEndTime));
-          const {statusType, statusColor, enteredTime, completedTime} =
-            eventStatus(history.eventList);
+          const {statusType, statusColor, enteredTime, completedTime} = eventStatus(
+            history.eventList,
+          );
           return (
             <View style={[styles.row, styles.borderTop]} key={i}>
               <View style={[styles.cell, styles.firstCell]}>
-                <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  lineBreakStrategyIOS="hangul-word">
+                <Text numberOfLines={2} ellipsizeMode="tail" lineBreakStrategyIOS="hangul-word">
                   {history.schedule.lecture.lectureName}
                 </Text>
               </View>
@@ -52,11 +50,7 @@ const HistoryList = ({historyData}: HistoryListProps) => {
                 />
               </View>
               <View style={styles.cell}>
-                <CText
-                  style={{textAlign: 'center'}}
-                  text={enteredTime}
-                  lineBreak
-                />
+                <CText style={{textAlign: 'center'}} text={enteredTime} lineBreak />
               </View>
               <View style={styles.cell}>
                 <CText

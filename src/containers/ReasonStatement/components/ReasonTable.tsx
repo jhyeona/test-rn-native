@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ListRenderItem, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import moment from 'moment/moment';
 import {useRecoilValue} from 'recoil';
 
 import CButton from '#components/common/CommonButton/CButton.tsx';
+import {CustomFlatList} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import Dropdown, {ItemProps} from '#components/common/Dropdown/Dropdown.tsx';
 import NoData from '#components/common/NoData';
@@ -122,7 +123,7 @@ const ReasonTable = ({handleNavigate}: {handleNavigate: (param: NavigateReasonPr
   return (
     <>
       <Dropdown items={items} onSelect={changedLecture} selected={items[0]} />
-      <FlatList
+      <CustomFlatList
         style={styles.container}
         ListHeaderComponent={<ListHeader />}
         stickyHeaderIndices={[0]}
