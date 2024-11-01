@@ -105,3 +105,8 @@ export interface ReqPasswordType {
 export interface ReqUpdatePush {
   settingPushApp: boolean;
 }
+
+export interface ReqAppVersions {
+  APP_VERSION_ANDROID: string;
+  APP_VERSION_IOS: string;
+}

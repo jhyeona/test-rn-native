@@ -3,10 +3,7 @@ import {AxiosRequestConfig} from 'axios';
 import instance from '#apis/instance.ts';
 import {ApiResponseErrorProps} from '#types/common.ts';
 
-export const requestGet = async <T>(
-  url: string,
-  config?: AxiosRequestConfig,
-): Promise<T> => {
+export const requestGet = async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
   return instance
     .get(url, config)
     .then(async axiosResponse => {
@@ -82,10 +79,7 @@ export const requestPatch = async <T>(
     });
 };
 
-export const requestDelete = async <T>(
-  url: string,
-  config?: AxiosRequestConfig,
-): Promise<T> => {
+export const requestDelete = async <T>(url: string, config?: AxiosRequestConfig): Promise<T> => {
   return instance
     .delete(url, config)
     .then(async axiosResponse => {
