@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {RefreshControl, ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {RefreshControl, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import CheckboxCircle from '#components/common/Checkbox/CheckboxCircle.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import {CustomScrollView} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
@@ -98,7 +99,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
       <CView>
         {checkboxState && checkboxState.length > 0 ? (
           <>
-            <ScrollView
+            <CustomScrollView
               refreshControl={
                 <RefreshControl
                   refreshing={isLoading}
@@ -135,7 +136,7 @@ const Academy = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
                   </View>
                 );
               })}
-            </ScrollView>
+            </CustomScrollView>
             <CButton
               text="추가하기"
               disabled={!checkboxState.some(item => item.isChecked)}

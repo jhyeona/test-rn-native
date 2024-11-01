@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 import {useSetRecoilState} from 'recoil';
@@ -9,6 +9,7 @@ import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import CInput from '#components/common/CustomInput/CInput.tsx';
+import {CustomScrollView} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import DefaultModal from '#components/common/Modal/DefaultModal.tsx';
@@ -274,7 +275,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
     <CSafeAreaView>
       <Header title="회원가입" navigation={navigation} isBack />
       <CView>
-        <ScrollView>
+        <CustomScrollView>
           <CInput
             title="성명"
             inputValue={signUpData.name}
@@ -401,7 +402,7 @@ const SignUp = ({navigation}: {navigation: NativeStackNavigationHelpers}) => {
             </Pressable>
           </Checkbox>
           <CButton text="가입하기" onPress={onPressSignUp} />
-        </ScrollView>
+        </CustomScrollView>
       </CView>
       <DefaultModal
         onPressCancel={isVisible => {

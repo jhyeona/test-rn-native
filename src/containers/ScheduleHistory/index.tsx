@@ -8,6 +8,7 @@ import {useRecoilValue} from 'recoil';
 import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView';
+import {CustomScrollView} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import Header from '#components/common/Header/Header.tsx';
 import {COLORS} from '#constants/colors.ts';
@@ -35,7 +36,7 @@ const ScheduleHistory = ({navigation}: {navigation: BottomTabNavigationHelpers})
     <CSafeAreaView edges={['top', 'bottom']}>
       <Header title="출석 기록" navigation={navigation} />
       <CView>
-        <ScrollView
+        <CustomScrollView
           refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetchHistory} />}>
           <View style={styles.top}>
             <DatePicker handleDateSelection={setSelectedDate} />
@@ -45,7 +46,7 @@ const ScheduleHistory = ({navigation}: {navigation: BottomTabNavigationHelpers})
             </View>
           </View>
           <HistoryList historyData={historyData} />
-        </ScrollView>
+        </CustomScrollView>
       </CView>
     </CSafeAreaView>
   );

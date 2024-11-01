@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import {NativeStackNavigationHelpers} from '@react-navigation/native-stack/lib/typescript/src/types';
 
@@ -7,6 +7,7 @@ import Checkbox from '#components/common/Checkbox/Checkbox.tsx';
 import CButton from '#components/common/CommonButton/CButton.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
+import {CustomFlatList} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import {useChangeWidth} from '#hooks/useGlobal.ts';
 import {setStorageItem} from '#utils/storageHelper.ts';
@@ -39,7 +40,7 @@ const Onboarding = ({navigation}: {navigation: NativeStackNavigationHelpers}) =>
     <CSafeAreaView edges={['top', 'bottom']}>
       <CView>
         <CText style={{alignSelf: 'center'}} text={`체크히어에 오신것을 환영합니다!`} />
-        <FlatList
+        <CustomFlatList
           data={flatListData}
           renderItem={renderItem}
           horizontal

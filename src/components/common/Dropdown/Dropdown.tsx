@@ -1,18 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Platform,
-} from 'react-native';
+import {TouchableOpacity, View, StyleSheet, Pressable} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {
-  DimensionValue,
-  ViewStyle,
-} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import {DimensionValue, ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
+import {CustomScrollView} from '#components/common/CustomScrollComponents';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {BOX_SHADOW, COLORS} from '#constants/colors.ts';
@@ -91,7 +82,7 @@ const Dropdown = (props: Props) => {
         </View>
       </Pressable>
       {isVisible && (
-        <ScrollView
+        <CustomScrollView
           contentContainerStyle={styles.optionsContentContainer}
           style={[styles.optionsContainer, {top: height ? height + 3 : 45}]}>
           {items.map((item, index) => (
@@ -102,7 +93,7 @@ const Dropdown = (props: Props) => {
               <CText text={item.label} fontSize={fontSize ?? 14} />
             </TouchableOpacity>
           ))}
-        </ScrollView>
+        </CustomScrollView>
       )}
     </View>
   );
