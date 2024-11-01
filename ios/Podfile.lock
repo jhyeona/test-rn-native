@@ -1457,7 +1457,7 @@ PODS:
   - react-native-onesignal (5.2.5):
     - OneSignalXCFramework (= 5.2.5)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-safe-area-context (4.13.1):
+  - react-native-safe-area-context (4.14.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1470,8 +1470,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-safe-area-context/common (= 4.13.1)
-    - react-native-safe-area-context/fabric (= 4.13.1)
+    - react-native-safe-area-context/common (= 4.14.0)
+    - react-native-safe-area-context/fabric (= 4.14.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1480,7 +1480,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (4.13.1):
+  - react-native-safe-area-context/common (4.14.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1501,7 +1501,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (4.13.1):
+  - react-native-safe-area-context/fabric (4.14.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1855,14 +1855,14 @@ PODS:
     - Yoga
   - RNDeviceInfo (13.2.0):
     - React-Core
-  - RNFBAnalytics (21.2.0):
+  - RNFBAnalytics (21.3.0):
     - Firebase/Analytics (<= 11.4.0)
     - React-Core
     - RNFBApp
-  - RNFBApp (21.2.0):
+  - RNFBApp (21.3.0):
     - Firebase/CoreOnly (<= 11.4.0)
     - React-Core
-  - RNFBCrashlytics (21.2.0):
+  - RNFBCrashlytics (21.3.0):
     - Firebase/Crashlytics (<= 11.4.0)
     - FirebaseCoreExtension (<= 11.4.0)
     - React-Core
@@ -2414,7 +2414,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: df6597d4b1878a443796be11eb2b7286ed10ece6
   react-native-mmkv: fb501d25ce65d16a1fad3296f7fc69150a1f0788
   react-native-onesignal: 505a974a74b97e81d7ab090a63ea065566e2339f
-  react-native-safe-area-context: b7c0ac799a7718ed070974ad6d0c8045c455838a
+  react-native-safe-area-context: f826417dadd1c1042c59355fb050682a9839f990
   react-native-webview: b20d2755d69776b5e254822e8c8f452694f9d2b2
   React-nativeconfig: e0b63af9169593319fb5ca10d051c9a803549a5d
   React-NativeModulesApple: 3ebcbdacf58bd33274ca44873ceb2c3c33f73bc0
@@ -2446,9 +2446,9 @@ SPEC CHECKSUMS:
   RNBootSplash: ffaf4712bdcb56f3c024c6bef548ed4f3204e5b0
   RNDateTimePicker: b4dbbbe7a49cf4c9d9c01179f6d30242018e20da
   RNDeviceInfo: 29e01d5ae94bdb5a0f6c11a4c438132545b4df80
-  RNFBAnalytics: 53cb18c79f25935697162f595f19ac84d73ba30b
-  RNFBApp: 91c5eba32f43787a66f4c00cf7625f472cd3e0fb
-  RNFBCrashlytics: 761aaa065ab40b46fc5f773cf383755ebd947f21
+  RNFBAnalytics: f2d2de1d546f626bbe9ca1be75fdf156930a8efe
+  RNFBApp: def68a9cfa45d685d540a2934bab81bc32e8cc87
+  RNFBCrashlytics: 96561d6cf7dbb9eddc56fc9848bc8469fe662e79
   RNGestureHandler: 598e45cedb905b157e9764acbef0b5e365693451
   RNPermissions: cf7efb34cbe7c8df3a6d84e5b7e3244517002177
   RNReanimated: bbfc101f2f9f69e403c581a4dd8ddfec31134e15
