@@ -2,10 +2,11 @@ import React, {ReactNode, useEffect, useRef} from 'react';
 import {View, StyleSheet, Animated, Modal, Pressable} from 'react-native';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
 import {ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+
 import CButton from '#components/common/CommonButton/CButton.tsx';
-import {COLORS} from '#constants/colors.ts';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
+import {COLORS} from '#constants/colors.ts';
 
 interface DefaultModalProps {
   isVisible: boolean;
@@ -64,9 +65,7 @@ const DefaultModal = (props: DefaultModalProps) => {
                 </Pressable>
               </View>
             )}
-            {children && (
-              <View style={{flex: 1, width: '100%'}}>{children}</View>
-            )}
+            {children && <View style={{flex: 1, width: '100%'}}>{children}</View>}
           </View>
           <View style={styles.buttonContainer}>
             <CButton onPress={closeModal} text="닫기" noMargin />

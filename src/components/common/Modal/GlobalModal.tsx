@@ -1,10 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {View, StyleSheet, Animated, TouchableWithoutFeedback} from 'react-native';
 import {GestureResponderEvent} from 'react-native/Libraries/Types/CoreEventTypes';
 
 import {useRecoilState} from 'recoil';
@@ -13,25 +8,27 @@ import CButton from '#components/common/CommonButton/CButton.tsx';
 import CText from '#components/common/CustomText/CText';
 import GlobalState from '#recoil/Global';
 
+const initModal = {
+  isVisible: false,
+  title: '',
+  message: '',
+  isConfirm: false,
+  hideButtons: false,
+  onPressConfirm: () => {},
+  onPressCancel: () => {},
+};
+
 const GlobalModal = () => {
-  const [modalState, setModalState] = useRecoilState(
-    GlobalState.globalModalState,
-  );
-  const {isVisible, title, message, isConfirm, onPressConfirm, onPressCancel} =
-    modalState;
+  const [
+    {isVisible, title, message, isConfirm, hideButtons, onPressConfirm, onPressCancel, children},
+    setModalState,
+  ] = useRecoilState(GlobalState.globalModalState);
   const [messageList, setMessageList] = useState<string[]>([]);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
-  const initModal = {
-    isVisible: false,
-    title: '',
-    message: '',
-    isConfirm: false,
-    onPressConfirm: () => {},
-    onPressCancel: () => {},
-  };
-
   const closeModal = () => {
+    setModalState(initModal);
+    setMessageList([]);
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 300,
@@ -40,20 +37,12 @@ const GlobalModal = () => {
   };
 
   const handleConfirm = () => {
-    if (onPressConfirm) {
-      onPressConfirm();
-    }
-    setModalState(initModal);
-    setMessageList([]);
+    onPressConfirm && onPressConfirm();
     closeModal();
   };
 
   const handleCancel = () => {
-    if (onPressCancel) {
-      onPressCancel();
-    }
-    setModalState(initModal);
-    setMessageList([]);
+    onPressCancel && onPressCancel();
     closeModal();
   };
 
@@ -73,12 +62,14 @@ const GlobalModal = () => {
 
   useEffect(() => {
     if (isVisible) {
-      // 메세지가 있을 경우 '.' 을 기준으로 잘라서 엔터 처리
-      const messageSplit = message.split('. ');
-      const splitList = messageSplit.map((item, index) =>
-        index === messageSplit.length - 1 ? item : `${item}.`,
-      );
-      setMessageList(splitList);
+      if (message) {
+        // 메세지가 있을 경우 '.' 을 기준으로 잘라서 엔터 처리
+        const messageSplit = message.split('. ');
+        const splitList = messageSplit.map((item, index) =>
+          index === messageSplit.length - 1 ? item : `${item}.`,
+        );
+        setMessageList(splitList);
+      }
 
       // 모달 애니메이션
       Animated.timing(fadeAnim, {
@@ -94,47 +85,47 @@ const GlobalModal = () => {
 
   return (
     <>
-      {isVisible && messageList.length > 0 && (
+      {isVisible && (
         <TouchableWithoutFeedback onPress={handleContainerPress}>
           <View style={styles.container}>
             <Animated.View style={[styles.modalContainer, {opacity: fadeAnim}]}>
               <View style={styles.modalContent}>
-                <CText
-                  text={title}
-                  fontSize={18}
-                  fontWeight="700"
-                  style={styles.titleText}
-                />
-                <View style={styles.messageText}>
-                  {messageList.map((item, i) => (
-                    <CText
-                      key={`modal-messages-${i}`}
-                      text={item}
-                      lineHeight={24}
-                      fontSize={16}
-                      lineBreak
-                      style={{textAlign: 'center'}}
-                    />
-                  ))}
-                </View>
-              </View>
-              <View style={styles.buttonContainer}>
-                {isConfirm && (
-                  <CButton
-                    text="취소"
-                    onPress={handleCancel}
-                    noMargin
-                    whiteButton
-                    buttonStyle={{flex: 0.5}}
-                  />
+                <CText text={title} fontSize={18} fontWeight="700" style={styles.titleText} />
+                {messageList.length > 0 && (
+                  <View style={styles.messageText}>
+                    {messageList.map((item, i) => (
+                      <CText
+                        key={`modal-messages-${i}`}
+                        text={item}
+                        lineHeight={24}
+                        fontSize={16}
+                        lineBreak
+                        style={{textAlign: 'center'}}
+                      />
+                    ))}
+                  </View>
                 )}
-                <CButton
-                  text="확인"
-                  onPress={handleConfirm}
-                  noMargin
-                  buttonStyle={{flex: isConfirm ? 0.5 : 1}}
-                />
+                {children}
               </View>
+              {!hideButtons && (
+                <View style={styles.buttonContainer}>
+                  {isConfirm && (
+                    <CButton
+                      text="취소"
+                      onPress={handleCancel}
+                      noMargin
+                      whiteButton
+                      buttonStyle={{flex: 0.5}}
+                    />
+                  )}
+                  <CButton
+                    text="확인"
+                    onPress={handleConfirm}
+                    noMargin
+                    buttonStyle={{flex: isConfirm ? 0.5 : 1}}
+                  />
+                </View>
+              )}
             </Animated.View>
           </View>
         </TouchableWithoutFeedback>

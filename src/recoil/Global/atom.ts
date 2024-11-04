@@ -26,8 +26,10 @@ export const globalLoadingState = atom<boolean>({
 export const globalModalState = atom<{
   isVisible: boolean;
   title: string;
-  message: string;
+  message?: string;
+  children?: ReactNode;
   isConfirm?: boolean;
+  hideButtons?: boolean;
   onPressConfirm?: () => void;
   onPressCancel?: () => void;
 }>({
@@ -37,6 +39,7 @@ export const globalModalState = atom<{
     title: '',
     message: '',
     isConfirm: false,
+    hideButtons: false,
   },
 });
 
