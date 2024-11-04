@@ -19,6 +19,7 @@ import CInput from '#components/common/CustomInput/CInput.tsx';
 import CText from '#components/common/CustomText/CText.tsx';
 import SvgIcon from '#components/common/Icon/Icon.tsx';
 import {COLORS} from '#constants/colors.ts';
+import {APP_VERSION} from '#constants/common.ts';
 import {useSignIn} from '#containers/SignIn/hooks/useApi.ts';
 import {errorToCrashlytics, logToCrashlytics} from '#services/firebase.ts';
 import {getDeviceUUID} from '#utils/common.ts';
@@ -132,6 +133,7 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
               <CText text="비밀번호 재발급" fontSize={12} color={COLORS.gray} />
             </TouchableOpacity>
           </View>
+          <CText text={`v${APP_VERSION}`} color={COLORS.layout} style={styles.version} />
         </KeyboardAvoidingView>
       </CView>
     </CSafeAreaView>
@@ -140,8 +142,8 @@ const SignIn = ({navigation}: {navigation: BottomTabNavigationHelpers}) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingBottom: 60,
-    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -160,6 +162,12 @@ const styles = StyleSheet.create({
   },
   footerText: {
     paddingHorizontal: 10,
+  },
+  version: {
+    width: '100%',
+    position: 'absolute',
+    bottom: 10,
+    textAlign: 'right',
   },
 });
 

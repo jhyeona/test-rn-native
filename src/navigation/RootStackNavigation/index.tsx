@@ -4,9 +4,10 @@ import BootSplash from 'react-native-bootsplash';
 
 import {NavigationContainer, useNavigationContainerRef} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 
-import {ACCESS_TOKEN, TOKEN_ERROR} from '#constants/common.ts';
+import OpenStore from '#components/common/OpenStore/OpenStore.tsx';
+import {ACCESS_TOKEN, APP_VERSION, IS_IOS, TOKEN_ERROR} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import FindPassword from '#containers/FindPassword';
 import Initialize from '#containers/Initialize';
@@ -20,19 +21,25 @@ import SignIn from '#containers/SignIn';
 import SignUp from '#containers/SignUp';
 import UpdatePassword from '#containers/UpdatePassword';
 import UserWithdraw from '#containers/UserWithdraw';
+import {useGetAppVersions} from '#hooks/useUser.ts';
 import TabNavigation from '#navigation/TabNavigation';
 import GlobalState from '#recoil/Global';
 import {logScreenViewToAnalytics} from '#services/firebase.ts';
 import {onesignalInit} from '#utils/onesignalHelper.ts';
 import {getStorageItem, storage} from '#utils/storageHelper.ts';
+import {isVersionLower} from '#utils/versionHelper.ts';
 const RootStack = createNativeStackNavigator();
 
 const screenOptions = {headerShown: false};
 
 const RootStackNavigation = () => {
-  const navigationRef = useNavigationContainerRef();
   const [isLogin, setIsLogin] = useRecoilState(GlobalState.isLoginState);
+  const setModalState = useSetRecoilState(GlobalState.globalModalState);
+
   const routeNameRef = useRef<string>();
+  const navigationRef = useNavigationContainerRef();
+
+  const {appVersions} = useGetAppVersions();
 
   const handleOnReady = () => {
     routeNameRef.current = navigationRef?.current?.getCurrentRoute()?.name ?? '';
@@ -52,6 +59,21 @@ const RootStackNavigation = () => {
   };
 
   useEffect(() => {
+    // 앱 버전 확인
+    if (!appVersions) return;
+    const minVersion = IS_IOS ? appVersions?.APP_VERSION_IOS : appVersions?.APP_VERSION_ANDROID;
+    const isLower = isVersionLower({current: APP_VERSION, minVersion});
+    if (isLower) {
+      setModalState({
+        isVisible: true,
+        title: '안내',
+        message: '더 나은 성능과 안정성을 위해 앱을 업데이트해 주세요.',
+        children: <OpenStore />,
+        hideButtons: true,
+      });
+      return;
+    }
+    // 초기화
     onesignalInit();
     // mmkv storage listener
     const storageListener = storage.addOnValueChangedListener(changedKey => {
@@ -68,7 +90,7 @@ const RootStackNavigation = () => {
     return () => {
       storageListener.remove();
     };
-  }, []);
+  }, [appVersions]);
 
   return (
     <NavigationContainer
