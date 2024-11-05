@@ -11,7 +11,7 @@ import {clearStorage, getStorageItem, setStorageItem} from '#utils/storageHelper
 // 공통 인스턴스 설정
 const commonInstance = {
   baseURL: Config.BASE_URL,
-  timeout: 1000 * 180, // 3분
+  timeout: 1000 * 30, // 30초
   maxRedirects: 3,
 };
 
