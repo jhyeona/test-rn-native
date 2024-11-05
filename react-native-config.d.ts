@@ -5,6 +5,7 @@ declare module 'react-native-config' {
     S3_URL: string;
     ONESIGNAL_INIT_ID: string;
     CRYPT_KEY: string;
+    SMS_PHONE: string;
   }
 
   export const Config: NativeConfig;
