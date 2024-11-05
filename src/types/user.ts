@@ -25,7 +25,7 @@ export interface ReqPhone {
 }
 
 export interface ReqSmsConfirm extends ReqPhone {
-  verifyCode: string;
+  code: string;
 }
 
 export interface ReqSignIn {
@@ -47,9 +47,9 @@ export interface ReqSignUpTAS extends UserDefaultProps {
   telecom: string;
 }
 
-export interface ReqSignUp extends UserDefaultProps {
+export interface ReqSignUp {
   password: string;
-  gender: GenderType;
+  code: string;
 }
 
 export interface StudentInfoProps {
