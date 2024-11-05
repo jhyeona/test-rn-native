@@ -41,9 +41,7 @@ const CInput = (props: Props) => {
   return (
     <View style={{width: width ?? '100%'}}>
       <View style={styles.titleContainer}>
-        {children ?? (
-          <CText text={title} fontWeight={'500'} fontSize={fontSize} />
-        )}
+        {children ?? <CText text={title} fontWeight={'500'} fontSize={fontSize} />}
       </View>
       <View style={{gap: 5, marginBottom: 10}}>
         <View
@@ -52,13 +50,13 @@ const CInput = (props: Props) => {
             {borderColor: isWarning ? COLORS.warning : COLORS.layout},
           ]}>
           <TextInput
-            placeholder={placeholder}
             placeholderTextColor={COLORS.placeholder}
             onChangeText={text => setInputValue(text)}
-            value={inputValue}
             style={[styles.input, {fontSize: fontSize ?? 14}]}
-            secureTextEntry={secureTextEntry}
             autoCapitalize="none"
+            value={inputValue}
+            placeholder={placeholder}
+            secureTextEntry={secureTextEntry}
             readOnly={readOnly}
             maxLength={maxLength}
             inputMode={inputMode}

@@ -2,10 +2,7 @@ import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {InputModeOptions} from 'react-native/Libraries/Components/TextInput/TextInput';
 import {StyleProp} from 'react-native/Libraries/StyleSheet/StyleSheet';
-import {
-  DimensionValue,
-  ViewStyle,
-} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
+import {DimensionValue, ViewStyle} from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 import CText from '#components/common/CustomText/CText.tsx';
 import {COLORS} from '#constants/colors.ts';
@@ -61,9 +58,7 @@ const CInputWithDropdown = (props: Props) => {
   return (
     <View style={{flex: 1, marginBottom: 8}}>
       <View style={styles.titleContainer}>
-        {children ?? (
-          <CText text={title} fontWeight={'500'} fontSize={fontSize} />
-        )}
+        {children ?? <CText text={title} fontWeight={'500'} fontSize={fontSize} />}
       </View>
       <View style={{gap: 10, flexDirection: 'row'}}>
         <View style={{flex: 1}}>
@@ -116,7 +111,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     height: 52,
-    flex: 1,
     borderWidth: 1,
     borderRadius: 7,
     borderColor: COLORS.layout,
