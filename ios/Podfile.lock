@@ -2441,7 +2441,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: bb2557e6ce7625ecfe3b2efe15609f220f8b2fd9
   React-timing: 7684108dfada8f02fe2f9905f0ec7fd62a53afd8
   React-utils: d8c3a2e6360f5308c1974b9f006a5ef30e87267c
-  ReactCodegen: 13fc33b956caafe5244ac3e0522aa38426b504ca
+  ReactCodegen: aaa3e633d8ea0c4807abc4d4ff916223ba1868d8
   ReactCommon: 08db07e471b7ee1cadfa9e347c8224fd4cefc4b5
   RNBootSplash: ffaf4712bdcb56f3c024c6bef548ed4f3204e5b0
   RNDateTimePicker: b4dbbbe7a49cf4c9d9c01179f6d30242018e20da

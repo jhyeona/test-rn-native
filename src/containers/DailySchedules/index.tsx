@@ -10,6 +10,7 @@ import DatePicker from '#components/common/Calendar/DatePicker.tsx';
 import CSafeAreaView from '#components/common/CommonView/CSafeAreaView.tsx';
 import CView from '#components/common/CommonView/CView.tsx';
 import ScheduleHeader from '#components/Schedule/ScheduleHeader.tsx';
+import TurboModuleTest from '#components/TurboModuleTest';
 import {ACCESS_TOKEN, DATE_FORMAT_DASH} from '#constants/common.ts';
 import Academy from '#containers/Academy';
 import BtnReasonList from '#containers/DailySchedules/components/BtnReasonList.tsx';
@@ -63,6 +64,7 @@ const DailySchedule = ({navigation}: {navigation: BottomTabNavigationHelpers}) =
       {userData &&
         (userData.studentList.length > 0 ? (
           <CSafeAreaView>
+            <TurboModuleTest />
             <ScheduleHeader />
             <CView style={{display: 'flex', gap: 12}}>
               <DatePicker

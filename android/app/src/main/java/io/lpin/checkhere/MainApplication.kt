@@ -12,6 +12,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import io.lpin.checkhere.RNModule.ModulePackage
+import io.lpin.checkhere.RNModule.NativeBaseInfoPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -22,6 +23,7 @@ class MainApplication : Application(), ReactApplication {
             // Packages that cannot be autolinked yet can be added manually here, for example:
             // add(MyReactNativePackage())
             add(ModulePackage())
+            add(NativeBaseInfoPackage())
           }
 
         override fun getJSMainModuleName(): String = "index"

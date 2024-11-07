@@ -11,7 +11,6 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		71A74871EF119848EF7EFA6A /* Pods_ihereapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9E744770023770300833694 /* Pods_ihereapp.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C407E4962B86CD7000BEC46F /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C407E4952B86CD7000BEC46F /* Config.xcconfig */; };
 		C407E4972B86CD7000BEC46F /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C407E4952B86CD7000BEC46F /* Config.xcconfig */; };
@@ -19,6 +18,7 @@
 		C407E49D2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist in Resources */ = {isa = PBXBuildFile; fileRef = C407E49A2B86DC8A00BEC46F /* GoogleService-Info-Debug.plist */; };
 		C407E49E2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */; };
 		C42DC77D2B4B9EF500A20A6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */; };
+		C47C8E402CDB393100571B87 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47C8E3F2CDB393100571B87 /* UIKit.framework */; };
 		C4A261F82B73426A00571C2A /* WiFiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F22B73426A00571C2A /* WiFiHelper.swift */; };
 		C4A261F92B73426A00571C2A /* WiFiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F22B73426A00571C2A /* WiFiHelper.swift */; };
 		C4A261FA2B73426A00571C2A /* BeaconModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F42B73426A00571C2A /* BeaconModule.swift */; };
@@ -29,6 +29,7 @@
 		C4A261FF2B73426A00571C2A /* LocationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F62B73426A00571C2A /* LocationModule.m */; };
 		C4A262002B73426A00571C2A /* LocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F72B73426A00571C2A /* LocationModule.swift */; };
 		C4A262012B73426A00571C2A /* LocationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A261F72B73426A00571C2A /* LocationModule.swift */; };
+		C4A461442CDA06090040453D /* RCTNativeBaseInfo.mm in Sources */ = {isa = PBXBuildFile; fileRef = C4A461432CDA06090040453D /* RCTNativeBaseInfo.mm */; };
 		C4CE30D52B6A185A001A01CC /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = C4CE30D42B6A185A001A01CC /* fonts */; };
 		C4D783C62B54DE840086145F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4D783C52B54DE840086145F /* BootSplash.storyboard */; };
 		C4F7B2BB2BD7AF5600658E86 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C4F7B2BA2BD7AF5600658E86 /* PrivacyInfo.xcprivacy */; };
@@ -67,12 +68,16 @@
 		C407E49B2B86DC8A00BEC46F /* GoogleService-Info-Prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Prod.plist"; sourceTree = "<group>"; };
 		C42DC77C2B4B9EF500A20A6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C432D78D2B7361260086F715 /* ihereapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ihereapp.entitlements; path = ihereapp/ihereapp.entitlements; sourceTree = "<group>"; };
+		C47C8E3D2CDB368600571B87 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		C47C8E3F2CDB393100571B87 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C4A261F22B73426A00571C2A /* WiFiHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WiFiHelper.swift; sourceTree = "<group>"; };
 		C4A261F42B73426A00571C2A /* BeaconModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconModule.swift; sourceTree = "<group>"; };
 		C4A261F52B73426A00571C2A /* BeaconModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeaconModule.m; sourceTree = "<group>"; };
 		C4A261F62B73426A00571C2A /* LocationModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationModule.m; sourceTree = "<group>"; };
 		C4A261F72B73426A00571C2A /* LocationModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationModule.swift; sourceTree = "<group>"; };
 		C4A262022B73472100571C2A /* imhereV2-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "imhereV2-Bridging-Header.h"; sourceTree = "<group>"; };
+		C4A461422CDA06090040453D /* RCTNativeBaseInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTNativeBaseInfo.h; sourceTree = "<group>"; };
+		C4A461432CDA06090040453D /* RCTNativeBaseInfo.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeBaseInfo.mm; sourceTree = "<group>"; };
 		C4CE30D42B6A185A001A01CC /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		C4D595072CCA24880037A7AA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ihereapp/Info.plist; sourceTree = "<group>"; };
 		C4D783C52B54DE840086145F /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = ihereapp/BootSplash.storyboard; sourceTree = "<group>"; };
@@ -95,7 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71A74871EF119848EF7EFA6A /* Pods_ihereapp.framework in Frameworks */,
+				C47C8E402CDB393100571B87 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* ihereapp */ = {
 			isa = PBXGroup;
 			children = (
+				C4A461412CDA05910040453D /* NativeBaseInfo */,
 				C432D78D2B7361260086F715 /* ihereapp.entitlements */,
 				C4A262022B73472100571C2A /* imhereV2-Bridging-Header.h */,
 				C4A261F12B73426A00571C2A /* Helper */,
@@ -141,6 +147,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C47C8E3F2CDB393100571B87 /* UIKit.framework */,
+				C47C8E3D2CDB368600571B87 /* CoreTelephony.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				F9E744770023770300833694 /* Pods_ihereapp.framework */,
 				84559B5A893E8BCC23C9D1FB /* Pods_ihereapp_ihereappTests.framework */,
@@ -223,6 +231,15 @@
 				C4A261F72B73426A00571C2A /* LocationModule.swift */,
 			);
 			path = RNModule;
+			sourceTree = "<group>";
+		};
+		C4A461412CDA05910040453D /* NativeBaseInfo */ = {
+			isa = PBXGroup;
+			children = (
+				C4A461422CDA06090040453D /* RCTNativeBaseInfo.h */,
+				C4A461432CDA06090040453D /* RCTNativeBaseInfo.mm */,
+			);
+			path = NativeBaseInfo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -518,6 +535,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				C4A261FC2B73426A00571C2A /* BeaconModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				C4A461442CDA06090040453D /* RCTNativeBaseInfo.mm in Sources */,
 				C4A261F82B73426A00571C2A /* WiFiHelper.swift in Sources */,
 				C4A261FA2B73426A00571C2A /* BeaconModule.swift in Sources */,
 			);

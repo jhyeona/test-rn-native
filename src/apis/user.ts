@@ -36,6 +36,12 @@ export const requestGetCheckUuid = async (uuid?: string): Promise<AcademyProps[]
 export const requestGetAppVersions = async (): Promise<
   AxiosResponse<CommonResponseProps<ReqAppVersions>>
 > => {
-  const url = `${Config.BASE_URL}/kv/app-version`;
-  return await axios.get(url);
+  const url = `/kv/app-version`;
+  return await axios
+    .create({
+      baseURL: Config.BASE_URL,
+      timeout: 1000 * 5, // 5초
+      maxRedirects: 1,
+    })
+    .get(url);
 };
