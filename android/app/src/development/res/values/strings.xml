@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">여기여기붙어라</string>
+    <string name="baseurl">http://192.168.219.184:8081/api/v3</string>
+</resources>
